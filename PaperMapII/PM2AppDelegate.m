@@ -15,6 +15,8 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    CGRect winLocSize=self.window.bounds;
+    NSLog(@"MainWindow: x=%.f, y=%.f, w=%.f, h=%.f",winLocSize.origin.x,winLocSize.origin.y,winLocSize.size.width,winLocSize.size.height);
     // Override point for customization after application launch.
     self.viewController = [[PM2ViewController alloc] initWithNibName:@"PM2ViewController" bundle:nil];
     self.window.rootViewController = self.viewController;

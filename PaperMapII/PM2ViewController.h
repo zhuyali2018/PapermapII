@@ -8,6 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
+@class TiledScrollView; //TODO: delete this line
+@class MapScrollView;
+
 @interface PM2ViewController : UIViewController
+
+@property (nonatomic) MapScrollView * mapScrollView;
 
 @end
