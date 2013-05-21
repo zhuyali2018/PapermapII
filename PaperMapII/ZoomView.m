@@ -10,7 +10,7 @@
 
 @implementation ZoomView
 @synthesize tileContainer;
-@synthesize v,v1;
+@synthesize basicMapLayer;
 
 extern const int bz;        //bezel width, should be set to 0 eventually
 - (id)initWithFrame:(CGRect)frame
@@ -18,16 +18,13 @@ extern const int bz;        //bezel width, should be set to 0 eventually
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-        tileContainer=[[TileContainer alloc] initWithFrame:CGRectMake(bz,bz,1000, 1000)];
-        [tileContainer setBackgroundColor:[UIColor darkGrayColor]];
-        [self addSubview:tileContainer];
+        basicMapLayer=[[TileContainer alloc] initWithFrame:CGRectMake(bz,bz,1000, 1000)];
+        [basicMapLayer setBackgroundColor:[UIColor clearColor]];
+        [self addSubview:basicMapLayer];
         
-//        v=[[UIView alloc] initWithFrame:CGRectMake(bz, bz, 256, 256)];
-//        [v setBackgroundColor:[UIColor greenColor]];
-//        [tileContainer addSubview:v];
-//        v1=[[UIView alloc] initWithFrame:CGRectMake(300,300, 256, 256)];
-//        [v1 setBackgroundColor:[UIColor cyanColor ]];
-//        [tileContainer addSubview:v1];
+        tileContainer=[[TileContainer alloc] initWithFrame:CGRectMake(bz,bz,1000, 1000)];
+        [tileContainer setBackgroundColor:[UIColor cyanColor]];
+        [self addSubview:tileContainer];
     }
     return self;
 }

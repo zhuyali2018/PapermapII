@@ -12,7 +12,6 @@
 @interface ZoomView : UIView
 
 @property (nonatomic)TileContainer *tileContainer;
-
-@property (nonatomic)UIView *v, *v1;
+@property (nonatomic)TileContainer *basicMapLayer;
 
 @end

@@ -24,7 +24,7 @@ float zmc;
 	float width=visibleBounds.size.width-2*bazel;
 	float height=visibleBounds.size.height-2*bazel;
 	mapScrollView=[[MapScrollView alloc] initWithFrame:CGRectMake(bazel,bazel,width,height)];
-    [mapScrollView setBackgroundColor:[UIColor redColor]];
+    
 	[[self view] addSubview:mapScrollView];
 }
 
@@ -32,7 +32,7 @@ float zmc;
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
-    [self.view setBackgroundColor:[UIColor blueColor]];
+    [self.view setBackgroundColor:[UIColor darkGrayColor]];
     //[self add_ImageScrollView];    //add map tile scroll view
     [self add_MapScrollView];    //add map tile scroll view
 }

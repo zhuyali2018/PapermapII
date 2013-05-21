@@ -16,22 +16,22 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-        MapTile * mapTile1=[[MapTile alloc]initWithFrame:CGRectMake(0,0, 256, 256)];
-        MapTile * mapTile2=[[MapTile alloc]initWithFrame:CGRectMake(0,256, 256, 256)];
-        MapTile * mapTile3=[[MapTile alloc]initWithFrame:CGRectMake(256,0, 256,256)];
-        MapTile * mapTile4=[[MapTile alloc]initWithFrame:CGRectMake(256,256, 256, 256)];
-        [self annotateTile:mapTile1 res:1 row:0 col:0];
-        [self annotateTile:mapTile2 res:1 row:0 col:1];
-        [self annotateTile:mapTile3 res:1 row:1 col:0];
-        [self annotateTile:mapTile4 res:1 row:1 col:1];
-        [mapTile1 setImage:[UIImage imageNamed:@"Map1_0_0.png"]];
-        [mapTile2 setImage:[UIImage imageNamed:@"Map1_0_1.png"]];
-        [mapTile3 setImage:[UIImage imageNamed:@"Map1_1_0.png"]];
-        [mapTile4 setImage:[UIImage imageNamed:@"Map1_1_1.png"]];
-        [self addSubview:mapTile1];
-        [self addSubview:mapTile2];
-        [self addSubview:mapTile3];
-        [self addSubview:mapTile4];
+//        MapTile * mapTile1=[[MapTile alloc]initWithFrame:CGRectMake(0,0, 256, 256)];
+//        MapTile * mapTile2=[[MapTile alloc]initWithFrame:CGRectMake(0,256, 256, 256)];
+//        MapTile * mapTile3=[[MapTile alloc]initWithFrame:CGRectMake(256,0, 256,256)];
+//        MapTile * mapTile4=[[MapTile alloc]initWithFrame:CGRectMake(256,256, 256, 256)];
+//        [self annotateTile:mapTile1 res:1 row:0 col:0];
+//        [self annotateTile:mapTile2 res:1 row:0 col:1];
+//        [self annotateTile:mapTile3 res:1 row:1 col:0];
+//        [self annotateTile:mapTile4 res:1 row:1 col:1];
+//        [mapTile1 setImage:[UIImage imageNamed:@"Map1_0_0.png"]];
+//        [mapTile2 setImage:[UIImage imageNamed:@"Map1_0_1.png"]];
+//        [mapTile3 setImage:[UIImage imageNamed:@"Map1_1_0.png"]];
+//        [mapTile4 setImage:[UIImage imageNamed:@"Map1_1_1.png"]];
+//        [self addSubview:mapTile1];
+//        [self addSubview:mapTile2];
+//        [self addSubview:mapTile3];
+//        [self addSubview:mapTile4];
     }
     return self;
 }
@@ -59,6 +59,8 @@
 		[[tile layer] setBorderWidth:2];
 		[[tile layer] setCornerRadius:10];	//yali added to test
 		[[tile layer] setBorderColor:[[UIColor greenColor] CGColor]];
-	}
+	}else{  //if already has a tag, just change the text ! Without this else, you can see which tile is the recycled one !
+        [label setText:[NSString stringWithFormat:@"level %d,(%d,%d)",res,row,col]];
+    }
 }
 @end
