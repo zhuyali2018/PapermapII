@@ -77,6 +77,15 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
 	tile1.row=row;
 	tile1.col=col;
 	
+    if (!Mode) {
+        NSLog(@"Mode is Eastern:col=%d, width=%.f",col,pow(2,maplevel1));
+        int half=pow(2.0, maplevel1)/2;
+        if (col>=half) {
+            col=col-half;
+        }else {
+            col+=half;
+        }
+    }
 	//load built in map for fast loading
 	NSString * imgname;
 	//if((maplevel1<6)&&(!bSatMap)){  // if less than 3, do it from builtin map tile TODO: Restore this line
@@ -125,7 +134,7 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
     int loadedImageCount=0;
 	for (int row = firstNeededRow; row <= lastNeededRow; row++) {
         for (int col = firstNeededCol; col <= lastNeededCol; col++) {
-			BOOL tileIsMissing = (firstVisibleRowx[i] > row || firstVisibleColumnx[i] > col ||lastVisibleRowx[i]  < row || lastVisibleColumnx[i]  < col);
+			BOOL tileIsMissing = (firstVisibleRowx[i] > row || firstVisibleColumnx[i] >= col ||lastVisibleRowx[i]  < row || lastVisibleColumnx[i]  < col);
 			//NSLog(@"%d>%d ?  %d >%d ? %d - %d ",firstVisibleRowx[i],row,firstVisibleColumnx[i],col,lastVisibleRowx[i],lastVisibleColumnx[i]);
 			if (tileIsMissing) {
 				if([self alreadyLoaded:row col:col levelDiff:i]){
@@ -245,6 +254,21 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
 	}
 	//[self setNeedsLayout];  //this one does not work
 }
+//reload all with no exceptions
+- (void)unLoadAllMapTiles {
+	// recycle all tiles so that every tile will be replaced in the next layoutSubviews
+    for (MapTile *view in [zoomView.tileContainer subviews]) {
+		[reusableTiles addObject:view];
+		[view removeFromSuperview];
+		[(UIImageView *)view setImage:NULL];
+    }
+    for (MapTile *view in [zoomView.basicMapLayer subviews]) {
+		[reusableTiles addObject:view];
+		[view removeFromSuperview];
+		[(UIImageView *)view setImage:NULL];
+    }
+	[self initVisibleVarArrays];
+}
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
@@ -277,6 +301,7 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
 		minMapLevel=level;
 		maxMapLevel=19;
         reusableTiles = [[NSMutableSet alloc] init];
+        Mode=TRUE;
     }
     return self;
 }
@@ -290,7 +315,34 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
     NSLog(@"ContentOffset:x:%.f, y:%.f",self.contentOffset.x,self.contentOffset.y);
     NSLog(@"ContentSize:W:%.f, H:%.f\n\n",self.contentSize.width,self.contentSize.height);
     
-    
+    int x1=self.contentOffset.x;
+    int x2=[self bounds].size.width;
+    if ((x1+x2)>=self.contentSize.width) {
+        NSLog(@"====================> right edge reached, time to change mode!: %d+%d=%d>%.f",x1,x2,(x1+x2),self.contentSize.width);
+        CGPoint offset=[self contentOffset];
+        CGSize Size=[self contentSize];
+        if (offset.x>Size.width/2) {
+            offset.x-=Size.width/2;
+            [self setContentOffset:offset];
+            [self unLoadAllMapTiles];
+            [self setNeedsDisplay];
+             Mode=!Mode;
+            return;
+        }
+    }
+    if (x1<0) {
+        CGPoint offset=[self contentOffset];
+        CGSize Size=[self contentSize];
+        CGSize bsz=[self bounds].size;
+        if (bsz.width<Size.width/2) {
+            offset.x+=Size.width/2;
+            [self setContentOffset:offset];
+            [self unLoadAllMapTiles];
+            [self setNeedsDisplay];
+            Mode=!Mode;
+            return;
+        }
+    }
 	//if (([self zoomScale]>=2*zmc)||([self zoomScale]<zmc)) {   //key for not overloading too many tiles //modify with a 1.3 coefficient, zmc is either 1 or 1.3
 	//	NSLog(@"zoom scale = %.3f, out or valid range, return",[self zoomScale]);
 	//	return;
@@ -395,7 +447,7 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
     //[zoomView.tapDetectView setFrame:fr1];
     //posErr1=[zoomView.drawLineView.dataObj.parent adJustErrForResolution:posErr res:zoomView.drawLineView.dataObj.parent.posErrResolution];
     
-    [self reloadData:zoomFactor];   
+    [self reloadData:zoomFactor];
     //[NSTimer scheduledTimerWithTimeInterval:0.2 target:self selector:@selector(restoreOffset) userInfo:nil repeats: NO];//TODO: Restore this line
 }
 

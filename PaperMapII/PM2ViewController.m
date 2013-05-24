@@ -16,7 +16,7 @@
 @implementation PM2ViewController
 
 @synthesize mapScrollView;
-float zmc;
+//float zmc;
 
 -(void)add_MapScrollView{
     float bazel=20;     //set to 0 to maxmize map area

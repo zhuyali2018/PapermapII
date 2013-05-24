@@ -12,7 +12,7 @@
 
 @interface MapScrollView : UIScrollView <UIScrollViewDelegate>{
     NSMutableSet    *reusableTiles;					//<======= recycled tiles holder
-
+    BOOL            Mode;                           //<====TRUE: Western, FALSE:Eastern
     int             maplevel,minMapLevel,maxMapLevel,lastLevel;
     CGPoint			posErr,posErr1;
 }
