@@ -1,0 +1,211 @@
+//
+//  MapSources.m
+//  PaperMapII
+//
+//  Created by Yali Zhu on 5/23/13.
+//  Copyright (c) 2013 Yali Zhu. All rights reserved.
+//
+
+#import "MapSources.h"
+
+@implementation MapSources
+-(NSString *)getPathName:(int)res row:(int)row col:(int)col{
+	switch (res) {
+		case 3:
+		case 4:
+			return @"Map4";
+			break;
+		case 5:{
+			NSString * strRow=[[NSString alloc]initWithFormat:@"%02d",row];
+			NSString * strCol=[[NSString alloc]initWithFormat:@"%02d",col];
+			NSString * path=[[NSString alloc]initWithFormat:@"Map5/%c%c",[strRow characterAtIndex:0],[strCol characterAtIndex:0]];
+			return path;
+			break;
+		}
+		case 6:{
+			NSString * strRow=[[NSString alloc]initWithFormat:@"%02d",row];
+			NSString * strCol=[[NSString alloc]initWithFormat:@"%02d",col];
+			NSString * path=[[NSString alloc]initWithFormat:@"Map6/%c%c",[strRow characterAtIndex:0],[strCol characterAtIndex:0]];
+			return path;
+			break;
+		}
+		case 7:{
+			NSString * strRow=[[NSString alloc]initWithFormat:@"%03d",row];
+			NSString * strCol=[[NSString alloc]initWithFormat:@"%03d",col];
+			NSString * path=[[NSString alloc]initWithFormat:@"Map7/%c%c/%c%c",[strRow characterAtIndex:0],[strCol characterAtIndex:0],[strRow characterAtIndex:1],[strCol characterAtIndex:1]];
+			return path;
+			break;
+		}
+		case 8:{
+			NSString * strRow=[[NSString alloc]initWithFormat:@"%03d",row];
+			NSString * strCol=[[NSString alloc]initWithFormat:@"%03d",col];
+			NSString * path=[[NSString alloc]initWithFormat:@"Map8/%c%c/%c%c",[strRow characterAtIndex:0],[strCol characterAtIndex:0],[strRow characterAtIndex:1],[strCol characterAtIndex:1]];
+			return path;
+			break;
+		}
+		case 9:{
+			NSString * strRow=[[NSString alloc]initWithFormat:@"%04d",row];
+			NSString * strCol=[[NSString alloc]initWithFormat:@"%04d",col];
+			NSString * path=[[NSString alloc]initWithFormat:@"Map9/%c%c/%c%c/%c%c",[strRow characterAtIndex:0],[strCol characterAtIndex:0],[strRow characterAtIndex:1],[strCol characterAtIndex:1],[strRow characterAtIndex:2],[strCol characterAtIndex:2]];
+			return path;
+			break;
+		}
+		case 10:{
+			NSString * strRow=[[NSString alloc]initWithFormat:@"%04d",row];
+			NSString * strCol=[[NSString alloc]initWithFormat:@"%04d",col];
+			NSString * path=[[NSString alloc]initWithFormat:@"Map10/%c%c/%c%c/%c%c",[strRow characterAtIndex:0],[strCol characterAtIndex:0],[strRow characterAtIndex:1],[strCol characterAtIndex:1],[strRow characterAtIndex:2],[strCol characterAtIndex:2]];
+			return path;
+			break;
+		}
+		case 11:{
+			NSString * strRow=[[NSString alloc]initWithFormat:@"%04d",row];
+			NSString * strCol=[[NSString alloc]initWithFormat:@"%04d",col];
+			NSString * path=[[NSString alloc]initWithFormat:@"Map11/%c%c/%c%c/%c%c",[strRow characterAtIndex:0],[strCol characterAtIndex:0],[strRow characterAtIndex:1],[strCol characterAtIndex:1],[strRow characterAtIndex:2],[strCol characterAtIndex:2]];
+			return path;
+			break;
+		}
+		case 12:{
+			NSString * strRow=[[NSString alloc]initWithFormat:@"%04d",row];
+			NSString * strCol=[[NSString alloc]initWithFormat:@"%04d",col];
+			NSString * path=[[NSString alloc]initWithFormat:@"Map12/%c%c/%c%c/%c%c",[strRow characterAtIndex:0],[strCol characterAtIndex:0],[strRow characterAtIndex:1],[strCol characterAtIndex:1],[strRow characterAtIndex:2],[strCol characterAtIndex:2]];
+			return path;
+			break;
+		}
+		case 13:{
+			NSString * strRow=[[NSString alloc]initWithFormat:@"%05d",row];
+			NSString * strCol=[[NSString alloc]initWithFormat:@"%05d",col];
+			NSString * path=[[NSString alloc]initWithFormat:@"Map13/%c%c/%c%c/%c%c/%c%c",[strRow characterAtIndex:0],[strCol characterAtIndex:0],
+							 [strRow characterAtIndex:1],[strCol characterAtIndex:1],[strRow characterAtIndex:2],[strCol characterAtIndex:2],
+							 [strRow characterAtIndex:3],[strCol characterAtIndex:3]];
+			return path;
+			break;
+		}
+		case 14:{
+			NSString * strRow=[[NSString alloc]initWithFormat:@"%05d",row];
+			NSString * strCol=[[NSString alloc]initWithFormat:@"%05d",col];
+			NSString * path=[[NSString alloc]initWithFormat:@"Map14/%c%c/%c%c/%c%c/%c%c",[strRow characterAtIndex:0],[strCol characterAtIndex:0],
+							 [strRow characterAtIndex:1],[strCol characterAtIndex:1],[strRow characterAtIndex:2],[strCol characterAtIndex:2],
+							 [strRow characterAtIndex:3],[strCol characterAtIndex:3]];
+			return path;
+			break;
+		}case 15:{
+			NSString * strRow=[[NSString alloc]initWithFormat:@"%05d",row];
+			NSString * strCol=[[NSString alloc]initWithFormat:@"%05d",col];
+			NSString * path=[[NSString alloc]initWithFormat:@"Map15/%c%c/%c%c/%c%c/%c%c",[strRow characterAtIndex:0],[strCol characterAtIndex:0],
+							 [strRow characterAtIndex:1],[strCol characterAtIndex:1],[strRow characterAtIndex:2],[strCol characterAtIndex:2],
+							 [strRow characterAtIndex:3],[strCol characterAtIndex:3]];
+			return path;
+			break;
+		}case 16:{
+			NSString * strRow=[[NSString alloc]initWithFormat:@"%06d",row];
+			NSString * strCol=[[NSString alloc]initWithFormat:@"%06d",col];
+			NSString * path=[[NSString alloc]initWithFormat:@"Map16/%c%c/%c%c/%c%c/%c%c/%c%c",[strRow characterAtIndex:0],[strCol characterAtIndex:0],
+							 [strRow characterAtIndex:1],[strCol characterAtIndex:1],[strRow characterAtIndex:2],[strCol characterAtIndex:2],
+							 [strRow characterAtIndex:3],[strCol characterAtIndex:3],[strRow characterAtIndex:4],[strCol characterAtIndex:4]];
+			return path;
+			break;
+		}case 17:{
+			NSString * strRow=[[NSString alloc]initWithFormat:@"%06d",row];
+			NSString * strCol=[[NSString alloc]initWithFormat:@"%06d",col];
+			NSString * path=[[NSString alloc]initWithFormat:@"Map17/%c%c/%c%c/%c%c/%c%c/%c%c",[strRow characterAtIndex:0],[strCol characterAtIndex:0],
+							 [strRow characterAtIndex:1],[strCol characterAtIndex:1],[strRow characterAtIndex:2],[strCol characterAtIndex:2],
+							 [strRow characterAtIndex:3],[strCol characterAtIndex:3],[strRow characterAtIndex:4],[strCol characterAtIndex:4]];
+			return path;
+			break;
+		}case 18:{
+			NSString * strRow=[[NSString alloc]initWithFormat:@"%06d",row];
+			NSString * strCol=[[NSString alloc]initWithFormat:@"%06d",col];
+			NSString * path=[[NSString alloc]initWithFormat:@"Map18/%c%c/%c%c/%c%c/%c%c/%c%c",[strRow characterAtIndex:0],[strCol characterAtIndex:0],
+							 [strRow characterAtIndex:1],[strCol characterAtIndex:1],[strRow characterAtIndex:2],[strCol characterAtIndex:2],
+							 [strRow characterAtIndex:3],[strCol characterAtIndex:3],[strRow characterAtIndex:4],[strCol characterAtIndex:4]];
+			return path;
+			break;
+		}case 19:{
+			NSString * strRow=[[NSString alloc]initWithFormat:@"%07d",row];
+			NSString * strCol=[[NSString alloc]initWithFormat:@"%07d",col];
+			NSString * path=[[NSString alloc]initWithFormat:@"Map19/%c%c/%c%c/%c%c/%c%c/%c%c/%c%c",[strRow characterAtIndex:0],[strCol characterAtIndex:0],
+							 [strRow characterAtIndex:1],[strCol characterAtIndex:1],[strRow characterAtIndex:2],[strCol characterAtIndex:2],
+							 [strRow characterAtIndex:3],[strCol characterAtIndex:3],[strRow characterAtIndex:4],[strCol characterAtIndex:4],[strRow characterAtIndex:5],[strCol characterAtIndex:5]];
+			return path;
+			break;
+		}
+		default:
+			break;
+	}
+	return nil;
+}
+-(NSString *)dataFilePath:(NSString *)localPath{
+	NSArray * paths=NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask,YES);
+	NSString * documentsDirectory=[paths objectAtIndex:0];
+	return [documentsDirectory stringByAppendingPathComponent:localPath];
+}
+#pragma mark Map Source Delegate method
+- (UIImage *)mapLevel:(int)mapLevel row:(int)row col:(int)col{
+    //load built in map for fast loading
+	NSString * imgname;
+	if((mapLevel<6)&&(!bSatMap)){  // if less than 3, do it from builtin map tile TODO: Restore this line
+    //if(mapLevel<6){  // if less than 3, do it from builtin map tile
+		// The resolution is stored as a power of 2, so -1 means 50%, -2 means 25%, and 0 means 100%.
+		imgname=[[NSString alloc]initWithFormat:@"Map%d_%d_%d.jpg", mapLevel, row, col];
+        UIImage * img=[UIImage imageNamed:imgname];
+        imgname=nil;
+		return img;
+	}else if((mapLevel<5)&&(bSatMap)){   //TODO:restore this line
+    //    }else if(maplevel1<5){
+        imgname=[[NSString alloc]initWithFormat:@"Sat%d_%d_%d.jpg", mapLevel, row, col];
+        UIImage *img=[UIImage imageNamed:imgname];
+        imgname=nil;
+		return img;
+    }
+    
+    NSString *  rootDir;
+    if(bSatMap)
+        rootDir=@"Sat";
+    else
+        rootDir=@"Map";
+    NSString * imgFn=[[NSString alloc] initWithFormat:@"%@%d_%d_%d.jpg",rootDir,mapLevel,row,col];
+    NSString * dirName=[self getPathName:mapLevel row:row col:col];
+    NSString * absPath=[self dataFilePath:dirName];
+    NSString * pathFn=[[NSString alloc] initWithFormat:@"%@/%@",absPath,imgFn];   //getPath and filename together;
+    
+    UIImage * img;
+    //TODO: Move following vars to as a property of the map source.
+    BOOL bInternetOnly=FALSE;
+    BOOL bCachedMapOnly=FALSE;
+    int satVersion=113;
+    NSString * country=@"en";
+    
+    if (bInternetOnly) {
+        img=nil;
+    }else {
+        img=[UIImage imageWithContentsOfFile:pathFn];  //tring to get image from local
+    }
+    
+    if ((!img)&&(!bCachedMapOnly)) {
+        //Get maptile from internet -------
+        NSString * mapUrlFomat;
+        static int svr=0;	svr++;	if (svr>2) svr=0;
+        NSString * imageUrl;
+        if(bSatMap){
+            //mapUrlFomat=[[NSString alloc]initWithString:@"http://khm%d.google.com/kh/v=76&x=%d&y=%d&z=%d"];
+            mapUrlFomat=@"http://khm%d.google.com/kh/v=%d&x=%d&y=%d&z=%d";    //version 4.0 4-29-2011
+            imageUrl=[[NSString alloc]initWithFormat:mapUrlFomat, svr,satVersion,col, row, mapLevel];	   //version 5.0
+        }else{
+            mapUrlFomat=@"http://mt%d.google.com/vt/v=w2.101&hl=%@&x=%d&y=%d&z=%d";
+            imageUrl=[[NSString alloc]initWithFormat:mapUrlFomat, svr,country,col, row, mapLevel];
+        }
+        NSData * imageData=[NSData dataWithContentsOfURL:[NSURL URLWithString:imageUrl]];
+        img=[UIImage imageWithData:imageData];
+        //Save images got from internet into buffer
+        if (imageData) {
+            if([[NSFileManager defaultManager] createDirectoryAtPath:absPath withIntermediateDirectories:YES attributes:nil error:NULL]){
+                [imageData writeToFile:pathFn atomically:YES]; //save to cache
+            }else {
+                NSLog(@"[loadImageInBackground] Directory creation failed:%@",pathFn);
+            }
+        }
+        //was leaked here
+    }
+    return img;
+}
+@end

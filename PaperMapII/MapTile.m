@@ -18,7 +18,7 @@
         row=-1;    //means image in recycle pool
 		col=0;
 		res=0;
-        [self setBackgroundColor:[UIColor blueColor]];
+        [self setBackgroundColor:[UIColor clearColor]];     //<===important, if not set clear, the map tiles beneath it won't show up
     }
     return self;
 }

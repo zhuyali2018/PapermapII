@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AA511CD6174F1F0F00F46B1A /* MapSources.m in Sources */ = {isa = PBXBuildFile; fileRef = AA511CD5174F1F0F00F46B1A /* MapSources.m */; };
 		AABDD48117437B3600A0D6E9 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AABDD48017437B3600A0D6E9 /* UIKit.framework */; };
 		AABDD48317437B3600A0D6E9 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AABDD48217437B3600A0D6E9 /* Foundation.framework */; };
 		AABDD48517437B3600A0D6E9 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AABDD48417437B3600A0D6E9 /* CoreGraphics.framework */; };
@@ -3455,6 +3456,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		AA511CD2174F152100F46B1A /* PM2Protocols.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PM2Protocols.h; sourceTree = "<group>"; };
+		AA511CD4174F1F0F00F46B1A /* MapSources.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapSources.h; sourceTree = "<group>"; };
+		AA511CD5174F1F0F00F46B1A /* MapSources.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapSources.m; sourceTree = "<group>"; };
 		AABDD47D17437B3600A0D6E9 /* PaperMapII.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PaperMapII.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AABDD48017437B3600A0D6E9 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		AABDD48217437B3600A0D6E9 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -5220,6 +5224,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		AA511CD3174F1E7600F46B1A /* MapSources */ = {
+			isa = PBXGroup;
+			children = (
+				AA511CD4174F1F0F00F46B1A /* MapSources.h */,
+				AA511CD5174F1F0F00F46B1A /* MapSources.m */,
+			);
+			name = MapSources;
+			sourceTree = "<group>";
+		};
 		AABDD47417437B3600A0D6E9 = {
 			isa = PBXGroup;
 			children = (
@@ -5260,8 +5273,10 @@
 				AABDD49817437B3600A0D6E9 /* PM2ViewController.h */,
 				AABDD49917437B3600A0D6E9 /* PM2ViewController.m */,
 				AABDD49B17437B3600A0D6E9 /* PM2ViewController.xib */,
+				AA511CD3174F1E7600F46B1A /* MapSources */,
 				AABDD4E71745EF1600A0D6E9 /* MapViews */,
 				AABDD48717437B3600A0D6E9 /* Supporting Files */,
+				AA511CD2174F152100F46B1A /* PM2Protocols.h */,
 			);
 			path = PaperMapII;
 			sourceTree = "<group>";
@@ -10554,6 +10569,7 @@
 				AABDD4EE1747402D00A0D6E9 /* ZoomView.m in Sources */,
 				AABDD4F6174744B600A0D6E9 /* TileContainer.m in Sources */,
 				AABDD4FA1747513700A0D6E9 /* MapTile.m in Sources */,
+				AA511CD6174F1F0F00F46B1A /* MapSources.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -10742,6 +10758,7 @@
 				AABDD4B717437B3600A0D6E9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		AABDD4B817437B3600A0D6E9 /* Build configuration list for PBXNativeTarget "PaperMapIITests" */ = {
 			isa = XCConfigurationList;
@@ -10750,6 +10767,7 @@
 				AABDD4BA17437B3600A0D6E9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

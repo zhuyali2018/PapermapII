@@ -10,9 +10,10 @@
 
 @class TiledScrollView; //TODO: delete this line
 @class MapScrollView;
+@class MapSources;
 
 @interface PM2ViewController : UIViewController
 
-@property (nonatomic) MapScrollView * mapScrollView;
-
+@property (nonatomic, strong) MapScrollView * mapScrollView;
+@property (nonatomic, strong) MapSources * mapSources;
 @end

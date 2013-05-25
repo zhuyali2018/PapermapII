@@ -10,6 +10,7 @@
 #import "MapTile.h"
 
 @implementation MapScrollView
+
 @synthesize zoomView;
 
 const int bz=0;        //bezel width, should be set to 0 eventually
@@ -77,7 +78,7 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
 	tile1.row=row;
 	tile1.col=col;
 	
-    if (!Mode) {
+    if (!Mode) {   //is the map Eastern hemisphere center or western one center of the map
         NSLog(@"Mode is Eastern:col=%d, width=%.f",col,pow(2,maplevel1));
         int half=pow(2.0, maplevel1)/2;
         if (col>=half) {
@@ -86,30 +87,17 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
             col+=half;
         }
     }
-	//load built in map for fast loading
-	NSString * imgname;
-	//if((maplevel1<6)&&(!bSatMap)){  // if less than 3, do it from builtin map tile TODO: Restore this line
-    if(maplevel1<6){  // if less than 3, do it from builtin map tile
-		// The resolution is stored as a power of 2, so -1 means 50%, -2 means 25%, and 0 means 100%.
-		imgname=[[NSString alloc]initWithFormat:@"Map%d_%d_%d.jpg", maplevel1, row, col];
-		[tile1 setImage:[UIImage imageNamed:imgname]];
-		imgname=nil;
-		return tile1;
-	//}else if((maplevel1<5)&&(bSatMap)){   TODO:restore this line
-    }else if(maplevel1<5){
-		imgname=[[NSString alloc]initWithFormat:@"Sat%d_%d_%d.jpg", maplevel1, row, col];
-		UIImage *img=[UIImage imageNamed:imgname];
-		[tile1 setImage:img];
-		imgname=nil;
-		return tile1;
-	}
-	
-	//load the map tile in another thread to increase performance
-	//[self performSelectorInBackground:@selector(loadImageInBackground:) withObject:tile1];  //TODO:Restore this line
-    NSLog(@"=============>Get Map tile %d, %d on level %d",tile1.row,tile1.col,tile1.res);
+     NSLog(@"=============>Get Map tile %d, %d on level %d",tile1.row,tile1.col,tile1.res);
+    //--------------------call mapsource delegate---------
+    if ([self.mapsourceDelegate respondsToSelector:@selector(mapLevel: row: col:)]) {
+        UIImage * img=[self.mapsourceDelegate mapLevel:maplevel1 row:row col:col];
+        if (nil!=img) {
+            [tile1 setImage:img];
+            return tile1;
+        }
+    }
 	[tile1 setImage:NULL];  //important, otherwise the old map tile will show up before new one comes in
 	return tile1;
-
 }
 -(void)fillWindowWithBasicMap:(int)levelDiff tileSize:(int)sz{
     if(levelDiff<0) { NSLog(@"error: levelDiff < 0, exit fillWindowWithBasicMap"); return;}
@@ -128,7 +116,7 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
     int lastNeededCol  = MIN(maxCol,floorf((CGRectGetMaxX(visibleBounds)-posErr1.x) / scaledTileSide));    //<=======
 	
     if ((firstNeededRow==firstVisibleRowx[i])&&(firstNeededCol==firstVisibleColumnx[i])&&(lastNeededCol==lastVisibleColumnx[i])&&(lastNeededRow==lastVisibleRowx[i])) {
-        NSLog(@"exit fillWindowWithBasicMap (2)");
+        NSLog(@"exit fillWindowWithBasicMap (2) i=%d, neededRow=%d, visiRow=%d",i,firstNeededRow,firstVisibleRowx[i]);
 		return;
 	}
     int loadedImageCount=0;

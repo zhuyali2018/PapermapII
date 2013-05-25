@@ -8,6 +8,7 @@
 
 #import "PM2ViewController.h"
 #import "MapScrollView.h"
+#import "MapSources.h"
 
 @interface PM2ViewController ()
 
@@ -16,6 +17,7 @@
 @implementation PM2ViewController
 
 @synthesize mapScrollView;
+@synthesize mapSources;
 //float zmc;
 
 -(void)add_MapScrollView{
@@ -25,7 +27,12 @@
 	float height=visibleBounds.size.height-2*bazel;
 	mapScrollView=[[MapScrollView alloc] initWithFrame:CGRectMake(bazel,bazel,width,height)];
     
-	[[self view] addSubview:mapScrollView];
+    mapSources=[[MapSources alloc]init];
+    mapSources->bSatMap=FALSE;
+    
+    mapScrollView.mapsourceDelegate=mapSources;
+	
+    [[self view] addSubview:mapScrollView];
 }
 
 - (void)viewDidLoad

@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 #import "ZoomView.h"
+#import "PM2Protocols.h"
 
 @interface MapScrollView : UIScrollView <UIScrollViewDelegate>{
     NSMutableSet    *reusableTiles;					//<======= recycled tiles holder
@@ -16,8 +17,8 @@
     int             maplevel,minMapLevel,maxMapLevel,lastLevel;
     CGPoint			posErr,posErr1;
 }
-@property (nonatomic)ZoomView *zoomView;
-
+@property (nonatomic, strong)ZoomView *zoomView;
+@property (nonatomic) id<PM2MapSourceDelegate> mapsourceDelegate;
 - (UIView *)dequeueReusableTile;
 
 @end
