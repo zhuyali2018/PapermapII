@@ -32,6 +32,8 @@
 //        [self addSubview:mapTile2];
 //        [self addSubview:mapTile3];
 //        [self addSubview:mapTile4];
+        
+        [self setMultipleTouchEnabled:YES];
     }
     return self;
 }

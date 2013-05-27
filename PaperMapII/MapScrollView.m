@@ -99,11 +99,11 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
 	[tile1 setImage:NULL];  //important, otherwise the old map tile will show up before new one comes in
 	return tile1;
 }
--(void)fillWindowWithBasicMap:(int)levelDiff tileSize:(int)sz{
+-(void)fillWindowWithBasicMap:(int)levelDiff{
     if(levelDiff<0) { NSLog(@"error: levelDiff < 0, exit fillWindowWithBasicMap"); return;}
     NSLog(@"in fillWindowWithBasicMap");
     int i=levelDiff;
-	float tileSize=sz*pow(2,levelDiff);
+	float tileSize=SIZE*pow(2,levelDiff);
 	float scaledTileSide  = tileSize  * [self zoomScale];
     
     int maxRow = floorf(([zoomView frame].size.height) / scaledTileSide);  // this is the maximum possible row
@@ -342,10 +342,10 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
 		if(levelDiff>3)
 			levelDiff=3;
 		for(int i=levelDiff;i>0;i--){
-			[self fillWindowWithBasicMap:i tileSize:SIZE];
+			[self fillWindowWithBasicMap:i];
 		}
 	}
-    [self fillWindowWithBasicMap:0 tileSize:SIZE];   //version 5.03 added
+    [self fillWindowWithBasicMap:0];   //version 5.03 added
 }
 /*
 // Only override drawRect: if you perform custom drawing.
@@ -437,6 +437,7 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
     
     [self reloadData:zoomFactor];
     //[NSTimer scheduledTimerWithTimeInterval:0.2 target:self selector:@selector(restoreOffset) userInfo:nil repeats: NO];//TODO: Restore this line
+    //[self setNeedsDisplay];
 }
 
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView{

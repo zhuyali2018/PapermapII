@@ -7,7 +7,8 @@
 //
 
 #import "PM2ViewController.h"
-#import "MapScrollView.h"
+//#import "MapScrollView.h"
+#import "TappableMapScrollView.h"
 #import "MapSources.h"
 
 @interface PM2ViewController ()
@@ -25,7 +26,7 @@
 	CGRect visibleBounds = [self.view bounds];
 	float width=visibleBounds.size.width-2*bazel;
 	float height=visibleBounds.size.height-2*bazel;
-	mapScrollView=[[MapScrollView alloc] initWithFrame:CGRectMake(bazel,bazel,width,height)];
+	mapScrollView=[[TappableMapScrollView alloc] initWithFrame:CGRectMake(bazel,bazel,width,height)];
     
     mapSources=[[MapSources alloc]init];
     mapSources->bSatMap=FALSE;

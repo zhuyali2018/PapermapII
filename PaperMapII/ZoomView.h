@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "TileContainer.h"
+#import "PM2Protocols.h"
 
-@interface ZoomView : UIView
+@interface ZoomView : UIView 
 
 @property (nonatomic)TileContainer *tileContainer;
 @property (nonatomic)TileContainer *basicMapLayer;
