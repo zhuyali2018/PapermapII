@@ -26,3 +26,8 @@
 - (void)tapDetectView:(TapDetectView *)view gotDoubleTapAtPoint:(CGPoint)tapPoint;
 - (void)tapDetectView:(TapDetectView *)view gotTwoFingerTapAtPoint:(CGPoint)tapPoint;
 @end
+
+@protocol PM2RecordingDelegate <NSObject>
+@optional
+- (void)mapLevel:(int)maplevel singleTapAtPoint:(CGPoint)tapPoint;
+@end

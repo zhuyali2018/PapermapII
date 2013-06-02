@@ -9,10 +9,11 @@
 #define DOUBLE_TAP_DELAY 0.35
 
 #import "TapDetectView.h"
+#import "PM2Protocols.h"
 
 @implementation TapDetectView
 
-@synthesize mapTapHandler;
+@synthesize mapTapHandler,drawDelegate;
 //====================================================
 CGPoint midpointBetweenPoints(CGPoint a, CGPoint b) {
     CGFloat x = (a.x + b.x) / 2.0;
@@ -156,8 +157,8 @@ CGPoint midpointBetweenPoints(CGPoint a, CGPoint b) {
 #pragma mark Touch Handling methods of the class------
 - (void)handleSingleTap{
 	NSLog(@"handleSingleTap - need to call external handler here");
-	//if ([drawDelegate respondsToSelector:@selector(tapDetectView:gotSingleTapAtPoint:)])
-    //    [drawDelegate tapDetectView:self gotSingleTapAtPoint:tapLocation];
+	if ([drawDelegate respondsToSelector:@selector(tappedView:singleTapAtPoint:)])
+        [drawDelegate tappedView:self singleTapAtPoint:tapLocation];
 }
 - (void)handleDoubleTap{
 	NSLog(@"handleDoubleTap - means map zoom in one level and center map at tapped point");

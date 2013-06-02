@@ -12,6 +12,7 @@
 
 @implementation TappableMapScrollView
 @synthesize tapDetectView;
+@synthesize recordingDelegate;
 //===================================
 - (CGRect)zoomRectForScale:(float)scale withCenter:(CGPoint)center {
     
@@ -42,6 +43,7 @@
         //[tapDetectView setBackgroundColor:[UIColor colorWithRed:0.5 green:0 blue:0 alpha:0.5]];
         //[tapDetectView setBackgroundColor:[UIColor redColor]];
         [tapDetectView setBackgroundColor:[UIColor clearColor]];  //without this line, the map would be black !
+        tapDetectView.drawDelegate=self;
         [self.zoomView addSubview:tapDetectView];
     }
     return self;
@@ -63,6 +65,7 @@
     CGRect fr1=CGRectMake(0, 0, calSide, calSide);
     [tapDetectView setFrame:fr1];
 }
+#pragma mark------------------------------------------
 #pragma mark protocal PM2MapTapHandleDelegate methods
 - (void)tapDetectView:(TapDetectView *)view gotDoubleTapAtPoint:(CGPoint)tapPoint {
 	float newScale = [self zoomScale] * ZOOM_STEP;
@@ -75,5 +78,14 @@
     CGRect zoomRect = [self zoomRectForScale:newScale withCenter:tapPoint];
     [self zoomToRect:zoomRect animated:YES];
     //[NSTimer scheduledTimerWithTimeInterval:0.99 target:imageScrollView selector:@selector(restoreOffset) userInfo:nil repeats: NO];
+}
+#pragma mark -----------------HandleSingleTap Delegate method------
+- (void)tappedView:(UIView *)view singleTapAtPoint:(CGPoint)tapPoint{
+    NSLog(@"singleTapAtPoint - need to call external handler here 2");
+    if ([recordingDelegate respondsToSelector:@selector(mapLevel:singleTapAtPoint:)]){
+        [recordingDelegate mapLevel:self.maplevel singleTapAtPoint:tapPoint];
+    }else {
+        NSLog(@"[recordingDelegate respondsToSelector:@selector(mapLevel:singleTapAtPoint:)] returns false");
+    }
 }
 @end

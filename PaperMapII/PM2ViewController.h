@@ -12,9 +12,11 @@
 @class DrawableMapScrollView;
 @class MapSources;
 @class Recorder;
+@class LineProperty;
 @interface PM2ViewController : UIViewController
 
 @property (nonatomic, strong) DrawableMapScrollView * mapScrollView;
 @property (nonatomic, strong) MapSources * mapSources;
 @property (nonatomic, strong) Recorder * routRecorder;
+@property (nonatomic, strong) LineProperty * lineProperty;
 @end

@@ -18,9 +18,10 @@
     return nodeCopy;
 }
 
-- (id)initWithPoint:(CGPoint)pt{
+- (id)initWithPoint:(CGPoint)pt  mapLevel:(int) maplevel{
 	self.x=pt.x;
 	self.y=pt.y;
+    self.r=maplevel;
 	return self;
 }
 -(id)initWithCoder:(NSCoder *)coder{

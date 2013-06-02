@@ -13,6 +13,6 @@
 @property     int y;   //row
 @property     int r;   //resolution
 
-- (id)initWithPoint:(CGPoint)pt;
+- (id)initWithPoint:(CGPoint)pt mapLevel:(int)maplevel;
 
 @end

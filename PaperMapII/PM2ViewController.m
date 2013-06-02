@@ -12,6 +12,7 @@
 #import "DrawableMapScrollView.h"
 #import "MapSources.h"
 #import "Recorder.h"
+#import "LineProperty.h"
 
 @interface PM2ViewController ()
 
@@ -21,6 +22,7 @@
 
 @synthesize mapScrollView;
 @synthesize mapSources;
+@synthesize lineProperty;
 //float zmc;
 
 -(void)add_MapScrollView{
@@ -33,11 +35,15 @@
     mapSources=[[MapSources alloc]init];
     mapSources.mapType=googleMap;
     
-    mapScrollView.mapsourceDelegate=mapSources;
-	mapScrollView.singleTapHandleDelegate=_routRecorder;
+    mapScrollView.mapsourceDelegate=mapSources;	
     [[self view] addSubview:mapScrollView];
+    
+    //Drawing Recoder or GPS Recorder
     self.routRecorder=[[Recorder alloc]init];
-    [self.routRecorder start];
+    if(self.routRecorder)
+        mapScrollView.recordingDelegate=_routRecorder;
+    lineProperty=[[LineProperty alloc]initWithRed:0.2 green:0.3 blue:0.9 alpha:0.8 linewidth:3];
+    [self.routRecorder start:lineProperty];   //user tap to enter intow drawing state here
 }
 
 - (void)viewDidLoad

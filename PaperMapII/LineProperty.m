@@ -9,6 +9,15 @@
 #import "LineProperty.h"
 
 @implementation LineProperty
+
+- (id)initWithRed:(float)red green:(float)green blue:(float) blue alpha:(float) alpha linewidth:(int)width {
+	self.red=red;
+	self.green=green;
+    self.blue=blue;
+    self.alpha=alpha;
+    self.lineWidth=width;
+	return self;
+}
 -(id)initWithCoder:(NSCoder *)coder{
 	if(self=[super init]){
 		self.red  =[coder decodeFloatForKey:@"RED"];

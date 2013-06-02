@@ -12,6 +12,7 @@
 @implementation MapScrollView
 
 @synthesize zoomView;
+@synthesize maplevel;
 
 const int bz=0;        //bezel width, should be set to 0 eventually
 const int SIZE=256;     // tile size
@@ -440,5 +441,11 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView{
 	//return nil;  //return nil if you do not zooming to occur
     return zoomView;
+}
+
+#pragma mark ----------------------------
+#pragma mark PM2SingleTapHandleDelegate method
+- (void)tappedView:(UIView *)view singleTapAtPoint:(CGPoint)tapPoint{
+    
 }
 @end

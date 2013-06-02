@@ -8,7 +8,8 @@
 
 #import "Recorder.h"
 #import "Track.h"
-
+#import "LineProperty.h"
+#import "Node.h"
 @implementation Recorder
 - (id)init {
     self = [super init];
@@ -18,7 +19,7 @@
     }
     return self;
 }
-- (void)start{
+- (void)start:(LineProperty *)prop{
     if (_recording) {
         return;
     }
@@ -27,12 +28,20 @@
         return;
     }
     _recording=true;
+    self.track.lineProperty=prop;
 }
 - (void)stop{
     _recording=false;
 }
-#pragma mark -----------------HandleSingleTap Delegate method------
-- (void)tappedView:(UIView *)view singleTapAtPoint:(CGPoint)tapPoint{
-    if(!_recording)return;
+#pragma mark ------------------PM2RecordingDelegate method---------
+
+- (void)mapLevel:(int)maplevel singleTapAtPoint:(CGPoint)tapPoint{
+    NSLog(@"gotSingleTapAtPoint in recoder - need to store the tapped point here");
+    Node *node=[[Node alloc]initWithPoint:tapPoint mapLevel:maplevel];
+    if (!self.track.nodes) {
+        self.track.nodes=[[NSArray alloc]initWithObjects:node,nil];
+    }else{
+        self.track.nodes=[self.track.nodes arrayByAddingObject:node];
+    }
 }
 @end

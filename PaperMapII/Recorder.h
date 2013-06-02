@@ -9,13 +9,14 @@
 #import <Foundation/Foundation.h>
 #import "PM2Protocols.h"
 @class Track;
-@interface Recorder : NSObject<PM2SingleTapHandleDelegate>
+@class LineProperty;
+@interface Recorder : NSObject<PM2RecordingDelegate>
 
 @property (nonatomic,strong) Track * track;
 @property bool recording; //if it is recording
 
-- (void)start;
+- (void)start:(LineProperty *)prop;
 - (void)stop;
-- (void)tappedView:(UIView *)view singleTapAtPoint:(CGPoint)tapPoint;
+- (void)mapLevel:(int)maplevel singleTapAtPoint:(CGPoint)tapPoint;
 
 @end

@@ -38,5 +38,4 @@ extern const int bz;        //bezel width, should be set to 0 eventually
 }
 */
 
-
 @end

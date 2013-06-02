@@ -9,7 +9,7 @@
 #import "PaperMapIITests.h"
 #import "Node.h"
 #import "LineProperty.h"
-#import "Line.h"
+#import "Track.h"
 @implementation PaperMapIITests
 
 - (void)setUp
@@ -44,11 +44,11 @@
     STAssertEquals(lp1.red,lp.red, @"LineProperty Copying Failed");
 }
 - (void)testCopyLine{
-    Line * line=[[Line alloc]init];
+    Track * line=[[Track alloc]init];
     line.nodes=[[NSArray alloc]initWithObjects:[[Node alloc]initWithPoint:CGPointMake(1.0,2.0)], nil];
     line.lineProperty=[[LineProperty alloc]init];
     line.lineProperty.red=0.66f;
-    Line * line2=[line copy];
+    Track * line2=[line copy];
     STAssertEquals(line.lineProperty.red,line2.lineProperty.red, @"LineProperty element Copying Failed");
     Node *node=[line.nodes objectAtIndex:0];
     Node *node2=[line2.nodes objectAtIndex:0];
