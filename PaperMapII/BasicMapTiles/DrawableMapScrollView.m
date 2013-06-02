@@ -1,31 +1,23 @@
 //
-//  MapTile.m
+//  DrawableMapScrollView.m
 //  PaperMapII
 //
-//  Created by Yali Zhu on 5/18/13.
+//  Created by Yali Zhu on 6/1/13.
 //  Copyright (c) 2013 Yali Zhu. All rights reserved.
 //
 
-#import "MapTile.h"
+#import "DrawableMapScrollView.h"
 
-@implementation MapTile
+@implementation DrawableMapScrollView
 
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-        row=-1;    //means image in recycle pool
-		col=0;
-		res=0;
-        self.modeCol=0;
-        self.mType=0;
-        [self setBackgroundColor:[UIColor clearColor]];     //<===important, if not set clear, the map tiles beneath it won't show up
     }
     return self;
 }
-
-@synthesize row,col,res;
 
 /*
 // Only override drawRect: if you perform custom drawing.

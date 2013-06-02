@@ -8,9 +8,11 @@
 
 #import <Foundation/Foundation.h>
 @class TapDetectView;
+@class MapTile;
+
 @protocol PM2MapSourceDelegate <NSObject>
 @optional
-- (UIImage *)mapLevel:(int)mapLevel row:(int)row col:(int)col;
+- (void)mapTile:(MapTile *)tile;
 @end
 
 @protocol PM2SingleTapHandleDelegate <NSObject>

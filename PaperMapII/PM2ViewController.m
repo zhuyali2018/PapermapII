@@ -8,8 +8,10 @@
 
 #import "PM2ViewController.h"
 //#import "MapScrollView.h"
-#import "TappableMapScrollView.h"
+//#import "TappableMapScrollView.h"
+#import "DrawableMapScrollView.h"
 #import "MapSources.h"
+#import "Recorder.h"
 
 @interface PM2ViewController ()
 
@@ -26,14 +28,16 @@
 	CGRect visibleBounds = [self.view bounds];
 	float width=visibleBounds.size.width-2*bazel;
 	float height=visibleBounds.size.height-2*bazel;
-	mapScrollView=[[TappableMapScrollView alloc] initWithFrame:CGRectMake(bazel,bazel,width,height)];
-    
+	//mapScrollView=[[TappableMapScrollView alloc] initWithFrame:CGRectMake(bazel,bazel,width,height)];
+    mapScrollView=[[DrawableMapScrollView alloc] initWithFrame:CGRectMake(bazel,bazel,width,height)];
     mapSources=[[MapSources alloc]init];
-    mapSources->bSatMap=FALSE;
+    mapSources.mapType=googleMap;
     
     mapScrollView.mapsourceDelegate=mapSources;
-	
+	mapScrollView.singleTapHandleDelegate=_routRecorder;
     [[self view] addSubview:mapScrollView];
+    self.routRecorder=[[Recorder alloc]init];
+    [self.routRecorder start];
 }
 
 - (void)viewDidLoad

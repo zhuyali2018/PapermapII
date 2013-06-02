@@ -10,8 +10,16 @@
 		AA04240417526D91004970B4 /* TapDetectView.m in Sources */ = {isa = PBXBuildFile; fileRef = AA04240317526D91004970B4 /* TapDetectView.m */; };
 		AA04240517526D91004970B4 /* TapDetectView.m in Sources */ = {isa = PBXBuildFile; fileRef = AA04240317526D91004970B4 /* TapDetectView.m */; };
 		AA511CD6174F1F0F00F46B1A /* MapSources.m in Sources */ = {isa = PBXBuildFile; fileRef = AA511CD5174F1F0F00F46B1A /* MapSources.m */; };
+		AA729A53175870D800F6AF78 /* LineProperty.m in Sources */ = {isa = PBXBuildFile; fileRef = AA729A52175870D800F6AF78 /* LineProperty.m */; };
+		AA729A54175870D800F6AF78 /* LineProperty.m in Sources */ = {isa = PBXBuildFile; fileRef = AA729A52175870D800F6AF78 /* LineProperty.m */; };
 		AAB3A65617513E6C00214D2C /* TappableMapScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = AAB3A65517513E6C00214D2C /* TappableMapScrollView.m */; };
 		AAB3A65717513E6C00214D2C /* TappableMapScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = AAB3A65517513E6C00214D2C /* TappableMapScrollView.m */; };
+		AABD95D8175A10CC00B2BC33 /* DrawableMapScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = AABD95D7175A10CC00B2BC33 /* DrawableMapScrollView.m */; };
+		AABD95D9175A10CC00B2BC33 /* DrawableMapScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = AABD95D7175A10CC00B2BC33 /* DrawableMapScrollView.m */; };
+		AABD95DC175A1C2F00B2BC33 /* Track.m in Sources */ = {isa = PBXBuildFile; fileRef = AABD95DB175A1C2F00B2BC33 /* Track.m */; };
+		AABD95DD175A1C2F00B2BC33 /* Track.m in Sources */ = {isa = PBXBuildFile; fileRef = AABD95DB175A1C2F00B2BC33 /* Track.m */; };
+		AABD95E0175A248700B2BC33 /* Recorder.m in Sources */ = {isa = PBXBuildFile; fileRef = AABD95DF175A248600B2BC33 /* Recorder.m */; };
+		AABD95E1175A248700B2BC33 /* Recorder.m in Sources */ = {isa = PBXBuildFile; fileRef = AABD95DF175A248600B2BC33 /* Recorder.m */; };
 		AABDD48117437B3600A0D6E9 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AABDD48017437B3600A0D6E9 /* UIKit.framework */; };
 		AABDD48317437B3600A0D6E9 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AABDD48217437B3600A0D6E9 /* Foundation.framework */; };
 		AABDD48517437B3600A0D6E9 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AABDD48417437B3600A0D6E9 /* CoreGraphics.framework */; };
@@ -3447,6 +3455,8 @@
 		AABDE8F4174755C000A0D6E9 /* Sat4_9_8.jpg in Resources */ = {isa = PBXBuildFile; fileRef = AABDDBA5174755BE00A0D6E9 /* Sat4_9_8.jpg */; };
 		AABDE8F5174755C000A0D6E9 /* Sat4_9_9.jpg in Resources */ = {isa = PBXBuildFile; fileRef = AABDDBA6174755BE00A0D6E9 /* Sat4_9_9.jpg */; };
 		AABDE8F6174755C000A0D6E9 /* Sat4_9_9.jpg in Resources */ = {isa = PBXBuildFile; fileRef = AABDDBA6174755BE00A0D6E9 /* Sat4_9_9.jpg */; };
+		AAC84848175718EC002D7AA9 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AABDD48417437B3600A0D6E9 /* CoreGraphics.framework */; };
+		AAC8484C175854C0002D7AA9 /* Node.m in Sources */ = {isa = PBXBuildFile; fileRef = AAC8484B175854C0002D7AA9 /* Node.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -3465,8 +3475,16 @@
 		AA511CD2174F152100F46B1A /* PM2Protocols.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PM2Protocols.h; sourceTree = "<group>"; };
 		AA511CD4174F1F0F00F46B1A /* MapSources.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapSources.h; sourceTree = "<group>"; };
 		AA511CD5174F1F0F00F46B1A /* MapSources.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapSources.m; sourceTree = "<group>"; };
+		AA729A51175870D800F6AF78 /* LineProperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LineProperty.h; sourceTree = "<group>"; };
+		AA729A52175870D800F6AF78 /* LineProperty.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LineProperty.m; sourceTree = "<group>"; };
 		AAB3A65417513E6B00214D2C /* TappableMapScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TappableMapScrollView.h; sourceTree = "<group>"; };
 		AAB3A65517513E6C00214D2C /* TappableMapScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TappableMapScrollView.m; sourceTree = "<group>"; };
+		AABD95D6175A10CC00B2BC33 /* DrawableMapScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DrawableMapScrollView.h; path = BasicMapTiles/DrawableMapScrollView.h; sourceTree = "<group>"; };
+		AABD95D7175A10CC00B2BC33 /* DrawableMapScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DrawableMapScrollView.m; path = BasicMapTiles/DrawableMapScrollView.m; sourceTree = "<group>"; };
+		AABD95DA175A1C2F00B2BC33 /* Track.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Track.h; sourceTree = "<group>"; };
+		AABD95DB175A1C2F00B2BC33 /* Track.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Track.m; sourceTree = "<group>"; };
+		AABD95DE175A248600B2BC33 /* Recorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Recorder.h; sourceTree = "<group>"; };
+		AABD95DF175A248600B2BC33 /* Recorder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Recorder.m; sourceTree = "<group>"; };
 		AABDD47D17437B3600A0D6E9 /* PaperMapII.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PaperMapII.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AABDD48017437B3600A0D6E9 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		AABDD48217437B3600A0D6E9 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -5204,6 +5222,8 @@
 		AABDDBA4174755BE00A0D6E9 /* Sat4_9_7.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Sat4_9_7.jpg; sourceTree = "<group>"; };
 		AABDDBA5174755BE00A0D6E9 /* Sat4_9_8.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Sat4_9_8.jpg; sourceTree = "<group>"; };
 		AABDDBA6174755BE00A0D6E9 /* Sat4_9_9.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Sat4_9_9.jpg; sourceTree = "<group>"; };
+		AAC8484A175854C0002D7AA9 /* Node.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Node.h; sourceTree = "<group>"; };
+		AAC8484B175854C0002D7AA9 /* Node.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Node.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -5223,6 +5243,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AAC84848175718EC002D7AA9 /* CoreGraphics.framework in Frameworks */,
 				AABDD4A517437B3600A0D6E9 /* SenTestingKit.framework in Frameworks */,
 				AABDD4A617437B3600A0D6E9 /* UIKit.framework in Frameworks */,
 				AABDD4A717437B3600A0D6E9 /* Foundation.framework in Frameworks */,
@@ -5283,6 +5304,7 @@
 				AABDD49B17437B3600A0D6E9 /* PM2ViewController.xib */,
 				AA511CD3174F1E7600F46B1A /* MapSources */,
 				AABDD4E71745EF1600A0D6E9 /* MapViews */,
+				AAC8484917585415002D7AA9 /* Drawing Classes */,
 				AABDD48717437B3600A0D6E9 /* Supporting Files */,
 				AA511CD2174F152100F46B1A /* PM2Protocols.h */,
 			);
@@ -5331,6 +5353,8 @@
 				AABDD4E91745F02B00A0D6E9 /* MapScrollView.m */,
 				AAB3A65417513E6B00214D2C /* TappableMapScrollView.h */,
 				AAB3A65517513E6C00214D2C /* TappableMapScrollView.m */,
+				AABD95D6175A10CC00B2BC33 /* DrawableMapScrollView.h */,
+				AABD95D7175A10CC00B2BC33 /* DrawableMapScrollView.m */,
 				AA04240217526D91004970B4 /* TapDetectView.h */,
 				AA04240317526D91004970B4 /* TapDetectView.m */,
 				AABDD4EC1747402D00A0D6E9 /* ZoomView.h */,
@@ -7052,6 +7076,21 @@
 				AABDDBA6174755BE00A0D6E9 /* Sat4_9_9.jpg */,
 			);
 			path = BasicMapTiles;
+			sourceTree = "<group>";
+		};
+		AAC8484917585415002D7AA9 /* Drawing Classes */ = {
+			isa = PBXGroup;
+			children = (
+				AAC8484A175854C0002D7AA9 /* Node.h */,
+				AAC8484B175854C0002D7AA9 /* Node.m */,
+				AA729A51175870D800F6AF78 /* LineProperty.h */,
+				AA729A52175870D800F6AF78 /* LineProperty.m */,
+				AABD95DA175A1C2F00B2BC33 /* Track.h */,
+				AABD95DB175A1C2F00B2BC33 /* Track.m */,
+				AABD95DE175A248600B2BC33 /* Recorder.h */,
+				AABD95DF175A248600B2BC33 /* Recorder.m */,
+			);
+			name = "Drawing Classes";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -10584,6 +10623,11 @@
 				AA511CD6174F1F0F00F46B1A /* MapSources.m in Sources */,
 				AAB3A65617513E6C00214D2C /* TappableMapScrollView.m in Sources */,
 				AA04240417526D91004970B4 /* TapDetectView.m in Sources */,
+				AAC8484C175854C0002D7AA9 /* Node.m in Sources */,
+				AA729A53175870D800F6AF78 /* LineProperty.m in Sources */,
+				AABD95D8175A10CC00B2BC33 /* DrawableMapScrollView.m in Sources */,
+				AABD95DC175A1C2F00B2BC33 /* Track.m in Sources */,
+				AABD95E0175A248700B2BC33 /* Recorder.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -10598,6 +10642,10 @@
 				AABDD4FB1747513700A0D6E9 /* MapTile.m in Sources */,
 				AAB3A65717513E6C00214D2C /* TappableMapScrollView.m in Sources */,
 				AA04240517526D91004970B4 /* TapDetectView.m in Sources */,
+				AA729A54175870D800F6AF78 /* LineProperty.m in Sources */,
+				AABD95D9175A10CC00B2BC33 /* DrawableMapScrollView.m in Sources */,
+				AABD95DD175A1C2F00B2BC33 /* Track.m in Sources */,
+				AABD95E1175A248700B2BC33 /* Recorder.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

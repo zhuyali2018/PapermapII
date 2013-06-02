@@ -85,18 +85,15 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
             col=col-half;
         }else {
             col+=half;
-        }
+        }        
     }
+    tile1.modeCol=col;
      NSLog(@"=============>Get Map tile %d, %d on level %d",tile1.row,tile1.col,tile1.res);
     //--------------------call mapsource delegate---------
-    if ([self.mapsourceDelegate respondsToSelector:@selector(mapLevel: row: col:)]) {
-        UIImage * img=[self.mapsourceDelegate mapLevel:maplevel1 row:row col:col];
-        if (nil!=img) {
-            [tile1 setImage:img];
-            return tile1;
-        }
+    if ([self.mapsourceDelegate respondsToSelector:@selector(mapTile:)]) {
+        [self.mapsourceDelegate mapTile:tile1];
     }
-	[tile1 setImage:NULL];  //important, otherwise the old map tile will show up before new one comes in
+	//[tile1 setImage:NULL];  //important, otherwise the old map tile will show up before new one comes in
 	return tile1;
 }
 -(void)fillWindowWithBasicMap:(int)levelDiff{
@@ -138,7 +135,7 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
                     //[zoomView.tileContainer annotateTile:tile res:tile.res row:tile.row col:tile.col];
 					[zoomView.tileContainer addSubview:tile];
                 }
-				[zoomView.tileContainer annotateTile:tile res:tile.res row:row col:col];  //add label to tile
+				//[zoomView.tileContainer annotateTile:tile res:tile.res row:row col:col];  //add label to tile
 				loadedImageCount++;
 				if(loadedImageCount>36) return;   // if it is more than 36, it must not be the layer that needs loading
 			}else{
@@ -193,7 +190,7 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
             CGRect tileR=[view frame];
             CGRect newRect=CGRectMake(tileR.origin.x/zoomFactor, tileR.origin.y/zoomFactor, tileR.size.width/zoomFactor, tileR.size.height/zoomFactor);
             [view setFrame:newRect];
-            [zoomView.tileContainer annotateTile:view res:view.res row:view.row col:view.col];  //add label to tile
+            //[zoomView.tileContainer annotateTile:view res:view.res row:view.row col:view.col];  //add label to tile
             continue;
 			//}
 		}

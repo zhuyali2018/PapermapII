@@ -8,9 +8,10 @@
 
 #import <Foundation/Foundation.h>
 #import "PM2Protocols.h"
-@interface MapSources: NSObject <PM2MapSourceDelegate>{
-    @public
-    BOOL bSatMap;
-}
-    -(UIImage *)mapLevel:(int)mapLevel row:(int)row col:(int)col;
+#import "MapTile.h"
+@interface MapSources: NSObject <PM2MapSourceDelegate>
+
+@property MapType mapType;
+
+- (void)mapTile:(MapTile *)tile1;
 @end
