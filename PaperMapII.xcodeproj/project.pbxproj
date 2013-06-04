@@ -20,6 +20,10 @@
 		AABD95DD175A1C2F00B2BC33 /* Track.m in Sources */ = {isa = PBXBuildFile; fileRef = AABD95DB175A1C2F00B2BC33 /* Track.m */; };
 		AABD95E0175A248700B2BC33 /* Recorder.m in Sources */ = {isa = PBXBuildFile; fileRef = AABD95DF175A248600B2BC33 /* Recorder.m */; };
 		AABD95E1175A248700B2BC33 /* Recorder.m in Sources */ = {isa = PBXBuildFile; fileRef = AABD95DF175A248600B2BC33 /* Recorder.m */; };
+		AABD962B175D98F100B2BC33 /* DrawingBoard.m in Sources */ = {isa = PBXBuildFile; fileRef = AABD962A175D98F100B2BC33 /* DrawingBoard.m */; };
+		AABD962C175D98F100B2BC33 /* DrawingBoard.m in Sources */ = {isa = PBXBuildFile; fileRef = AABD962A175D98F100B2BC33 /* DrawingBoard.m */; };
+		AABD962F175D9FC800B2BC33 /* GPSTrackPOIBoard.m in Sources */ = {isa = PBXBuildFile; fileRef = AABD962E175D9FC800B2BC33 /* GPSTrackPOIBoard.m */; };
+		AABD9630175D9FC800B2BC33 /* GPSTrackPOIBoard.m in Sources */ = {isa = PBXBuildFile; fileRef = AABD962E175D9FC800B2BC33 /* GPSTrackPOIBoard.m */; };
 		AABDD48117437B3600A0D6E9 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AABDD48017437B3600A0D6E9 /* UIKit.framework */; };
 		AABDD48317437B3600A0D6E9 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AABDD48217437B3600A0D6E9 /* Foundation.framework */; };
 		AABDD48517437B3600A0D6E9 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AABDD48417437B3600A0D6E9 /* CoreGraphics.framework */; };
@@ -3485,6 +3489,10 @@
 		AABD95DB175A1C2F00B2BC33 /* Track.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Track.m; sourceTree = "<group>"; };
 		AABD95DE175A248600B2BC33 /* Recorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Recorder.h; sourceTree = "<group>"; };
 		AABD95DF175A248600B2BC33 /* Recorder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Recorder.m; sourceTree = "<group>"; };
+		AABD9629175D98F100B2BC33 /* DrawingBoard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DrawingBoard.h; sourceTree = "<group>"; };
+		AABD962A175D98F100B2BC33 /* DrawingBoard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DrawingBoard.m; sourceTree = "<group>"; };
+		AABD962D175D9FC700B2BC33 /* GPSTrackPOIBoard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPSTrackPOIBoard.h; sourceTree = "<group>"; };
+		AABD962E175D9FC800B2BC33 /* GPSTrackPOIBoard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPSTrackPOIBoard.m; sourceTree = "<group>"; };
 		AABDD47D17437B3600A0D6E9 /* PaperMapII.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PaperMapII.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AABDD48017437B3600A0D6E9 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		AABDD48217437B3600A0D6E9 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -5363,6 +5371,10 @@
 				AABDD4F5174744B500A0D6E9 /* TileContainer.m */,
 				AABDD4F81747513600A0D6E9 /* MapTile.h */,
 				AABDD4F91747513700A0D6E9 /* MapTile.m */,
+				AABD962D175D9FC700B2BC33 /* GPSTrackPOIBoard.h */,
+				AABD962E175D9FC800B2BC33 /* GPSTrackPOIBoard.m */,
+				AABD9629175D98F100B2BC33 /* DrawingBoard.h */,
+				AABD962A175D98F100B2BC33 /* DrawingBoard.m */,
 			);
 			name = MapViews;
 			sourceTree = "<group>";
@@ -10628,6 +10640,8 @@
 				AABD95D8175A10CC00B2BC33 /* DrawableMapScrollView.m in Sources */,
 				AABD95DC175A1C2F00B2BC33 /* Track.m in Sources */,
 				AABD95E0175A248700B2BC33 /* Recorder.m in Sources */,
+				AABD962B175D98F100B2BC33 /* DrawingBoard.m in Sources */,
+				AABD962F175D9FC800B2BC33 /* GPSTrackPOIBoard.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -10646,6 +10660,8 @@
 				AABD95D9175A10CC00B2BC33 /* DrawableMapScrollView.m in Sources */,
 				AABD95DD175A1C2F00B2BC33 /* Track.m in Sources */,
 				AABD95E1175A248700B2BC33 /* Recorder.m in Sources */,
+				AABD962C175D98F100B2BC33 /* DrawingBoard.m in Sources */,
+				AABD9630175D9FC800B2BC33 /* GPSTrackPOIBoard.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

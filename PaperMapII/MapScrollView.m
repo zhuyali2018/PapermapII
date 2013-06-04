@@ -8,7 +8,8 @@
 
 #import "MapScrollView.h"
 #import "MapTile.h"
-
+#import "GPSTrackPOIBoard.h"
+#import "DrawingBoard.h"
 @implementation MapScrollView
 
 @synthesize zoomView;
@@ -291,6 +292,57 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
     }
     return self;
 }
+
+-(BOOL)handleDrawingView{
+	
+	CGRect visibleBounds = [self bounds];   // get the bounds of scrollview on the coordinate system of its contentView - scrollView's frame always is 0,0,320,640 yali320
+	
+	int edge=MIN(visibleBounds.size.height,visibleBounds.size.width);
+	//for production
+	int DrawingFrameBezel=-1*edge;
+	int DrawingFrameBezel1=-90;
+	
+	/////debug setings//////////
+	//int DrawingFrameBezel=60;    //for drawing view, should be minus the size of buffering distance
+	//int DrawingFrameBezel1=200;  //for windows, should be zero or minus for release
+	
+	//X0Y0 for frame visible
+	static bool init = true;
+	CGFloat X0=([self contentOffset].x+        DrawingFrameBezel1)/[self zoomScale];
+	CGFloat Y0=([self contentOffset].y+        DrawingFrameBezel1)/[self zoomScale];
+	CGFloat X1=X0+(visibleBounds.size.width -2*DrawingFrameBezel1)/[self zoomScale];
+	CGFloat Y1=Y0+(visibleBounds.size.height-2*DrawingFrameBezel1)/[self zoomScale];
+	
+	static CGFloat x0,y0,x1,y1;
+	//NSLog(@"[handleDrawingView] Checking Range:X0(%.0f) Y0(%.0f) X1(%.0f) Y1(%.0f) | (%.0f,%.0f),(%.0f,%.0f),[%.0f,%.0f],[%.0f,%.0f]",  X0-x0,Y0-y0,x1-X1,y1-Y1,  x0,y0,x1,y1,X0,Y0,X1,Y1);
+	if(init){
+		//lowercase x0y0 for drawingview moving with scrollview and adjust its position when far enough
+		x0=([self contentOffset].x+        DrawingFrameBezel)/[self zoomScale];
+		y0=([self contentOffset].y+        DrawingFrameBezel)/[self zoomScale];
+		x1=x0+(visibleBounds.size.width -2*DrawingFrameBezel)/[self zoomScale];
+		y1=y0+(visibleBounds.size.height-2*DrawingFrameBezel)/[self zoomScale];
+		
+		//[viewFlattener.drawLineView setFrame:CGRectMake(x0,y0,x1-x0,y1-y0)];
+        [zoomView.gpsTrackPOIBoard setFrame:CGRectMake(x0,y0,x1-x0,y1-y0)];
+		[zoomView.gpsTrackPOIBoard.drawingBoard  setFrame:CGRectMake(0,0,x1-x0,y1-y0)];   //version 4.0
+		init=false;
+	} // else{[viewFlattener.drawLineView setFrame:CGRectMake(x0,y0,x1-x0,y1-y0)];}
+	BOOL correct=(x0>X0)||(x1<X1)||(y0>Y0)||(y1<Y1);
+	// this line of code keeps drawview stable relative to window
+	if(correct){   //if offset is enough, centralize the drawing board
+		x0=([self contentOffset].x+        DrawingFrameBezel)/[self zoomScale];
+		y0=([self contentOffset].y+        DrawingFrameBezel)/[self zoomScale];
+		x1=x0+(visibleBounds.size.width- 2*DrawingFrameBezel)/[self zoomScale];
+		y1=y0+(visibleBounds.size.height-2*DrawingFrameBezel)/[self zoomScale];
+		[zoomView.gpsTrackPOIBoard setFrame:CGRectMake(x0,y0,x1-x0,y1-y0)];
+		[zoomView.gpsTrackPOIBoard.drawingBoard setFrame:CGRectMake(0,0,x1-x0,y1-y0)];   //version 4.0
+		[zoomView.gpsTrackPOIBoard setNeedsDisplay];   //redrawLines
+        //[viewFlattener.drawLineView setNeedsLayout];   //redrawLines
+	}
+	return true;   //always return true to update the tile while making move map with drawing smooth
+	//return correct||resolutionChanged;
+}
+ 
 - (void)layoutSubviews{
     if (self.zooming){
         NSLog(@"self.zooming, exit layoutSubviews:W:%.f, H:%.f",self.contentSize.width,self.contentSize.height);
@@ -329,11 +381,9 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
             return;
         }
     }
-	//if (([self zoomScale]>=2*zmc)||([self zoomScale]<zmc)) {   //key for not overloading too many tiles //modify with a 1.3 coefficient, zmc is either 1 or 1.3
-	//	NSLog(@"zoom scale = %.3f, out or valid range, return",[self zoomScale]);
-	//	return;
-	//}
-    //if(((maplevel>5)&&(!bSatMap))||((maplevel>4)&&bSatMap)){
+
+    [self handleDrawingView];   //drawing view here
+    
     if(maplevel>4){
 		int levelDiff=maplevel-4;
 		

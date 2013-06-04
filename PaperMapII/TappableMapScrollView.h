@@ -11,6 +11,6 @@
 @interface TappableMapScrollView : MapScrollView <PM2MapTapHandleDelegate,PM2SingleTapHandleDelegate>
 @property (nonatomic,strong)TapDetectView * tapDetectView;
 @property (nonatomic) id<PM2RecordingDelegate> recordingDelegate;
-
+@property bool bDrawing;  //if the map is in drawing mode
 - (void)tappedView:(UIView *)view singleTapAtPoint:(CGPoint)tapPoint;
 @end

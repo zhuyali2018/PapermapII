@@ -9,10 +9,10 @@
 #import <UIKit/UIKit.h>
 #import "TileContainer.h"
 #import "PM2Protocols.h"
-
+@class GPSTrackPOIBoard;
 @interface ZoomView : UIView 
 
-@property (nonatomic)TileContainer *tileContainer;
-@property (nonatomic)TileContainer *basicMapLayer;
-
+@property (nonatomic, strong)TileContainer *tileContainer;
+@property (nonatomic, strong)TileContainer *basicMapLayer;
+@property (nonatomic, strong)GPSTrackPOIBoard *gpsTrackPOIBoard;
 @end

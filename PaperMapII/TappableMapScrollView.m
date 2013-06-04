@@ -45,6 +45,7 @@
         [tapDetectView setBackgroundColor:[UIColor clearColor]];  //without this line, the map would be black !
         tapDetectView.drawDelegate=self;
         [self.zoomView addSubview:tapDetectView];
+        self.bDrawing=true;
     }
     return self;
 }
@@ -82,8 +83,12 @@
 #pragma mark -----------------HandleSingleTap Delegate method------
 - (void)tappedView:(UIView *)view singleTapAtPoint:(CGPoint)tapPoint{
     NSLog(@"singleTapAtPoint - need to call external handler here 2");
+    if (!self.bDrawing) {
+        return;
+    }
     if ([recordingDelegate respondsToSelector:@selector(mapLevel:singleTapAtPoint:)]){
         [recordingDelegate mapLevel:self.maplevel singleTapAtPoint:tapPoint];
+        
     }else {
         NSLog(@"[recordingDelegate respondsToSelector:@selector(mapLevel:singleTapAtPoint:)] returns false");
     }
