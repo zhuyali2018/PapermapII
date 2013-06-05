@@ -3476,6 +3476,7 @@
 /* Begin PBXFileReference section */
 		AA04240217526D91004970B4 /* TapDetectView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TapDetectView.h; path = BasicMapTiles/TapDetectView.h; sourceTree = "<group>"; };
 		AA04240317526D91004970B4 /* TapDetectView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TapDetectView.m; path = BasicMapTiles/TapDetectView.m; sourceTree = "<group>"; };
+		AA1B5345175EE308005355C3 /* AllImports.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllImports.h; sourceTree = "<group>"; };
 		AA511CD2174F152100F46B1A /* PM2Protocols.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PM2Protocols.h; sourceTree = "<group>"; };
 		AA511CD4174F1F0F00F46B1A /* MapSources.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapSources.h; sourceTree = "<group>"; };
 		AA511CD5174F1F0F00F46B1A /* MapSources.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapSources.m; sourceTree = "<group>"; };
@@ -5273,6 +5274,7 @@
 		AABDD47417437B3600A0D6E9 = {
 			isa = PBXGroup;
 			children = (
+				AA1B5345175EE308005355C3 /* AllImports.h */,
 				AABDD48617437B3600A0D6E9 /* PaperMapII */,
 				AABDD4AA17437B3600A0D6E9 /* PaperMapIITests */,
 				AABDD47F17437B3600A0D6E9 /* Frameworks */,

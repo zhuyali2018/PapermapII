@@ -11,7 +11,7 @@
 #import "ZoomView.h"
 #import "PM2Protocols.h"
 
-@interface MapScrollView : UIScrollView <UIScrollViewDelegate, PM2SingleTapHandleDelegate>{
+@interface MapScrollView : UIScrollView <UIScrollViewDelegate>{
     NSMutableSet    *reusableTiles;					//<======= recycled tiles holder
     BOOL            Mode;                           //<====TRUE: Western, FALSE:Eastern
     int             maplevel,minMapLevel,maxMapLevel,lastLevel;
@@ -22,5 +22,4 @@
 @property (nonatomic) id<PM2MapSourceDelegate> mapsourceDelegate;
 - (UIView *)dequeueReusableTile;
 
-- (void)tappedView:(UIView *)view singleTapAtPoint:(CGPoint)tapPoint;
 @end

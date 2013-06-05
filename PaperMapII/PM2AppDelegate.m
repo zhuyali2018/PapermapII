@@ -6,8 +6,8 @@
 //  Copyright (c) 2013 Yali Zhu. All rights reserved.
 //
 
+#import "AllImports.h"
 #import "PM2AppDelegate.h"
-
 #import "PM2ViewController.h"
 
 @implementation PM2AppDelegate
@@ -16,7 +16,7 @@
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     CGRect winLocSize=self.window.bounds;
-    NSLog(@"MainWindow: x=%.f, y=%.f, w=%.f, h=%.f",winLocSize.origin.x,winLocSize.origin.y,winLocSize.size.width,winLocSize.size.height);
+    NSLOG(@"MainWindow: x=%.f, y=%.f, w=%.f, h=%.f",winLocSize.origin.x,winLocSize.origin.y,winLocSize.size.width,winLocSize.size.height);
     // Override point for customization after application launch.
     self.viewController = [[PM2ViewController alloc] initWithNibName:@"PM2ViewController" bundle:nil];
     self.window.rootViewController = self.viewController;

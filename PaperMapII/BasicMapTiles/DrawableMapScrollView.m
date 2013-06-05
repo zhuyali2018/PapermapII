@@ -7,6 +7,8 @@
 //
 
 #import "DrawableMapScrollView.h"
+#import "GPSTrackPOIBoard.h"
+#import "DrawingBoard.h"
 
 @implementation DrawableMapScrollView
 
@@ -28,4 +30,12 @@
 }
 */
 
+#define DRAWINGBOARD self.zoomView.gpsTrackPOIBoard.drawingBoard
+-(void)registTracksToBeDrawn:(NSArray*)tracks1{
+    if (!DRAWINGBOARD.ptrToTracksArray) {
+        DRAWINGBOARD.ptrToTracksArray=[[NSArray alloc]initWithObjects:tracks1,nil];
+    }else{
+        DRAWINGBOARD.ptrToTracksArray=[DRAWINGBOARD.ptrToTracksArray arrayByAddingObject:tracks1];
+    }
+}
 @end

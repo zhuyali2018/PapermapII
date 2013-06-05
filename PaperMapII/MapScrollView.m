@@ -5,7 +5,7 @@
 //  Created by Yali Zhu on 5/16/13.
 //  Copyright (c) 2013 Yali Zhu. All rights reserved.
 //
-
+#import "AllImports.h"
 #import "MapScrollView.h"
 #import "MapTile.h"
 #import "GPSTrackPOIBoard.h"
@@ -81,7 +81,7 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
 	tile1.col=col;
 	
     if (!Mode) {   //is the map Eastern hemisphere center or western one center of the map
-        NSLog(@"Mode is Eastern:col=%d, width=%.f",col,pow(2,maplevel1));
+        NSLOG(@"Mode is Eastern:col=%d, width=%.f",col,pow(2,maplevel1));
         int half=pow(2.0, maplevel1)/2;
         if (col>=half) {
             col=col-half;
@@ -90,7 +90,7 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
         }        
     }
     tile1.modeCol=col;
-     NSLog(@"=============>Get Map tile %d, %d on level %d",tile1.row,tile1.col,tile1.res);
+     NSLOG(@"=============>Get Map tile %d, %d on level %d",tile1.row,tile1.col,tile1.res);
     //--------------------call mapsource delegate---------
     if ([self.mapsourceDelegate respondsToSelector:@selector(mapTile:)]) {
         [self.mapsourceDelegate mapTile:tile1];
@@ -99,8 +99,8 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
 	return tile1;
 }
 -(void)fillWindowWithBasicMap:(int)levelDiff{
-    if(levelDiff<0) { NSLog(@"error: levelDiff < 0, exit fillWindowWithBasicMap"); return;}
-    NSLog(@"in fillWindowWithBasicMap");
+    if(levelDiff<0) { NSLOG(@"error: levelDiff < 0, exit fillWindowWithBasicMap"); return;}
+    NSLOG(@"in fillWindowWithBasicMap");
     int i=levelDiff;
 	float tileSize=SIZE*pow(2,levelDiff);
 	float scaledTileSide  = tileSize  * [self zoomScale];
@@ -115,7 +115,7 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
     int lastNeededCol  = MIN(maxCol,floorf((CGRectGetMaxX(visibleBounds)-posErr1.x) / scaledTileSide));    //<=======
 	
     if ((firstNeededRow==firstVisibleRowx[i])&&(firstNeededCol==firstVisibleColumnx[i])&&(lastNeededCol==lastVisibleColumnx[i])&&(lastNeededRow==lastVisibleRowx[i])) {
-        NSLog(@"exit fillWindowWithBasicMap (2) i=%d, neededRow=%d, visiRow=%d",i,firstNeededRow,firstVisibleRowx[i]);
+        NSLOG(@"exit fillWindowWithBasicMap (2) i=%d, neededRow=%d, visiRow=%d",i,firstNeededRow,firstVisibleRowx[i]);
 		return;
 	}
     int loadedImageCount=0;
@@ -125,10 +125,10 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
 			//NSLog(@"%d>%d ?  %d >%d ? %d - %d ",firstVisibleRowx[i],row,firstVisibleColumnx[i],col,lastVisibleRowx[i],lastVisibleColumnx[i]);
 			if (tileIsMissing) {
 				if([self alreadyLoaded:row col:col levelDiff:i]){
-					NSLog(@"Already loaded image %d,%d on level %d",row,col,(maplevel-levelDiff));
+					NSLOG(@"Already loaded image %d,%d on level %d",row,col,(maplevel-levelDiff));
 					continue;
 				}
-				NSLog(@"Load image %d,%d on level %d(%d-%d)",row,col,(maplevel-levelDiff),maplevel,levelDiff);
+				NSLOG(@"Load image %d,%d on level %d(%d-%d)",row,col,(maplevel-levelDiff),maplevel,levelDiff);
 				MapTile * tile=[self tileForRow:row column:col mapLevel:(maplevel-levelDiff)];   //get the map tile image
 				[tile setFrame:CGRectMake(tileSize*col+posErr1.x, tileSize*row+posErr1.y, tileSize,tileSize)];
 				if(i>0)
@@ -141,13 +141,13 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
 				loadedImageCount++;
 				if(loadedImageCount>36) return;   // if it is more than 36, it must not be the layer that needs loading
 			}else{
-                NSLog(@"Tile NOT MISSING on image %d,%d on level %d",row,col,(maplevel-levelDiff));
+                NSLOG(@"Tile NOT MISSING on image %d,%d on level %d",row,col,(maplevel-levelDiff));
             }
 		}
 	}
 	firstVisibleRowx[i] = firstNeededRow; firstVisibleColumnx[i] = firstNeededCol;
     lastVisibleRowx[i]  = lastNeededRow;  lastVisibleColumnx[i]  = lastNeededCol;
-    NSLog(@"fillWindowWithBasicMap returns");
+    NSLOG(@"fillWindowWithBasicMap returns");
 }
 
 -(void) setMaxandMinZoomScale{
@@ -200,7 +200,7 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
 		[reusableTiles addObject:view];
 		[view removeFromSuperview];
 		[(UIImageView *)view setImage:NULL];
-        NSLog(@"One Tile recycled !!!");
+        NSLOG(@"One Tile recycled !!!");
 		c++;
     }
 	
@@ -208,7 +208,7 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
 		[reusableTiles addObject:view];
 		[view removeFromSuperview];
 		[(UIImageView *)view setImage:NULL];
-        NSLog(@"Another Tile recycled !!!");
+        NSLOG(@"Another Tile recycled !!!");
 		c++;
     }
 	
@@ -345,18 +345,18 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
  
 - (void)layoutSubviews{
     if (self.zooming){
-        NSLog(@"self.zooming, exit layoutSubviews:W:%.f, H:%.f",self.contentSize.width,self.contentSize.height);
+        NSLOG(@"self.zooming, exit layoutSubviews:W:%.f, H:%.f",self.contentSize.width,self.contentSize.height);
         return;
     }
     
-    NSLog(@"in layoutSubviews");
-    NSLog(@"ContentOffset:x:%.f, y:%.f",self.contentOffset.x,self.contentOffset.y);
-    NSLog(@"ContentSize:W:%.f, H:%.f\n\n",self.contentSize.width,self.contentSize.height);
+    NSLOG(@"in layoutSubviews");
+    NSLOG(@"ContentOffset:x:%.f, y:%.f",self.contentOffset.x,self.contentOffset.y);
+    NSLOG(@"ContentSize:W:%.f, H:%.f\n\n",self.contentSize.width,self.contentSize.height);
     
     int x1=self.contentOffset.x;
     int x2=[self bounds].size.width;
     if ((x1+x2)>=self.contentSize.width) {
-        NSLog(@"====================> right edge reached, time to change mode!: %d+%d=%d>%.f",x1,x2,(x1+x2),self.contentSize.width);
+        NSLOG(@"====================> right edge reached, time to change mode!: %d+%d=%d>%.f",x1,x2,(x1+x2),self.contentSize.width);
         CGPoint offset=[self contentOffset];
         CGSize Size=[self contentSize];
         if (offset.x>Size.width/2) {
@@ -409,8 +409,8 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
 #pragma mark UIScrollViewDelegate methods
 - (void) scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(float)scale{
     //NSLog(@"scale:%f",scale);
-    NSLog(@"scrollviewContent:%.f,%.f :%.f x %.f",scrollView.contentOffset.x,scrollView.contentOffset.y,scrollView.contentSize.width,scrollView.contentSize.height);
-    NSLog(@"--------> Zoom fingers let go:maplevel:%d, atScale:%.2f, zoomScale:%.2f",maplevel,scale,[self zoomScale]);
+    NSLOG(@"scrollviewContent:%.f,%.f :%.f x %.f",scrollView.contentOffset.x,scrollView.contentOffset.y,scrollView.contentSize.width,scrollView.contentSize.height);
+    NSLOG(@"--------> Zoom fingers let go:maplevel:%d, atScale:%.2f, zoomScale:%.2f",maplevel,scale,[self zoomScale]);
     //all the triks should happen here:
     savedOffset=[self contentOffset];
     float zoomFactor=1.0;
@@ -493,9 +493,4 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
     return zoomView;
 }
 
-#pragma mark ----------------------------
-#pragma mark PM2SingleTapHandleDelegate method
-- (void)tappedView:(UIView *)view singleTapAtPoint:(CGPoint)tapPoint{
-    
-}
 @end

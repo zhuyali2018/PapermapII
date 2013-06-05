@@ -8,7 +8,11 @@
 
 #define SIZE 256
 #define ZOOM_STEP 2.0
+
+#import "AllImports.h"
 #import "TappableMapScrollView.h"
+#import "DrawingBoard.h"
+#import "GPSTrackPOIBoard.h"
 
 @implementation TappableMapScrollView
 @synthesize tapDetectView;
@@ -82,15 +86,16 @@
 }
 #pragma mark -----------------HandleSingleTap Delegate method------
 - (void)tappedView:(UIView *)view singleTapAtPoint:(CGPoint)tapPoint{
-    NSLog(@"singleTapAtPoint - need to call external handler here 2");
+    NSLOG3(@"singleTapAtPoint - need to call external handler here 2");
     if (!self.bDrawing) {
         return;
     }
     if ([recordingDelegate respondsToSelector:@selector(mapLevel:singleTapAtPoint:)]){
         [recordingDelegate mapLevel:self.maplevel singleTapAtPoint:tapPoint];
+        [self.zoomView.gpsTrackPOIBoard.drawingBoard setNeedsDisplay];
         
     }else {
-        NSLog(@"[recordingDelegate respondsToSelector:@selector(mapLevel:singleTapAtPoint:)] returns false");
+        NSLOG3(@"[recordingDelegate respondsToSelector:@selector(mapLevel:singleTapAtPoint:)] returns false");
     }
 }
 @end

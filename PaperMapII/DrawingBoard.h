@@ -7,7 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-
+@class Track;
 @interface DrawingBoard : UIView
+@property (nonatomic,strong) NSArray * ptrToTracksArray;   //array of pointers to tracks which is also an array of tracks
 
+//-(void)registTrack:(Track*)track;
 @end

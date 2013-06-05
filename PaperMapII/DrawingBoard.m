@@ -5,10 +5,11 @@
 //  Created by Yali Zhu on 6/3/13.
 //  Copyright (c) 2013 Yali Zhu. All rights reserved.
 //
-
+#import "AllImports.h"
 #import "DrawingBoard.h"
 
 @implementation DrawingBoard
+@synthesize ptrToTracksArray;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -34,7 +35,15 @@
     CGContextMoveToPoint(context, 0,0);
     CGContextAddLineToPoint(context, 500, 500);
     CGContextStrokePath(context);
+    NSLOG1(@"Line Redrawn!");
 }
 
 
+//-(void)registTrack:(Track*)track{
+//    if (!self.tracks) {
+//        self.tracks=[[NSArray alloc]initWithObjects:track,nil];
+//    }else{
+//        self.tracks=[self.tracks arrayByAddingObject:track];
+//    }
+//}
 @end

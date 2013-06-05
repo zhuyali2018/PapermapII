@@ -5,7 +5,7 @@
 //  Created by Yali Zhu on 6/1/13.
 //  Copyright (c) 2013 Yali Zhu. All rights reserved.
 //
-
+#import "AllImports.h"
 #import "Recorder.h"
 #import "Track.h"
 #import "LineProperty.h"
@@ -36,7 +36,7 @@
 #pragma mark ------------------PM2RecordingDelegate method---------
 
 - (void)mapLevel:(int)maplevel singleTapAtPoint:(CGPoint)tapPoint{
-    NSLog(@"gotSingleTapAtPoint in recoder - need to store the tapped point here");
+    NSLOG3(@"gotSingleTapAtPoint in recoder - need to store the tapped point here");
     Node *node=[[Node alloc]initWithPoint:tapPoint mapLevel:maplevel];
     if (!self.track.nodes) {
         self.track.nodes=[[NSArray alloc]initWithObjects:node,nil];

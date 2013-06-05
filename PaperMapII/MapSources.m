@@ -5,7 +5,7 @@
 //  Created by Yali Zhu on 5/23/13.
 //  Copyright (c) 2013 Yali Zhu. All rights reserved.
 //
-
+#import "AllImports.h"
 #import "MapSources.h"
 #import "MapTile.h"
 @implementation MapSources
@@ -226,7 +226,7 @@
         if([[NSFileManager defaultManager] createDirectoryAtPath:absPath withIntermediateDirectories:YES attributes:nil error:NULL]){
             [imageData writeToFile:pathFn atomically:YES]; //save to cache
         }else {
-            NSLog(@"[loadImageInBackground] Directory creation failed:%@",pathFn);
+            NSLOG(@"[loadImageInBackground] Directory creation failed:%@",pathFn);
         }
     }
     if(img)
