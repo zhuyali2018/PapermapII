@@ -46,9 +46,9 @@
 #pragma mark ------------------PM2RecordingDelegate method---------
 
 - (void)mapLevel:(int)maplevel singleTapAtPoint:(CGPoint)tapPoint{
-    NSLOG3(@"gotSingleTapAtPoint in recoder - need to store the tapped point here");
+    //NSLOG3(@"gotSingleTapAtPoint in recoder - need to store the tapped point here");
     if(!_recording){   //if not recording, do not create the node for the tappoint
-        [self start:[self.track.lineProperty copy]];  //TODO: Remove this test statement
+        //[self start:[self.track.lineProperty copy]];  //TODO: Remove this test statement
         return;
     }
     Node *node=[[Node alloc]initWithPoint:tapPoint mapLevel:maplevel];
@@ -58,8 +58,9 @@
         self.track.nodes=[self.track.nodes arrayByAddingObject:node];
     }
     //TODO: remove following test statements
-    NSLOG3(@"Nodes cout=%d",[self.track.nodes count]);
-    if([self.track.nodes count]>3)
-        [self stop];
+    NSLOG4(@"Nodes cout=%d",[self.track.nodes count]);
+    
+    //if([self.track.nodes count]>3)
+    //    [self stop];
 }
 @end

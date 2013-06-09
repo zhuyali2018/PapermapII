@@ -18,7 +18,10 @@ const static bool showLog1=true;   //redrawn
 const static bool showLog2=false;   //touch handler log
 #define NSLOG2(fmt, ...) if(showLog2) NSLog((@"%s " fmt), __PRETTY_FUNCTION__,##__VA_ARGS__)
 
-const static bool showLog3=true;   //New Log
+const static bool showLog3=false;   //New Log
 #define NSLOG3(fmt, ...) if(showLog3) NSLog((@"%s " fmt), __PRETTY_FUNCTION__,##__VA_ARGS__)
+
+const static bool showLog4=true;   //New Log
+#define NSLOG4(fmt, ...) if(showLog4) NSLog((@"%s " fmt), __PRETTY_FUNCTION__,##__VA_ARGS__)
 
 #endif

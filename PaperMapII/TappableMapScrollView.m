@@ -9,6 +9,10 @@
 #define SIZE 256
 #define ZOOM_STEP 2.0
 
+#import "PM2AppDelegate.h"      //TODO: Remove this line for final release
+#import "PM2ViewController.h"   //TODO: Remove this line for final release
+#import "Recorder.h"            //TODO: Remove this line for final release
+
 #import "AllImports.h"
 #import "TappableMapScrollView.h"
 #import "DrawingBoard.h"
@@ -77,6 +81,10 @@
 	float newScale = [self zoomScale] * ZOOM_STEP;
     CGRect zoomRect = [self zoomRectForScale:newScale withCenter:tapPoint];
     [self zoomToRect:zoomRect animated:YES];
+    
+    PM2AppDelegate * dele=[[UIApplication sharedApplication] delegate];     //TODO: Remove this test line
+    [dele.viewController.routRecorder stop];                                //TODO: Remove this test line
+    NSLOG4(@"Recorder Stopped!");                                           //TODO: Remove this test line
 }
 - (void)tapDetectView:(TapDetectView *)view gotTwoFingerTapAtPoint:(CGPoint)tapPoint {
     float newScale = [self zoomScale] / ZOOM_STEP;
@@ -84,6 +92,9 @@
     CGRect zoomRect = [self zoomRectForScale:newScale withCenter:tapPoint];
     [self zoomToRect:zoomRect animated:YES];
     //[NSTimer scheduledTimerWithTimeInterval:0.99 target:imageScrollView selector:@selector(restoreOffset) userInfo:nil repeats: NO];
+    PM2AppDelegate * dele=[[UIApplication sharedApplication] delegate];     //TODO: Remove this test line
+    [dele.viewController.routRecorder start:dele.viewController.lineProperty];   //TODO: Remove this test line
+    NSLOG4(@"Recorder started!");
 }
 #pragma mark -----------------HandleSingleTap Delegate method------
 - (void)tappedView:(UIView *)view singleTapAtPoint:(CGPoint)tapPoint{

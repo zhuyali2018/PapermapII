@@ -92,21 +92,26 @@
 - (void)drawRect:(CGRect)rect
 {
     // Drawing code
-    if (!ptrToTracksArray) {
+    if (!ptrToTracksArray) {  //if not initialized
         return;
     }
-    if ([ptrToTracksArray count]==0) {
+    if ([ptrToTracksArray count]==0) {  // if 0 element
         return;
     }
-    if ([ptrToTracksArray[0] count]==0) {
-        return;
-    }
+    
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetShouldAntialias(context, YES);   //make line smoother ?
     
-    Track * track=ptrToTracksArray[0][0][0];
-    [self tapDrawTrack:track context:context];
-    NSLOG3(@"Line Redrawn!");
+    for (int i=0; i<[ptrToTracksArray count]; i++) {     //loop through each track arrays of track arrays
+        for (int j=0;j<[ptrToTracksArray[i] count]; j++) {  //loop through each track arry for each track array
+            for (int k=0;k<[ptrToTracksArray[i][j] count]; k++) {  //loop through each track for each track array
+                Track * track=ptrToTracksArray[i][j][k];
+                [self tapDrawTrack:track context:context];
+            }
+        }
+    }
+    
+    NSLOG4(@"Line Redrawn!");
 }
 
 
