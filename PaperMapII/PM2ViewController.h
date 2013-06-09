@@ -19,4 +19,5 @@
 @property (nonatomic, strong) MapSources * mapSources;
 @property (nonatomic, strong) Recorder * routRecorder;
 @property (nonatomic, strong) LineProperty * lineProperty;
+@property (nonatomic, strong) NSMutableArray  * arrAllTracks;     //array of tracks
 @end

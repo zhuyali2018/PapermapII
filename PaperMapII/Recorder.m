@@ -23,12 +23,22 @@
     if (_recording) {
         return;
     }
+    //initialize track
     _track=[[Track alloc] init];
     if (!_track) {
         return;
     }
     _recording=true;
     self.track.lineProperty=prop;
+    if(!self.trackArray){   //when first time starting recorder, ini track array
+        self.trackArray=[[NSMutableArray alloc]initWithCapacity:5];
+        [self.trackArray addObject:self.track];
+    }else{
+        [self.trackArray addObject:self.track];
+    }
+    NSMutableArray *tar=(NSMutableArray *)self.track.nodes;
+    [tar removeAllObjects];
+    self.track.nodes = tar;
 }
 - (void)stop{
     _recording=false;
@@ -37,11 +47,19 @@
 
 - (void)mapLevel:(int)maplevel singleTapAtPoint:(CGPoint)tapPoint{
     NSLOG3(@"gotSingleTapAtPoint in recoder - need to store the tapped point here");
+    if(!_recording){   //if not recording, do not create the node for the tappoint
+        [self start:[self.track.lineProperty copy]];  //TODO: Remove this test statement
+        return;
+    }
     Node *node=[[Node alloc]initWithPoint:tapPoint mapLevel:maplevel];
     if (!self.track.nodes) {
         self.track.nodes=[[NSArray alloc]initWithObjects:node,nil];
     }else{
         self.track.nodes=[self.track.nodes arrayByAddingObject:node];
     }
+    //TODO: remove following test statements
+    NSLOG3(@"Nodes cout=%d",[self.track.nodes count]);
+    if([self.track.nodes count]>3)
+        [self stop];
 }
 @end

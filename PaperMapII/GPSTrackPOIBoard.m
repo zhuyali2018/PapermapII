@@ -5,12 +5,21 @@
 //  Created by Yali Zhu on 6/3/13.
 //  Copyright (c) 2013 Yali Zhu. All rights reserved.
 //
-
+#import "AllImports.h"
 #import "GPSTrackPOIBoard.h"
 #import "DrawingBoard.h"
+#import "Node.h"
+#import "Track.h"
+#import "TapDetectView.h"
+#import "LineProperty.h"
 
 @implementation GPSTrackPOIBoard
+
+@synthesize tapDetectView;
+@synthesize ptrToTracksArray;
+@synthesize maplevel;
 @synthesize drawingBoard;
+
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
@@ -22,14 +31,83 @@
     }
     return self;
 }
+-(CGPoint)ConvertPoint:(Node *)node{
+	//First, convert the point coordinates to current maplevel
+	int delta=maplevel-node.r;
+	float zoomFactor = pow(2, delta * -1);
+	CGPoint p;
+	p.x=node.x/zoomFactor;
+	p.y=node.y/zoomFactor;
+	//Second, convert the point's coordinates to the coordinates on DrawingBoard which is significantly smaller, only covers window area
+	CGPoint p2=[tapDetectView convertPoint:p toView:self];
+	return p2;
+}
+#define COLOR track.lineProperty
+-(void)drawTrack:(Track *)track context:(CGContextRef)context{
+    if(!track) return;
+    if(nil==track.nodes)
+        return;
+    int count=[track.nodes count];
+    if(count<2) return;
+    
+    CGContextSetStrokeColorWithColor(context, [UIColor colorWithRed:COLOR.red green:COLOR.green blue:COLOR.blue alpha:COLOR.alpha].CGColor);
+	CGContextSetLineWidth(context, COLOR.lineWidth);
+	CGContextSetLineCap(context, kCGLineCapRound);  //version 4.0
+	
+	Node * startNode=[track.nodes objectAtIndex:0];
+    CGPoint pStart=[self ConvertPoint:startNode];
+	CGContextMoveToPoint(context, pStart.x, pStart.y);
+	for (int i=1; i<count; i++) {
+		Node * tmpN=[track.nodes objectAtIndex:i];
+        CGPoint tmpP=[self ConvertPoint:tmpN];
+		CGContextAddLineToPoint(context, tmpP.x, tmpP.y);
+	}
+	CGContextStrokePath(context);
+}
+-(void)tapDrawTrack:(Track *)track context:(CGContextRef)context{
+    if(!track) return;
+    if(nil==track.nodes)
+        return;
+    int count=[track.nodes count];
+    if(count<2) return;
+    
+    CGContextSetStrokeColorWithColor(context, [UIColor colorWithRed:COLOR.red green:COLOR.green blue:COLOR.blue alpha:COLOR.alpha].CGColor);
+	CGContextSetLineWidth(context, COLOR.lineWidth);
+	CGContextSetLineCap(context, kCGLineCapRound);  //version 4.0
+	
+	Node * startNode=[track.nodes objectAtIndex:0];
+    CGPoint pStart=[self ConvertPoint:startNode];
+	CGContextMoveToPoint(context, pStart.x, pStart.y);
+	for (int i=1; i<count; i++) {
+		Node * tmpN=[track.nodes objectAtIndex:i];
+        CGPoint tmpP=[self ConvertPoint:tmpN];
+		CGContextAddLineToPoint(context, tmpP.x, tmpP.y);
+	}
+	CGContextStrokePath(context);
+}
 
-/*
+
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.
 - (void)drawRect:(CGRect)rect
 {
     // Drawing code
+    if (!ptrToTracksArray) {
+        return;
+    }
+    if ([ptrToTracksArray count]==0) {
+        return;
+    }
+    if ([ptrToTracksArray[0] count]==0) {
+        return;
+    }
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetShouldAntialias(context, YES);   //make line smoother ?
+    
+    Track * track=ptrToTracksArray[0][0][0];
+    [self tapDrawTrack:track context:context];
+    NSLOG3(@"Line Redrawn!");
 }
-*/
+
 
 @end

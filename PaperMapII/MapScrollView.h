@@ -16,8 +16,13 @@
     BOOL            Mode;                           //<====TRUE: Western, FALSE:Eastern
     int             maplevel,minMapLevel,maxMapLevel,lastLevel;
     CGPoint			posErr,posErr1;
+
+//@private int mapLevel;
 }
-@property int maplevel;
+//@property int maplevel;
+-(int)maplevel;
+-(void)setMaplevel:(int)maplevel;
+
 @property (nonatomic, strong)ZoomView *zoomView;
 @property (nonatomic) id<PM2MapSourceDelegate> mapsourceDelegate;
 - (UIView *)dequeueReusableTile;

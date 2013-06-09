@@ -30,12 +30,11 @@
 }
 */
 
-#define DRAWINGBOARD self.zoomView.gpsTrackPOIBoard.drawingBoard
+#define DRAWINGBOARD self.zoomView.gpsTrackPOIBoard
 -(void)registTracksToBeDrawn:(NSArray*)tracks1{
     if (!DRAWINGBOARD.ptrToTracksArray) {
-        DRAWINGBOARD.ptrToTracksArray=[[NSArray alloc]initWithObjects:tracks1,nil];
-    }else{
-        DRAWINGBOARD.ptrToTracksArray=[DRAWINGBOARD.ptrToTracksArray arrayByAddingObject:tracks1];
+        DRAWINGBOARD.ptrToTracksArray=[[NSMutableArray alloc]initWithCapacity:3];
     }
+    [DRAWINGBOARD.ptrToTracksArray addObject:tracks1];
 }
 @end

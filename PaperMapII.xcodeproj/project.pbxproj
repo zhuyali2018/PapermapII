@@ -3476,7 +3476,7 @@
 /* Begin PBXFileReference section */
 		AA04240217526D91004970B4 /* TapDetectView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TapDetectView.h; path = BasicMapTiles/TapDetectView.h; sourceTree = "<group>"; };
 		AA04240317526D91004970B4 /* TapDetectView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TapDetectView.m; path = BasicMapTiles/TapDetectView.m; sourceTree = "<group>"; };
-		AA1B5345175EE308005355C3 /* AllImports.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllImports.h; sourceTree = "<group>"; };
+		AA1B5345175EE308005355C3 /* AllImports.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AllImports.h; path = ../AllImports.h; sourceTree = "<group>"; };
 		AA511CD2174F152100F46B1A /* PM2Protocols.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PM2Protocols.h; sourceTree = "<group>"; };
 		AA511CD4174F1F0F00F46B1A /* MapSources.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapSources.h; sourceTree = "<group>"; };
 		AA511CD5174F1F0F00F46B1A /* MapSources.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapSources.m; sourceTree = "<group>"; };
@@ -5274,7 +5274,6 @@
 		AABDD47417437B3600A0D6E9 = {
 			isa = PBXGroup;
 			children = (
-				AA1B5345175EE308005355C3 /* AllImports.h */,
 				AABDD48617437B3600A0D6E9 /* PaperMapII */,
 				AABDD4AA17437B3600A0D6E9 /* PaperMapIITests */,
 				AABDD47F17437B3600A0D6E9 /* Frameworks */,
@@ -5317,6 +5316,7 @@
 				AAC8484917585415002D7AA9 /* Drawing Classes */,
 				AABDD48717437B3600A0D6E9 /* Supporting Files */,
 				AA511CD2174F152100F46B1A /* PM2Protocols.h */,
+				AA1B5345175EE308005355C3 /* AllImports.h */,
 			);
 			path = PaperMapII;
 			sourceTree = "<group>";
@@ -10730,7 +10730,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 2;
@@ -10755,7 +10755,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 2;
@@ -10769,7 +10769,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PaperMapII/PaperMapII-Prefix.pch";
 				INFOPLIST_FILE = "PaperMapII/PaperMapII-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -10781,7 +10781,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PaperMapII/PaperMapII-Prefix.pch";
 				INFOPLIST_FILE = "PaperMapII/PaperMapII-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};

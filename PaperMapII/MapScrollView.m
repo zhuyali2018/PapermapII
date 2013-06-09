@@ -13,7 +13,8 @@
 @implementation MapScrollView
 
 @synthesize zoomView;
-@synthesize maplevel;
+//@synthesize maplevel;
+
 
 const int bz=0;        //bezel width, should be set to 0 eventually
 const int SIZE=256;     // tile size
@@ -21,6 +22,15 @@ const int SIZE=256;     // tile size
 float zmc=1;
 CGPoint savedOffset;
 
+-(void)setMaplevel:(int)maplevel1{
+    maplevel=maplevel1;
+    self.zoomView.gpsTrackPOIBoard.maplevel=maplevel;
+    NSLOG3(@"MapLevel set to %d on gpsTrackPOIBoard",maplevel);
+}
+-(int)maplevel{
+    NSLOG3(@"getMaplevel returns mapvel %d",maplevel);
+    return maplevel;
+}
 int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleColumnx[4];
 -(void)initVisibleVarArrays{
     // no rows or columns are visible at first; note this by making the firsts very high and the lasts very low
@@ -284,7 +294,8 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
         [self addSubview:zoomView];
         
         [self initVisibleVarArrays];
-        maplevel=level;
+        //maplevel=level;
+        [self setMaplevel:level];
 		minMapLevel=level;
 		maxMapLevel=19;
         reusableTiles = [[NSMutableSet alloc] init];
@@ -448,8 +459,8 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
 	}
     
     lastLevel=maplevel;    
-    maplevel+=deltaRes;		//set new maplevel;
-	
+    //maplevel+=deltaRes;		//set new maplevel;
+	[self setMaplevel:maplevel+deltaRes];
     [self setMaxandMinZoomScale];   //important, immediately change the zooming range here instead of after setting the new zoomscale
     
     zoomFactor=pow(2, deltaRes * -1);			//zoomfactor =newZoomScale/oldZoomScale; or newZoomScale=oldZoomScale*ZoomFactor;

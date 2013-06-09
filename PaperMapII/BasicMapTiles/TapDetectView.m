@@ -147,7 +147,7 @@ CGPoint midpointBetweenPoints(CGPoint a, CGPoint b) {
 }
 #pragma mark Touch Handling methods of the class------
 - (void)handleSingleTap{
-	NSLOG3(@"handleSingleTap - need to call TappableMapScrollView's handler here");
+	NSLOG2(@"handleSingleTap - need to call TappableMapScrollView's handler here");
 	if ([drawDelegate respondsToSelector:@selector(tappedView:singleTapAtPoint:)])
         [drawDelegate tappedView:self singleTapAtPoint:tapLocation];
 }

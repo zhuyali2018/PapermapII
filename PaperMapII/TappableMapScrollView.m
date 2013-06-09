@@ -49,6 +49,7 @@
         [tapDetectView setBackgroundColor:[UIColor clearColor]];  //without this line, the map would be black !
         tapDetectView.drawDelegate=self;
         [self.zoomView addSubview:tapDetectView];
+        self.zoomView.gpsTrackPOIBoard.tapDetectView=tapDetectView;
         self.bDrawing=true;
     }
     return self;
@@ -92,7 +93,7 @@
     }
     if ([recordingDelegate respondsToSelector:@selector(mapLevel:singleTapAtPoint:)]){
         [recordingDelegate mapLevel:self.maplevel singleTapAtPoint:tapPoint];
-        [self.zoomView.gpsTrackPOIBoard.drawingBoard setNeedsDisplay];
+        [self.zoomView.gpsTrackPOIBoard setNeedsDisplay];
         
     }else {
         NSLOG3(@"[recordingDelegate respondsToSelector:@selector(mapLevel:singleTapAtPoint:)] returns false");

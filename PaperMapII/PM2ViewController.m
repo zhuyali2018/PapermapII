@@ -23,7 +23,7 @@
 @synthesize mapScrollView;
 @synthesize mapSources;
 @synthesize lineProperty;
-//float zmc;
+@synthesize arrAllTracks;
 
 -(void)add_MapScrollView{
     float bazel=20;     //set to 0 to maxmize map area
@@ -43,7 +43,12 @@
     if(self.routRecorder)
         mapScrollView.recordingDelegate=_routRecorder;
     lineProperty=[[LineProperty alloc]initWithRed:0.2 green:0.3 blue:0.9 alpha:0.8 linewidth:3];
-    [self.routRecorder start:lineProperty];   //user tap to enter intow drawing state here
+    [self.routRecorder start:[lineProperty copy]];   //user tap to enter into drawing state here
+    
+    //register array of tracks to be drawn
+    [mapScrollView registTracksToBeDrawn:arrAllTracks];
+    
+    [arrAllTracks addObject:self.routRecorder.trackArray];
 }
 
 - (void)viewDidLoad
@@ -51,6 +56,8 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     [self.view setBackgroundColor:[UIColor darkGrayColor]];
+    //initialize arrAllTracks
+    arrAllTracks=[[NSMutableArray alloc]initWithCapacity:2];
     //[self add_ImageScrollView];    //add map tile scroll view
     [self add_MapScrollView];    //add map tile scroll view
 }

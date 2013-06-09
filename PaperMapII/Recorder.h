@@ -12,6 +12,7 @@
 @class LineProperty;
 @interface Recorder : NSObject<PM2RecordingDelegate>
 
+@property (nonatomic,strong) NSMutableArray * trackArray;
 @property (nonatomic,strong) Track * track;
 @property bool recording; //if it is recording
 
