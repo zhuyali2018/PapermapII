@@ -18,6 +18,8 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
+        self.preDraw=false;
+        self.lastPt=self.firstPt=CGPointMake(0,0);
     }
     return self;
 }
@@ -26,6 +28,23 @@
 
 - (void)drawRect:(CGRect)rect
 {
+    if (self.preDraw) {
+        if (self.firstPt.x==0) {
+            return;
+        }
+        CGContextRef context = UIGraphicsGetCurrentContext();
+        CGContextSetShouldAntialias(context, YES);   //make line smoother ?
+
+        CGContextSetStrokeColorWithColor(context, [UIColor colorWithRed:0 green:1 blue:1 alpha:0.6].CGColor);
+        CGContextSetLineWidth(context, 4);
+        CGContextSetLineCap(context, kCGLineCapRound);  //version 4.0
+        CGPoint pStart=self.firstPt;
+        CGContextMoveToPoint(context, pStart.x, pStart.y);
+        CGPoint tmpP=self.lastPt;
+        CGContextAddLineToPoint(context, tmpP.x, tmpP.y);
+        CGContextStrokePath(context);
+        return;
+    }
     if (ptList==nil) {
         return;
     }

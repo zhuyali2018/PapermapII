@@ -10,7 +10,9 @@
 
 
 @interface DrawingBoard : UIView
-
+@property bool preDraw;
+@property CGPoint firstPt;
+@property CGPoint lastPt;
 @ property NSArray	* ptList;
 -(void) addNode:(CGPoint) pt;
 -(void) clearAll;

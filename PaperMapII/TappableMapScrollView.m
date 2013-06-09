@@ -54,7 +54,7 @@
         tapDetectView.drawDelegate=self;
         [self.zoomView addSubview:tapDetectView];
         self.zoomView.gpsTrackPOIBoard.tapDetectView=tapDetectView;
-        self.bDrawing=true;
+        self.bDrawing=false;
     }
     return self;
 }
@@ -88,7 +88,9 @@
     
     self.mapPined=FALSE;                  //TODO: remove this line for release
     [self setScrollEnabled:YES];          //TODO: remove this free draw test line
-    [self.zoomView.gpsTrackPOIBoard.drawingBoard clearAll];
+    [self.zoomView.gpsTrackPOIBoard.drawingBoard clearAll];                 //TODO: remove this line for release
+    self.zoomView.gpsTrackPOIBoard.drawingBoard.firstPt=CGPointMake(0,0);  //TODO: remove this line for release
+    self.zoomView.gpsTrackPOIBoard.drawingBoard.lastPt=CGPointMake(0,0);    //TODO: remove this line for release
 }
 - (void)tapDetectView:(TapDetectView *)view gotTwoFingerTapAtPoint:(CGPoint)tapPoint {
     float newScale = [self zoomScale] / ZOOM_STEP;
@@ -101,6 +103,8 @@
     NSLOG4(@"Recorder started!");
     self.mapPined=TRUE;                  //TODO: remove this line for release
     [self setScrollEnabled:NO];          //TODO: remove this free draw test line
+    self.freeDraw=false;                 //TODO: remove this line for release
+    self.bDrawing=true;                    //TODO: remove this line for release
 }
 #pragma mark -----------------HandleSingleTap Delegate method------
 #define FREEDrawBoard self.zoomView.gpsTrackPOIBoard.drawingBoard
@@ -110,15 +114,50 @@
         return;
     }
     if (self.mapPined) {
-        CGPoint tapPt=[view convertPoint:tapPoint  toView:FREEDrawBoard];	//version 4.0
-        //if(self.freeDraw)
+        if(self.freeDraw){
+            CGPoint tapPt=[view convertPoint:tapPoint  toView:FREEDrawBoard];	//version 4.0
             [FREEDrawBoard addNode:tapPt];	 //version 4.0
-        [FREEDrawBoard setNeedsDisplay]; //version 4.0
+            [FREEDrawBoard setNeedsDisplay]; //version 4.0
+            if ([recordingDelegate respondsToSelector:@selector(mapLevel:singleTapAtPoint:)]){
+                [recordingDelegate mapLevel:self.maplevel singleTapAtPoint:tapPoint];
+                return;
+            }
+        }else{ //is drawing, mapPined but not freeDraw. got to be drawing with predrawingline
+            if (tapPoint.x==0) {  //if touch up happened
+                if (FREEDrawBoard.firstPt.x!=0) {   //means predrawing is going
+                    FREEDrawBoard.firstPt=CGPointMake(0,0);      //reset the state for next segment predrawing
+                    CGPoint lastTapPoint=[FREEDrawBoard convertPoint:FREEDrawBoard.lastPt  toView:view];
+                    if ([recordingDelegate respondsToSelector:@selector(mapLevel:singleTapAtPoint:)]){
+                        [recordingDelegate mapLevel:_lastMaplevel singleTapAtPoint:lastTapPoint];
+                        [self.zoomView.gpsTrackPOIBoard.drawingBoard clearAll];
+                        [self.zoomView.gpsTrackPOIBoard.drawingBoard setNeedsDisplay];
+                        [self.zoomView.gpsTrackPOIBoard setNeedsDisplay];
+                        return;
+                    }
+                }
+                return;     //no handle of this situation, just return;
+            }
+            if (FREEDrawBoard.firstPt.x==0) {                                             //if first point not set, set it and start next segment of drawing
+                if (FREEDrawBoard.lastPt.x!=0) {
+                    FREEDrawBoard.firstPt=FREEDrawBoard.lastPt;
+                }else{
+                    FREEDrawBoard.firstPt=[view convertPoint:tapPoint  toView:FREEDrawBoard];
+                    if ([recordingDelegate respondsToSelector:@selector(mapLevel:singleTapAtPoint:)]){      //first point of rubberband drawing has to be set.
+                        [recordingDelegate mapLevel:self.maplevel singleTapAtPoint:tapPoint];
+                    }
+                }
+            }
+            FREEDrawBoard.lastPt=[view convertPoint:tapPoint  toView:FREEDrawBoard];      //always set last point and refresh the display for predrawing of the line
+            _lastMaplevel=maplevel;
+            FREEDrawBoard.preDraw=true;
+            [FREEDrawBoard setNeedsDisplay];
+        }
+        return;
     }
+    if(tapPoint.x==0)return;  //no handle of touchup
     if ([recordingDelegate respondsToSelector:@selector(mapLevel:singleTapAtPoint:)]){
         [recordingDelegate mapLevel:self.maplevel singleTapAtPoint:tapPoint];
-        if(!self.mapPined)  //in free draw mode, do not refresh every time for performance
-            [self.zoomView.gpsTrackPOIBoard setNeedsDisplay];
+        [self.zoomView.gpsTrackPOIBoard setNeedsDisplay];
         
     }else {
         NSLOG3(@"[recordingDelegate respondsToSelector:@selector(mapLevel:singleTapAtPoint:)] returns false");

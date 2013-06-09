@@ -59,7 +59,7 @@ CGPoint midpointBetweenPoints(CGPoint a, CGPoint b) {
         twoFingerTapIsPossible = NO;
     if ([[event touchesForView:self] count] == 1)
         twoFingerTapIsPossible = YES;
-
+    
     NSLOG2(@"[touchesBegan] number of fingers used:%d ",[[event touchesForView:self] count]);
 
 }
@@ -80,6 +80,10 @@ CGPoint midpointBetweenPoints(CGPoint a, CGPoint b) {
             [self handleDoubleTap];
         }
 		NSLOG4(@"[touchesEnded]Single touch, number of taps:%d",[touch tapCount]);
+        //newly added for detection of touch up
+        if((0==[touch tapCount])||(1==[touch tapCount])){
+             [self handleSingleTapTouchUp:CGPointMake(0,[touch tapCount])];
+        }
     }
     
     // check for 2-finger tap if we've seen multiple touches and haven't yet ruled out that possibility
@@ -144,16 +148,18 @@ CGPoint midpointBetweenPoints(CGPoint a, CGPoint b) {
 	//[self performSelector:@selector(handleSingleTap) withObject:nil afterDelay:DOUBLE_TAP_DELAY];
 	UITouch *touch = [touches anyObject];
 	tapLocation = [touch locationInView:self];
-	[self handleSingleTap1];
+	[self handleSingleTap];
 }
-- (void)handleSingleTap1{
-	NSLOG4(@"handleSingleTap1 - need to call TappableMapScrollView's handler here");
+
+
+- (void)handleSingleTapTouchUp:(CGPoint)atPoint{
+	NSLOG4(@"handleSingleTapTouchUp - TapPoint:%.0f,%.0f",atPoint.x,atPoint.y);
 	if ([drawDelegate respondsToSelector:@selector(tappedView:singleTapAtPoint:)])
-        [drawDelegate tappedView:self singleTapAtPoint:tapLocation];
+        [drawDelegate tappedView:self singleTapAtPoint:atPoint];
 }
 #pragma mark Touch Handling methods of the class------
 - (void)handleSingleTap{
-	NSLOG4(@"handleSingleTap - need to call TappableMapScrollView's handler here");
+	NSLOG4(@"handleSingleTap - TapPoint:%.0f,%.0f",tapLocation.x,tapLocation.y);
 	if ([drawDelegate respondsToSelector:@selector(tappedView:singleTapAtPoint:)])
         [drawDelegate tappedView:self singleTapAtPoint:tapLocation];
 }

@@ -9,6 +9,7 @@
 #import "MapScrollView.h"
 #import "TapDetectView.h"
 @interface TappableMapScrollView : MapScrollView <PM2MapTapHandleDelegate,PM2SingleTapHandleDelegate>
+@property int lastMaplevel;
 @property bool mapPined;
 @property bool freeDraw;        
 @property (nonatomic,strong)TapDetectView * tapDetectView;
