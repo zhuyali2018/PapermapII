@@ -79,7 +79,7 @@ CGPoint midpointBetweenPoints(CGPoint a, CGPoint b) {
         } else if([touch tapCount] == 2) {
             [self handleDoubleTap];
         }
-		NSLOG2(@"[touchesEnded]Single touch, number of taps:%d",[touch tapCount]);
+		NSLOG4(@"[touchesEnded]Single touch, number of taps:%d",[touch tapCount]);
     }
     
     // check for 2-finger tap if we've seen multiple touches and haven't yet ruled out that possibility
@@ -99,7 +99,7 @@ CGPoint midpointBetweenPoints(CGPoint a, CGPoint b) {
                 [self handleTwoFingerTap];   //two finger touch at the same timing
 				//[self performSelector:@selector(handleTwoFingerTap) withObject:nil afterDelay:DOUBLE_TAP_DELAY]; //this means call handleSingleTap after 0.35 seconds				
 
-				NSLOG2(@"[touchesEnded] 2 touches at the same time");
+				NSLOG4(@"[touchesEnded] 2 touches ended at the same time");
 
             }
         }
@@ -112,6 +112,7 @@ CGPoint midpointBetweenPoints(CGPoint a, CGPoint b) {
             } else {
                 twoFingerTapIsPossible = NO;
             }
+            NSLOG4(@"[touchesEnded] 1 touches ended, second touch not yet");
         }
 		
         // case 3: this is the end of the second of the two touches
@@ -121,7 +122,7 @@ CGPoint midpointBetweenPoints(CGPoint a, CGPoint b) {
                 // if the last touch up is a single tap, this was a 2-finger tap
                 tapLocation = midpointBetweenPoints(tapLocation, [touch locationInView:self]);
                 [self handleTwoFingerTap];    //two finger touch in a sequence, not at exactly the same time
-				NSLOG2(@"[touchesEnded] 2 touches Not at the same time");			
+				NSLOG4(@"[touchesEnded] 2 touches ended but Not at the same time");
             }
         }
     }
@@ -135,19 +136,24 @@ CGPoint midpointBetweenPoints(CGPoint a, CGPoint b) {
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
     twoFingerTapIsPossible = YES;
     multipleTouches = NO;
-	NSLOG2(@"[touchesCancelled] gets called ...");
+	NSLOG4(@"[touchesCancelled] gets called ...");
 }
 -(void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event{
-	NSLOG2(@"--->[touchesMoved] gets called ...");
+	NSLOG4(@"--->>>>>>>>>>>>>>>>>>>>[touchesMoved] gets called ...");
 	//rootView.CenterCurrentLocation=FALSE;   //when finger moved on screen, gps should unhook the center location
 	//[self performSelector:@selector(handleSingleTap) withObject:nil afterDelay:DOUBLE_TAP_DELAY];
 	UITouch *touch = [touches anyObject];
 	tapLocation = [touch locationInView:self];
-	[self handleSingleTap];
+	[self handleSingleTap1];
+}
+- (void)handleSingleTap1{
+	NSLOG4(@"handleSingleTap1 - need to call TappableMapScrollView's handler here");
+	if ([drawDelegate respondsToSelector:@selector(tappedView:singleTapAtPoint:)])
+        [drawDelegate tappedView:self singleTapAtPoint:tapLocation];
 }
 #pragma mark Touch Handling methods of the class------
 - (void)handleSingleTap{
-	NSLOG2(@"handleSingleTap - need to call TappableMapScrollView's handler here");
+	NSLOG4(@"handleSingleTap - need to call TappableMapScrollView's handler here");
 	if ([drawDelegate respondsToSelector:@selector(tappedView:singleTapAtPoint:)])
         [drawDelegate tappedView:self singleTapAtPoint:tapLocation];
 }

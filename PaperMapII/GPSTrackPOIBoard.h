@@ -18,5 +18,5 @@
 @property (nonatomic,strong) NSMutableArray * ptrToTracksArray;   //array of pointers to tracks which is also an array of tracks
 @property int maplevel;
 
-@property (nonatomic) DrawingBoard * drawingBoard;
+@property (nonatomic) DrawingBoard * drawingBoard;          //freeDrawingBoard in PM1
 @end

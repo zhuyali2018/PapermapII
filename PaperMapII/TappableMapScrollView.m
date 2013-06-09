@@ -85,6 +85,10 @@
     PM2AppDelegate * dele=[[UIApplication sharedApplication] delegate];     //TODO: Remove this test line
     [dele.viewController.routRecorder stop];                                //TODO: Remove this test line
     NSLOG4(@"Recorder Stopped!");                                           //TODO: Remove this test line
+    
+    self.mapPined=FALSE;                  //TODO: remove this line for release
+    [self setScrollEnabled:YES];          //TODO: remove this free draw test line
+    [self.zoomView.gpsTrackPOIBoard.drawingBoard clearAll];
 }
 - (void)tapDetectView:(TapDetectView *)view gotTwoFingerTapAtPoint:(CGPoint)tapPoint {
     float newScale = [self zoomScale] / ZOOM_STEP;
@@ -95,16 +99,26 @@
     PM2AppDelegate * dele=[[UIApplication sharedApplication] delegate];     //TODO: Remove this test line
     [dele.viewController.routRecorder start:dele.viewController.lineProperty];   //TODO: Remove this test line
     NSLOG4(@"Recorder started!");
+    self.mapPined=TRUE;                  //TODO: remove this line for release
+    [self setScrollEnabled:NO];          //TODO: remove this free draw test line
 }
 #pragma mark -----------------HandleSingleTap Delegate method------
+#define FREEDrawBoard self.zoomView.gpsTrackPOIBoard.drawingBoard
 - (void)tappedView:(UIView *)view singleTapAtPoint:(CGPoint)tapPoint{
     NSLOG3(@"singleTapAtPoint - need to call external handler here 2");
     if (!self.bDrawing) {
         return;
     }
+    if (self.mapPined) {
+        CGPoint tapPt=[view convertPoint:tapPoint  toView:FREEDrawBoard];	//version 4.0
+        //if(self.freeDraw)
+            [FREEDrawBoard addNode:tapPt];	 //version 4.0
+        [FREEDrawBoard setNeedsDisplay]; //version 4.0
+    }
     if ([recordingDelegate respondsToSelector:@selector(mapLevel:singleTapAtPoint:)]){
         [recordingDelegate mapLevel:self.maplevel singleTapAtPoint:tapPoint];
-        [self.zoomView.gpsTrackPOIBoard setNeedsDisplay];
+        if(!self.mapPined)  //in free draw mode, do not refresh every time for performance
+            [self.zoomView.gpsTrackPOIBoard setNeedsDisplay];
         
     }else {
         NSLOG3(@"[recordingDelegate respondsToSelector:@selector(mapLevel:singleTapAtPoint:)] returns false");

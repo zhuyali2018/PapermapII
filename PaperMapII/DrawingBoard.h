@@ -11,5 +11,7 @@
 
 @interface DrawingBoard : UIView
 
-
+@ property NSArray	* ptList;
+-(void) addNode:(CGPoint) pt;
+-(void) clearAll;
 @end

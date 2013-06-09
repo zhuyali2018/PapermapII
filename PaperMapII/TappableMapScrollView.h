@@ -9,6 +9,8 @@
 #import "MapScrollView.h"
 #import "TapDetectView.h"
 @interface TappableMapScrollView : MapScrollView <PM2MapTapHandleDelegate,PM2SingleTapHandleDelegate>
+@property bool mapPined;
+@property bool freeDraw;        
 @property (nonatomic,strong)TapDetectView * tapDetectView;
 @property (nonatomic) id<PM2RecordingDelegate> recordingDelegate;
 @property bool bDrawing;  //if the map is in drawing mode
