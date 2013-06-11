@@ -81,30 +81,13 @@
 	float newScale = [self zoomScale] * ZOOM_STEP;
     CGRect zoomRect = [self zoomRectForScale:newScale withCenter:tapPoint];
     [self zoomToRect:zoomRect animated:YES];
-    
-    PM2AppDelegate * dele=[[UIApplication sharedApplication] delegate];     //TODO: Remove this test line
-    [dele.viewController.routRecorder stop];                                //TODO: Remove this test line
-    NSLOG4(@"Recorder Stopped!");                                           //TODO: Remove this test line
-    
-    self.mapPined=FALSE;                  //TODO: remove this line for release
-    [self setScrollEnabled:YES];          //TODO: remove this free draw test line
-    [self.zoomView.gpsTrackPOIBoard.drawingBoard clearAll];                 //TODO: remove this line for release
-    self.zoomView.gpsTrackPOIBoard.drawingBoard.firstPt=CGPointMake(0,0);  //TODO: remove this line for release
-    self.zoomView.gpsTrackPOIBoard.drawingBoard.lastPt=CGPointMake(0,0);    //TODO: remove this line for release
-}
+ }
 - (void)tapDetectView:(TapDetectView *)view gotTwoFingerTapAtPoint:(CGPoint)tapPoint {
     float newScale = [self zoomScale] / ZOOM_STEP;
     //NSLog(@"[tapDetectView.gotTwoFingerTapAtPoint] newScale=%6.2f",newScale );
     CGRect zoomRect = [self zoomRectForScale:newScale withCenter:tapPoint];
     [self zoomToRect:zoomRect animated:YES];
     //[NSTimer scheduledTimerWithTimeInterval:0.99 target:imageScrollView selector:@selector(restoreOffset) userInfo:nil repeats: NO];
-    PM2AppDelegate * dele=[[UIApplication sharedApplication] delegate];     //TODO: Remove this test line
-    [dele.viewController.routRecorder start:dele.viewController.lineProperty];   //TODO: Remove this test line
-    NSLOG4(@"Recorder started!");
-    self.mapPined=TRUE;                  //TODO: remove this line for release
-    [self setScrollEnabled:NO];          //TODO: remove this free draw test line
-    self.freeDraw=false;                 //TODO: remove this line for release
-    self.bDrawing=true;                    //TODO: remove this line for release
 }
 #pragma mark -----------------HandleSingleTap Delegate method------
 #define FREEDrawBoard self.zoomView.gpsTrackPOIBoard.drawingBoard
@@ -149,7 +132,7 @@
             }
             FREEDrawBoard.lastPt=[view convertPoint:tapPoint  toView:FREEDrawBoard];      //always set last point and refresh the display for predrawing of the line
             _lastMaplevel=maplevel;
-            FREEDrawBoard.preDraw=true;
+            
             [FREEDrawBoard setNeedsDisplay];
         }
         return;

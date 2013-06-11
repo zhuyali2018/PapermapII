@@ -16,6 +16,7 @@
     if (self) {
         // Initialize self.
         _recording=false;
+        self.trackArray=[[NSMutableArray alloc]initWithCapacity:5];  //initialize track array here
     }
     return self;
 }
