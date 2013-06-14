@@ -75,8 +75,10 @@
 	if (ptList==nil) {
 		ptList=[[NSArray alloc]initWithObjects:[NSValue valueWithCGPoint:pt],nil];
 	}else {
+        NSLOG5(@"pt added to freeDrawView: %.2f,%.2f",pt.x,pt.y);
 		ptList=[ptList arrayByAddingObject:[NSValue valueWithCGPoint:pt]];
 	}
+    [self setNeedsDisplay];
 }
 -(void) clearAll{
 	if (ptList==nil) {

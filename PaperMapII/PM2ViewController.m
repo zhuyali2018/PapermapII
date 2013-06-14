@@ -28,19 +28,23 @@
 @synthesize mapSources;
 @synthesize lineProperty;
 @synthesize arrAllTracks;
+@synthesize drawButton,fdrawButton;
+
 -(void)add_Buttons{
     [self addDrawButton];
     [self addFreeDrawButton];
 }
 -(void)addFreeDrawButton{
-    UIButton * drawButton=[UIButton buttonWithType:(UIButtonTypeRoundedRect)];
-    [drawButton setFrame:CGRectMake([[self view] bounds].size.width-150, 100, 100, 30)];
-    [drawButton setTitle:@"Free Draw" forState:UIControlStateNormal];
-    [drawButton addTarget:self action:@selector(switchToFreeDraw:) forControlEvents:UIControlEventTouchUpInside];
-    [[self view] addSubview:drawButton];
+    fdrawButton=[UIButton buttonWithType:(UIButtonTypeRoundedRect)];
+    [fdrawButton setFrame:CGRectMake([[self view] bounds].size.width-150, 100, 100, 30)];
+    [fdrawButton setTitle:@"Free Draw" forState:UIControlStateNormal];
+    [fdrawButton addTarget:self action:@selector(switchToFreeDraw:) forControlEvents:UIControlEventTouchUpInside];
+    [[self view] addSubview:fdrawButton];
+    //[fdrawButton setEnabled:FALSE];
+    [fdrawButton setHidden:TRUE];
 }
 -(void)addDrawButton{
-    UIButton * drawButton=[UIButton buttonWithType:(UIButtonTypeRoundedRect)];
+    drawButton=[UIButton buttonWithType:(UIButtonTypeRoundedRect)];
     [drawButton setFrame:CGRectMake([[self view] bounds].size.width-150, 50, 100, 30)];
     [drawButton setTitle:@"Draw" forState:UIControlStateNormal];
     [drawButton addTarget:self action:@selector(startDrawingRecorder:) forControlEvents:UIControlEventTouchUpInside];
@@ -50,14 +54,16 @@
     NSLOG4(@"Free Draw button tapped. Button title is %@",[bn.titleLabel text]);
     if ([[bn.titleLabel text] compare:@"Free Draw"]==NSOrderedSame) {
         [bn setTitle:@"No Free Draw" forState:UIControlStateNormal];
-        self.mapScrollView.freeDraw=false;
-        self.mapScrollView.zoomView.gpsTrackPOIBoard.drawingBoard.preDraw=true;
+        self.mapScrollView.freeDraw=true;
+        self.mapScrollView.zoomView.gpsTrackPOIBoard.drawingBoard.preDraw=FALSE;
+        [self.routRecorder startNewTrack];
     }else{
         [bn setTitle:@"Free Draw" forState:UIControlStateNormal];
-        self.mapScrollView.freeDraw=true;
-        self.mapScrollView.zoomView.gpsTrackPOIBoard.drawingBoard.preDraw=false;
+        self.mapScrollView.freeDraw=false;
+        self.mapScrollView.zoomView.gpsTrackPOIBoard.drawingBoard.preDraw=TRUE;
     }
 }
+
 -(void)startDrawingRecorder:(UIButton *)bn{
     NSLOG4(@"Button title is %@",[bn.titleLabel text]);
     if ([[bn.titleLabel text] compare:@"Draw"]==NSOrderedSame) {
@@ -70,6 +76,7 @@
         self.mapScrollView.freeDraw=false;                 
         self.mapScrollView.bDrawing=true;
         self.mapScrollView.zoomView.gpsTrackPOIBoard.drawingBoard.preDraw=true;
+        [fdrawButton setHidden:FALSE];
     }else{
         [bn setTitle:@"Draw" forState:UIControlStateNormal];
         
@@ -79,7 +86,13 @@
         [self.mapScrollView setScrollEnabled:YES];          
         [self.mapScrollView.zoomView.gpsTrackPOIBoard.drawingBoard clearAll];                 
         self.mapScrollView.zoomView.gpsTrackPOIBoard.drawingBoard.firstPt=CGPointMake(0,0);  
-        self.mapScrollView.zoomView.gpsTrackPOIBoard.drawingBoard.lastPt=CGPointMake(0,0);    
+        self.mapScrollView.zoomView.gpsTrackPOIBoard.drawingBoard.lastPt=CGPointMake(0,0);
+        [self.mapScrollView.zoomView.gpsTrackPOIBoard setNeedsDisplay];
+        //reset the free draw button too
+        [fdrawButton setTitle:@"Free Draw" forState:UIControlStateNormal];
+        self.mapScrollView.freeDraw=false;
+        self.mapScrollView.zoomView.gpsTrackPOIBoard.drawingBoard.preDraw=TRUE;
+        [fdrawButton setHidden:TRUE];
     }
 }
 -(void)add_MapScrollView{
@@ -114,7 +127,6 @@
     [self.view setBackgroundColor:[UIColor darkGrayColor]];
     //initialize arrAllTracks
     arrAllTracks=[[NSMutableArray alloc]initWithCapacity:2];
-    //[self add_ImageScrollView];    //add map tile scroll view
     [self add_MapScrollView];    //add map tile scroll view
     [self add_Buttons];
 }

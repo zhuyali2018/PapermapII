@@ -15,6 +15,8 @@
 @class LineProperty;
 @interface PM2ViewController : UIViewController
 
+@property (nonatomic, strong) UIButton *drawButton;
+@property (nonatomic, strong) UIButton *fdrawButton;
 @property (nonatomic, strong) DrawableMapScrollView * mapScrollView;
 @property (nonatomic, strong) MapSources * mapSources;
 @property (nonatomic, strong) Recorder * routRecorder;

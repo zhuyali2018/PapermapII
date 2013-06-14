@@ -41,6 +41,25 @@
     [tar removeAllObjects];
     self.track.nodes = tar;
 }
+-(void) startNewTrack{
+    //initialize a track
+    if (!_track) return;                    //if track not initialized, return;
+    LineProperty *lp=_track.lineProperty;   //save the line property
+    _track=[[Track alloc] init];
+    if (!_track) return;                    //return if failed
+    _track.lineProperty=lp;
+    if(!self.trackArray){   //when first time starting recorder, ini track array
+        self.trackArray=[[NSMutableArray alloc]initWithCapacity:5];
+        [self.trackArray addObject:self.track];
+    }else{
+        [self.trackArray addObject:self.track];
+    }
+    
+    //following code not necessary
+//    NSMutableArray *tar=(NSMutableArray *)self.track.nodes;
+//    [tar removeAllObjects];
+//    self.track.nodes = tar;
+}
 - (void)stop{
     _recording=false;
 }
@@ -52,7 +71,12 @@
         //[self start:[self.track.lineProperty copy]];  //TODO: Remove this test statement
         return;
     }
+    if((tapPoint.x==0)||(tapPoint.y==0)){   //signal for starting a new track
+        [self startNewTrack];
+        return;
+    }
     Node *node=[[Node alloc]initWithPoint:tapPoint mapLevel:maplevel];
+    NSLOG5(@"Recorder:addNode(%d,%d)",node.x,node.y);
     if (!self.track.nodes) {
         self.track.nodes=[[NSArray alloc]initWithObjects:node,nil];
     }else{

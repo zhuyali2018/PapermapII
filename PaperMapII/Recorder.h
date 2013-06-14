@@ -19,5 +19,5 @@
 - (void)start:(LineProperty *)prop;
 - (void)stop;
 - (void)mapLevel:(int)maplevel singleTapAtPoint:(CGPoint)tapPoint;
-
+-(void) startNewTrack;
 @end

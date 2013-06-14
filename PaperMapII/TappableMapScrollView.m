@@ -98,11 +98,16 @@
     }
     if (self.mapPined) {
         if(self.freeDraw){
-            CGPoint tapPt=[view convertPoint:tapPoint  toView:FREEDrawBoard];	//version 4.0
-            [FREEDrawBoard addNode:tapPt];	 //version 4.0
-            [FREEDrawBoard setNeedsDisplay]; //version 4.0
+            CGPoint tapPt=[view convertPoint:tapPoint  toView:FREEDrawBoard];
+            if((tapPoint.x==0)&&(tapPoint.y==0)){       //if tapPoint is (0,0), it is a signal to start a new track
+                [FREEDrawBoard clearAll];               //clear all points and call setNeedsDisplay
+                [self.zoomView.gpsTrackPOIBoard setNeedsDisplay];   //refresh our track board too
+            }else{
+                [FREEDrawBoard addNode:tapPt];               //add a point and call setNeedsDisplay
+            }
             if ([recordingDelegate respondsToSelector:@selector(mapLevel:singleTapAtPoint:)]){
-                [recordingDelegate mapLevel:self.maplevel singleTapAtPoint:tapPoint];
+                [recordingDelegate mapLevel:self.maplevel singleTapAtPoint:tapPoint];       //if tapPoint is (0,0), it is a signal for starting a new track
+                NSLOG5(@"Node added:(%.2f,%.2f)",tapPoint.x,tapPoint.y);
                 return;
             }
         }else{ //is drawing, mapPined but not freeDraw. got to be drawing with predrawingline
@@ -112,20 +117,22 @@
                     CGPoint lastTapPoint=[FREEDrawBoard convertPoint:FREEDrawBoard.lastPt  toView:view];
                     if ([recordingDelegate respondsToSelector:@selector(mapLevel:singleTapAtPoint:)]){
                         [recordingDelegate mapLevel:_lastMaplevel singleTapAtPoint:lastTapPoint];
+                        NSLOG5(@"NON Free Draw Node added:(%.2f,%.2f)",lastTapPoint.x,lastTapPoint.y);
                         [self.zoomView.gpsTrackPOIBoard.drawingBoard clearAll];
                         [self.zoomView.gpsTrackPOIBoard.drawingBoard setNeedsDisplay];
                         [self.zoomView.gpsTrackPOIBoard setNeedsDisplay];
                         return;
                     }
                 }
-                return;     //no handle of this situation, just return;
+                return;     //no handle of this situation(touch up if no drawing was going on), just return;
             }
+            //normal tap line segment drawing:
             if (FREEDrawBoard.firstPt.x==0) {                                             //if first point not set, set it and start next segment of drawing
-                if (FREEDrawBoard.lastPt.x!=0) {
+                if (FREEDrawBoard.lastPt.x!=0) {                                                //if the last point set, but first not set,move last to first, but do not save
                     FREEDrawBoard.firstPt=FREEDrawBoard.lastPt;
-                }else{
-                    FREEDrawBoard.firstPt=[view convertPoint:tapPoint  toView:FREEDrawBoard];
-                    if ([recordingDelegate respondsToSelector:@selector(mapLevel:singleTapAtPoint:)]){      //first point of rubberband drawing has to be set.
+                }else{                                                                          //if firsst point and last point are both 0, 
+                    FREEDrawBoard.firstPt=[view convertPoint:tapPoint  toView:FREEDrawBoard];   //first point of rubberband drawing has to be set.
+                    if ([recordingDelegate respondsToSelector:@selector(mapLevel:singleTapAtPoint:)]){      //save the point and move on
                         [recordingDelegate mapLevel:self.maplevel singleTapAtPoint:tapPoint];
                     }
                 }
