@@ -145,7 +145,7 @@
 - (void)mapTile:(MapTile *)tile1{
     //load built in map for fast loading
 	NSString * imgname;
-	if((tile1.res<6)&&(mapType==googleMap)){  // if less than 3, do it from builtin map tile TODO: Restore this line
+	if((tile1.res<6)&&(mapType==googleMap)){  // if less than 3, do it from builtin map tile
     //if(mapLevel<6){  // if less than 3, do it from builtin map tile
 		// The resolution is stored as a power of 2, so -1 means 50%, -2 means 25%, and 0 means 100%.
 		imgname=[[NSString alloc]initWithFormat:@"Map%d_%d_%d.jpg", tile1.res, tile1.row, tile1.modeCol];

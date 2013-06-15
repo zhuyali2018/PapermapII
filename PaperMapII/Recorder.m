@@ -37,9 +37,6 @@
     }else{
         [self.trackArray addObject:self.track];
     }
-    NSMutableArray *tar=(NSMutableArray *)self.track.nodes;
-    [tar removeAllObjects];
-    self.track.nodes = tar;
 }
 -(void) startNewTrack{
     //initialize a track
@@ -53,22 +50,21 @@
         [self.trackArray addObject:self.track];
     }else{
         [self.trackArray addObject:self.track];
-    }
-    
-    //following code not necessary
-//    NSMutableArray *tar=(NSMutableArray *)self.track.nodes;
-//    [tar removeAllObjects];
-//    self.track.nodes = tar;
+    }    
 }
 - (void)stop{
     _recording=false;
+}
+-( void)undo{
+    NSMutableArray *tar=[[NSMutableArray alloc] initWithArray:self.track.nodes];
+    [tar removeLastObject];
+    self.track.nodes = tar;
 }
 #pragma mark ------------------PM2RecordingDelegate method---------
 
 - (void)mapLevel:(int)maplevel singleTapAtPoint:(CGPoint)tapPoint{
     //NSLOG3(@"gotSingleTapAtPoint in recoder - need to store the tapped point here");
     if(!_recording){   //if not recording, do not create the node for the tappoint
-        //[self start:[self.track.lineProperty copy]];  //TODO: Remove this test statement
         return;
     }
     if((tapPoint.x==0)||(tapPoint.y==0)){   //signal for starting a new track
@@ -82,10 +78,6 @@
     }else{
         self.track.nodes=[self.track.nodes arrayByAddingObject:node];
     }
-    //TODO: remove following test statements
     NSLOG4(@"Nodes cout=%d",[self.track.nodes count]);
-    
-    //if([self.track.nodes count]>3)
-    //    [self stop];
 }
 @end

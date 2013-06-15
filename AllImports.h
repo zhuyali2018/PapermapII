@@ -24,7 +24,12 @@ const static bool showLog3=false;   //New Log
 const static bool showLog4=false;   //New Log
 #define NSLOG4(fmt, ...) if(showLog4) NSLog((@"%s " fmt), __PRETTY_FUNCTION__,##__VA_ARGS__)
 
-const static bool showLog5=true;   //New Log
+const static bool showLog5=true;   //track the node added
 #define NSLOG5(fmt, ...) if(showLog5) NSLog((@"%s " fmt), __PRETTY_FUNCTION__,##__VA_ARGS__)
+
+const static bool showLog6=true;   //track the node added
+#define NSLOG6(fmt, ...) if(showLog6) NSLog((@"%s " fmt), __PRETTY_FUNCTION__,##__VA_ARGS__)
+
+const static int TSIZE=256;     // tile size
 
 #endif

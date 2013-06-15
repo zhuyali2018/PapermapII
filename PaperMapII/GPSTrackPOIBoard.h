@@ -14,6 +14,7 @@
 
 @interface GPSTrackPOIBoard : UIView
 
+@property (nonatomic) BOOL * pMode;
 @property (nonatomic,weak) TapDetectView * tapDetectView;
 @property (nonatomic,strong) NSMutableArray * ptrToTracksArray;   //array of pointers to tracks which is also an array of tracks
 @property int maplevel;

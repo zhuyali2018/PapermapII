@@ -10,6 +10,8 @@
 #import "MapTile.h"
 #import "GPSTrackPOIBoard.h"
 #import "DrawingBoard.h"
+#import "TapDetectView.h"
+
 @implementation MapScrollView
 
 @synthesize zoomView;
@@ -17,7 +19,7 @@
 
 
 const int bz=0;        //bezel width, should be set to 0 eventually
-const int SIZE=256;     // tile size
+//const int SIZE=256;
 
 float zmc=1;
 CGPoint savedOffset;
@@ -112,7 +114,7 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
     if(levelDiff<0) { NSLOG(@"error: levelDiff < 0, exit fillWindowWithBasicMap"); return;}
     NSLOG(@"in fillWindowWithBasicMap");
     int i=levelDiff;
-	float tileSize=SIZE*pow(2,levelDiff);
+	float tileSize=TSIZE*pow(2,levelDiff);
 	float scaledTileSide  = tileSize  * [self zoomScale];
     
     int maxRow = floorf(([zoomView frame].size.height) / scaledTileSide);  // this is the maximum possible row
@@ -272,9 +274,9 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
     if (self) {
         // Initialization code
         int longside=MAX(frame.size.width,frame.size.height);
-        int tilesNeeded=ceil(longside/SIZE);
+        int tilesNeeded=ceil(longside/TSIZE);
         int level=ceil(sqrt(tilesNeeded));
-        int squareSide=pow(2,level)*SIZE;
+        int squareSide=pow(2,level)*TSIZE;
         [self setBackgroundColor:[UIColor blueColor]];
         self.showsVerticalScrollIndicator=NO;
 		self.showsHorizontalScrollIndicator=NO;
@@ -292,6 +294,7 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
         zoomView=[[ZoomView alloc] initWithFrame:CGRectMake(bz,bz,1000, 1000)];
         [zoomView setBackgroundColor:[UIColor lightGrayColor]];
         [self addSubview:zoomView];
+        zoomView.gpsTrackPOIBoard.pMode=&Mode;    //pass address to pMode on gpsTrackPOIBoard
         
         [self initVisibleVarArrays];
         //maplevel=level;
@@ -374,7 +377,7 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
             offset.x-=Size.width/2;
             [self setContentOffset:offset];
             [self unLoadAllMapTiles];
-            [self setNeedsDisplay];
+            [self setNeedsDisplay];[self.zoomView.gpsTrackPOIBoard setNeedsDisplay];
              Mode=!Mode;
             return;
         }
@@ -387,7 +390,7 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
             offset.x+=Size.width/2;
             [self setContentOffset:offset];
             [self unLoadAllMapTiles];
-            [self setNeedsDisplay];
+            [self setNeedsDisplay];[self.zoomView.gpsTrackPOIBoard setNeedsDisplay];
             Mode=!Mode;
             return;
         }
@@ -414,7 +417,60 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
     // Drawing code
 }
 */
-
+#define MAPLEVEL @"maplevel"
+#define ZOOMSCALE  @"zoomScale"
+#define CONTENTOFFSET_X @"ContentOffsetX"
+#define CONTENTOFFSET_Y @"ContentOffsetY"
+#define CONTENTSIZEWIDE @"CONTENTSIZEWIDE"
+#define CONTETSIZEHEIGHT @"CONTETSIZEHEIGHT"
+#define MODE            @"MODE"
+#define SATMAP			@"SATORMAP"
+-(void)saveMapState{
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	[defaults setInteger:self.maplevel forKey:MAPLEVEL];
+	//float zs=imageScrollView.zoomScale;
+	[defaults setFloat:self.zoomScale forKey:ZOOMSCALE];
+	
+	[defaults setFloat:[self contentOffset].x forKey:CONTENTOFFSET_X];
+    [defaults setFloat:[self contentOffset].y forKey:CONTENTOFFSET_Y];
+	
+	[defaults setFloat:[self contentSize].width forKey:CONTENTSIZEWIDE];
+    [defaults setFloat:[self contentSize].height forKey:CONTETSIZEHEIGHT];
+    [defaults setBool:Mode forKey:MODE];
+	//[defaults setBool:imageScrollView.bSatMap forKey:SATMAP];
+	//[defaults setBool:bResetPrecinct forKey:@"bResetPrecinct"];
+	[defaults synchronize];
+}
+-(void)restoreMapState{
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	float zScale= [defaults floatForKey:ZOOMSCALE];
+    Mode=[defaults boolForKey:MODE];
+	self.maplevel=[defaults integerForKey:MAPLEVEL];
+    if (self.maplevel==0) {
+        return;     //it means the state has never beensaved
+    }
+	// if the saved level is less than minMapLevel, that means data is corrupted, start over
+	[self setZoomScale:zScale];
+	
+	CGPoint contentOffset;
+	contentOffset.x=[defaults floatForKey:CONTENTOFFSET_X];
+	contentOffset.y=[defaults floatForKey:CONTENTOFFSET_Y];
+	[self setContentOffset: contentOffset];
+    
+	CGSize contentSize;
+	contentSize.width=[defaults floatForKey:CONTENTSIZEWIDE];
+	contentSize.height=[defaults floatForKey:CONTETSIZEHEIGHT];
+	[self setContentSize:contentSize];
+	CGRect fr=CGRectMake(0, 0, contentSize.width, contentSize.height);
+	[self.zoomView setFrame:fr];
+	[self setMaxandMinZoomScale];
+	
+	float calSide=TSIZE*pow(2, self.maplevel);
+	CGRect fr1=CGRectMake(0, 0, calSide, calSide);
+	[self.zoomView.basicMapLayer setFrame:fr1];
+	[self.zoomView.tileContainer setFrame:fr1];
+	[self.zoomView.gpsTrackPOIBoard.tapDetectView setFrame:fr1];
+}
 
 #pragma mark ----------------------------
 #pragma mark UIScrollViewDelegate methods
@@ -446,7 +502,7 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
     }
     if(deltaRes==0){
         //calculate the new contentsize
-        float calW=pow(2,maplevel)*SIZE*[self zoomScale];
+        float calW=pow(2,maplevel)*TSIZE*[self zoomScale];
         CGSize calContentSize=CGSizeMake(calW, calW);
         [self setContentSize:calContentSize];
         
@@ -473,7 +529,7 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
     //after setting new zoomscale, need to restore old size and offset of content view
     
     //calculate the new contentsize
-    float calW=pow(2,maplevel)*SIZE*[self zoomScale];
+    float calW=pow(2,maplevel)*TSIZE*[self zoomScale];
     CGSize calContentSize=CGSizeMake(calW, calW);
     
     //[self setContentSize:contentSize1];
@@ -484,7 +540,7 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
     [zoomView setFrame:fr];
     
     // layer inside scrollview content's zooming view zoomView  is without zoomScale factor:
-    float calSide=SIZE*pow(2, maplevel);
+    float calSide=TSIZE*pow(2, maplevel);
     
     CGRect fr1=CGRectMake(0, 0, calSide, calSide);
     [zoomView.basicMapLayer setFrame:fr1];

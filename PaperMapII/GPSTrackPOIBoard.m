@@ -31,12 +31,22 @@
     }
     return self;
 }
+-(int)ModeAdjust:(int)x res:(int)r{
+    if(*self.pMode)
+        return x;
+    int H=TSIZE*pow(2,r-1);
+    if(x<H)
+        return x+H;
+    return x-H;
+}
 -(CGPoint)ConvertPoint:(Node *)node{
+    //Mode Adjust node.x:
+    int nodeX=[self ModeAdjust:node.x res:node.r];
 	//First, convert the point coordinates to current maplevel
 	int delta=maplevel-node.r;
 	float zoomFactor = pow(2, delta * -1);
 	CGPoint p;
-	p.x=node.x/zoomFactor;
+	p.x=nodeX/zoomFactor;
 	p.y=node.y/zoomFactor;
 	//Second, convert the point's coordinates to the coordinates on DrawingBoard which is significantly smaller, only covers window area
 	CGPoint p2=[tapDetectView convertPoint:p toView:self];
@@ -91,6 +101,9 @@
 // An empty implementation adversely affects performance during animation.
 - (void)drawRect:(CGRect)rect
 {
+    if (maplevel<2) {
+        return;         //no drawing on maplevel 1 and 0
+    }
     // Drawing code
     if (!ptrToTracksArray) {  //if not initialized
         return;

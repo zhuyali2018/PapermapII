@@ -33,6 +33,14 @@
 -(void)add_Buttons{
     [self addDrawButton];
     [self addFreeDrawButton];
+    [self addUndoButton];
+}
+-(void)addUndoButton{
+    UIButton * drawButton1=[UIButton buttonWithType:(UIButtonTypeRoundedRect)];
+    [drawButton1 setFrame:CGRectMake([[self view] bounds].size.width-150, 150, 100, 30)];
+    [drawButton1 setTitle:@"Undo" forState:UIControlStateNormal];
+    [drawButton1 addTarget:self action:@selector(undoDrawing:) forControlEvents:UIControlEventTouchUpInside];
+    [[self view] addSubview:drawButton1];
 }
 -(void)addFreeDrawButton{
     fdrawButton=[UIButton buttonWithType:(UIButtonTypeRoundedRect)];
@@ -49,6 +57,12 @@
     [drawButton setTitle:@"Draw" forState:UIControlStateNormal];
     [drawButton addTarget:self action:@selector(startDrawingRecorder:) forControlEvents:UIControlEventTouchUpInside];
     [[self view] addSubview:drawButton];
+}
+-(void)undoDrawing:(UIButton *)bn{
+    [self.routRecorder undo];
+    NSLOG5(@"Undo drawing called");
+    [self.mapScrollView.zoomView.gpsTrackPOIBoard setNeedsDisplay];
+    [self.mapScrollView.zoomView.gpsTrackPOIBoard.drawingBoard setNeedsDisplay];
 }
 -(void)switchToFreeDraw:(UIButton *)bn{
     NSLOG4(@"Free Draw button tapped. Button title is %@",[bn.titleLabel text]);
@@ -102,16 +116,21 @@
 	float height=visibleBounds.size.height-2*bazel;
 	//mapScrollView=[[TappableMapScrollView alloc] initWithFrame:CGRectMake(bazel,bazel,width,height)];
     mapScrollView=[[DrawableMapScrollView alloc] initWithFrame:CGRectMake(bazel,bazel,width,height)];
+    //create a mapsource object
     mapSources=[[MapSources alloc]init];
     mapSources.mapType=googleMap;
-    
-    mapScrollView.mapsourceDelegate=mapSources;	
+    //specifying mapsource
+    mapScrollView.mapsourceDelegate=mapSources;
+	//display map view
+    [mapScrollView restoreMapState];
     [[self view] addSubview:mapScrollView];
     
-    //Drawing Recoder or GPS Recorder
+    //create a Drawing Recoder or GPS Recorder
     self.routRecorder=[[Recorder alloc]init];
     if(self.routRecorder)
         mapScrollView.recordingDelegate=_routRecorder;
+    
+    //initializing the lineproperty of lines for drawing 
     lineProperty=[[LineProperty alloc]initWithRed:0.2 green:0.3 blue:0.9 alpha:0.8 linewidth:3];
     
     
@@ -129,6 +148,10 @@
     arrAllTracks=[[NSMutableArray alloc]initWithCapacity:2];
     [self add_MapScrollView];    //add map tile scroll view
     [self add_Buttons];
+
+    //TODO: Fixe the following 2 lines not working, why?
+    UIApplication *app=[UIApplication sharedApplication];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillTerminate:) name:UIApplicationWillTerminateNotification object:app];
 }
 
 - (void)didReceiveMemoryWarning
@@ -136,5 +159,8 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
+-(void)applicationWillTerminate:(NSNotification *)notification{
+	NSLOG5(@"=====>calling applicationWillTerminate:");
+    [mapScrollView saveMapState];
+}
 @end

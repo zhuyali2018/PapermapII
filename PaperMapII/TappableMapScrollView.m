@@ -9,10 +9,6 @@
 #define SIZE 256
 #define ZOOM_STEP 2.0
 
-#import "PM2AppDelegate.h"      //TODO: Remove this line for final release
-#import "PM2ViewController.h"   //TODO: Remove this line for final release
-#import "Recorder.h"            //TODO: Remove this line for final release
-
 #import "AllImports.h"
 #import "TappableMapScrollView.h"
 #import "DrawingBoard.h"

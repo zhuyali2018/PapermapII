@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-//@class TiledScrollView; //TODO: delete this line
 @class DrawableMapScrollView;
 @class MapSources;
 @class Recorder;
@@ -22,4 +21,7 @@
 @property (nonatomic, strong) Recorder * routRecorder;
 @property (nonatomic, strong) LineProperty * lineProperty;
 @property (nonatomic, strong) NSMutableArray  * arrAllTracks;     //array of tracks
+
+-(void)applicationWillTerminate:(NSNotification *)notification;
+
 @end
