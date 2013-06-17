@@ -9,6 +9,8 @@
 #ifndef PaperMapII_AllImports_h
 #define PaperMapII_AllImports_h
 
+const static int TSIZE=256;     // tile size
+
 const static bool showLog=false;
 #define NSLOG(fmt, ...) if(showLog) NSLog((@"%s " fmt), __PRETTY_FUNCTION__,##__VA_ARGS__)
 
@@ -27,9 +29,10 @@ const static bool showLog4=false;   //New Log
 const static bool showLog5=true;   //track the node added
 #define NSLOG5(fmt, ...) if(showLog5) NSLog((@"%s " fmt), __PRETTY_FUNCTION__,##__VA_ARGS__)
 
-const static bool showLog6=true;   //track the node added
+const static bool showLog6=true;   //Application Delegate methods calling log
 #define NSLOG6(fmt, ...) if(showLog6) NSLog((@"%s " fmt), __PRETTY_FUNCTION__,##__VA_ARGS__)
 
-const static int TSIZE=256;     // tile size
+const static bool showLog7=true;   //Application Delegate methods calling log
+#define NSLOG7(fmt, ...) if(showLog7) NSLog((@"%s " fmt), __PRETTY_FUNCTION__,##__VA_ARGS__)
 
 #endif

@@ -115,15 +115,21 @@
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetShouldAntialias(context, YES);   //make line smoother ?
     
+//    for (int i=0; i<[ptrToTracksArray count]; i++) {     //loop through each track arrays of track arrays
+//        for (int j=0;j<[ptrToTracksArray[i] count]; j++) {  //loop through each track arry for each track array
+//            for (int k=0;k<[ptrToTracksArray[i][j] count]; k++) {  //loop through each track for each track array
+//                Track * track=ptrToTracksArray[i][j][k];
+//                [self tapDrawTrack:track context:context];
+//            }
+//        }
+//    }
+
     for (int i=0; i<[ptrToTracksArray count]; i++) {     //loop through each track arrays of track arrays
         for (int j=0;j<[ptrToTracksArray[i] count]; j++) {  //loop through each track arry for each track array
-            for (int k=0;k<[ptrToTracksArray[i][j] count]; k++) {  //loop through each track for each track array
-                Track * track=ptrToTracksArray[i][j][k];
+                Track * track=ptrToTracksArray[i][j];
                 [self tapDrawTrack:track context:context];
-            }
         }
     }
-    
     NSLOG4(@"Line Redrawn!");
 }
 

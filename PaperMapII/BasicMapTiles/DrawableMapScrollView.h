@@ -9,5 +9,6 @@
 #import "TappableMapScrollView.h"
 
 @interface DrawableMapScrollView : TappableMapScrollView
--(void)registTracksToBeDrawn:(NSArray*)tracks;
+-(void)registTracksToBeDrawn:(NSMutableArray*)tracks;
++ (id)sharedMap;
 @end

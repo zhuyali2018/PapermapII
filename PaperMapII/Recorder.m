@@ -11,6 +11,16 @@
 #import "LineProperty.h"
 #import "Node.h"
 @implementation Recorder
+
++ (id)sharedRecorder{
+    static Recorder *sharedMyManager = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        sharedMyManager = [[self alloc] init];
+    });
+    return sharedMyManager;
+}
+
 - (id)init {
     self = [super init];
     if (self) {
@@ -20,7 +30,8 @@
     }
     return self;
 }
-- (void)start:(LineProperty *)prop{
+
+- (void)start{
     if (_recording) {
         return;
     }
@@ -30,7 +41,7 @@
         return;
     }
     _recording=true;
-    self.track.lineProperty=prop;
+    self.track.lineProperty=[LineProperty sharedDrawingLineProperty];
     if(!self.trackArray){   //when first time starting recorder, ini track array
         self.trackArray=[[NSMutableArray alloc]initWithCapacity:5];
         [self.trackArray addObject:self.track];

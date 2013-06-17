@@ -16,9 +16,12 @@
 @property (nonatomic,strong) Track * track;
 @property bool recording; //if it is recording
 
-- (void) start:(LineProperty *)prop;
+- (void) start;
 - (void) stop;
 - (void) mapLevel:(int)maplevel singleTapAtPoint:(CGPoint)tapPoint;
 - (void) startNewTrack;
 - (void) undo;
+
++ (id)sharedRecorder;
+
 @end

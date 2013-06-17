@@ -30,11 +30,24 @@
 }
 */
 
+#pragma mark Singleton Methods
++ (id)sharedMap {
+    static DrawableMapScrollView *sharedMyManager = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        sharedMyManager = [[self alloc] init];
+    });
+    return sharedMyManager;
+}
+
 #define DRAWINGBOARD self.zoomView.gpsTrackPOIBoard
--(void)registTracksToBeDrawn:(NSArray*)tracks1{
+-(void)registTracksToBeDrawn1:(NSMutableArray*)tracks1{
     if (!DRAWINGBOARD.ptrToTracksArray) {
         DRAWINGBOARD.ptrToTracksArray=[[NSMutableArray alloc]initWithCapacity:3];
     }
     [DRAWINGBOARD.ptrToTracksArray addObject:tracks1];
+}
+-(void)registTracksToBeDrawn:(NSMutableArray*)tracks1{
+    DRAWINGBOARD.ptrToTracksArray=tracks1;
 }
 @end

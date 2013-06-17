@@ -32,4 +32,9 @@
 	}
 	return self;
 }
+-(void)encodeWithCoder:(NSCoder *)coder{
+	[coder encodeInt:x forKey:@"pointx"];
+	[coder encodeInt:y forKey:@"pointy"];
+    [coder encodeInt:r forKey:@"res"];
+}
 @end

@@ -20,4 +20,7 @@
 @property int maplevel;
 
 @property (nonatomic) DrawingBoard * drawingBoard;          //freeDrawingBoard in PM1
+
+-(int)ModeAdjust:(int)x res:(int)r;
+
 @end

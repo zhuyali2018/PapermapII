@@ -9,6 +9,22 @@
 #import "LineProperty.h"
 
 @implementation LineProperty
++ (id)sharedDrawingLineProperty{
+    static LineProperty *sharedDrawingLineProperty = nil;
+    @synchronized(self) {
+        if (sharedDrawingLineProperty == nil)
+            sharedDrawingLineProperty = [[self alloc] init];
+    }
+    return sharedDrawingLineProperty;
+}
++ (id)sharedGPSTrackProperty{
+    static LineProperty *sharedGPSTrackProperty = nil;
+    @synchronized(self) {
+        if (sharedGPSTrackProperty == nil)
+            sharedGPSTrackProperty = [[self alloc] init];
+    }
+    return sharedGPSTrackProperty;
+}
 
 - (id)initWithRed:(float)red green:(float)green blue:(float) blue alpha:(float) alpha linewidth:(int)width {
 	self.red=red;
