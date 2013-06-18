@@ -9,6 +9,7 @@
 #import "PM2OnScreenButtons.h"
 #import "GPSTrackPOIBoard.h"
 #import "DrawingBoard.h"
+#import "ScaleRuler.h"
 
 @implementation PM2OnScreenButtons
 @synthesize drawButton,fdrawButton;
@@ -36,6 +37,12 @@
     [self addFreeDrawButton];
     [self addUndoButton];
     [self addMapLevelLabel];
+    [self addScaleRuler];
+}
+-(void)addScaleRuler{
+    ScaleRuler * scaleRuler=[ScaleRuler shareScaleRuler:CGRectMake(30, 0,700,30)];
+    [scaleRuler setBackgroundColor:[UIColor colorWithRed:0.3 green:0.4 blue:0.5 alpha:0.7]];
+    [_baseView addSubview:scaleRuler];
 }
 -(void)addMapLevelLabel{
     resLabel=[[UILabel alloc] initWithFrame:CGRectMake(0, 0, 50, 30)];

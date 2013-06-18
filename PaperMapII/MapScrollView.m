@@ -12,6 +12,7 @@
 #import "DrawingBoard.h"
 #import "TapDetectView.h"
 #import "PM2OnScreenButtons.h"
+#import "ScaleRuler.h"
 
 @implementation MapScrollView
 
@@ -340,6 +341,7 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
 }
  
 - (void)layoutSubviews{
+    [[ScaleRuler shareScaleRuler:CGRectMake(30, 0,700,30)] updateRuler:self];
     if (self.zooming){
         NSLOG(@"self.zooming, exit layoutSubviews:W:%.f, H:%.f",self.contentSize.width,self.contentSize.height);
         return;

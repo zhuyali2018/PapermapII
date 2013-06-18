@@ -14,6 +14,8 @@
 		AA729A54175870D800F6AF78 /* LineProperty.m in Sources */ = {isa = PBXBuildFile; fileRef = AA729A52175870D800F6AF78 /* LineProperty.m */; };
 		AAAD5A6F176E1F5900DCDAD2 /* PM2OnScreenButtons.m in Sources */ = {isa = PBXBuildFile; fileRef = AAAD5A6E176E1F5900DCDAD2 /* PM2OnScreenButtons.m */; };
 		AAAD5A70176E1F5900DCDAD2 /* PM2OnScreenButtons.m in Sources */ = {isa = PBXBuildFile; fileRef = AAAD5A6E176E1F5900DCDAD2 /* PM2OnScreenButtons.m */; };
+		AAAD5A7517701B5800DCDAD2 /* ScaleRuler.m in Sources */ = {isa = PBXBuildFile; fileRef = AAAD5A7417701B5800DCDAD2 /* ScaleRuler.m */; };
+		AAAD5A7617701B5800DCDAD2 /* ScaleRuler.m in Sources */ = {isa = PBXBuildFile; fileRef = AAAD5A7417701B5800DCDAD2 /* ScaleRuler.m */; };
 		AAB3A65617513E6C00214D2C /* TappableMapScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = AAB3A65517513E6C00214D2C /* TappableMapScrollView.m */; };
 		AAB3A65717513E6C00214D2C /* TappableMapScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = AAB3A65517513E6C00214D2C /* TappableMapScrollView.m */; };
 		AABD95D8175A10CC00B2BC33 /* DrawableMapScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = AABD95D7175A10CC00B2BC33 /* DrawableMapScrollView.m */; };
@@ -3486,6 +3488,8 @@
 		AA729A52175870D800F6AF78 /* LineProperty.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LineProperty.m; sourceTree = "<group>"; };
 		AAAD5A6D176E1F5900DCDAD2 /* PM2OnScreenButtons.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PM2OnScreenButtons.h; sourceTree = "<group>"; };
 		AAAD5A6E176E1F5900DCDAD2 /* PM2OnScreenButtons.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PM2OnScreenButtons.m; sourceTree = "<group>"; };
+		AAAD5A7317701B5800DCDAD2 /* ScaleRuler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScaleRuler.h; sourceTree = "<group>"; };
+		AAAD5A7417701B5800DCDAD2 /* ScaleRuler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScaleRuler.m; sourceTree = "<group>"; };
 		AAB3A65417513E6B00214D2C /* TappableMapScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TappableMapScrollView.h; sourceTree = "<group>"; };
 		AAB3A65517513E6C00214D2C /* TappableMapScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TappableMapScrollView.m; sourceTree = "<group>"; };
 		AABD95D6175A10CC00B2BC33 /* DrawableMapScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DrawableMapScrollView.h; path = BasicMapTiles/DrawableMapScrollView.h; sourceTree = "<group>"; };
@@ -5275,13 +5279,15 @@
 			name = MapSources;
 			sourceTree = "<group>";
 		};
-		AAAD5A71176E1F7800DCDAD2 /* Buttons */ = {
+		AAAD5A71176E1F7800DCDAD2 /* Buttons and Labels */ = {
 			isa = PBXGroup;
 			children = (
 				AAAD5A6D176E1F5900DCDAD2 /* PM2OnScreenButtons.h */,
 				AAAD5A6E176E1F5900DCDAD2 /* PM2OnScreenButtons.m */,
+				AAAD5A7317701B5800DCDAD2 /* ScaleRuler.h */,
+				AAAD5A7417701B5800DCDAD2 /* ScaleRuler.m */,
 			);
-			name = Buttons;
+			name = "Buttons and Labels";
 			sourceTree = "<group>";
 		};
 		AAAD5A7217700B0300DCDAD2 /* MapViews-Old */ = {
@@ -5331,7 +5337,7 @@
 				AABDD49817437B3600A0D6E9 /* PM2ViewController.h */,
 				AABDD49917437B3600A0D6E9 /* PM2ViewController.m */,
 				AABDD49B17437B3600A0D6E9 /* PM2ViewController.xib */,
-				AAAD5A71176E1F7800DCDAD2 /* Buttons */,
+				AAAD5A71176E1F7800DCDAD2 /* Buttons and Labels */,
 				AA511CD3174F1E7600F46B1A /* MapSources */,
 				AAAD5A7217700B0300DCDAD2 /* MapViews-Old */,
 				AABDD4E71745EF1600A0D6E9 /* MapViews */,
@@ -10667,6 +10673,7 @@
 				AABD962B175D98F100B2BC33 /* DrawingBoard.m in Sources */,
 				AABD962F175D9FC800B2BC33 /* GPSTrackPOIBoard.m in Sources */,
 				AAAD5A6F176E1F5900DCDAD2 /* PM2OnScreenButtons.m in Sources */,
+				AAAD5A7517701B5800DCDAD2 /* ScaleRuler.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -10688,6 +10695,7 @@
 				AABD962C175D98F100B2BC33 /* DrawingBoard.m in Sources */,
 				AABD9630175D9FC800B2BC33 /* GPSTrackPOIBoard.m in Sources */,
 				AAAD5A70176E1F5900DCDAD2 /* PM2OnScreenButtons.m in Sources */,
+				AAAD5A7617701B5800DCDAD2 /* ScaleRuler.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
