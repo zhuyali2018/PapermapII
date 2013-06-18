@@ -18,6 +18,9 @@
 		AAAD5A7617701B5800DCDAD2 /* ScaleRuler.m in Sources */ = {isa = PBXBuildFile; fileRef = AAAD5A7417701B5800DCDAD2 /* ScaleRuler.m */; };
 		AAAD5A7917702BE200DCDAD2 /* MapCenterIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = AAAD5A7817702BE200DCDAD2 /* MapCenterIndicator.m */; };
 		AAAD5A7A17702BE200DCDAD2 /* MapCenterIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = AAAD5A7817702BE200DCDAD2 /* MapCenterIndicator.m */; };
+		AAAD5A7D177034AF00DCDAD2 /* GPSReceiver.m in Sources */ = {isa = PBXBuildFile; fileRef = AAAD5A7C177034AF00DCDAD2 /* GPSReceiver.m */; };
+		AAAD5A7E177034AF00DCDAD2 /* GPSReceiver.m in Sources */ = {isa = PBXBuildFile; fileRef = AAAD5A7C177034AF00DCDAD2 /* GPSReceiver.m */; };
+		AAAD5A801770364800DCDAD2 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAAD5A7F1770364800DCDAD2 /* CoreLocation.framework */; };
 		AAB3A65617513E6C00214D2C /* TappableMapScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = AAB3A65517513E6C00214D2C /* TappableMapScrollView.m */; };
 		AAB3A65717513E6C00214D2C /* TappableMapScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = AAB3A65517513E6C00214D2C /* TappableMapScrollView.m */; };
 		AABD95D8175A10CC00B2BC33 /* DrawableMapScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = AABD95D7175A10CC00B2BC33 /* DrawableMapScrollView.m */; };
@@ -3494,6 +3497,9 @@
 		AAAD5A7417701B5800DCDAD2 /* ScaleRuler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScaleRuler.m; sourceTree = "<group>"; };
 		AAAD5A7717702BE200DCDAD2 /* MapCenterIndicator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapCenterIndicator.h; sourceTree = "<group>"; };
 		AAAD5A7817702BE200DCDAD2 /* MapCenterIndicator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapCenterIndicator.m; sourceTree = "<group>"; };
+		AAAD5A7B177034AF00DCDAD2 /* GPSReceiver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPSReceiver.h; sourceTree = "<group>"; };
+		AAAD5A7C177034AF00DCDAD2 /* GPSReceiver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPSReceiver.m; sourceTree = "<group>"; };
+		AAAD5A7F1770364800DCDAD2 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		AAB3A65417513E6B00214D2C /* TappableMapScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TappableMapScrollView.h; sourceTree = "<group>"; };
 		AAB3A65517513E6C00214D2C /* TappableMapScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TappableMapScrollView.m; sourceTree = "<group>"; };
 		AABD95D6175A10CC00B2BC33 /* DrawableMapScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DrawableMapScrollView.h; path = BasicMapTiles/DrawableMapScrollView.h; sourceTree = "<group>"; };
@@ -5252,6 +5258,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AAAD5A801770364800DCDAD2 /* CoreLocation.framework in Frameworks */,
 				AABDD4FD1747547000A0D6E9 /* QuartzCore.framework in Frameworks */,
 				AABDD4D91744A15000A0D6E9 /* GameKit.framework in Frameworks */,
 				AABDD48117437B3600A0D6E9 /* UIKit.framework in Frameworks */,
@@ -5296,11 +5303,13 @@
 			name = "Buttons and Labels";
 			sourceTree = "<group>";
 		};
-		AAAD5A7217700B0300DCDAD2 /* MapViews-Old */ = {
+		AAAD5A7217700B0300DCDAD2 /* GPS */ = {
 			isa = PBXGroup;
 			children = (
+				AAAD5A7B177034AF00DCDAD2 /* GPSReceiver.h */,
+				AAAD5A7C177034AF00DCDAD2 /* GPSReceiver.m */,
 			);
-			name = "MapViews-Old";
+			name = GPS;
 			sourceTree = "<group>";
 		};
 		AABDD47417437B3600A0D6E9 = {
@@ -5325,6 +5334,7 @@
 		AABDD47F17437B3600A0D6E9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				AAAD5A7F1770364800DCDAD2 /* CoreLocation.framework */,
 				AABDD4FC1747547000A0D6E9 /* QuartzCore.framework */,
 				AABDD4D81744A15000A0D6E9 /* GameKit.framework */,
 				AABDD48017437B3600A0D6E9 /* UIKit.framework */,
@@ -5345,7 +5355,7 @@
 				AABDD49B17437B3600A0D6E9 /* PM2ViewController.xib */,
 				AAAD5A71176E1F7800DCDAD2 /* Buttons and Labels */,
 				AA511CD3174F1E7600F46B1A /* MapSources */,
-				AAAD5A7217700B0300DCDAD2 /* MapViews-Old */,
+				AAAD5A7217700B0300DCDAD2 /* GPS */,
 				AABDD4E71745EF1600A0D6E9 /* MapViews */,
 				AAC8484917585415002D7AA9 /* Drawing Classes */,
 				AABDD48717437B3600A0D6E9 /* Supporting Files */,
@@ -10681,6 +10691,7 @@
 				AAAD5A6F176E1F5900DCDAD2 /* PM2OnScreenButtons.m in Sources */,
 				AAAD5A7517701B5800DCDAD2 /* ScaleRuler.m in Sources */,
 				AAAD5A7917702BE200DCDAD2 /* MapCenterIndicator.m in Sources */,
+				AAAD5A7D177034AF00DCDAD2 /* GPSReceiver.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -10704,6 +10715,7 @@
 				AAAD5A70176E1F5900DCDAD2 /* PM2OnScreenButtons.m in Sources */,
 				AAAD5A7617701B5800DCDAD2 /* ScaleRuler.m in Sources */,
 				AAAD5A7A17702BE200DCDAD2 /* MapCenterIndicator.m in Sources */,
+				AAAD5A7E177034AF00DCDAD2 /* GPSReceiver.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

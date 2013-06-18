@@ -11,11 +11,14 @@
 #import "DrawingBoard.h"
 #import "ScaleRuler.h"
 #import "MapCenterIndicator.h"
+#import "GPSReceiver.h"
 
 @implementation PM2OnScreenButtons
 @synthesize drawButton,fdrawButton;
 @synthesize mapScrollView;
 @synthesize resLabel;
+@synthesize messageLabel;
+@synthesize gpsReceiver;
 
 + (id)sharedBnManager {
     static PM2OnScreenButtons *onScreenbuttons = nil;
@@ -29,6 +32,7 @@
     if (self = [super init]) {
         _routRecorder=[Recorder sharedRecorder];
         mapScrollView=[DrawableMapScrollView sharedMap];
+        gpsReceiver=[GPSReceiver sharedGPSReceiver];
     }
     return self;
 }
@@ -40,6 +44,40 @@
     [self addMapLevelLabel];
     [self addScaleRuler];
     [self addMapCenterIndicator:vc];
+    [self addMessageLabel];
+    [self addGPSButton];
+    [self addStopGPSButton];
+}
+-(void) addGPSButton{
+    UIButton * gpsButton=[UIButton buttonWithType:(UIButtonTypeRoundedRect)];
+    [gpsButton setFrame:CGRectMake([_baseView bounds].size.width-150, 200, 100, 30)];
+    [gpsButton setTitle:@"Start GPS" forState:UIControlStateNormal];
+    [gpsButton addTarget:self action:@selector(startGPS) forControlEvents:UIControlEventTouchUpInside];
+    [_baseView addSubview:gpsButton];
+}
+-(void) addStopGPSButton{
+    UIButton * gpsButton=[UIButton buttonWithType:(UIButtonTypeRoundedRect)];
+    [gpsButton setFrame:CGRectMake([_baseView bounds].size.width-150, 250, 100, 30)];
+    [gpsButton setTitle:@"Stop GPS" forState:UIControlStateNormal];
+    [gpsButton addTarget:self action:@selector(stopGPS) forControlEvents:UIControlEventTouchUpInside];
+    [_baseView addSubview:gpsButton];
+}
+-(void) startGPS{    
+    [gpsReceiver start];
+}
+-(void) stopGPS{
+    [gpsReceiver stop];
+}
+-(void) addMessageLabel{
+    messageLabel=[[UILabel alloc] initWithFrame:CGRectMake(0, 40, 720, 40)];
+	//[messageLabel setBackgroundColor:[UIColor clearColor]];
+    [messageLabel setBackgroundColor:[UIColor colorWithRed:0.3 green:0.4 blue:0.5 alpha:0.7]];
+	[messageLabel setTextColor:[UIColor greenColor]];
+	[messageLabel setShadowColor:[UIColor blackColor]];
+	[messageLabel setShadowOffset:CGSizeMake(1.0, 1.0)];
+	[messageLabel setFont:[UIFont boldSystemFontOfSize:20]];
+	//[messageLabel setText:[NSString stringWithFormat:@" %d", mapScrollView.maplevel]];
+    [_baseView addSubview:messageLabel];
 }
 -(void)addMapCenterIndicator:(UIView*)vc{
     int screenW=[vc bounds].size.width;

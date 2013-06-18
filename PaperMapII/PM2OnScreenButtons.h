@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "Recorder.h"
 #import "DrawableMapScrollView.h"
+@class GPSReceiver;
 
 @interface PM2OnScreenButtons : NSObject
 @property (nonatomic, strong) UIButton *drawButton;
@@ -17,6 +18,8 @@
 @property (nonatomic, strong) Recorder * routRecorder;
 @property (nonatomic, strong) DrawableMapScrollView * mapScrollView;
 @property (nonatomic, strong) UILabel * resLabel;
+@property (nonatomic, strong) UILabel * messageLabel;
+@property (nonatomic, strong) GPSReceiver * gpsReceiver;
 + (id)sharedBnManager;
 -(void)addButtons:(UIView *)vc;
 -(void)updateMapLevel;
