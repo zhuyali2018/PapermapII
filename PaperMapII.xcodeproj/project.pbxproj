@@ -16,6 +16,8 @@
 		AAAD5A70176E1F5900DCDAD2 /* PM2OnScreenButtons.m in Sources */ = {isa = PBXBuildFile; fileRef = AAAD5A6E176E1F5900DCDAD2 /* PM2OnScreenButtons.m */; };
 		AAAD5A7517701B5800DCDAD2 /* ScaleRuler.m in Sources */ = {isa = PBXBuildFile; fileRef = AAAD5A7417701B5800DCDAD2 /* ScaleRuler.m */; };
 		AAAD5A7617701B5800DCDAD2 /* ScaleRuler.m in Sources */ = {isa = PBXBuildFile; fileRef = AAAD5A7417701B5800DCDAD2 /* ScaleRuler.m */; };
+		AAAD5A7917702BE200DCDAD2 /* MapCenterIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = AAAD5A7817702BE200DCDAD2 /* MapCenterIndicator.m */; };
+		AAAD5A7A17702BE200DCDAD2 /* MapCenterIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = AAAD5A7817702BE200DCDAD2 /* MapCenterIndicator.m */; };
 		AAB3A65617513E6C00214D2C /* TappableMapScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = AAB3A65517513E6C00214D2C /* TappableMapScrollView.m */; };
 		AAB3A65717513E6C00214D2C /* TappableMapScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = AAB3A65517513E6C00214D2C /* TappableMapScrollView.m */; };
 		AABD95D8175A10CC00B2BC33 /* DrawableMapScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = AABD95D7175A10CC00B2BC33 /* DrawableMapScrollView.m */; };
@@ -3490,6 +3492,8 @@
 		AAAD5A6E176E1F5900DCDAD2 /* PM2OnScreenButtons.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PM2OnScreenButtons.m; sourceTree = "<group>"; };
 		AAAD5A7317701B5800DCDAD2 /* ScaleRuler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScaleRuler.h; sourceTree = "<group>"; };
 		AAAD5A7417701B5800DCDAD2 /* ScaleRuler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScaleRuler.m; sourceTree = "<group>"; };
+		AAAD5A7717702BE200DCDAD2 /* MapCenterIndicator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapCenterIndicator.h; sourceTree = "<group>"; };
+		AAAD5A7817702BE200DCDAD2 /* MapCenterIndicator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapCenterIndicator.m; sourceTree = "<group>"; };
 		AAB3A65417513E6B00214D2C /* TappableMapScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TappableMapScrollView.h; sourceTree = "<group>"; };
 		AAB3A65517513E6C00214D2C /* TappableMapScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TappableMapScrollView.m; sourceTree = "<group>"; };
 		AABD95D6175A10CC00B2BC33 /* DrawableMapScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DrawableMapScrollView.h; path = BasicMapTiles/DrawableMapScrollView.h; sourceTree = "<group>"; };
@@ -5286,6 +5290,8 @@
 				AAAD5A6E176E1F5900DCDAD2 /* PM2OnScreenButtons.m */,
 				AAAD5A7317701B5800DCDAD2 /* ScaleRuler.h */,
 				AAAD5A7417701B5800DCDAD2 /* ScaleRuler.m */,
+				AAAD5A7717702BE200DCDAD2 /* MapCenterIndicator.h */,
+				AAAD5A7817702BE200DCDAD2 /* MapCenterIndicator.m */,
 			);
 			name = "Buttons and Labels";
 			sourceTree = "<group>";
@@ -10674,6 +10680,7 @@
 				AABD962F175D9FC800B2BC33 /* GPSTrackPOIBoard.m in Sources */,
 				AAAD5A6F176E1F5900DCDAD2 /* PM2OnScreenButtons.m in Sources */,
 				AAAD5A7517701B5800DCDAD2 /* ScaleRuler.m in Sources */,
+				AAAD5A7917702BE200DCDAD2 /* MapCenterIndicator.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -10696,6 +10703,7 @@
 				AABD9630175D9FC800B2BC33 /* GPSTrackPOIBoard.m in Sources */,
 				AAAD5A70176E1F5900DCDAD2 /* PM2OnScreenButtons.m in Sources */,
 				AAAD5A7617701B5800DCDAD2 /* ScaleRuler.m in Sources */,
+				AAAD5A7A17702BE200DCDAD2 /* MapCenterIndicator.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
