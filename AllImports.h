@@ -26,13 +26,16 @@ const static bool showLog3=false;   //New Log
 const static bool showLog4=false;   //New Log
 #define NSLOG4(fmt, ...) if(showLog4) NSLog((@"%s " fmt), __PRETTY_FUNCTION__,##__VA_ARGS__)
 
-const static bool showLog5=true;   //track the node added
+const static bool showLog5=false;   //track the node added
 #define NSLOG5(fmt, ...) if(showLog5) NSLog((@"%s " fmt), __PRETTY_FUNCTION__,##__VA_ARGS__)
 
-const static bool showLog6=true;   //Application Delegate methods calling log
+const static bool showLog6=false;   //Application Delegate methods calling log
 #define NSLOG6(fmt, ...) if(showLog6) NSLog((@"%s " fmt), __PRETTY_FUNCTION__,##__VA_ARGS__)
 
-const static bool showLog7=true;   //Application Delegate methods calling log
+const static bool showLog7=false;   //Tile Debug
 #define NSLOG7(fmt, ...) if(showLog7) NSLog((@"%s " fmt), __PRETTY_FUNCTION__,##__VA_ARGS__)
+
+const static bool showLog8=true;   //Tile Debug
+#define NSLOG8(fmt, ...) if(showLog8) NSLog((@"%s " fmt), __PRETTY_FUNCTION__,##__VA_ARGS__)
 
 #endif

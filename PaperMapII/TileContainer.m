@@ -16,23 +16,6 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-//        MapTile * mapTile1=[[MapTile alloc]initWithFrame:CGRectMake(0,0, 256, 256)];
-//        MapTile * mapTile2=[[MapTile alloc]initWithFrame:CGRectMake(0,256, 256, 256)];
-//        MapTile * mapTile3=[[MapTile alloc]initWithFrame:CGRectMake(256,0, 256,256)];
-//        MapTile * mapTile4=[[MapTile alloc]initWithFrame:CGRectMake(256,256, 256, 256)];
-//        [self annotateTile:mapTile1 res:1 row:0 col:0];
-//        [self annotateTile:mapTile2 res:1 row:0 col:1];
-//        [self annotateTile:mapTile3 res:1 row:1 col:0];
-//        [self annotateTile:mapTile4 res:1 row:1 col:1];
-//        [mapTile1 setImage:[UIImage imageNamed:@"Map1_0_0.png"]];
-//        [mapTile2 setImage:[UIImage imageNamed:@"Map1_0_1.png"]];
-//        [mapTile3 setImage:[UIImage imageNamed:@"Map1_1_0.png"]];
-//        [mapTile4 setImage:[UIImage imageNamed:@"Map1_1_1.png"]];
-//        [self addSubview:mapTile1];
-//        [self addSubview:mapTile2];
-//        [self addSubview:mapTile3];
-//        [self addSubview:mapTile4];
-        
         [self setMultipleTouchEnabled:YES];
     }
     return self;
@@ -49,7 +32,7 @@
 - (void)annotateTile:(UIImageView *)tile res:(int)res row:(int)row col:(int)col{
 	UILabel *label = (UILabel *)[tile viewWithTag:3];
 	if (!label) {
-		UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(5, 0, 128, 50)];
+		UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(5, 0, 246, 50)];
         [label setBackgroundColor:[UIColor clearColor]];
         [label setTag:3];
         [label setTextColor:[UIColor greenColor]];

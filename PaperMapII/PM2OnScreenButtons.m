@@ -13,6 +13,8 @@
 @implementation PM2OnScreenButtons
 @synthesize drawButton,fdrawButton;
 @synthesize mapScrollView;
+@synthesize resLabel;
+
 + (id)sharedBnManager {
     static PM2OnScreenButtons *onScreenbuttons = nil;
     static dispatch_once_t onceToken;
@@ -33,6 +35,20 @@
     [self addDrawButton];
     [self addFreeDrawButton];
     [self addUndoButton];
+    [self addMapLevelLabel];
+}
+-(void)addMapLevelLabel{
+    resLabel=[[UILabel alloc] initWithFrame:CGRectMake(0, 0, 50, 30)];
+	[resLabel setBackgroundColor:[UIColor clearColor]];
+	[resLabel setTextColor:[UIColor greenColor]];
+	[resLabel setShadowColor:[UIColor blackColor]];
+	[resLabel setShadowOffset:CGSizeMake(1.0, 1.0)];
+	[resLabel setFont:[UIFont boldSystemFontOfSize:20]];
+	[resLabel setText:[NSString stringWithFormat:@" %d", mapScrollView.maplevel]];
+    [_baseView addSubview:resLabel];
+}
+-(void)updateMapLevel{
+    [resLabel setText:[NSString stringWithFormat:@" %d", mapScrollView.maplevel]];
 }
 -(void)addUndoButton{
     UIButton * drawButton1=[UIButton buttonWithType:(UIButtonTypeRoundedRect)];

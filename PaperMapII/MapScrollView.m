@@ -11,6 +11,7 @@
 #import "GPSTrackPOIBoard.h"
 #import "DrawingBoard.h"
 #import "TapDetectView.h"
+#import "PM2OnScreenButtons.h"
 
 @implementation MapScrollView
 
@@ -83,10 +84,14 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
     
 	//////////////////////////////////////////////////
 	// Got ImageView tile from resuables or create new
-	MapTile *tile1= (MapTile *)[self dequeueReusableTile];
+	MapTile *tile1= (MapTile *)[self dequeueReusableTile];  
 	if (!tile1) {
 		tile1 = [[MapTile alloc] initWithFrame:CGRectZero];
-	}
+	}else{  //TODO: remve the else before releasing, but remember to set image to NULL
+        if (tile1.image) {
+            NSLOG7(@"reused tile at %d,%d at level %d still has image in it!!!",tile1.row,tile1.col,tile1.res);
+        }
+    }
 	//got a tile, assign the col,row ane res to it
 	tile1.res=maplevel1;
 	tile1.row=row;
@@ -104,10 +109,10 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
     tile1.modeCol=col;
      NSLOG(@"=============>Get Map tile %d, %d on level %d",tile1.row,tile1.col,tile1.res);
     //--------------------call mapsource delegate---------
+    [tile1 setImage:NULL];  // important, otherwise the old map tile will show up before new one comes in
     if ([self.mapsourceDelegate respondsToSelector:@selector(mapTile:)]) {
         [self.mapsourceDelegate mapTile:tile1];
     }
-	//[tile1 setImage:NULL];  //important, otherwise the old map tile will show up before new one comes in
 	return tile1;
 }
 -(void)fillWindowWithBasicMap:(int)levelDiff{
@@ -137,11 +142,15 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
 			//NSLog(@"%d>%d ?  %d >%d ? %d - %d ",firstVisibleRowx[i],row,firstVisibleColumnx[i],col,lastVisibleRowx[i],lastVisibleColumnx[i]);
 			if (tileIsMissing) {
 				if([self alreadyLoaded:row col:col levelDiff:i]){
-					NSLOG(@"Already loaded image %d,%d on level %d",row,col,(maplevel-levelDiff));
+					NSLOG7(@"Already loaded image %d,%d on level %d",row,col,(maplevel-levelDiff));
 					continue;
 				}
 				NSLOG(@"Load image %d,%d on level %d(%d-%d)",row,col,(maplevel-levelDiff),maplevel,levelDiff);
 				MapTile * tile=[self tileForRow:row column:col mapLevel:(maplevel-levelDiff)];   //get the map tile image
+                if(!tile){
+                    NSLOG7(@"Returned nil when requesint tile at %d,%d on level %d",row,col,(maplevel-levelDiff));
+                    continue;  //if tile is nil, return for the next one
+                }
 				[tile setFrame:CGRectMake(tileSize*col+posErr1.x, tileSize*row+posErr1.y, tileSize,tileSize)];
 				if(i>0)
 					[zoomView.basicMapLayer addSubview:tile];
@@ -186,63 +195,34 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
 
 //reload all except those on last Level
 - (void)reloadData:(float)zoomFactor {
-	
 	// recycle all tiles so that every tile will be replaced in the next layoutSubviews
-	static int c=0;   //counter
-	static int c1=0;  //number of tiles kept
-	
     for (MapTile *view in [zoomView.tileContainer subviews]) {
 		//keep the last level
-		
-		//if ((view.res==lastLevel)&&(!menuObj.GPSRunning)) {	//do not unload the last maplevel
 		if ((view.res==lastLevel)&&(lastLevel<maplevel)) {	//do not unload the last maplevel
-			
-			//CGRect scaledTileFrame = [viewFlattener.tileContainer convertRect:[view frame] toView:self];
-			//if (CGRectIntersectsRect(scaledTileFrame, visibleBounds)) {  //if in window, keep them
-            c1++;
             //adjust tile frame to the new maplevel for those that stay
             CGRect tileR=[view frame];
             CGRect newRect=CGRectMake(tileR.origin.x/zoomFactor, tileR.origin.y/zoomFactor, tileR.size.width/zoomFactor, tileR.size.height/zoomFactor);
             [view setFrame:newRect];
             //[zoomView.tileContainer annotateTile:view res:view.res row:view.row col:view.col];  //add label to tile
+            //NSLOG7(@"tileContainer keep a tile of last level:%d, current level:%d",lastLevel,maplevel);
             continue;
-			//}
 		}
 		
 		[reusableTiles addObject:view];
 		[view removeFromSuperview];
+        view.row=-1;
 		[(UIImageView *)view setImage:NULL];
         NSLOG(@"One Tile recycled !!!");
-		c++;
     }
 	
 	for (MapTile *view in [zoomView.basicMapLayer subviews]) {
 		[reusableTiles addObject:view];
 		[view removeFromSuperview];
+        view.row=-1;
 		[(UIImageView *)view setImage:NULL];
-        NSLOG(@"Another Tile recycled !!!");
-		c++;
+        NSLOG(@"Another Tile in basic layer recycled !!!");
     }
-	
-	//if(DBG) NSLog(@"[reloadData:zoomFactor] %d tiles were put into reuseables while %d tiles in the lastLevel not",c,c1);
-	c=0;
-	c1=0;
-	//count total tiles in memory
-	/*
-     int count1=[reusableTiles count];
-     NSArray *subviews=[viewFlattener.tileContainer subviews];
-     int count2=[subviews count];
-     NSArray *subviews2=[viewFlattener.basicMapLayer subviews];
-     int count3=[subviews2 count];
-	 */
-	//if(DBG) NSLog(@"[reloadData:zoomFactor]  %d in recycle, %d in main, %d in basic",count1,count2,count3);
-    // no rows or columns are now visible; note this by making the firsts very high and the lasts very low
- 	[self initVisibleVarArrays];
-	
-	//update maplevel display
-	//TravelMapAppDelegate * dele=[[UIApplication sharedApplication] delegate];
-	//[dele.viewController.resLabel setText:[NSString stringWithFormat:@" %d", maplevel]];
-	//[self setNeedsLayout];  //==> this calls layoutSubviews of UIScrollView or its sub class
+	[self initVisibleVarArrays];
 	[self setNeedsDisplay];
 }
 -(void) restoreOffset{  // this is an ugly workaround the random jump
@@ -259,11 +239,13 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
     for (MapTile *view in [zoomView.tileContainer subviews]) {
 		[reusableTiles addObject:view];
 		[view removeFromSuperview];
+        view.row=-1;
 		[(UIImageView *)view setImage:NULL];
     }
     for (MapTile *view in [zoomView.basicMapLayer subviews]) {
 		[reusableTiles addObject:view];
 		[view removeFromSuperview];
+        view.row=-1;
 		[(UIImageView *)view setImage:NULL];
     }
 	[self initVisibleVarArrays];
@@ -516,7 +498,13 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
     
     lastLevel=maplevel;    
     //maplevel+=deltaRes;		//set new maplevel;
-	[self setMaplevel:maplevel+deltaRes];
+    int newMapLevel=maplevel+deltaRes;
+    if(newMapLevel<2)          //minimum maplevel set to 2
+        newMapLevel=2;
+	[self setMaplevel:newMapLevel];
+    
+    [[PM2OnScreenButtons sharedBnManager] updateMapLevel];  //added for update maplevel label
+    
     [self setMaxandMinZoomScale];   //important, immediately change the zooming range here instead of after setting the new zoomscale
     
     zoomFactor=pow(2, deltaRes * -1);			//zoomfactor =newZoomScale/oldZoomScale; or newZoomScale=oldZoomScale*ZoomFactor;

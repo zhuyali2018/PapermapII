@@ -16,7 +16,8 @@
 @property (nonatomic, strong) UIView *baseView;
 @property (nonatomic, strong) Recorder * routRecorder;
 @property (nonatomic, strong) DrawableMapScrollView * mapScrollView;
-
+@property (nonatomic, strong) UILabel * resLabel;
 + (id)sharedBnManager;
 -(void)addButtons:(UIView *)vc;
+-(void)updateMapLevel;
 @end

@@ -190,48 +190,60 @@
         //Get maptile from internet -------
         //load the map tile in another thread to increase performance
         [self performSelectorInBackground:@selector(loadImageInBackground:) withObject:tile1];
+        //[self loadImageInBackground:tile1];
     }else
         [tile1 setImage:NULL];
     return;
 }
 -(void)loadImageInBackground:(MapTile *)tile1{
-    int satVersion=113;
-    NSString * country=@"en";
-    
-    NSString * mapUrlFomat;
-    static int svr=0;	svr++;	if (svr>2) svr=0;
-    NSString * imageUrl;
-    if(mapType==googleSat){
-        //mapUrlFomat=[[NSString alloc]initWithString:@"http://khm%d.google.com/kh/v=76&x=%d&y=%d&z=%d"];
-        mapUrlFomat=@"http://khm%d.google.com/kh/v=%d&x=%d&y=%d&z=%d";    //version 4.0 4-29-2011
-        imageUrl=[[NSString alloc]initWithFormat:mapUrlFomat, svr,satVersion,tile1.modeCol, tile1.row, tile1.res];	   //version 5.0
-    }else if(mapType==googleMap){
-        mapUrlFomat=@"http://mt%d.google.com/vt/v=w2.101&hl=%@&x=%d&y=%d&z=%d";
-        imageUrl=[[NSString alloc]initWithFormat:mapUrlFomat, svr,country,tile1.modeCol, tile1.row, tile1.res];
-    }
-    NSData * imageData=[NSData dataWithContentsOfURL:[NSURL URLWithString:imageUrl]];
-    UIImage * img;
-    img=[UIImage imageWithData:imageData];
-    //Save images got from internet into buffer
-    if (imageData) {
-        NSString *  rootDir;
-        if(mapType==googleSat)
-            rootDir=@"Sat";
-        else if(mapType==googleMap)
-            rootDir=@"Map";
-        NSString * imgFn=[[NSString alloc] initWithFormat:@"%@%d_%d_%d.jpg",rootDir,tile1.res,tile1.row,tile1.modeCol];
-        NSString * dirName=[self getPathName:tile1.res row:tile1.row col:tile1.modeCol];
-        NSString * absPath=[self dataFilePath:dirName];
-        NSString * pathFn=[[NSString alloc] initWithFormat:@"%@/%@",absPath,imgFn];   //getPath and filename together;
-        if([[NSFileManager defaultManager] createDirectoryAtPath:absPath withIntermediateDirectories:YES attributes:nil error:NULL]){
-            [imageData writeToFile:pathFn atomically:YES]; //save to cache
-        }else {
-            NSLOG(@"[loadImageInBackground] Directory creation failed:%@",pathFn);
+    @autoreleasepool {
+    @synchronized(self) {
+        int satVersion=113;
+        NSString * country=@"en";
+        
+        NSString * mapUrlFomat;
+        static int svr=0;	svr++;	if (svr>2) svr=0;
+        NSString * imageUrl;
+        if(mapType==googleSat){
+            //mapUrlFomat=[[NSString alloc]initWithString:@"http://khm%d.google.com/kh/v=76&x=%d&y=%d&z=%d"];
+            mapUrlFomat=@"http://khm%d.google.com/kh/v=%d&x=%d&y=%d&z=%d";    //version 4.0 4-29-2011
+            imageUrl=[[NSString alloc]initWithFormat:mapUrlFomat, svr,satVersion,tile1.modeCol, tile1.row, tile1.res];	   //version 5.0
+        }else if(mapType==googleMap){
+                mapUrlFomat=@"http://mt%d.google.com/vt/v=w2.101&hl=%@&x=%d&y=%d&z=%d";
+                imageUrl=[[NSString alloc]initWithFormat:mapUrlFomat, svr,country,tile1.modeCol, tile1.row, tile1.res];
         }
-    }
-    if(img)
-        [tile1 setImage:img];
-    else
-        [tile1 setImage:NULL];
+        NSData * imageData;
+        if (tile1.row==-1) {  //no need to do it
+            NSLOG8(@"No need to load image %d,%d at %d any more",tile1.row,tile1.col,tile1.res);
+            return;
+        }
+        imageData=[NSData dataWithContentsOfURL:[NSURL URLWithString:imageUrl]];
+        UIImage * img;
+        img=[UIImage imageWithData:imageData];
+        //Save images got from internet into buffer
+        if (imageData) {
+            
+            NSString *  rootDir;
+            if(mapType==googleSat)
+                rootDir=@"Sat";
+            else if(mapType==googleMap)
+                rootDir=@"Map";
+            NSString * imgFn=[[NSString alloc] initWithFormat:@"%@%d_%d_%d.jpg",rootDir,tile1.res,tile1.row,tile1.modeCol];
+            NSString * dirName=[self getPathName:tile1.res row:tile1.row col:tile1.modeCol];
+            NSString * absPath=[self dataFilePath:dirName];
+            NSString * pathFn=[[NSString alloc] initWithFormat:@"%@/%@",absPath,imgFn];   //getPath and filename together;
+            if([[NSFileManager defaultManager] createDirectoryAtPath:absPath withIntermediateDirectories:YES attributes:nil error:NULL]){
+                [imageData writeToFile:pathFn atomically:YES]; //save to cache
+            }else {
+                NSLOG(@"[loadImageInBackground] Directory creation failed:%@",pathFn);
+            }
+            
+        }
+        if(img){
+            if(tile1.row!=-1)
+                [tile1 setImage:img];
+        }else
+            [tile1 setImage:NULL];
+    }}
 }
 @end
