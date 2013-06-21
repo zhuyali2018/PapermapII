@@ -127,78 +127,7 @@
     Node *node=[[Node alloc]initWithPoint:tapPoint mapLevel:maplevel];
     self.track.nodes=[self addAnyModeAdjustedNode:self.track.nodes Node:node Mode:self.mapMode];
 }
-    //========code below was old one====================
-    /*
-    if ([self.track.nodes count]<1) {
-        [self addNode:node];
-        return;
-    }
-    NSLOG5(@"Recorder:addNode(%d,%d)",node.x,node.y);
-    Node * lastNode=[self.track.nodes lastObject];
-    if(lastNode.r==maplevel){
-        int middleVerticalLine=TSIZE*pow(2, maplevel-1);
-        if(((lastNode.x<middleVerticalLine)&&(node.x<middleVerticalLine)) ||
-           ((lastNode.x>=middleVerticalLine)&&(node.x>=middleVerticalLine))){
-            [self addNode:node];
-        }else{
-            DrawableMapScrollView *ms=[DrawableMapScrollView sharedMap];
-            bool mapMode=*ms.zoomView.gpsTrackPOIBoard.pMode;
-            if (!mapMode) {  //mapmode adjust x of node and last node;
-                int nodeX    =[ms.zoomView.gpsTrackPOIBoard ModeAdjust:node.x res:node.r];
-                int lastNodeX=[ms.zoomView.gpsTrackPOIBoard ModeAdjust:lastNode.x res:lastNode.r];
-                Node * adjNode=[node copy];
-                Node * adjLastNode=[lastNode copy];
-                adjNode.x=nodeX;
-                adjLastNode.x=lastNodeX;
-                
-                Node * LNode=[self getLNode:adjNode lastNode:adjLastNode mapLevel:maplevel];
-                Node * RNode=[self getRNode:adjNode lastNode:adjLastNode mapLevel:maplevel];
-                //adjust back before adding to array
-                LNode.x=[ms.zoomView.gpsTrackPOIBoard ModeAdjust:LNode.x res:lastNode.r];
-                RNode.x=[ms.zoomView.gpsTrackPOIBoard ModeAdjust:RNode.x res:lastNode.r];
-                Node * TerminateNode=[[Node alloc]initWithPoint:CGPointMake(0, 0) mapLevel:maplevel];
-                if(adjLastNode.x<middleVerticalLine){
-                    [self addNode:LNode];
-                    [self addNode:TerminateNode];
-                    [self addNode:RNode];
-                    [self addNode:node];
-                }else{
-                    [self addNode:RNode];
-                    [self addNode:TerminateNode];
-                    [self addNode:LNode];
-                    [self addNode:node];
-                }
-                return; //return for eastern map mode
-            }
-            //for Western map mode
-            Node * LNode=[self getLNode:node lastNode:lastNode mapLevel:maplevel];
-            Node * RNode=[self getRNode:node lastNode:lastNode mapLevel:maplevel];
-            Node * TerminateNode=[[Node alloc]initWithPoint:CGPointMake(0, 0) mapLevel:maplevel];
-            if(lastNode.x<middleVerticalLine){
-                [self addNode:LNode];
-                [self addNode:TerminateNode];
-                [self addNode:RNode];
-                [self addNode:node];
-            }else{
-                [self addNode:RNode];
-                [self addNode:TerminateNode];
-                [self addNode:LNode];
-                [self addNode:node];
-            }
-        }
-    }else//if not the same maplevel, just simply add the node for now, which might create a problem for across hemisphare lines
-        [self addNode:node];
-}
--(void) addNode:(Node *)node{
-    if (!self.track.nodes) {
-        self.track.nodes=[[NSArray alloc]initWithObjects:node,nil];
-    }else{
-        self.track.nodes=[self.track.nodes arrayByAddingObject:node];
-    }
-    NSLOG4(@"Nodes cout=%d",[self.track.nodes count]);
-}
-*/
-//============================new improved methods follows================
+
 //=====add a node to array arrNodes=================
 
 -(NSArray *) addAnyModeAdjustedNode:(NSArray*)arrNodes Node:(Node *)node Mode:(bool)mode{
@@ -260,7 +189,6 @@
         arrNodes=[self addNode:node to:arrNodes];
     return arrNodes;
 }
-
 -(Node *)getLNode:(Node *)node lastNode:(Node *)lastNode  mapLevel:(int)maplevel{
     int Xm=TSIZE*pow(2, maplevel-1)-1;
     int Ym=(Xm-lastNode.x)*(node.y-lastNode.y)/(node.x-lastNode.x)+lastNode.y;
