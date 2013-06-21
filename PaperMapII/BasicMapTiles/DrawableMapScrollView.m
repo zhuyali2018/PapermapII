@@ -31,7 +31,7 @@
 */
 
 #pragma mark Singleton Methods
-+ (id)sharedMap {
++ (DrawableMapScrollView *)sharedMap {
     static DrawableMapScrollView *sharedMyManager = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -49,5 +49,8 @@
 }
 -(void)registTracksToBeDrawn:(NSMutableArray*)tracks1{
     DRAWINGBOARD.ptrToTracksArray=tracks1;
+}
+-(void)registGpsTracksToBeDrawn:(NSMutableArray*)tracks1{
+    DRAWINGBOARD.ptrToGpsTracksArray=tracks1;
 }
 @end

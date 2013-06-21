@@ -10,5 +10,7 @@
 
 @interface DrawableMapScrollView : TappableMapScrollView
 -(void)registTracksToBeDrawn:(NSMutableArray*)tracks;
-+ (id)sharedMap;
+-(void)registGpsTracksToBeDrawn:(NSMutableArray*)tracks;
+
++ (DrawableMapScrollView *)sharedMap;
 @end

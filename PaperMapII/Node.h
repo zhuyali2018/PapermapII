@@ -13,6 +13,8 @@
 @property     int y;   //row
 @property     int r;   //resolution
 
-- (id)initWithPoint:(CGPoint)pt mapLevel:(int)maplevel;
-
+-(id)initWithPoint:(CGPoint)pt mapLevel:(int)maplevel;
+-(id)copyWithZone:(NSZone *)zone;
+-(id)initWithCoder:(NSCoder *)coder;
+-(void)encodeWithCoder:(NSCoder *)coder;
 @end

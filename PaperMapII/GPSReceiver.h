@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import<CoreLocation/CoreLocation.h>
 
-@interface GPSReceiver : NSObject<CLLocationManagerDelegate>
+@interface GPSReceiver : NSObject
 
 @property (nonatomic) CLLocationManager * locationManager;
 @property (nonatomic) CLLocation		* currentLocation;

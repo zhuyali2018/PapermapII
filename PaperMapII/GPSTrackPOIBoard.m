@@ -12,11 +12,12 @@
 #import "Track.h"
 #import "TapDetectView.h"
 #import "LineProperty.h"
+#import "GPSTrack.h"
 
 @implementation GPSTrackPOIBoard
 
 @synthesize tapDetectView;
-@synthesize ptrToTracksArray;
+@synthesize ptrToTracksArray,ptrToGpsTracksArray;
 @synthesize maplevel;
 @synthesize drawingBoard;
 
@@ -85,22 +86,54 @@
 	CGContextSetLineWidth(context, COLOR.lineWidth);
 	CGContextSetLineCap(context, kCGLineCapRound);  //version 4.0
 	
-	Node * startNode=[track.nodes objectAtIndex:0];
+	Node * startNode;
+    int i=0;
+    for (i=0;i<count;i++){
+        startNode=[track.nodes objectAtIndex:i];
+        if(startNode.y!=0)          //y==0 means it is a terminating node
+            break;
+    }
+    CGPoint pStart=[self ConvertPoint:startNode];
+	CGContextMoveToPoint(context, pStart.x, pStart.y);
+	for (int j=i; j<count; j++) {
+		Node * tmpN=[track.nodes objectAtIndex:j];
+        bool terNodeFound=false;
+        while (tmpN.y==0) {
+            terNodeFound=true;
+            j++;
+            tmpN=[track.nodes objectAtIndex:j];
+        }
+        CGPoint tmpP=[self ConvertPoint:tmpN];
+        if(terNodeFound){
+            CGContextMoveToPoint(context, tmpP.x, tmpP.y);
+            terNodeFound=false;
+        }else
+            CGContextAddLineToPoint(context, tmpP.x, tmpP.y);
+	}
+	CGContextStrokePath(context);
+}
+-(void)gpsDrawTrack:(GPSTrack *)track context:(CGContextRef)context{
+    if(!track) return;
+    if(nil==track.gpsNodes)
+        return;
+    int count=[track.gpsNodes count];
+    if(count<2) return;
+    
+    CGContextSetStrokeColorWithColor(context, [UIColor colorWithRed:COLOR.red green:COLOR.green blue:COLOR.blue alpha:COLOR.alpha].CGColor);
+	CGContextSetLineWidth(context, COLOR.lineWidth);
+	CGContextSetLineCap(context, kCGLineCapRound);  //version 4.0
+	
+	GPSNode * startNode=[track.gpsNodes objectAtIndex:0];
     CGPoint pStart=[self ConvertPoint:startNode];
 	CGContextMoveToPoint(context, pStart.x, pStart.y);
 	for (int i=1; i<count; i++) {
-		Node * tmpN=[track.nodes objectAtIndex:i];
+		GPSNode * tmpN=[track.gpsNodes objectAtIndex:i];
         CGPoint tmpP=[self ConvertPoint:tmpN];
 		CGContextAddLineToPoint(context, tmpP.x, tmpP.y);
 	}
 	CGContextStrokePath(context);
 }
-
-
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect
-{
+-(void)drawLines:(CGContextRef)context{
     if (maplevel<2) {
         return;         //no drawing on maplevel 1 and 0
     }
@@ -112,25 +145,45 @@
         return;
     }
     
-    CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetShouldAntialias(context, YES);   //make line smoother ?
     
-//    for (int i=0; i<[ptrToTracksArray count]; i++) {     //loop through each track arrays of track arrays
-//        for (int j=0;j<[ptrToTracksArray[i] count]; j++) {  //loop through each track arry for each track array
-//            for (int k=0;k<[ptrToTracksArray[i][j] count]; k++) {  //loop through each track for each track array
-//                Track * track=ptrToTracksArray[i][j][k];
-//                [self tapDrawTrack:track context:context];
-//            }
-//        }
-//    }
-
+    //Drawing lines
     for (int i=0; i<[ptrToTracksArray count]; i++) {     //loop through each track arrays of track arrays
         for (int j=0;j<[ptrToTracksArray[i] count]; j++) {  //loop through each track arry for each track array
-                Track * track=ptrToTracksArray[i][j];
-                [self tapDrawTrack:track context:context];
+            Track * track=ptrToTracksArray[i][j];
+            [self tapDrawTrack:track context:context];
         }
     }
-    NSLOG4(@"Line Redrawn!");
+}
+-(void)drawGpsTracks:(CGContextRef)context{
+    if (maplevel<2) {
+        return;         //no drawing on maplevel 1 and 0
+    }
+    // Drawing code
+    if (!ptrToGpsTracksArray) {  //if not initialized
+        return;
+    }
+    if ([ptrToGpsTracksArray count]==0) {  // if 0 element
+        return;
+    }
+    
+    CGContextSetShouldAntialias(context, YES);   //make line smoother ?
+    
+    //Drawing lines
+    for (int i=0; i<[ptrToGpsTracksArray count]; i++) {     //loop through each track arrays of track arrays
+        for (int j=0;j<[ptrToGpsTracksArray[i] count]; j++) {  //loop through each track arry for each track array
+            GPSTrack * gpsTrack=ptrToGpsTracksArray[i][j];
+            [self gpsDrawTrack:gpsTrack context:context];
+        }
+    }
+}
+// Only override drawRect: if you perform custom drawing.
+// An empty implementation adversely affects performance during animation.
+- (void)drawRect:(CGRect)rect
+{
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    [self drawLines:context];
+    [self drawGpsTracks:context];
 }
 
 

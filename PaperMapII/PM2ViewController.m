@@ -28,7 +28,7 @@
 
 @synthesize mapScrollView;
 @synthesize mapSources;
-@synthesize arrAllTracks;
+@synthesize arrAllTracks,arrAllGpsTracks;
 
 -(void)addOnScreeButtons{
     PM2OnScreenButtons * bns=[PM2OnScreenButtons sharedBnManager];
@@ -44,7 +44,7 @@
 	float height=visibleBounds.size.height-2*bazel;
 
     mapScrollView=[DrawableMapScrollView sharedMap];
-    [mapScrollView setFrame:CGRectMake(bazel,bazel,width,height)];
+    [mapScrollView setFrame:CGRectMake(bazel,bazel,height,width)];  //TODO: change height and width back
     //create a mapsource object
     mapSources=[[MapSources alloc]init];
     mapSources.mapType=googleMap;
@@ -62,12 +62,20 @@
     //register array of tracks to be drawn
     [mapScrollView registTracksToBeDrawn:arrAllTracks];
     [arrAllTracks addObject:self.routRecorder.trackArray];
+    
+    [mapScrollView registGpsTracksToBeDrawn:arrAllGpsTracks];
+    [arrAllGpsTracks addObject:self.routRecorder.gpsTrackArray];
 }
 
 -(NSString *)dataFilePath{
 	NSArray * paths=NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask,YES);
 	NSString * documentsDirectory=[paths objectAtIndex:0];
 	return [documentsDirectory stringByAppendingPathComponent:@"DrawList.plist"];
+}
+-(NSString *)gpsDataFilePath{
+	NSArray * paths=NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask,YES);
+	NSString * documentsDirectory=[paths objectAtIndex:0];
+	return [documentsDirectory stringByAppendingPathComponent:@"GpsList.plist"];
 }
 -(void) saveArrayAllTracks{
     NSMutableData * data=[[NSMutableData alloc] init];
@@ -77,6 +85,15 @@
 	
 	[data writeToFile:[self dataFilePath] atomically:YES];
 }
+-(void) saveArrayAllGpsTracks{
+    NSMutableData * data=[[NSMutableData alloc] init];
+	NSKeyedArchiver * archiver=[[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
+	[archiver encodeObject:arrAllGpsTracks forKey:@"arrAllGpsTracks"];
+	[archiver finishEncoding];
+	
+	[data writeToFile:[self gpsDataFilePath] atomically:YES];
+}
+
 -(void)initializeArrAllTracks{
     //initialize arrAllTracks
     NSString * filePath=[self dataFilePath];
@@ -92,6 +109,21 @@
     if(!arrAllTracks)
         arrAllTracks=[[NSMutableArray alloc]initWithCapacity:2];
 }
+-(void)initializeArrAllGpsTracks{
+    //initialize arrAllTracks
+    NSString * filePath=[self gpsDataFilePath];
+	//NSLog(@"data file path=%@",filePath);
+	if([[NSFileManager defaultManager] fileExistsAtPath:filePath]){
+		NSData * data=[[NSData alloc] initWithContentsOfFile:filePath];
+		NSKeyedUnarchiver *unarchiver=[[NSKeyedUnarchiver alloc] initForReadingWithData:data];
+		
+		arrAllGpsTracks=[unarchiver decodeObjectForKey:@"arrAllGpsTracks"];
+		[unarchiver finishDecoding];
+	}
+    
+    if(!arrAllGpsTracks)
+        arrAllGpsTracks=[[NSMutableArray alloc]initWithCapacity:2];
+}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -99,6 +131,7 @@
     [self.view setBackgroundColor:[UIColor darkGrayColor]];
     //initialize arrAllTracks
     [self initializeArrAllTracks];
+    [self initializeArrAllGpsTracks];
     [self addRecorder];
     [self add_MapScrollView];    //add map tile scroll view
     [self addOnScreeButtons];
@@ -121,5 +154,6 @@
 	NSLOG5(@"=====>calling applicationWillTerminate:");
     [mapScrollView saveMapState];
     [self saveArrayAllTracks];
+    [self saveArrayAllGpsTracks];
 }
 @end

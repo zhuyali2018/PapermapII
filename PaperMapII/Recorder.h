@@ -7,14 +7,22 @@
 //
 
 #import <Foundation/Foundation.h>
+#import<CoreLocation/CoreLocation.h>
 #import "PM2Protocols.h"
 @class Track;
 @class LineProperty;
-@interface Recorder : NSObject<PM2RecordingDelegate>
+@class GPSTrack;
+@class Node;
+
+@interface Recorder : NSObject<PM2RecordingDelegate,CLLocationManagerDelegate>
 
 @property (nonatomic,strong) NSMutableArray * trackArray;
+@property (nonatomic,strong) NSMutableArray * gpsTrackArray;
 @property (nonatomic,strong) Track * track;
+@property (nonatomic,strong) GPSTrack * gpsTrack;
 @property bool recording; //if it is recording
+@property bool gpsRecording; //if it is recording
+@property bool mapMode;  //Eastern mode (false) or Western mode (true);
 
 - (void) start;
 - (void) stop;
@@ -22,6 +30,9 @@
 - (void) startNewTrack;
 - (void) undo;
 
-+ (id)sharedRecorder;
+- (void)gpsStart;
+- (void)gpsStop;
 
++ (id)sharedRecorder;
+-(NSArray*) addAnyModeAdjustedNode:(NSArray*)arrNodes Node:(Node *)node Mode:(bool)mode;
 @end

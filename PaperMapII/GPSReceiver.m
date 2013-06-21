@@ -8,6 +8,7 @@
 #import "AllImports.h"
 #import "GPSReceiver.h"
 #import "PM2OnScreenButtons.h"
+#import "Recorder.h"
 
 @implementation GPSReceiver
 @synthesize locationManager;
@@ -25,7 +26,7 @@
     self = [super init];
     if (self) {
         locationManager=[[CLLocationManager alloc]init];
-        locationManager.delegate=self;
+        locationManager.delegate=[Recorder sharedRecorder];
         locationManager.desiredAccuracy=kCLLocationAccuracyBest;
         GPSRunning=FALSE;
     }
@@ -36,35 +37,25 @@
     if (GPSRunning) {
         return;
     }
+    [[Recorder sharedRecorder] gpsStart];
     [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
+    //if(!locationManager)
+    //    locationManager=[[CLLocationManager alloc]init];
     [locationManager startUpdatingLocation];
     GPSRunning=TRUE;
 }
 -(void)stop{
     if(!GPSRunning)return;
+    [[Recorder sharedRecorder] gpsStop];
     [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
     [locationManager stopUpdatingLocation];
     [self saveGPSTrack];
-    GPSRunning=TRUE;
+    GPSRunning=FALSE;
     PM2OnScreenButtons * bns=[PM2OnScreenButtons sharedBnManager];
     [bns.messageLabel setText:@""];
 }
 -(void)saveGPSTrack{
 
-}
-#pragma marks delegate methods
-- (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation{
-    static int n=0;
-    n++;
-    PM2OnScreenButtons * bns=[PM2OnScreenButtons sharedBnManager];
-    float accuracy=newLocation.horizontalAccuracy;
-    NSString * msg=[[NSString alloc]initWithFormat:@"Starting GPS, Accuracy=%3.1f meters (%d)",accuracy,n];
-    [bns.messageLabel setText:msg];
-    if(accuracy>50){  //if acuracy is not accurate enough, do nothing
-        [bns.messageLabel setTextColor:[UIColor redColor]];
-    }else{
-        [bns.messageLabel setTextColor:[UIColor greenColor]];
-    }
 }
 
 @end

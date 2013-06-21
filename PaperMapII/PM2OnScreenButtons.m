@@ -50,14 +50,14 @@
 }
 -(void) addGPSButton{
     UIButton * gpsButton=[UIButton buttonWithType:(UIButtonTypeRoundedRect)];
-    [gpsButton setFrame:CGRectMake([_baseView bounds].size.width-150, 200, 100, 30)];
+    [gpsButton setFrame:CGRectMake([_baseView bounds].size.height-150, 200, 100, 30)];
     [gpsButton setTitle:@"Start GPS" forState:UIControlStateNormal];
     [gpsButton addTarget:self action:@selector(startGPS) forControlEvents:UIControlEventTouchUpInside];
     [_baseView addSubview:gpsButton];
 }
 -(void) addStopGPSButton{
     UIButton * gpsButton=[UIButton buttonWithType:(UIButtonTypeRoundedRect)];
-    [gpsButton setFrame:CGRectMake([_baseView bounds].size.width-150, 250, 100, 30)];
+    [gpsButton setFrame:CGRectMake([_baseView bounds].size.height-150, 250, 100, 30)];
     [gpsButton setTitle:@"Stop GPS" forState:UIControlStateNormal];
     [gpsButton addTarget:self action:@selector(stopGPS) forControlEvents:UIControlEventTouchUpInside];
     [_baseView addSubview:gpsButton];
@@ -80,8 +80,8 @@
     [_baseView addSubview:messageLabel];
 }
 -(void)addMapCenterIndicator:(UIView*)vc{
-    int screenW=[vc bounds].size.width;
-	int screenH=[vc bounds].size.height;
+    int screenH=[vc bounds].size.width;
+	int screenW=[vc bounds].size.height;
     MapCenterIndicator * mc=[MapCenterIndicator sharedMapCenter:CGRectMake(screenW/2-10-1, (screenH-20)/2-10+9, 20, 20)];
     [vc addSubview:mc];
 }
@@ -106,14 +106,14 @@
 }
 -(void)addUndoButton{
     UIButton * drawButton1=[UIButton buttonWithType:(UIButtonTypeRoundedRect)];
-    [drawButton1 setFrame:CGRectMake([_baseView bounds].size.width-150, 150, 100, 30)];
+    [drawButton1 setFrame:CGRectMake([_baseView bounds].size.height-150, 150, 100, 30)];
     [drawButton1 setTitle:@"Undo" forState:UIControlStateNormal];
     [drawButton1 addTarget:self action:@selector(undoDrawing:) forControlEvents:UIControlEventTouchUpInside];
     [_baseView addSubview:drawButton1];
 }
 -(void)addFreeDrawButton{
     fdrawButton=[UIButton buttonWithType:(UIButtonTypeRoundedRect)];
-    [fdrawButton setFrame:CGRectMake([_baseView bounds].size.width-150, 100, 100, 30)];
+    [fdrawButton setFrame:CGRectMake([_baseView bounds].size.height-150, 100, 100, 30)];
     [fdrawButton setTitle:@"Free Draw" forState:UIControlStateNormal];
     [fdrawButton addTarget:self action:@selector(switchToFreeDraw:) forControlEvents:UIControlEventTouchUpInside];
     [_baseView addSubview:fdrawButton];
@@ -122,7 +122,7 @@
 }
 -(void)addDrawButton{
     drawButton=[UIButton buttonWithType:(UIButtonTypeRoundedRect)];
-    [drawButton setFrame:CGRectMake([_baseView bounds].size.width-150, 50, 100, 30)];
+    [drawButton setFrame:CGRectMake([_baseView bounds].size.height-150, 50, 100, 30)];
     [drawButton setTitle:@"Draw" forState:UIControlStateNormal];
     [drawButton addTarget:self action:@selector(startDrawingRecorder:) forControlEvents:UIControlEventTouchUpInside];
     [_baseView addSubview:drawButton];
