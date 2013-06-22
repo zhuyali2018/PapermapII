@@ -13,13 +13,17 @@
 #import "MapCenterIndicator.h"
 #import "GPSReceiver.h"
 #import "Track.h"
+#import "ColorSettingView.h"
+
 
 @implementation PM2OnScreenButtons
-@synthesize drawButton,fdrawButton;
+@synthesize drawButton,fdrawButton,colorButton;
 @synthesize mapScrollView;
 @synthesize resLabel;
 @synthesize messageLabel;
 @synthesize gpsReceiver;
+@synthesize colorPickPopover;
+@synthesize linePropertyViewCtrlr;
 
 + (id)sharedBnManager {
     static PM2OnScreenButtons *onScreenbuttons = nil;
@@ -49,6 +53,14 @@
     [self addGPSButton];
     [self addStopGPSButton];
     [self addTrackCleanupButton];
+    [self addColorButton];
+}
+-(void) addColorButton{
+    colorButton=[UIButton buttonWithType:(UIButtonTypeRoundedRect)];
+    [colorButton setFrame:CGRectMake([_baseView bounds].size.height-150, 350, 100, 30)];
+    [colorButton setTitle:@"Pick Color" forState:UIControlStateNormal];
+    [colorButton addTarget:self action:@selector(colorPicker) forControlEvents:UIControlEventTouchUpInside];
+    [_baseView addSubview:colorButton];
 }
 -(void) addTrackCleanupButton{
     UIButton * gpsButton=[UIButton buttonWithType:(UIButtonTypeRoundedRect)];
@@ -77,8 +89,30 @@
         [arr removeObjectsInRange:NSMakeRange(1, count-1)];
     }
 }
--(void)cleanUpTrack{  //useless for now
+-(void)cleanUpTrack{  
     [_routRecorder unloadTracks];
+    [mapScrollView.zoomView.gpsTrackPOIBoard setNeedsDisplay];
+}
+-(void) colorPicker{
+    NSLOG8(@"ColorPicker button tapped!");
+    if (colorPickPopover == nil) {
+        Class cls = NSClassFromString(@"UIPopoverController");
+        if (cls != nil) {
+			linePropertyViewCtrlr=[[LinePropertyViewController alloc] init];
+            //linePropertyViewCtrlr=[[LinePropertyViewController2 alloc]initWithNibName:@"LinePropertyViewController2" bundle:nil];
+			[linePropertyViewCtrlr setTitle:@"Line Property setting"];
+            
+			UINavigationController * ctrl=[[UINavigationController alloc]initWithRootViewController:linePropertyViewCtrlr];
+			UIPopoverController *aPopoverController =[[cls alloc] initWithContentViewController:ctrl];
+		    self.colorPickPopover = aPopoverController;
+        }
+    }
+    if([colorPickPopover isPopoverVisible]){
+		[colorPickPopover dismissPopoverAnimated:YES];
+	}else{
+		[colorPickPopover setPopoverContentSize:CGSizeMake(350,360) animated:YES];
+        [colorPickPopover presentPopoverFromRect:colorButton.frame inView:_baseView permittedArrowDirections:UIPopoverArrowDirectionAny  animated:YES];
+	}
 }
 -(void) startGPS{    
     [gpsReceiver start];

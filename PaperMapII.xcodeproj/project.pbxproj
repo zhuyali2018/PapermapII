@@ -3472,6 +3472,10 @@
 		AABDE8F6174755C000A0D6E9 /* Sat4_9_9.jpg in Resources */ = {isa = PBXBuildFile; fileRef = AABDDBA6174755BE00A0D6E9 /* Sat4_9_9.jpg */; };
 		AAC84848175718EC002D7AA9 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AABDD48417437B3600A0D6E9 /* CoreGraphics.framework */; };
 		AAC8484C175854C0002D7AA9 /* Node.m in Sources */ = {isa = PBXBuildFile; fileRef = AAC8484B175854C0002D7AA9 /* Node.m */; };
+		AAEE0CA41776205700549A7D /* LinePropertyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AAEE0CA31776205700549A7D /* LinePropertyViewController.m */; };
+		AAEE0CA51776205700549A7D /* LinePropertyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AAEE0CA31776205700549A7D /* LinePropertyViewController.m */; };
+		AAEE0CA81776228E00549A7D /* ColorSettingView.m in Sources */ = {isa = PBXBuildFile; fileRef = AAEE0CA71776228E00549A7D /* ColorSettingView.m */; };
+		AAEE0CA91776228E00549A7D /* ColorSettingView.m in Sources */ = {isa = PBXBuildFile; fileRef = AAEE0CA71776228E00549A7D /* ColorSettingView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -5255,6 +5259,10 @@
 		AABDDBA6174755BE00A0D6E9 /* Sat4_9_9.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Sat4_9_9.jpg; sourceTree = "<group>"; };
 		AAC8484A175854C0002D7AA9 /* Node.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Node.h; sourceTree = "<group>"; };
 		AAC8484B175854C0002D7AA9 /* Node.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Node.m; sourceTree = "<group>"; };
+		AAEE0CA21776205700549A7D /* LinePropertyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LinePropertyViewController.h; sourceTree = "<group>"; };
+		AAEE0CA31776205700549A7D /* LinePropertyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LinePropertyViewController.m; sourceTree = "<group>"; };
+		AAEE0CA61776228E00549A7D /* ColorSettingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColorSettingView.h; sourceTree = "<group>"; };
+		AAEE0CA71776228E00549A7D /* ColorSettingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ColorSettingView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -5303,6 +5311,10 @@
 				AAAD5A7417701B5800DCDAD2 /* ScaleRuler.m */,
 				AAAD5A7717702BE200DCDAD2 /* MapCenterIndicator.h */,
 				AAAD5A7817702BE200DCDAD2 /* MapCenterIndicator.m */,
+				AAEE0CA21776205700549A7D /* LinePropertyViewController.h */,
+				AAEE0CA31776205700549A7D /* LinePropertyViewController.m */,
+				AAEE0CA61776228E00549A7D /* ColorSettingView.h */,
+				AAEE0CA71776228E00549A7D /* ColorSettingView.m */,
 			);
 			name = "Buttons and Labels";
 			sourceTree = "<group>";
@@ -10699,6 +10711,8 @@
 				AAAD5A7917702BE200DCDAD2 /* MapCenterIndicator.m in Sources */,
 				AAAD5A7D177034AF00DCDAD2 /* GPSReceiver.m in Sources */,
 				AAAD5A8317714CDB00DCDAD2 /* GPSNode.m in Sources */,
+				AAEE0CA41776205700549A7D /* LinePropertyViewController.m in Sources */,
+				AAEE0CA81776228E00549A7D /* ColorSettingView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -10724,6 +10738,8 @@
 				AAAD5A7A17702BE200DCDAD2 /* MapCenterIndicator.m in Sources */,
 				AAAD5A7E177034AF00DCDAD2 /* GPSReceiver.m in Sources */,
 				AAAD5A8417714CDB00DCDAD2 /* GPSNode.m in Sources */,
+				AAEE0CA51776205700549A7D /* LinePropertyViewController.m in Sources */,
+				AAEE0CA91776228E00549A7D /* ColorSettingView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

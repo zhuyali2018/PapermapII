@@ -54,6 +54,7 @@
     PM2OnScreenButtons * bns=[PM2OnScreenButtons sharedBnManager];
     [bns.messageLabel setText:@""];
 }
+//TODO:SaveGPSTrack On Stop
 -(void)saveGPSTrack{
 
 }

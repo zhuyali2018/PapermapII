@@ -69,7 +69,7 @@
         return;
     }
     _gpsRecording=true;
-    self.gpsTrack.lineProperty=[LineProperty sharedDrawingLineProperty];   //TODO: change to GPS used line property
+    self.gpsTrack.lineProperty=[LineProperty sharedGPSTrackProperty];   //TODO: change to GPS used line property
     if(!self.gpsTrackArray){   //when first time starting recorder, ini track array
         self.gpsTrackArray=[[NSMutableArray alloc]initWithCapacity:5];
         [self.gpsTrackArray addObject:self.gpsTrack];
@@ -80,10 +80,10 @@
 -(void) startNewTrack{
     //initialize a track
     if (!_track) return;                    //if track not initialized, return;
-    LineProperty *lp=_track.lineProperty;   //save the line property
+    LineProperty *lp=_track.lineProperty;   //save the line property 
     _track=[[Track alloc] init];
     if (!_track) return;                    //return if failed
-    _track.lineProperty=lp;
+    _track.lineProperty=lp;                 //TODO: this may need to get from setings directly
     if(!self.trackArray){   //when first time starting recorder, ini track array
         self.trackArray=[[NSMutableArray alloc]initWithCapacity:5];
         [self.trackArray addObject:self.track];
@@ -93,11 +93,11 @@
 }
 -(void) startNewGpsTrack{
     //initialize a track
-    if (!_gpsTrack) return;                    //if track not initialized, return;
-    LineProperty *lp=_gpsTrack.lineProperty;      //save the line property
+    if (!_gpsTrack) return;                     //if track not initialized, return;
+    LineProperty *lp=_gpsTrack.lineProperty;    //save the line property
     _gpsTrack=[[Track alloc] init];
-    if (!_gpsTrack) return;                    //return if failed
-    _gpsTrack.lineProperty=lp;
+    if (!_gpsTrack) return;                     //return if failed
+    _gpsTrack.lineProperty=lp;                  //TODO: this may need to get from setings directly
     if(!self.gpsTrackArray){   //when first time starting recorder, ini track array
         self.gpsTrackArray=[[NSMutableArray alloc]initWithCapacity:5];
         [self.gpsTrackArray addObject:self.gpsTrack];
@@ -122,7 +122,8 @@
     [self gpsStop];
     [trackArray removeAllObjects];
     [gpsTrackArray removeAllObjects];
-    [[DrawableMapScrollView sharedMap].zoomView.gpsTrackPOIBoard setNeedsDisplay];
+    //should do refresh from the caller of this method
+    //[[DrawableMapScrollView sharedMap].zoomView.gpsTrackPOIBoard setNeedsDisplay];
 }
 
 -(NSString *)dataFilePath{
@@ -186,7 +187,6 @@
 #pragma mark ------------------PM2RecordingDelegate method---------
 
 - (void)mapLevel:(int)maplevel singleTapAtPoint:(CGPoint)tapPoint{
-    //NSLOG3(@"gotSingleTapAtPoint in recoder - need to store the tapped point here");
     if(!_recording){   //if not recording, do not create the node for the tappoint
         return;
     }
@@ -199,7 +199,6 @@
 }
 
 //=====add a node to array arrNodes=================
-
 -(NSArray *) addAnyModeAdjustedNode:(NSArray*)arrNodes Node:(Node *)node Mode:(bool)mode{
     if ([arrNodes count]<1) {
         return [self addNode:node to:arrNodes];
