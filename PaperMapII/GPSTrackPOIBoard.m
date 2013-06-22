@@ -13,11 +13,12 @@
 #import "TapDetectView.h"
 #import "LineProperty.h"
 #import "GPSTrack.h"
+#import "Recorder.h"
 
 @implementation GPSTrackPOIBoard
 
 @synthesize tapDetectView;
-@synthesize ptrToTracksArray,ptrToGpsTracksArray;
+@synthesize ptrToTrackArray,ptrToGpsTrackArray;
 @synthesize maplevel;
 @synthesize drawingBoard;
 
@@ -26,10 +27,10 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-        drawingBoard=[[DrawingBoard alloc]initWithFrame:frame];	//version 4.0
-		[drawingBoard setBackgroundColor:[UIColor clearColor]];	//version 4.0
-		[self addSubview:drawingBoard];							//version 4.0
-    }
+        drawingBoard=[[DrawingBoard alloc]initWithFrame:frame];	
+		[drawingBoard setBackgroundColor:[UIColor clearColor]];	
+		[self addSubview:drawingBoard];							
+     }
     return self;
 }
 -(int)ModeAdjust:(int)x res:(int)r{
@@ -138,21 +139,18 @@
         return;         //no drawing on maplevel 1 and 0
     }
     // Drawing code
-    if (!ptrToTracksArray) {  //if not initialized
-        return;
+    if (!ptrToTrackArray) {  //if not initialized
+        ptrToTrackArray=((Recorder *)[Recorder sharedRecorder]).trackArray;
     }
-    if ([ptrToTracksArray count]==0) {  // if 0 element
+    if ([ptrToTrackArray count]==0) {  // if 0 element
         return;
     }
     
     CGContextSetShouldAntialias(context, YES);   //make line smoother ?
     
     //Drawing lines
-    for (int i=0; i<[ptrToTracksArray count]; i++) {     //loop through each track arrays of track arrays
-        for (int j=0;j<[ptrToTracksArray[i] count]; j++) {  //loop through each track arry for each track array
-            Track * track=ptrToTracksArray[i][j];
-            [self tapDrawTrack:track context:context];
-        }
+    for (int i=0; i<[ptrToTrackArray count]; i++) {     //loop through each track in track array
+        [self tapDrawTrack:ptrToTrackArray[i] context:context];
     }
 }
 -(void)drawGpsTracks:(CGContextRef)context{
@@ -160,21 +158,18 @@
         return;         //no drawing on maplevel 1 and 0
     }
     // Drawing code
-    if (!ptrToGpsTracksArray) {  //if not initialized
-        return;
+    if (!ptrToGpsTrackArray) {  //if not initialized
+        ptrToGpsTrackArray=((Recorder *)[Recorder sharedRecorder]).gpsTrackArray;
     }
-    if ([ptrToGpsTracksArray count]==0) {  // if 0 element
+    if ([ptrToGpsTrackArray count]==0) {  // if 0 element
         return;
     }
     
     CGContextSetShouldAntialias(context, YES);   //make line smoother ?
     
     //Drawing lines
-    for (int i=0; i<[ptrToGpsTracksArray count]; i++) {     //loop through each track arrays of track arrays
-        for (int j=0;j<[ptrToGpsTracksArray[i] count]; j++) {  //loop through each track arry for each track array
-            GPSTrack * gpsTrack=ptrToGpsTracksArray[i][j];
-            [self gpsDrawTrack:gpsTrack context:context];
-        }
+    for (int i=0; i<[ptrToGpsTrackArray count]; i++) {     //loop through each track arrays of track arrays
+        [self gpsDrawTrack:ptrToGpsTrackArray[i] context:context];
     }
 }
 // Only override drawRect: if you perform custom drawing.

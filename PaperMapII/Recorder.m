@@ -17,7 +17,9 @@
 
 @implementation Recorder
 
-+ (id)sharedRecorder{
+@synthesize trackArray,gpsTrackArray;
+
++ (Recorder *)sharedRecorder{
     static Recorder *sharedMyManager = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -30,8 +32,10 @@
     if (self) {
         // Initialize self.
         _recording=false;
-        self.trackArray=[[NSMutableArray alloc]initWithCapacity:5];  //initialize track array here
-        self.gpsTrackArray=[[NSMutableArray alloc]initWithCapacity:5];  //initialize track array here
+        if (trackArray) 
+            self.trackArray=[[NSMutableArray alloc]initWithCapacity:5];  //initialize track array here
+        if(gpsTrackArray)
+            gpsTrackArray=[[NSMutableArray alloc]initWithCapacity:5];  //initialize track array here
         self.mapMode=*[DrawableMapScrollView sharedMap].zoomView.gpsTrackPOIBoard.pMode;;
     }
     return self;
@@ -113,6 +117,72 @@
     [tar removeLastObject];
     self.track.nodes = tar;
 }
+-(void)unloadTracks{
+    [self stop];
+    [self gpsStop];
+    [trackArray removeAllObjects];
+    [gpsTrackArray removeAllObjects];
+    [[DrawableMapScrollView sharedMap].zoomView.gpsTrackPOIBoard setNeedsDisplay];
+}
+
+-(NSString *)dataFilePath{
+	NSArray * paths=NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask,YES);
+	NSString * documentsDirectory=[paths objectAtIndex:0];
+	return [documentsDirectory stringByAppendingPathComponent:@"DrawList.plist"];
+}
+-(NSString *)gpsDataFilePath{
+	NSArray * paths=NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask,YES);
+	NSString * documentsDirectory=[paths objectAtIndex:0];
+	return [documentsDirectory stringByAppendingPathComponent:@"GpsList.plist"];
+}
+
+-(void) saveAllTracks{
+     NSMutableData * data=[[NSMutableData alloc] init];
+     NSKeyedArchiver * archiver=[[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
+     [archiver encodeObject:trackArray forKey:@"trackArray"];
+     [archiver finishEncoding];
+     
+     [data writeToFile:[self dataFilePath] atomically:YES];
+}
+-(void) saveAllGpsTracks{
+    NSMutableData * data=[[NSMutableData alloc] init];
+    NSKeyedArchiver * archiver=[[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
+    [archiver encodeObject:gpsTrackArray forKey:@"gpsTrackArray"];
+    [archiver finishEncoding];
+
+    [data writeToFile:[self gpsDataFilePath] atomically:YES];
+}
+
+-(void)initializeAllTracks{
+    //initialize arrAllTracks
+    NSString * filePath=[self dataFilePath];
+    //NSLog(@"data file path=%@",filePath);
+    if([[NSFileManager defaultManager] fileExistsAtPath:filePath]){
+        NSData * data=[[NSData alloc] initWithContentsOfFile:filePath];
+        NSKeyedUnarchiver *unarchiver=[[NSKeyedUnarchiver alloc] initForReadingWithData:data];
+
+        trackArray=[unarchiver decodeObjectForKey:@"trackArray"];
+        [unarchiver finishDecoding];
+    }
+    if(!trackArray)
+        trackArray=[[NSMutableArray alloc]initWithCapacity:2];
+}
+-(void)initializeAllGpsTracks{
+    //initialize arrAllTracks
+    NSString * filePath=[self gpsDataFilePath];
+    //NSLog(@"data file path=%@",filePath);
+    if([[NSFileManager defaultManager] fileExistsAtPath:filePath]){
+        NSData * data=[[NSData alloc] initWithContentsOfFile:filePath];
+        NSKeyedUnarchiver *unarchiver=[[NSKeyedUnarchiver alloc] initForReadingWithData:data];
+
+        gpsTrackArray=[unarchiver decodeObjectForKey:@"gpsTrackArray"];
+        [unarchiver finishDecoding];
+    }
+
+    if(!gpsTrackArray)
+        gpsTrackArray=[[NSMutableArray alloc]initWithCapacity:2];
+}
+
 #pragma mark ------------------PM2RecordingDelegate method---------
 
 - (void)mapLevel:(int)maplevel singleTapAtPoint:(CGPoint)tapPoint{
@@ -246,9 +316,10 @@
     node.longitude=newLocation.coordinate.longitude;
     node.latitude=newLocation.coordinate.latitude;
     node.direction=newLocation.course;
-    [self addGPSNode:node];
+    self.gpsTrack.gpsNodes=[self addGPSNode:node to:self.gpsTrack.gpsNodes];
     [[DrawableMapScrollView sharedMap].zoomView.gpsTrackPOIBoard setNeedsDisplay];
 }
+/*
 -(void) addGPSNode:(GPSNode *)node{
     if(!_gpsRecording){   //if not recording, do not create the node for the node
         return;
@@ -258,6 +329,13 @@
     }else{
         self.gpsTrack.gpsNodes=[self.gpsTrack.gpsNodes arrayByAddingObject:node];
     }
+}
+ */
+-(NSArray *) addGPSNode:(GPSNode *)node to:(NSArray *)arrGpsNodes{
+    if(!_gpsRecording){   //if not recording, do not create the node for the node
+        return arrGpsNodes;
+    }
+    return [self addAnyModeAdjustedNode:arrGpsNodes Node:node Mode:self.mapMode];
 }
 #define PI 3.1415926
 -(double)GetScreenY:(double)lat{

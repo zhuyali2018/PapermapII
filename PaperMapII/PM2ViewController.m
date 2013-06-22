@@ -28,14 +28,11 @@
 
 @synthesize mapScrollView;
 @synthesize mapSources;
-@synthesize arrAllTracks,arrAllGpsTracks;
+//@synthesize arrAllTracks,arrAllGpsTracks;
 
 -(void)addOnScreeButtons{
     PM2OnScreenButtons * bns=[PM2OnScreenButtons sharedBnManager];
     [bns addButtons:(UIView *)[self view]];
-}
--(void)addRecorder{
-    _routRecorder=[Recorder sharedRecorder];
 }
 -(void)add_MapScrollView{
     float bazel=20;     //set to 0 to maxmize map area
@@ -54,85 +51,17 @@
     [mapScrollView restoreMapState];
     [[self view] addSubview:mapScrollView];
     
-    //create a Drawing Recoder or GPS Recorder
-    _routRecorder=[Recorder sharedRecorder];
-    if(self.routRecorder)
-        mapScrollView.recordingDelegate=_routRecorder;
-    
-    //register array of tracks to be drawn
-    [mapScrollView registTracksToBeDrawn:arrAllTracks];
-    [arrAllTracks addObject:self.routRecorder.trackArray];
-    
-    [mapScrollView registGpsTracksToBeDrawn:arrAllGpsTracks];
-    [arrAllGpsTracks addObject:self.routRecorder.gpsTrackArray];
+    mapScrollView.recordingDelegate=[Recorder sharedRecorder];
+    [[Recorder sharedRecorder] initializeAllTracks];
+    [[Recorder sharedRecorder] initializeAllGpsTracks];
 }
 
--(NSString *)dataFilePath{
-	NSArray * paths=NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask,YES);
-	NSString * documentsDirectory=[paths objectAtIndex:0];
-	return [documentsDirectory stringByAppendingPathComponent:@"DrawList.plist"];
-}
--(NSString *)gpsDataFilePath{
-	NSArray * paths=NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask,YES);
-	NSString * documentsDirectory=[paths objectAtIndex:0];
-	return [documentsDirectory stringByAppendingPathComponent:@"GpsList.plist"];
-}
--(void) saveArrayAllTracks{
-    NSMutableData * data=[[NSMutableData alloc] init];
-	NSKeyedArchiver * archiver=[[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
-	[archiver encodeObject:arrAllTracks forKey:@"arrAllTracks"];
-	[archiver finishEncoding];
-	
-	[data writeToFile:[self dataFilePath] atomically:YES];
-}
--(void) saveArrayAllGpsTracks{
-    NSMutableData * data=[[NSMutableData alloc] init];
-	NSKeyedArchiver * archiver=[[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
-	[archiver encodeObject:arrAllGpsTracks forKey:@"arrAllGpsTracks"];
-	[archiver finishEncoding];
-	
-	[data writeToFile:[self gpsDataFilePath] atomically:YES];
-}
 
--(void)initializeArrAllTracks{
-    //initialize arrAllTracks
-    NSString * filePath=[self dataFilePath];
-	//NSLog(@"data file path=%@",filePath);
-	if([[NSFileManager defaultManager] fileExistsAtPath:filePath]){
-		NSData * data=[[NSData alloc] initWithContentsOfFile:filePath];
-		NSKeyedUnarchiver *unarchiver=[[NSKeyedUnarchiver alloc] initForReadingWithData:data];
-		
-		arrAllTracks=[unarchiver decodeObjectForKey:@"arrAllTracks"];
-		[unarchiver finishDecoding];
-	}
-    
-    if(!arrAllTracks)
-        arrAllTracks=[[NSMutableArray alloc]initWithCapacity:2];
-}
--(void)initializeArrAllGpsTracks{
-    //initialize arrAllTracks
-    NSString * filePath=[self gpsDataFilePath];
-	//NSLog(@"data file path=%@",filePath);
-	if([[NSFileManager defaultManager] fileExistsAtPath:filePath]){
-		NSData * data=[[NSData alloc] initWithContentsOfFile:filePath];
-		NSKeyedUnarchiver *unarchiver=[[NSKeyedUnarchiver alloc] initForReadingWithData:data];
-		
-		arrAllGpsTracks=[unarchiver decodeObjectForKey:@"arrAllGpsTracks"];
-		[unarchiver finishDecoding];
-	}
-    
-    if(!arrAllGpsTracks)
-        arrAllGpsTracks=[[NSMutableArray alloc]initWithCapacity:2];
-}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     [self.view setBackgroundColor:[UIColor darkGrayColor]];
-    //initialize arrAllTracks
-    [self initializeArrAllTracks];
-    [self initializeArrAllGpsTracks];
-    [self addRecorder];
     [self add_MapScrollView];    //add map tile scroll view
     [self addOnScreeButtons];
     //TODO: remove following lines for release
@@ -153,7 +82,9 @@
 -(void)applicationWillTerminate:(NSNotification *)notification{
 	NSLOG5(@"=====>calling applicationWillTerminate:");
     [mapScrollView saveMapState];
-    [self saveArrayAllTracks];
-    [self saveArrayAllGpsTracks];
+    //[self saveArrayAllTracks];
+    //[self saveArrayAllGpsTracks];
+    [[Recorder sharedRecorder] saveAllTracks];
+    [[Recorder sharedRecorder] saveAllGpsTracks];
 }
 @end

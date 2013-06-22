@@ -32,7 +32,12 @@
 
 - (void)gpsStart;
 - (void)gpsStop;
+- (void)unloadTracks;
+- (void)saveAllTracks;
+- (void)saveAllGpsTracks;
+- (void)initializeAllTracks;
+- (void)initializeAllGpsTracks;
 
-+ (id)sharedRecorder;
++ (Recorder *)sharedRecorder;
 -(NSArray*) addAnyModeAdjustedNode:(NSArray*)arrNodes Node:(Node *)node Mode:(bool)mode;
 @end

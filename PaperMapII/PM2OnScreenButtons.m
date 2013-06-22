@@ -12,6 +12,8 @@
 #import "ScaleRuler.h"
 #import "MapCenterIndicator.h"
 #import "GPSReceiver.h"
+#import "Track.h"
+#import "GPSTrack.h"
 
 @implementation PM2OnScreenButtons
 @synthesize drawButton,fdrawButton;
@@ -47,6 +49,14 @@
     [self addMessageLabel];
     [self addGPSButton];
     [self addStopGPSButton];
+    [self addTrackCleanupButton];
+}
+-(void) addTrackCleanupButton{
+    UIButton * gpsButton=[UIButton buttonWithType:(UIButtonTypeRoundedRect)];
+    [gpsButton setFrame:CGRectMake([_baseView bounds].size.height-150, 300, 100, 30)];
+    [gpsButton setTitle:@"Clean up" forState:UIControlStateNormal];
+    [gpsButton addTarget:self action:@selector(cleanUpTrack) forControlEvents:UIControlEventTouchUpInside];
+    [_baseView addSubview:gpsButton];
 }
 -(void) addGPSButton{
     UIButton * gpsButton=[UIButton buttonWithType:(UIButtonTypeRoundedRect)];
@@ -61,6 +71,15 @@
     [gpsButton setTitle:@"Stop GPS" forState:UIControlStateNormal];
     [gpsButton addTarget:self action:@selector(stopGPS) forControlEvents:UIControlEventTouchUpInside];
     [_baseView addSubview:gpsButton];
+}
+-(void) keepFirstOneFrom:(NSMutableArray *)arr{
+    int count=[arr count];
+    if (count>1) {
+        [arr removeObjectsInRange:NSMakeRange(1, count-1)];
+    }
+}
+-(void)cleanUpTrack{  //useless for now
+    [_routRecorder unloadTracks];
 }
 -(void) startGPS{    
     [gpsReceiver start];
