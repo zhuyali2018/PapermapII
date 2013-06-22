@@ -10,7 +10,7 @@
 #import "Track.h"
 #import "LineProperty.h"
 #import "Node.h"
-#import "GPSTrack.h"
+#import "GPSNode.h"
 #import "PM2OnScreenButtons.h"
 #import "DrawableMapScrollView.h"
 #import "GPSTrackPOIBoard.h"
@@ -64,7 +64,7 @@
         return;
     }
     //initialize track
-    _gpsTrack=[[GPSTrack alloc] init];
+    _gpsTrack=[[Track alloc] init];
     if (!_gpsTrack) {
         return;
     }
@@ -95,7 +95,7 @@
     //initialize a track
     if (!_gpsTrack) return;                    //if track not initialized, return;
     LineProperty *lp=_gpsTrack.lineProperty;      //save the line property
-    _gpsTrack=[[GPSTrack alloc] init];
+    _gpsTrack=[[Track alloc] init];
     if (!_gpsTrack) return;                    //return if failed
     _gpsTrack.lineProperty=lp;
     if(!self.gpsTrackArray){   //when first time starting recorder, ini track array
@@ -316,7 +316,7 @@
     node.longitude=newLocation.coordinate.longitude;
     node.latitude=newLocation.coordinate.latitude;
     node.direction=newLocation.course;
-    self.gpsTrack.gpsNodes=[self addGPSNode:node to:self.gpsTrack.gpsNodes];
+    self.gpsTrack.nodes=[self addGPSNode:node to:self.gpsTrack.nodes];
     [[DrawableMapScrollView sharedMap].zoomView.gpsTrackPOIBoard setNeedsDisplay];
 }
 /*

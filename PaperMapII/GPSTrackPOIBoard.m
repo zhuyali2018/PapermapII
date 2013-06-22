@@ -9,10 +9,10 @@
 #import "GPSTrackPOIBoard.h"
 #import "DrawingBoard.h"
 #import "Node.h"
+#import "GPSNode.h"
 #import "Track.h"
 #import "TapDetectView.h"
 #import "LineProperty.h"
-#import "GPSTrack.h"
 #import "Recorder.h"
 
 @implementation GPSTrackPOIBoard
@@ -113,22 +113,22 @@
 	}
 	CGContextStrokePath(context);
 }
--(void)gpsDrawTrack:(GPSTrack *)track context:(CGContextRef)context{
+-(void)gpsDrawTrack:(Track *)track context:(CGContextRef)context{
     if(!track) return;
-    if(nil==track.gpsNodes)
+    if(nil==track.nodes)
         return;
-    int count=[track.gpsNodes count];
+    int count=[track.nodes count];
     if(count<2) return;
     
     CGContextSetStrokeColorWithColor(context, [UIColor colorWithRed:COLOR.red green:COLOR.green blue:COLOR.blue alpha:COLOR.alpha].CGColor);
 	CGContextSetLineWidth(context, COLOR.lineWidth);
 	CGContextSetLineCap(context, kCGLineCapRound);  //version 4.0
 	
-	GPSNode * startNode=[track.gpsNodes objectAtIndex:0];
+	GPSNode * startNode=[track.nodes objectAtIndex:0];
     CGPoint pStart=[self ConvertPoint:startNode];
 	CGContextMoveToPoint(context, pStart.x, pStart.y);
 	for (int i=1; i<count; i++) {
-		GPSNode * tmpN=[track.gpsNodes objectAtIndex:i];
+		GPSNode * tmpN=[track.nodes objectAtIndex:i];
         CGPoint tmpP=[self ConvertPoint:tmpN];
 		CGContextAddLineToPoint(context, tmpP.x, tmpP.y);
 	}

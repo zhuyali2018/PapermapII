@@ -23,8 +23,6 @@
 		AAAD5A801770364800DCDAD2 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAAD5A7F1770364800DCDAD2 /* CoreLocation.framework */; };
 		AAAD5A8317714CDB00DCDAD2 /* GPSNode.m in Sources */ = {isa = PBXBuildFile; fileRef = AAAD5A8217714CDB00DCDAD2 /* GPSNode.m */; };
 		AAAD5A8417714CDB00DCDAD2 /* GPSNode.m in Sources */ = {isa = PBXBuildFile; fileRef = AAAD5A8217714CDB00DCDAD2 /* GPSNode.m */; };
-		AAAD5A87177163F800DCDAD2 /* GPSTrack.m in Sources */ = {isa = PBXBuildFile; fileRef = AAAD5A86177163F800DCDAD2 /* GPSTrack.m */; };
-		AAAD5A88177163F800DCDAD2 /* GPSTrack.m in Sources */ = {isa = PBXBuildFile; fileRef = AAAD5A86177163F800DCDAD2 /* GPSTrack.m */; };
 		AAB3A65617513E6C00214D2C /* TappableMapScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = AAB3A65517513E6C00214D2C /* TappableMapScrollView.m */; };
 		AAB3A65717513E6C00214D2C /* TappableMapScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = AAB3A65517513E6C00214D2C /* TappableMapScrollView.m */; };
 		AABD95D8175A10CC00B2BC33 /* DrawableMapScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = AABD95D7175A10CC00B2BC33 /* DrawableMapScrollView.m */; };
@@ -3506,8 +3504,6 @@
 		AAAD5A7F1770364800DCDAD2 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		AAAD5A8117714CDB00DCDAD2 /* GPSNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPSNode.h; sourceTree = "<group>"; };
 		AAAD5A8217714CDB00DCDAD2 /* GPSNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPSNode.m; sourceTree = "<group>"; };
-		AAAD5A85177163F700DCDAD2 /* GPSTrack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPSTrack.h; sourceTree = "<group>"; };
-		AAAD5A86177163F800DCDAD2 /* GPSTrack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPSTrack.m; sourceTree = "<group>"; };
 		AAB3A65417513E6B00214D2C /* TappableMapScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TappableMapScrollView.h; sourceTree = "<group>"; };
 		AAB3A65517513E6C00214D2C /* TappableMapScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TappableMapScrollView.m; sourceTree = "<group>"; };
 		AABD95D6175A10CC00B2BC33 /* DrawableMapScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DrawableMapScrollView.h; path = BasicMapTiles/DrawableMapScrollView.h; sourceTree = "<group>"; };
@@ -5318,8 +5314,6 @@
 				AAAD5A7C177034AF00DCDAD2 /* GPSReceiver.m */,
 				AAAD5A8117714CDB00DCDAD2 /* GPSNode.h */,
 				AAAD5A8217714CDB00DCDAD2 /* GPSNode.m */,
-				AAAD5A85177163F700DCDAD2 /* GPSTrack.h */,
-				AAAD5A86177163F800DCDAD2 /* GPSTrack.m */,
 			);
 			name = GPS;
 			sourceTree = "<group>";
@@ -10705,7 +10699,6 @@
 				AAAD5A7917702BE200DCDAD2 /* MapCenterIndicator.m in Sources */,
 				AAAD5A7D177034AF00DCDAD2 /* GPSReceiver.m in Sources */,
 				AAAD5A8317714CDB00DCDAD2 /* GPSNode.m in Sources */,
-				AAAD5A87177163F800DCDAD2 /* GPSTrack.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -10731,7 +10724,6 @@
 				AAAD5A7A17702BE200DCDAD2 /* MapCenterIndicator.m in Sources */,
 				AAAD5A7E177034AF00DCDAD2 /* GPSReceiver.m in Sources */,
 				AAAD5A8417714CDB00DCDAD2 /* GPSNode.m in Sources */,
-				AAAD5A88177163F800DCDAD2 /* GPSTrack.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -19,7 +19,7 @@
 @property (nonatomic,strong) NSMutableArray * trackArray;
 @property (nonatomic,strong) NSMutableArray * gpsTrackArray;
 @property (nonatomic,strong) Track * track;
-@property (nonatomic,strong) GPSTrack * gpsTrack;
+@property (nonatomic,strong) Track * gpsTrack;
 @property bool recording; //if it is recording
 @property bool gpsRecording; //if it is recording
 @property bool mapMode;  //Eastern mode (false) or Western mode (true);

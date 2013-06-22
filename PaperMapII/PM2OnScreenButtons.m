@@ -13,7 +13,6 @@
 #import "MapCenterIndicator.h"
 #import "GPSReceiver.h"
 #import "Track.h"
-#import "GPSTrack.h"
 
 @implementation PM2OnScreenButtons
 @synthesize drawButton,fdrawButton;
