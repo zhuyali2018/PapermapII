@@ -9,7 +9,9 @@
 #import "LineProperty.h"
 
 @implementation LineProperty
-+ (id)sharedDrawingLineProperty{
+@synthesize red,green,blue,alpha,lineWidth;
+
++ (LineProperty *)sharedDrawingLineProperty{
     static LineProperty *sharedDrawingLineProperty = nil;
     @synchronized(self) {
         if (sharedDrawingLineProperty == nil)
@@ -17,7 +19,7 @@
     }
     return sharedDrawingLineProperty;
 }
-+ (id)sharedGPSTrackProperty{
++ (LineProperty *)sharedGPSTrackProperty{
     static LineProperty *sharedGPSTrackProperty = nil;
     @synchronized(self) {
         if (sharedGPSTrackProperty == nil)
@@ -26,14 +28,14 @@
     return sharedGPSTrackProperty;
 }
 
-- (id)initWithRed:(float)red green:(float)green blue:(float) blue alpha:(float) alpha linewidth:(int)width {
-	self.red=red;
-	self.green=green;
-    self.blue=blue;
-    self.alpha=alpha;
-    self.lineWidth=width;
-	return self;
-}
+//- (id)initWithRed:(float)red1 green:(float)green1 blue:(float) blue1 alpha:(float) alpha1 linewidth:(int)width {
+//	self.red=red1;
+//	self.green=green1;
+//    self.blue=blue1;
+//    self.alpha=alpha1;
+//    self.lineWidth=width;
+//	return self;
+//}
 -(id)initWithCoder:(NSCoder *)coder{
 	if(self=[super init]){
 		self.red  =[coder decodeFloatForKey:@"RED"];

@@ -13,7 +13,6 @@
 #import "MapCenterIndicator.h"
 #import "GPSReceiver.h"
 #import "Track.h"
-#import "ColorSettingView.h"
 
 
 @implementation PM2OnScreenButtons
@@ -99,8 +98,8 @@
         Class cls = NSClassFromString(@"UIPopoverController");
         if (cls != nil) {
 			linePropertyViewCtrlr=[[LinePropertyViewController alloc] init];
-            //linePropertyViewCtrlr=[[LinePropertyViewController2 alloc]initWithNibName:@"LinePropertyViewController2" bundle:nil];
-			[linePropertyViewCtrlr setTitle:@"Line Property setting"];
+            
+            [linePropertyViewCtrlr setTitle:@"Line Property setting"];
             
 			UINavigationController * ctrl=[[UINavigationController alloc]initWithRootViewController:linePropertyViewCtrlr];
 			UIPopoverController *aPopoverController =[[cls alloc] initWithContentViewController:ctrl];
@@ -110,7 +109,7 @@
     if([colorPickPopover isPopoverVisible]){
 		[colorPickPopover dismissPopoverAnimated:YES];
 	}else{
-		[colorPickPopover setPopoverContentSize:CGSizeMake(350,360) animated:YES];
+		[colorPickPopover setPopoverContentSize:CGSizeMake(350,400) animated:YES];
         [colorPickPopover presentPopoverFromRect:colorButton.frame inView:_baseView permittedArrowDirections:UIPopoverArrowDirectionAny  animated:YES];
 	}
 }

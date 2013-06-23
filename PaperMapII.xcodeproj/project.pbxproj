@@ -3474,8 +3474,12 @@
 		AAC8484C175854C0002D7AA9 /* Node.m in Sources */ = {isa = PBXBuildFile; fileRef = AAC8484B175854C0002D7AA9 /* Node.m */; };
 		AAEE0CA41776205700549A7D /* LinePropertyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AAEE0CA31776205700549A7D /* LinePropertyViewController.m */; };
 		AAEE0CA51776205700549A7D /* LinePropertyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AAEE0CA31776205700549A7D /* LinePropertyViewController.m */; };
-		AAEE0CA81776228E00549A7D /* ColorSettingView.m in Sources */ = {isa = PBXBuildFile; fileRef = AAEE0CA71776228E00549A7D /* ColorSettingView.m */; };
-		AAEE0CA91776228E00549A7D /* ColorSettingView.m in Sources */ = {isa = PBXBuildFile; fileRef = AAEE0CA71776228E00549A7D /* ColorSettingView.m */; };
+		AAEE0CBA17763B0F00549A7D /* PropertyButton.m in Sources */ = {isa = PBXBuildFile; fileRef = AAEE0CB917763B0F00549A7D /* PropertyButton.m */; };
+		AAEE0CBB17763B0F00549A7D /* PropertyButton.m in Sources */ = {isa = PBXBuildFile; fileRef = AAEE0CB917763B0F00549A7D /* PropertyButton.m */; };
+		AAEE0CBE1776562500549A7D /* LinePropStorageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AAEE0CBD1776562500549A7D /* LinePropStorageViewController.m */; };
+		AAEE0CBF1776562500549A7D /* LinePropStorageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AAEE0CBD1776562500549A7D /* LinePropStorageViewController.m */; };
+		AAEE0CC2177669DB00549A7D /* LinePropPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AAEE0CC1177669DB00549A7D /* LinePropPickerViewController.m */; };
+		AAEE0CC3177669DB00549A7D /* LinePropPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AAEE0CC1177669DB00549A7D /* LinePropPickerViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -5261,8 +5265,12 @@
 		AAC8484B175854C0002D7AA9 /* Node.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Node.m; sourceTree = "<group>"; };
 		AAEE0CA21776205700549A7D /* LinePropertyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LinePropertyViewController.h; sourceTree = "<group>"; };
 		AAEE0CA31776205700549A7D /* LinePropertyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LinePropertyViewController.m; sourceTree = "<group>"; };
-		AAEE0CA61776228E00549A7D /* ColorSettingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColorSettingView.h; sourceTree = "<group>"; };
-		AAEE0CA71776228E00549A7D /* ColorSettingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ColorSettingView.m; sourceTree = "<group>"; };
+		AAEE0CB817763B0F00549A7D /* PropertyButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PropertyButton.h; sourceTree = "<group>"; };
+		AAEE0CB917763B0F00549A7D /* PropertyButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PropertyButton.m; sourceTree = "<group>"; };
+		AAEE0CBC1776562400549A7D /* LinePropStorageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LinePropStorageViewController.h; sourceTree = "<group>"; };
+		AAEE0CBD1776562500549A7D /* LinePropStorageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LinePropStorageViewController.m; sourceTree = "<group>"; };
+		AAEE0CC0177669DB00549A7D /* LinePropPickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LinePropPickerViewController.h; sourceTree = "<group>"; };
+		AAEE0CC1177669DB00549A7D /* LinePropPickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LinePropPickerViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -5313,8 +5321,12 @@
 				AAAD5A7817702BE200DCDAD2 /* MapCenterIndicator.m */,
 				AAEE0CA21776205700549A7D /* LinePropertyViewController.h */,
 				AAEE0CA31776205700549A7D /* LinePropertyViewController.m */,
-				AAEE0CA61776228E00549A7D /* ColorSettingView.h */,
-				AAEE0CA71776228E00549A7D /* ColorSettingView.m */,
+				AAEE0CB817763B0F00549A7D /* PropertyButton.h */,
+				AAEE0CB917763B0F00549A7D /* PropertyButton.m */,
+				AAEE0CBC1776562400549A7D /* LinePropStorageViewController.h */,
+				AAEE0CBD1776562500549A7D /* LinePropStorageViewController.m */,
+				AAEE0CC0177669DB00549A7D /* LinePropPickerViewController.h */,
+				AAEE0CC1177669DB00549A7D /* LinePropPickerViewController.m */,
 			);
 			name = "Buttons and Labels";
 			sourceTree = "<group>";
@@ -10712,7 +10724,9 @@
 				AAAD5A7D177034AF00DCDAD2 /* GPSReceiver.m in Sources */,
 				AAAD5A8317714CDB00DCDAD2 /* GPSNode.m in Sources */,
 				AAEE0CA41776205700549A7D /* LinePropertyViewController.m in Sources */,
-				AAEE0CA81776228E00549A7D /* ColorSettingView.m in Sources */,
+				AAEE0CBA17763B0F00549A7D /* PropertyButton.m in Sources */,
+				AAEE0CBE1776562500549A7D /* LinePropStorageViewController.m in Sources */,
+				AAEE0CC2177669DB00549A7D /* LinePropPickerViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -10739,7 +10753,9 @@
 				AAAD5A7E177034AF00DCDAD2 /* GPSReceiver.m in Sources */,
 				AAAD5A8417714CDB00DCDAD2 /* GPSNode.m in Sources */,
 				AAEE0CA51776205700549A7D /* LinePropertyViewController.m in Sources */,
-				AAEE0CA91776228E00549A7D /* ColorSettingView.m in Sources */,
+				AAEE0CBB17763B0F00549A7D /* PropertyButton.m in Sources */,
+				AAEE0CBF1776562500549A7D /* LinePropStorageViewController.m in Sources */,
+				AAEE0CC3177669DB00549A7D /* LinePropPickerViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -10,7 +10,7 @@
 #import "Recorder.h"
 #import "DrawableMapScrollView.h"
 #import "LinePropertyViewController.h"
-#import "LinePropertyViewController2.h"
+
 @class GPSReceiver;
 
 @interface PM2OnScreenButtons : NSObject

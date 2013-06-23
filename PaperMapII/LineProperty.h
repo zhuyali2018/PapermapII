@@ -15,7 +15,7 @@
 @property CGFloat  alpha;
 @property CGFloat  lineWidth;
 
-- (id)initWithRed:(float)red green:(float)green blue:(float) blue alpha:(float) alpha linewidth:(int)width;
-+ (id)sharedDrawingLineProperty;
-+ (id)sharedGPSTrackProperty;
+//- (id)initWithRed:(float)red green:(float)green blue:(float) blue alpha:(float) alpha linewidth:(int)width;
++ (LineProperty *)sharedDrawingLineProperty;
++ (LineProperty *)sharedGPSTrackProperty;
 @end

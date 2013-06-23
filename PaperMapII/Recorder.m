@@ -51,7 +51,7 @@
         return;
     }
     _recording=true;
-    self.track.lineProperty=[LineProperty sharedDrawingLineProperty];
+    self.track.lineProperty=[[LineProperty sharedDrawingLineProperty] copy];
     if(!self.trackArray){   //when first time starting recorder, ini track array
         self.trackArray=[[NSMutableArray alloc]initWithCapacity:5];
         [self.trackArray addObject:self.track];
@@ -69,7 +69,7 @@
         return;
     }
     _gpsRecording=true;
-    self.gpsTrack.lineProperty=[LineProperty sharedGPSTrackProperty];   //TODO: change to GPS used line property
+    self.gpsTrack.lineProperty=[[LineProperty sharedGPSTrackProperty] copy];   //TODO: change to GPS used line property
     if(!self.gpsTrackArray){   //when first time starting recorder, ini track array
         self.gpsTrackArray=[[NSMutableArray alloc]initWithCapacity:5];
         [self.gpsTrackArray addObject:self.gpsTrack];

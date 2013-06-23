@@ -7,7 +7,7 @@
 //
 #import "AllImports.h"
 #import "DrawingBoard.h"
-
+#import "LineProperty.h"
 
 @implementation DrawingBoard
 
@@ -25,7 +25,7 @@
 }
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.
-
+#define LP ((LineProperty *)[LineProperty sharedDrawingLineProperty])
 - (void)drawRect:(CGRect)rect
 {
     if (self.preDraw) {
@@ -34,9 +34,8 @@
         }
         CGContextRef context = UIGraphicsGetCurrentContext();
         CGContextSetShouldAntialias(context, YES);   //make line smoother ?
-
-        CGContextSetStrokeColorWithColor(context, [UIColor colorWithRed:0 green:1 blue:1 alpha:0.6].CGColor);
-        CGContextSetLineWidth(context, 4);
+        CGContextSetStrokeColorWithColor(context, [UIColor colorWithRed:LP.red green:LP.green blue:LP.blue alpha:LP.alpha].CGColor);
+        CGContextSetLineWidth(context, LP.lineWidth);
         CGContextSetLineCap(context, kCGLineCapRound);  //version 4.0
         CGPoint pStart=self.firstPt;
         CGContextMoveToPoint(context, pStart.x, pStart.y);
@@ -56,8 +55,8 @@
     CGContextSetShouldAntialias(context, YES);   //make line smoother ?
     
     //NSLog(@"start draw on free drawing board's drawRect.... bluevalue:%.2f",LNPROP.blue);
-    CGContextSetStrokeColorWithColor(context, [UIColor colorWithRed:0 green:0 blue:1 alpha:1].CGColor);
-    CGContextSetLineWidth(context, 3);
+    CGContextSetStrokeColorWithColor(context, [UIColor colorWithRed:LP.red green:LP.green blue:LP.blue alpha:LP.alpha].CGColor);
+    CGContextSetLineWidth(context, LP.lineWidth);
     CGContextSetLineCap(context, kCGLineCapRound);  //version 4.0
     
     CGPoint pStart=[[ptList objectAtIndex:0] CGPointValue];
