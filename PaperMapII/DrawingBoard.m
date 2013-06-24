@@ -8,7 +8,8 @@
 #import "AllImports.h"
 #import "DrawingBoard.h"
 #import "LineProperty.h"
-
+#import "Recorder.h"
+#import "Track.h"
 @implementation DrawingBoard
 
 @synthesize ptList;
@@ -25,7 +26,8 @@
 }
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.
-#define LP ((LineProperty *)[LineProperty sharedDrawingLineProperty])
+//#define LP ((LineProperty *)[LineProperty sharedDrawingLineProperty])
+#define LP [Recorder sharedRecorder].track.lineProperty
 - (void)drawRect:(CGRect)rect
 {
     if (self.preDraw) {

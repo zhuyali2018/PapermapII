@@ -30,8 +30,9 @@ const static int NUM=5;     //number of stored property
             bn.ID=i+1;
             NSString *t=[[NSString alloc]initWithFormat:@"Stored Property %d:",i+1];
             [bn.titleLabel setText:t];
-            [bn setBackgroundImage:[UIImage imageNamed:@"icon72x72.png"] forState:UIControlStateHighlighted];
-            bn.lineProperty=[LineProperty sharedDrawingLineProperty];
+            [bn setBackgroundImage:[UIImage imageNamed:@"icon72x72.png"] forState:UIControlStateHighlighted];  //TODO: Change for a nicer image
+            bn.lineProperty=[LineProperty loadSettings:t];    //<===Should not let all stored one points to current LP address !!!
+            //bn.lineProperty=[[LineProperty sharedDrawingLineProperty] copy];   //TODO: this one should be removed after making the stored properties sticky
             [bn addTarget:self action:@selector(gotSelectedColor:) forControlEvents:UIControlEventTouchUpInside];
             [self.view addSubview:bn];
             [propBns addObject:bn];
@@ -61,17 +62,21 @@ const static int NUM=5;     //number of stored property
     }
     
     if(OSB.linePropertyViewCtrlr.trackProperty==DrawingLineProperty){
-        [LineProperty sharedDrawingLineProperty].red    = ((PropertyButton *)sender).lineProperty.red;
-        [LineProperty sharedDrawingLineProperty].green  = ((PropertyButton *)sender).lineProperty.green;
-        [LineProperty sharedDrawingLineProperty].blue   = ((PropertyButton *)sender).lineProperty.blue;
-        [LineProperty sharedDrawingLineProperty].alpha  = ((PropertyButton *)sender).lineProperty.alpha;
-        [LineProperty sharedDrawingLineProperty].lineWidth= ((PropertyButton *)sender).lineProperty.lineWidth;
+        LineProperty *lp=[LineProperty sharedDrawingLineProperty];
+        lp.red    = ((PropertyButton *)sender).lineProperty.red;
+        lp.green  = ((PropertyButton *)sender).lineProperty.green;
+        lp.blue   = ((PropertyButton *)sender).lineProperty.blue;
+        lp.alpha  = ((PropertyButton *)sender).lineProperty.alpha;
+        lp.lineWidth= ((PropertyButton *)sender).lineProperty.lineWidth;
+        [lp saveDrawingLineSettings];
     }else{
-        [LineProperty sharedGPSTrackProperty].red    = ((PropertyButton *)sender).lineProperty.red;
-        [LineProperty sharedGPSTrackProperty].green  = ((PropertyButton *)sender).lineProperty.green;
-        [LineProperty sharedGPSTrackProperty].blue   = ((PropertyButton *)sender).lineProperty.blue;
-        [LineProperty sharedGPSTrackProperty].alpha  = ((PropertyButton *)sender).lineProperty.alpha;
-        [LineProperty sharedGPSTrackProperty].lineWidth= ((PropertyButton *)sender).lineProperty.lineWidth;
+        LineProperty *tp=  [LineProperty sharedGPSTrackProperty];
+        tp.red    = ((PropertyButton *)sender).lineProperty.red;
+        tp.green  = ((PropertyButton *)sender).lineProperty.green;
+        tp.blue   = ((PropertyButton *)sender).lineProperty.blue;
+        tp.alpha  = ((PropertyButton *)sender).lineProperty.alpha;
+        tp.lineWidth= ((PropertyButton *)sender).lineProperty.lineWidth;
+        [tp saveGPSTrackSettings];
     }
 }
 - (void) changeStorageColor:(id)sender{

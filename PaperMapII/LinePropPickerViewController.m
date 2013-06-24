@@ -53,14 +53,14 @@
 
 	// Do any additional setup after loading the view.
     okBn=[UIButton buttonWithType:UIButtonTypeRoundedRect];
-    [okBn setTitle:@"Save" forState:UIControlStateNormal];
+    [okBn setTitle:@"OK" forState:UIControlStateNormal];
     [okBn setFrame:CGRectMake(130, 315, 100, 30)];
     [okBn addTarget:self action:@selector(propertiesPicked:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:okBn];
     
     sampleLineLabel=[[UILabel alloc] initWithFrame:CGRectMake(20, 0, 150, 25)];
     [sampleLineLabel setBackgroundColor:[UIColor clearColor]];
-    [sampleLineLabel setText:@"Sample Line"];
+    [sampleLineLabel setText:@"Sample Line:"];
     
     sampleTextLabel=[[UILabel alloc] initWithFrame:CGRectMake(50, 20, 250, 50)];
     [sampleTextLabel setBackgroundColor:[UIColor clearColor]];
@@ -137,7 +137,7 @@
 }
 -(void)setProperty:(LineProperty *)lp{
     sampleLine.lineProperty=lp;
-    
+    [sampleLine setNeedsDisplay];
     redSlider.value=sampleLine.lineProperty.red;
     greSlider.value=sampleLine.lineProperty.green;
 	bluSlider.value=sampleLine.lineProperty.blue;
@@ -191,8 +191,11 @@
     
     PM2OnScreenButtons * OSB=[PM2OnScreenButtons sharedBnManager];
     [OSB.linePropertyViewCtrlr setTitle:savedTitle];
-    ((PropertyButton *)OSB.linePropertyViewCtrlr.linePSVCtrl.propBns[self.view.tag-1]).lineProperty=sampleLine.lineProperty;
-    [((PropertyButton *)OSB.linePropertyViewCtrlr.linePSVCtrl.propBns[self.view.tag-1]) setNeedsDisplay];
+    //save the new settings
+    PropertyButton *pBn=((PropertyButton *)OSB.linePropertyViewCtrlr.linePSVCtrl.propBns[self.view.tag-1]);
+    NSString * titleKey=pBn.titleLabel.text;
+    [pBn.lineProperty saveSettings:titleKey];
+    [pBn setNeedsDisplay];
     
     [UIView beginAnimations:@"View Flip" context:nil];
 	[UIView setAnimationDuration:1.0];

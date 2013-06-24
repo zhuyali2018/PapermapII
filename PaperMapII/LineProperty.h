@@ -15,7 +15,20 @@
 @property CGFloat  alpha;
 @property CGFloat  lineWidth;
 
-//- (id)initWithRed:(float)red green:(float)green blue:(float) blue alpha:(float) alpha linewidth:(int)width;
+- (id)initWithRed:(float)red green:(float)green blue:(float) blue alpha:(float) alpha linewidth:(int)width;
+
 + (LineProperty *)sharedDrawingLineProperty;
 + (LineProperty *)sharedGPSTrackProperty;
+
++ (LineProperty *)loadSettings:(NSString *)key;
+- (void)saveSettings:(NSString *)key;
+
+- (void)loadPreSavedDrawingLineSettings;
+- (void)loadPreSavedGPSTrackSettings;
+
++ (NSString *)dataFilePath:(NSString *)filename;
+
+- (void)saveDrawingLineSettings;
+- (void)saveGPSTrackSettings;
+
 @end
