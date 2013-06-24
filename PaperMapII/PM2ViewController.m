@@ -75,7 +75,15 @@
     //UIApplication *app=[UIApplication sharedApplication];
 	//[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillTerminate:) name:UIApplicationWillTerminateNotification object:app];
 }
-
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+{
+	int screenW=[[self view] bounds].size.width;
+	int screenH=[[self view] bounds].size.height;
+    [self.mapScrollView setFrame:CGRectMake(0, 0, screenW,screenH)];
+    PM2OnScreenButtons * bns=[PM2OnScreenButtons sharedBnManager];
+    [bns repositionButtonsFromX:screenW-150 Y:0];
+    NSLOG9(@"did Rotate !!!");
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];

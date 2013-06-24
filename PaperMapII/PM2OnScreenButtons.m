@@ -6,6 +6,8 @@
 //  Copyright (c) 2013 Yali Zhu. All rights reserved.
 //
 #import "AllImports.h"
+#import "PM2AppDelegate.h"
+#import "PM2ViewController.h"
 #import "PM2OnScreenButtons.h"
 #import "GPSTrackPOIBoard.h"
 #import "DrawingBoard.h"
@@ -13,7 +15,8 @@
 #import "MapCenterIndicator.h"
 #import "GPSReceiver.h"
 #import "Track.h"
-
+#import "MapTile.h"
+#import "MapSources.h"
 
 @implementation PM2OnScreenButtons
 @synthesize drawButton,fdrawButton,colorButton;
@@ -24,6 +27,13 @@
 @synthesize colorPickPopover;
 @synthesize linePropertyViewCtrlr;
 
+@synthesize cleanupButton;
+@synthesize gpsButton;
+@synthesize stopGpsButton;
+@synthesize undoButton;
+@synthesize mapTypeButton;
+@synthesize unloadDrawingButton;
+@synthesize unloadGPSTrackButton;
 + (id)sharedBnManager {
     static PM2OnScreenButtons *onScreenbuttons = nil;
     static dispatch_once_t onceToken;
@@ -53,41 +63,67 @@
     [self addStopGPSButton];
     [self addTrackCleanupButton];
     [self addColorButton];
+    [self addMapTypeButton];
+    [self addUnloadDrawingButton];
+    [self addUnloadGPSTrackButton];
+    [self repositionButtonsFromX:800 Y:0];
+}
+-(void)repositionButtonsFromX:(int)x Y:(int)y{
+    int w=150;
+    [drawButton             setFrame:CGRectMake(x, y=y+50, w, 30)];
+    [fdrawButton            setFrame:CGRectMake(x, y=y+50, w, 30)];
+    [undoButton             setFrame:CGRectMake(x, y=y+50, w, 30)];
+    [gpsButton              setFrame:CGRectMake(x, y=y+50, w, 30)];
+    [stopGpsButton          setFrame:CGRectMake(x, y=y+50, w, 30)];
+    [cleanupButton          setFrame:CGRectMake(x, y=y+50, w, 30)];
+    [colorButton            setFrame:CGRectMake(x, y=y+50, w, 30)];
+    [mapTypeButton          setFrame:CGRectMake(x, y=y+50, w, 30)];
+    [unloadDrawingButton    setFrame:CGRectMake(x, y=y+50, w, 30)];
+    [unloadGPSTrackButton   setFrame:CGRectMake(x, y=y+50, w, 30)];
+}
+-(void)addUnloadDrawingButton{
+    unloadDrawingButton=[UIButton buttonWithType:(UIButtonTypeRoundedRect)];
+    [unloadDrawingButton setTitle:@"Unload Drawings" forState:UIControlStateNormal];
+    [unloadDrawingButton addTarget:self action:@selector(unloadDrawings:) forControlEvents:UIControlEventTouchUpInside];
+    [_baseView addSubview:unloadDrawingButton];
+}
+-(void)addUnloadGPSTrackButton{
+    unloadGPSTrackButton=[UIButton buttonWithType:(UIButtonTypeRoundedRect)];
+    [unloadGPSTrackButton setTitle:@"Unload GPS Track" forState:UIControlStateNormal];
+    [unloadGPSTrackButton addTarget:self action:@selector(unloadGPSTrack:) forControlEvents:UIControlEventTouchUpInside];
+    [_baseView addSubview:unloadGPSTrackButton];
+}
+-(void) addMapTypeButton{
+    mapTypeButton=[UIButton buttonWithType:(UIButtonTypeRoundedRect)];
+    [mapTypeButton setTitle:@"Map" forState:UIControlStateNormal];
+    [mapTypeButton addTarget:self action:@selector(toggleMapType:) forControlEvents:UIControlEventTouchUpInside];
+    [_baseView addSubview:mapTypeButton];
 }
 -(void) addColorButton{
     colorButton=[UIButton buttonWithType:(UIButtonTypeRoundedRect)];
-    [colorButton setFrame:CGRectMake([_baseView bounds].size.height-150, 350, 100, 30)];
     [colorButton setTitle:@"Pick Color" forState:UIControlStateNormal];
     [colorButton addTarget:self action:@selector(colorPicker) forControlEvents:UIControlEventTouchUpInside];
     [_baseView addSubview:colorButton];
 }
 -(void) addTrackCleanupButton{
-    UIButton * gpsButton=[UIButton buttonWithType:(UIButtonTypeRoundedRect)];
-    [gpsButton setFrame:CGRectMake([_baseView bounds].size.height-150, 300, 100, 30)];
-    [gpsButton setTitle:@"Clean up" forState:UIControlStateNormal];
-    [gpsButton addTarget:self action:@selector(cleanUpTrack) forControlEvents:UIControlEventTouchUpInside];
-    [_baseView addSubview:gpsButton];
+    cleanupButton=[UIButton buttonWithType:(UIButtonTypeRoundedRect)];
+    [cleanupButton setTitle:@"Clean up" forState:UIControlStateNormal];
+    [cleanupButton addTarget:self action:@selector(cleanUpTrack) forControlEvents:UIControlEventTouchUpInside];
+    [_baseView addSubview:cleanupButton];
 }
 -(void) addGPSButton{
-    UIButton * gpsButton=[UIButton buttonWithType:(UIButtonTypeRoundedRect)];
-    [gpsButton setFrame:CGRectMake([_baseView bounds].size.height-150, 200, 100, 30)];
+    gpsButton=[UIButton buttonWithType:(UIButtonTypeRoundedRect)];
     [gpsButton setTitle:@"Start GPS" forState:UIControlStateNormal];
     [gpsButton addTarget:self action:@selector(startGPS) forControlEvents:UIControlEventTouchUpInside];
     [_baseView addSubview:gpsButton];
 }
 -(void) addStopGPSButton{
-    UIButton * gpsButton=[UIButton buttonWithType:(UIButtonTypeRoundedRect)];
-    [gpsButton setFrame:CGRectMake([_baseView bounds].size.height-150, 250, 100, 30)];
-    [gpsButton setTitle:@"Stop GPS" forState:UIControlStateNormal];
-    [gpsButton addTarget:self action:@selector(stopGPS) forControlEvents:UIControlEventTouchUpInside];
-    [_baseView addSubview:gpsButton];
+    stopGpsButton=[UIButton buttonWithType:(UIButtonTypeRoundedRect)];
+    [stopGpsButton setTitle:@"Stop GPS" forState:UIControlStateNormal];
+    [stopGpsButton addTarget:self action:@selector(stopGPS) forControlEvents:UIControlEventTouchUpInside];
+    [_baseView addSubview:stopGpsButton];
 }
--(void) keepFirstOneFrom:(NSMutableArray *)arr{
-    int count=[arr count];
-    if (count>1) {
-        [arr removeObjectsInRange:NSMakeRange(1, count-1)];
-    }
-}
+
 -(void)cleanUpTrack{  
     [_routRecorder unloadTracks];
     [mapScrollView.zoomView.gpsTrackPOIBoard setNeedsDisplay];
@@ -156,15 +192,13 @@
     [resLabel setText:[NSString stringWithFormat:@" %d", mapScrollView.maplevel]];
 }
 -(void)addUndoButton{
-    UIButton * drawButton1=[UIButton buttonWithType:(UIButtonTypeRoundedRect)];
-    [drawButton1 setFrame:CGRectMake([_baseView bounds].size.height-150, 150, 100, 30)];
-    [drawButton1 setTitle:@"Undo" forState:UIControlStateNormal];
-    [drawButton1 addTarget:self action:@selector(undoDrawing:) forControlEvents:UIControlEventTouchUpInside];
-    [_baseView addSubview:drawButton1];
+    undoButton=[UIButton buttonWithType:(UIButtonTypeRoundedRect)];
+    [undoButton setTitle:@"Undo" forState:UIControlStateNormal];
+    [undoButton addTarget:self action:@selector(undoDrawing:) forControlEvents:UIControlEventTouchUpInside];
+    [_baseView addSubview:undoButton];
 }
 -(void)addFreeDrawButton{
     fdrawButton=[UIButton buttonWithType:(UIButtonTypeRoundedRect)];
-    [fdrawButton setFrame:CGRectMake([_baseView bounds].size.height-150, 100, 100, 30)];
     [fdrawButton setTitle:@"Free Draw" forState:UIControlStateNormal];
     [fdrawButton addTarget:self action:@selector(switchToFreeDraw:) forControlEvents:UIControlEventTouchUpInside];
     [_baseView addSubview:fdrawButton];
@@ -173,7 +207,6 @@
 }
 -(void)addDrawButton{
     drawButton=[UIButton buttonWithType:(UIButtonTypeRoundedRect)];
-    [drawButton setFrame:CGRectMake([_baseView bounds].size.height-150, 50, 100, 30)];
     [drawButton setTitle:@"Draw" forState:UIControlStateNormal];
     [drawButton addTarget:self action:@selector(startDrawingRecorder:) forControlEvents:UIControlEventTouchUpInside];
     [_baseView addSubview:drawButton];
@@ -228,6 +261,27 @@
         self.mapScrollView.zoomView.gpsTrackPOIBoard.drawingBoard.preDraw=TRUE;
         [fdrawButton setHidden:TRUE];
     }
+}
+-(void)toggleMapType:(UIButton *)bn{
+    NSLOG9(@"toggleMapType here !");
+    PM2AppDelegate * dele= [[UIApplication sharedApplication] delegate];
+    if ([[bn.titleLabel text] compare:@"Map"]==NSOrderedSame) {
+        [bn setTitle:@"Sat" forState:UIControlStateNormal];
+        dele.viewController.mapSources.mapType=googleSat;
+    }else{
+        [bn setTitle:@"Map" forState:UIControlStateNormal];
+        dele.viewController.mapSources.mapType=googleMap;
+    }
+    [[DrawableMapScrollView sharedMap] reloadData];
+    [[DrawableMapScrollView sharedMap] setNeedsDisplay];
+}
+-(void)unloadGPSTrack:(UIButton *)bn{
+    [_routRecorder unloadGPSTracks];
+    [mapScrollView.zoomView.gpsTrackPOIBoard setNeedsDisplay];
+}
+-(void)unloadDrawings:(UIButton *)bn{
+    [_routRecorder unloadDrawings];
+    [mapScrollView.zoomView.gpsTrackPOIBoard setNeedsDisplay];
 }
 
 @end

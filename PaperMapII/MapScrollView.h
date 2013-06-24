@@ -27,6 +27,7 @@
 @property (nonatomic, strong)ZoomView *zoomView;
 @property (nonatomic) id<PM2MapSourceDelegate> mapsourceDelegate;
 - (UIView *)dequeueReusableTile;
--(void)saveMapState;
--(void)restoreMapState;
+- (void)saveMapState;
+- (void)restoreMapState;
+- (void)reloadData;
 @end

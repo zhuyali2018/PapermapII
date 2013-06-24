@@ -17,6 +17,13 @@
 @property (nonatomic, strong) UIButton *drawButton;
 @property (nonatomic, strong) UIButton *colorButton;
 @property (nonatomic, strong) UIButton *fdrawButton;
+@property (nonatomic, strong) UIButton *gpsButton;
+@property (nonatomic, strong) UIButton *stopGpsButton;
+@property (nonatomic, strong) UIButton *cleanupButton;
+@property (nonatomic, strong) UIButton *undoButton;
+@property (nonatomic, strong) UIButton *mapTypeButton;
+@property (nonatomic, strong) UIButton *unloadDrawingButton;
+@property (nonatomic, strong) UIButton *unloadGPSTrackButton;
 @property (nonatomic, strong) UIView *baseView;
 @property (nonatomic, strong) Recorder * routRecorder;
 @property (nonatomic, strong) DrawableMapScrollView * mapScrollView;
@@ -28,4 +35,5 @@
 + (id)sharedBnManager;
 -(void)addButtons:(UIView *)vc;
 -(void)updateMapLevel;
+-(void)repositionButtonsFromX:(int)x Y:(int)y;
 @end

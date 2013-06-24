@@ -226,6 +226,26 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
 	[self initVisibleVarArrays];
 	[self setNeedsDisplay];
 }
+//reload all with no exceptions
+- (void)reloadData {
+	// recycle all tiles so that every tile will be replaced in the next layoutSubviews
+    for (MapTile *view in [zoomView.tileContainer subviews]) {
+		[reusableTiles addObject:view];
+		[view removeFromSuperview];
+		[(UIImageView *)view setImage:NULL];
+    }
+    for (MapTile *view in [zoomView.basicMapLayer subviews]) {
+		[reusableTiles addObject:view];
+		[view removeFromSuperview];
+		[(UIImageView *)view setImage:NULL];
+    }
+	[self initVisibleVarArrays];
+	//update maplevel display
+	//TravelMapAppDelegate * dele=[[UIApplication sharedApplication] delegate];
+	//[dele.viewController.resLabel setText:[NSString stringWithFormat:@" %d", maplevel]];
+	[self setNeedsLayout];  //==> this calls layoutSubviews of UIScrollView or its sub class
+	//[self setNeedsDisplay];
+}
 -(void) restoreOffset{  // this is an ugly workaround the random jump
 	CGPoint currentOffset=[self contentOffset];
 	if((abs(currentOffset.x-savedOffset.x)>200.0)||(abs(currentOffset.y-savedOffset.y)>200.0)){

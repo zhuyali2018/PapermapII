@@ -33,6 +33,8 @@
 - (void)gpsStart;
 - (void)gpsStop;
 - (void)unloadTracks;
+- (void)unloadGPSTracks;
+- (void)unloadDrawings;
 - (void)saveAllTracks;
 - (void)saveAllGpsTracks;
 - (void)initializeAllTracks;

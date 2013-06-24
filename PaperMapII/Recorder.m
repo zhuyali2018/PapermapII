@@ -122,8 +122,14 @@
     [self gpsStop];
     [trackArray removeAllObjects];
     [gpsTrackArray removeAllObjects];
-    //should do refresh from the caller of this method
-    //[[DrawableMapScrollView sharedMap].zoomView.gpsTrackPOIBoard setNeedsDisplay];
+}
+-(void)unloadGPSTracks{
+    [self gpsStop];
+    [gpsTrackArray removeAllObjects];
+}
+-(void)unloadDrawings{
+    [self stop];
+    [trackArray removeAllObjects];
 }
 
 -(NSString *)dataFilePath{
@@ -300,7 +306,7 @@
 	int xM=pow(2,resM)*0.711111111*(Long+180);						 //256/360=0.7111111111
 	int yM=pow(2,resM)*1.422222222*(90-[self GetScreenY:Lat]);		 //256/180=1.4222222222
 	
-    //x,y used to center the map
+    //x,y used to center the map below
 	int x=pow(2,res)*0.711111111*(Long+180);						 //256/360=0.7111111111
 	int y=pow(2,res)*1.422222222*(90-[self GetScreenY:Lat]);		 //256/180=1.4222222222
 	
@@ -317,6 +323,12 @@
     node.direction=newLocation.course;
     self.gpsTrack.nodes=[self addGPSNode:node to:self.gpsTrack.nodes];
     [[DrawableMapScrollView sharedMap].zoomView.gpsTrackPOIBoard setNeedsDisplay];
+    //center the current position
+    DrawableMapScrollView * mapWindow=[DrawableMapScrollView sharedMap];
+    CGRect  visibleBounds = [mapWindow bounds];     //Check this should return a size of 1280x1280 instead of 1024x768 for rotating purpose
+	CGFloat zm=[mapWindow zoomScale];
+	CGPoint offset=CGPointMake(x*zm-visibleBounds.size.width/2, y*zm-visibleBounds.size.height/2);
+	[mapWindow setContentOffset:offset animated:YES];
 }
 /*
 -(void) addGPSNode:(GPSNode *)node{
