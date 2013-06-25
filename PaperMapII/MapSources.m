@@ -219,7 +219,7 @@
         NSLOG10(@"No need to load image %d,%d at %d any more",tile1.row,tile1.modeCol,tile1.res);
         return;
     }
-    NSLOG10(@"imageURL=%@",imageUrl);
+    //NSLOG10(@"imageURL=%@",imageUrl);
     imageData=[NSData dataWithContentsOfURL:[NSURL URLWithString:imageUrl]];  //goto internet to get the maptile
     UIImage * img;
     img=[UIImage imageWithData:imageData];

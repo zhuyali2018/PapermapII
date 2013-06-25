@@ -13,13 +13,15 @@
 @class LineProperty;
 @class GPSTrack;
 @class Node;
+@class GPSNode;
 
 @interface Recorder : NSObject<PM2RecordingDelegate,CLLocationManagerDelegate>
 
 @property (nonatomic,strong) NSMutableArray * trackArray;
 @property (nonatomic,strong) NSMutableArray * gpsTrackArray;
 @property (nonatomic,strong) Track * track;
-@property (nonatomic,strong) Track * gpsTrack;
+@property (nonatomic,strong) GPSTrack * gpsTrack;
+@property (nonatomic,strong) GPSNode * lastGpsNode;
 @property bool recording; //if it is recording
 @property bool gpsRecording; //if it is recording
 @property bool mapMode;  //Eastern mode (false) or Western mode (true);

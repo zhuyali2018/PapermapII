@@ -17,6 +17,7 @@
 @property CLLocationSpeed speed;
 @property NSDate * timestamp;
 @property CLLocationDistance distanceFromLastNode;
+@property CLLocationDistance distanceFromStart;
 
 -(id)initWithPoint:(CGPoint)pt mapLevel:(int)maplevel;
 -(id)copyWithZone:(NSZone *)zone;

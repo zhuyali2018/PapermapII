@@ -10,6 +10,8 @@
 
 @implementation GPSNode
 @synthesize latitude,longitude,altitude,direction,distanceFromLastNode,timestamp,speed;
+@synthesize distanceFromStart;
+
 -(id)copyWithZone:(NSZone *)zone {
     GPSNode * nodeCopy=[super copyWithZone:zone];
     nodeCopy.latitude=self.latitude;
@@ -17,6 +19,7 @@
     nodeCopy.altitude=self.altitude;
     nodeCopy.direction=self.direction;
     nodeCopy.distanceFromLastNode=self.distanceFromLastNode;
+    nodeCopy.distanceFromStart=self.distanceFromStart;
     nodeCopy.timestamp=self.timestamp;
     nodeCopy.speed=self.speed;
     return nodeCopy;
@@ -35,6 +38,7 @@
 		self.altitude=[coder decodeDoubleForKey:@"altitude"];
 		self.direction=[coder decodeDoubleForKey:@"direction"];
         self.distanceFromLastNode=[coder decodeDoubleForKey:@"distanceFromLastNode"];
+        self.distanceFromStart=[coder decodeDoubleForKey:@"distanceFromStart"];
 		self.timestamp=(NSDate *)[coder decodeObjectForKey:@"timestamp"];
 		self.speed=[coder decodeDoubleForKey:@"speed"];
 	}
@@ -47,6 +51,7 @@
     [coder encodeDouble:altitude forKey:@"altitude"];
     [coder encodeDouble:direction forKey:@"direction"];
     [coder encodeDouble:distanceFromLastNode forKey:@"distanceFromLastNode"];
+    [coder encodeDouble:distanceFromStart forKey:@"distanceFromStart"];
     [coder encodeDouble:speed forKey:@"speed"];
     [coder encodeObject:timestamp forKey:@"timestamp"];
 }

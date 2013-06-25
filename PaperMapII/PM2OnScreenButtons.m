@@ -34,6 +34,10 @@
 @synthesize mapTypeButton;
 @synthesize unloadDrawingButton;
 @synthesize unloadGPSTrackButton;
+@synthesize speedLabel;
+@synthesize heightLabel;
+@synthesize tripLabel;
+
 + (id)sharedBnManager {
     static PM2OnScreenButtons *onScreenbuttons = nil;
     static dispatch_once_t onceToken;
@@ -67,6 +71,9 @@
     [self addUnloadDrawingButton];
     [self addUnloadGPSTrackButton];
     [self repositionButtonsFromX:800 Y:0];
+    [self add_SpeedPanel];
+    [self add_HeightPanel];
+    [self add_TripMeter];
 }
 -(void)repositionButtonsFromX:(int)x Y:(int)y{
     int w=150;
@@ -283,5 +290,66 @@
     [_routRecorder unloadDrawings];
     [mapScrollView.zoomView.gpsTrackPOIBoard setNeedsDisplay];
 }
-
+-(void)add_SpeedPanel{
+    //Speed panel
+    //int screenW=[[UIScreen mainScreen] applicationFrame].size.width;
+	//int screenH=[[UIScreen mainScreen] applicationFrame].size.height;
+    int screenH=[_baseView frame].size.height;
+	speedLabel=[[UILabel alloc] initWithFrame:CGRectMake(0,screenH-180, 400, 140)];
+    //speedLabel=[[UILabel alloc] initWithFrame:CGRectMake(0,0, 400, 140)];
+	[speedLabel setBackgroundColor:[UIColor colorWithRed:0.2 green:0.2 blue:0.2 alpha:0.6]];
+	[speedLabel setTextColor:[UIColor yellowColor]];
+	[speedLabel setShadowColor:[UIColor blackColor]];
+	[speedLabel setShadowOffset:CGSizeMake(2.0, 2.0)];
+	[speedLabel setFont:[UIFont boldSystemFontOfSize:130]];
+	[speedLabel setText:[NSString stringWithFormat:@" %4.1f  ",128.2]];
+	[speedLabel setTextAlignment:UITextAlignmentRight];
+    [_baseView addSubview:speedLabel];
+	speedLabel.hidden=NO;  //TODO: change to YES;
+	
+	//unit label
+	UILabel * unitLabel=[[UILabel alloc] initWithFrame:CGRectMake(340, 90, 60, 40)];
+	[unitLabel setBackgroundColor:[UIColor clearColor]];
+	[unitLabel setTextColor:[UIColor whiteColor]];
+	
+	//[unitLabel setText:@"MPH"];
+	[speedLabel addSubview:unitLabel];
+	
+	//NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	//NSString * unit=(NSString *)[defaults objectForKey:@"unit"];
+	//if([unit compare:@"km"]==0){
+    bool bMetric=false;     //TODO: do sth with this line
+    if(bMetric){
+		//bMetric=TRUE;
+		[unitLabel setText:@"KM/Hr"];
+	}else {
+		//bMetric=FALSE;
+		[unitLabel setText:@"MPH"];
+	}
+    [_baseView addSubview:speedLabel];
+}
+-(void)add_HeightPanel{
+    int screenH=[_baseView frame].size.height;
+	heightLabel=[[UILabel alloc] initWithFrame:CGRectMake(402,screenH-80, 200, 40)];
+	[heightLabel setBackgroundColor:[UIColor colorWithRed:0.2 green:0.4 blue:0.4 alpha:0.5]];
+	[heightLabel setTextColor:[UIColor yellowColor]];
+	[heightLabel setShadowColor:[UIColor blackColor]];
+	[heightLabel setShadowOffset:CGSizeMake(2.0, 2.0)];
+	[heightLabel setFont:[UIFont boldSystemFontOfSize:40]];
+	//[heightLabel setText:[NSString stringWithFormat:@" %4.1fm ",128.2]];
+	[heightLabel setTextAlignment:UITextAlignmentRight];
+    [_baseView addSubview:heightLabel];
+}
+-(void)add_TripMeter{
+    int screenH=[_baseView frame].size.height;
+	tripLabel=[[UILabel alloc] initWithFrame:CGRectMake(402,screenH-122, 200, 40)];
+	[tripLabel setBackgroundColor:[UIColor colorWithRed:0.2 green:0.7 blue:0.2 alpha:0.5]];
+	[tripLabel setTextColor:[UIColor yellowColor]];
+	[tripLabel setShadowColor:[UIColor blackColor]];
+	[tripLabel setShadowOffset:CGSizeMake(2.0, 2.0)];
+	[tripLabel setFont:[UIFont boldSystemFontOfSize:40]];
+	//[tripLabel setText:[NSString stringWithFormat:@" %4.1fm ",128.2]];
+	[tripLabel setTextAlignment:UITextAlignmentRight];
+    [_baseView addSubview:tripLabel];
+}
 @end

@@ -3480,6 +3480,8 @@
 		AAEE0CBF1776562500549A7D /* LinePropStorageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AAEE0CBD1776562500549A7D /* LinePropStorageViewController.m */; };
 		AAEE0CC2177669DB00549A7D /* LinePropPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AAEE0CC1177669DB00549A7D /* LinePropPickerViewController.m */; };
 		AAEE0CC3177669DB00549A7D /* LinePropPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AAEE0CC1177669DB00549A7D /* LinePropPickerViewController.m */; };
+		AAEE0CC61779448B00549A7D /* GPSTrack.m in Sources */ = {isa = PBXBuildFile; fileRef = AAEE0CC51779448A00549A7D /* GPSTrack.m */; };
+		AAEE0CC71779448B00549A7D /* GPSTrack.m in Sources */ = {isa = PBXBuildFile; fileRef = AAEE0CC51779448A00549A7D /* GPSTrack.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -5271,6 +5273,8 @@
 		AAEE0CBD1776562500549A7D /* LinePropStorageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LinePropStorageViewController.m; sourceTree = "<group>"; };
 		AAEE0CC0177669DB00549A7D /* LinePropPickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LinePropPickerViewController.h; sourceTree = "<group>"; };
 		AAEE0CC1177669DB00549A7D /* LinePropPickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LinePropPickerViewController.m; sourceTree = "<group>"; };
+		AAEE0CC41779448A00549A7D /* GPSTrack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPSTrack.h; sourceTree = "<group>"; };
+		AAEE0CC51779448A00549A7D /* GPSTrack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPSTrack.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -5338,6 +5342,8 @@
 				AAAD5A7C177034AF00DCDAD2 /* GPSReceiver.m */,
 				AAAD5A8117714CDB00DCDAD2 /* GPSNode.h */,
 				AAAD5A8217714CDB00DCDAD2 /* GPSNode.m */,
+				AAEE0CC41779448A00549A7D /* GPSTrack.h */,
+				AAEE0CC51779448A00549A7D /* GPSTrack.m */,
 			);
 			name = GPS;
 			sourceTree = "<group>";
@@ -10727,6 +10733,7 @@
 				AAEE0CBA17763B0F00549A7D /* PropertyButton.m in Sources */,
 				AAEE0CBE1776562500549A7D /* LinePropStorageViewController.m in Sources */,
 				AAEE0CC2177669DB00549A7D /* LinePropPickerViewController.m in Sources */,
+				AAEE0CC61779448B00549A7D /* GPSTrack.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -10756,6 +10763,7 @@
 				AAEE0CBB17763B0F00549A7D /* PropertyButton.m in Sources */,
 				AAEE0CBF1776562500549A7D /* LinePropStorageViewController.m in Sources */,
 				AAEE0CC3177669DB00549A7D /* LinePropPickerViewController.m in Sources */,
+				AAEE0CC71779448B00549A7D /* GPSTrack.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

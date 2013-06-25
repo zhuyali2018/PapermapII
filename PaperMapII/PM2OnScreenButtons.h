@@ -24,6 +24,9 @@
 @property (nonatomic, strong) UIButton *mapTypeButton;
 @property (nonatomic, strong) UIButton *unloadDrawingButton;
 @property (nonatomic, strong) UIButton *unloadGPSTrackButton;
+@property (nonatomic, strong) UILabel * speedLabel;
+@property (nonatomic, strong) UILabel *heightLabel;
+@property (nonatomic, strong) UILabel *tripLabel;
 @property (nonatomic, strong) UIView *baseView;
 @property (nonatomic, strong) Recorder * routRecorder;
 @property (nonatomic, strong) DrawableMapScrollView * mapScrollView;

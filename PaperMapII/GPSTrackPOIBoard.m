@@ -21,6 +21,7 @@
 @synthesize ptrToTrackArray,ptrToGpsTrackArray;
 @synthesize maplevel;
 @synthesize drawingBoard;
+@synthesize ptrToLastGpsNode;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -132,6 +133,11 @@
         CGPoint tmpP=[self ConvertPoint:tmpN];
 		CGContextAddLineToPoint(context, tmpP.x, tmpP.y);
 	}
+    //draw to the lastGPSNode if it is not 0
+    if ((ptrToLastGpsNode.x>0) &&(ptrToLastGpsNode.y>0)){
+        CGPoint tmpP=[self ConvertPoint:ptrToLastGpsNode];
+        CGContextAddLineToPoint(context, tmpP.x, tmpP.y);
+    }
 	CGContextStrokePath(context);
 }
 -(void)drawLines:(CGContextRef)context{
@@ -164,7 +170,9 @@
     if ([ptrToGpsTrackArray count]==0) {  // if 0 element
         return;
     }
-    
+    if (!ptrToLastGpsNode) {  //if not initialized
+        ptrToLastGpsNode=((Recorder *)[Recorder sharedRecorder]).lastGpsNode;
+    }
     CGContextSetShouldAntialias(context, YES);   //make line smoother ?
     
     //Drawing lines

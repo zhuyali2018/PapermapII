@@ -83,6 +83,10 @@
     PM2OnScreenButtons * bns=[PM2OnScreenButtons sharedBnManager];
     [bns repositionButtonsFromX:screenW-150 Y:0];
     NSLOG9(@"did Rotate !!!");
+    [((PM2OnScreenButtons *)[PM2OnScreenButtons sharedBnManager]).speedLabel  setFrame:CGRectMake(0,  screenH-180, 400, 140)];
+    [((PM2OnScreenButtons *)[PM2OnScreenButtons sharedBnManager]).heightLabel setFrame:CGRectMake(402,screenH-80,  200,  40)];
+    [((PM2OnScreenButtons *)[PM2OnScreenButtons sharedBnManager]).tripLabel setFrame:CGRectMake(402,screenH-122,  200,  40)];
+	
 }
 - (void)didReceiveMemoryWarning
 {

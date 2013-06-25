@@ -46,11 +46,12 @@
 }
 -(void)stop{
     if(!GPSRunning)return;
-    [[Recorder sharedRecorder] gpsStop];
+    
     [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
     [locationManager stopUpdatingLocation];
     [self saveGPSTrack];
     GPSRunning=FALSE;
+    [[Recorder sharedRecorder] gpsStop];
     PM2OnScreenButtons * bns=[PM2OnScreenButtons sharedBnManager];
     [bns.messageLabel setText:@""];
 }
