@@ -38,7 +38,10 @@ const static bool showLog7=false;   //Tile Debug
 const static bool showLog8=false;   //Tile Debug
 #define NSLOG8(fmt, ...) if(showLog8) NSLog((@"%s " fmt), __PRETTY_FUNCTION__,##__VA_ARGS__)
 
-const static bool showLog9=true;   //Tile Debug
+const static bool showLog9=false;   //Tile Debug
 #define NSLOG9(fmt, ...) if(showLog9) NSLog((@"%s " fmt), __PRETTY_FUNCTION__,##__VA_ARGS__)
+
+const static bool showLog10=true;   //Tile Debug
+#define NSLOG10(fmt, ...) if(showLog10) NSLog((@"%s " fmt), __PRETTY_FUNCTION__,##__VA_ARGS__)
 
 #endif
