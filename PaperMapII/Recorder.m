@@ -83,6 +83,7 @@
     lastLoc=0;
     currentLocation=0;
     totalTrip=0;
+    n=0;
 }
 -(void) startNewTrack{
     //initialize a track
@@ -351,7 +352,7 @@
     }else if (totalTrip<1600) {
         tripString=[[NSString alloc] initWithFormat:@"%4.1fkm ", totalTrip/1000];
     }else{
-        tripString=[[NSString alloc] initWithFormat:@"%4.1fmiles", totalTrip/1600];
+        tripString=[[NSString alloc] initWithFormat:@"%4.1fmiles", totalTrip/1609.344];
     }
     [osb.tripLabel setText:tripString];
 }
@@ -364,18 +365,8 @@
 -(void)showSpeed:(CLLocationSpeed)speed{
     PM2OnScreenButtons *osb=[PM2OnScreenButtons sharedBnManager];
     bool bMetric=false;
-    int minDistance=20;
-	if(speed>0){
-		//speed sensitive point distance on gps track, added on 10/24/2010
-		if (speed<2) {			 //about 4 mph
-			minDistance=5;
-		}else if (speed<5) {	 //about 11 mph
-			minDistance=10;
-		}else if (speed > 20) {  //about 45 mph
-			minDistance=40;
-		}
-        
-		if(bMetric){
+    if(speed>1){    //> 2.25 mph
+        if(bMetric){
 			float howfast=speed*(3600.00/1000);
 			NSString *speedString;
 			if(howfast>100)
@@ -394,7 +385,7 @@
 		}
 		osb.speedLabel.hidden=NO;
 	}else{
-		osb.speedLabel.hidden=NO;  //<==YES;
+		osb.speedLabel.hidden=YES;  //<==YES;
 	}
 	//---------------
 }
@@ -402,16 +393,17 @@ bool bStartGPSNode;
 CLLocation *lastLoc;
 CLLocation *currentLocation;
 CLLocationDistance totalTrip;
+int n=0;  //gps node counter
 -(void) addGpsNode:(GPSNode *)node with:(CLLocation *)newLocation{
     bool bFarEnough=false;
     
     CLLocationSpeed speed=newLocation.speed;
     int minDistance=20;
-	if(speed>0){
+	if(speed>1){                 //>2.22 mph
 		//speed sensitive point distance on gps track, added on 10/24/2010
 		if (speed<2) {			 //about 4 mph
-			minDistance=5;
-		}else if (speed<5) {			 //about 11 mph
+			minDistance=5;       //max accuracy is 5 meters
+		}else if (speed<5) {	 //about 11 mph
 			minDistance=10;
 		}else if (speed > 20) {  //about 45 mph
 			minDistance=40;
@@ -425,6 +417,7 @@ CLLocationDistance totalTrip;
     if(bStartGPSNode){
         bFarEnough=true;        //log the first location
         lastLoc=newLocation;
+        bStartGPSNode=false;    //missed this, so that distance never got added up
     }else{			// if not first node, check the minimu distance traveled before add a node:
 		CLLocationDistance distance=[newLocation distanceFromLocation:lastLoc];
 		if(distance>minDistance){
@@ -480,7 +473,6 @@ CLLocationDistance totalTrip;
 	return y*180/PI/2;
 }
 -(void)displayAccuracy:(CLLocation *)newLocation{
-    static int n=0;
     n++;
     PM2OnScreenButtons * bns=[PM2OnScreenButtons sharedBnManager];
     float accuracy=newLocation.horizontalAccuracy;
