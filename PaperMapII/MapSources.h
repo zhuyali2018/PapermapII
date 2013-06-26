@@ -9,9 +9,11 @@
 #import <Foundation/Foundation.h>
 #import "PM2Protocols.h"
 #import "MapTile.h"
-@interface MapSources: NSObject <PM2MapSourceDelegate>
-
-@property MapType mapType;
-
+#import "MainQ.h"
+@interface MapSources: NSObject <PM2MapSourceDelegate>{
+    MapType mapType;
+}
++ (id)sharedManager;
 - (void)mapTile:(MapTile *)tile1;
+- (void)setMapSourceType:(MapType)mapType;
 @end

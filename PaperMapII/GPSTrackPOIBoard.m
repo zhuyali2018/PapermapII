@@ -14,6 +14,7 @@
 #import "TapDetectView.h"
 #import "LineProperty.h"
 #import "Recorder.h"
+#import "MainQ.h"
 
 @implementation GPSTrackPOIBoard
 
@@ -30,7 +31,8 @@
         // Initialization code
         drawingBoard=[[DrawingBoard alloc]initWithFrame:frame];	
 		[drawingBoard setBackgroundColor:[UIColor clearColor]];	
-		[self addSubview:drawingBoard];							
+		[self addSubview:drawingBoard];
+        [[MainQ sharedManager] register:drawingBoard withID:DRAWINGBOARD];
      }
     return self;
 }

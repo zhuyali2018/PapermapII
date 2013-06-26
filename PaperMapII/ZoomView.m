@@ -8,6 +8,8 @@
 
 #import "ZoomView.h"
 #import "GPSTrackPOIBoard.h"
+#import "MainQ.h"
+
 @implementation ZoomView
 @synthesize tileContainer;
 @synthesize basicMapLayer;
@@ -32,6 +34,7 @@ extern const int bz;        //bezel width, should be set to 0 eventually
         //[gpsTrackPOIBoard setBackgroundColor:[UIColor colorWithRed:0.8 green:0.2 blue:0.2 alpha:0.5]];
         [gpsTrackPOIBoard setBackgroundColor:[UIColor clearColor]];    //without this line, map view will be blocked black
         //[drawingBoard setBackgroundColor:[UIColor clearColor]];
+        [[MainQ sharedManager] register:gpsTrackPOIBoard withID:GPSTRACKPOIBOARD];
     }
     return self;
 }

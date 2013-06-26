@@ -15,6 +15,7 @@
 #import "DrawableMapScrollView.h"
 #import "GPSTrackPOIBoard.h"
 #import "GPSTrack.h"
+#import "MainQ.h"
 
 @implementation Recorder
 
@@ -345,7 +346,9 @@
 }
 -(void)showTripMeter{
     if(!_gpsRecording)return;
-    PM2OnScreenButtons *osb=[PM2OnScreenButtons sharedBnManager];
+    MainQ * mQ=[MainQ sharedManager];
+    UILabel * lb=(UILabel *)[mQ getTargetRef:TRIPMETER];
+    if(!lb) return;
     NSString *tripString;
     if (totalTrip<1000) {
         tripString=[[NSString alloc] initWithFormat:@"%4.1fm ", totalTrip];
@@ -354,16 +357,20 @@
     }else{
         tripString=[[NSString alloc] initWithFormat:@"%4.1fmiles", totalTrip/1609.344];
     }
-    [osb.tripLabel setText:tripString];
+    [lb setText:tripString];
 }
 -(void)showAltitude:(CLLocationDistance)altitude{
-    PM2OnScreenButtons *osb=[PM2OnScreenButtons sharedBnManager];
+    MainQ * mQ=[MainQ sharedManager];
+    UILabel * lb=(UILabel *)[mQ getTargetRef:ALTITUDELABEL];
+    if(!lb) return;
     NSString *altString;
     altString=[[NSString alloc] initWithFormat:@"%4.1fm ", altitude];
-    [osb.heightLabel setText:altString];
+    [lb setText:altString];
 }
 -(void)showSpeed:(CLLocationSpeed)speed{
-    PM2OnScreenButtons *osb=[PM2OnScreenButtons sharedBnManager];
+    MainQ * mQ=[MainQ sharedManager];
+    UILabel * lb=(UILabel *)[mQ getTargetRef:SPEEDLABEL];
+    if(!lb) return;
     bool bMetric=false;
     if(speed>1){    //> 2.25 mph
         if(bMetric){
@@ -373,7 +380,7 @@
 				speedString=[[NSString alloc] initWithFormat:@"%4.0f  ", howfast];
 			else
 				speedString=[[NSString alloc] initWithFormat:@"%4.1f  ", howfast];
-			[osb.speedLabel setText:speedString];
+			[lb setText:speedString];
 		}else{
 			float howfast=speed*(3600.00/1609.344);
 			NSString *speedString;
@@ -381,11 +388,11 @@
 				speedString=[[NSString alloc] initWithFormat:@"%4.0f  ", howfast];
 			else
 				speedString=[[NSString alloc] initWithFormat:@"%4.1f  ", howfast];
-			[osb.speedLabel setText:speedString];
+			[lb setText:speedString];
 		}
-		osb.speedLabel.hidden=NO;
+		lb.hidden=NO;
 	}else{
-		osb.speedLabel.hidden=YES;  //<==YES;
+		lb.hidden=YES;  //<==YES;
 	}
 	//---------------
 }
@@ -473,15 +480,17 @@ int n=0;  //gps node counter
 	return y*180/PI/2;
 }
 -(void)displayAccuracy:(CLLocation *)newLocation{
+    MainQ * mQ=[MainQ sharedManager];
+    UILabel * lb=(UILabel *)[mQ getTargetRef:MESSAGELABEL];
+    if(!lb) return;
     n++;
-    PM2OnScreenButtons * bns=[PM2OnScreenButtons sharedBnManager];
     float accuracy=newLocation.horizontalAccuracy;
     NSString * msg=[[NSString alloc]initWithFormat:@"Starting GPS, Accuracy=%3.1f meters (%d)",accuracy,n];
-    [bns.messageLabel setText:msg];
+    [lb setText:msg];
     if(accuracy>50){  //if acuracy is not accurate enough, do nothing
-        [bns.messageLabel setTextColor:[UIColor redColor]];
+        [lb setTextColor:[UIColor redColor]];
     }else{
-        [bns.messageLabel setTextColor:[UIColor greenColor]];
+        [lb setTextColor:[UIColor greenColor]];
     }
 }
 @end

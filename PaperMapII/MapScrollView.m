@@ -13,6 +13,7 @@
 #import "TapDetectView.h"
 #import "PM2OnScreenButtons.h"
 #import "ScaleRuler.h"
+#import "MainQ.h"
 
 @implementation MapScrollView
 
@@ -525,7 +526,12 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
         newMapLevel=2;
 	[self setMaplevel:newMapLevel];
     
-    [[PM2OnScreenButtons sharedBnManager] updateMapLevel];  //added for update maplevel label
+    //update the maplevel display
+    MainQ * mQ=[MainQ sharedManager];
+    UILabel * lb=(UILabel *)[mQ getTargetRef:MESSAGELABEL];
+    if(lb){                     //added for update maplevel label
+        [lb setText:[NSString stringWithFormat:@" %d", maplevel]];
+    }
     
     [self setMaxandMinZoomScale];   //important, immediately change the zooming range here instead of after setting the new zoomscale
     

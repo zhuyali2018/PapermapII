@@ -37,6 +37,5 @@
 @property (strong, nonatomic) LinePropertyViewController * linePropertyViewCtrlr;
 + (id)sharedBnManager;
 -(void)addButtons:(UIView *)vc;
--(void)updateMapLevel;
 -(void)repositionButtonsFromX:(int)x Y:(int)y;
 @end

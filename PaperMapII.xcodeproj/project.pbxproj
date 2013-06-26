@@ -12,6 +12,8 @@
 		AA511CD6174F1F0F00F46B1A /* MapSources.m in Sources */ = {isa = PBXBuildFile; fileRef = AA511CD5174F1F0F00F46B1A /* MapSources.m */; };
 		AA729A53175870D800F6AF78 /* LineProperty.m in Sources */ = {isa = PBXBuildFile; fileRef = AA729A52175870D800F6AF78 /* LineProperty.m */; };
 		AA729A54175870D800F6AF78 /* LineProperty.m in Sources */ = {isa = PBXBuildFile; fileRef = AA729A52175870D800F6AF78 /* LineProperty.m */; };
+		AA8608F6177AA703008EBC95 /* MainQ.m in Sources */ = {isa = PBXBuildFile; fileRef = AA8608F5177AA703008EBC95 /* MainQ.m */; };
+		AA8608F7177AA703008EBC95 /* MainQ.m in Sources */ = {isa = PBXBuildFile; fileRef = AA8608F5177AA703008EBC95 /* MainQ.m */; };
 		AAAD5A6F176E1F5900DCDAD2 /* PM2OnScreenButtons.m in Sources */ = {isa = PBXBuildFile; fileRef = AAAD5A6E176E1F5900DCDAD2 /* PM2OnScreenButtons.m */; };
 		AAAD5A70176E1F5900DCDAD2 /* PM2OnScreenButtons.m in Sources */ = {isa = PBXBuildFile; fileRef = AAAD5A6E176E1F5900DCDAD2 /* PM2OnScreenButtons.m */; };
 		AAAD5A7517701B5800DCDAD2 /* ScaleRuler.m in Sources */ = {isa = PBXBuildFile; fileRef = AAAD5A7417701B5800DCDAD2 /* ScaleRuler.m */; };
@@ -3503,6 +3505,8 @@
 		AA511CD5174F1F0F00F46B1A /* MapSources.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapSources.m; sourceTree = "<group>"; };
 		AA729A51175870D800F6AF78 /* LineProperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LineProperty.h; sourceTree = "<group>"; };
 		AA729A52175870D800F6AF78 /* LineProperty.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LineProperty.m; sourceTree = "<group>"; };
+		AA8608F4177AA702008EBC95 /* MainQ.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainQ.h; sourceTree = "<group>"; };
+		AA8608F5177AA703008EBC95 /* MainQ.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainQ.m; sourceTree = "<group>"; };
 		AAAD5A6D176E1F5900DCDAD2 /* PM2OnScreenButtons.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PM2OnScreenButtons.h; sourceTree = "<group>"; };
 		AAAD5A6E176E1F5900DCDAD2 /* PM2OnScreenButtons.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PM2OnScreenButtons.m; sourceTree = "<group>"; };
 		AAAD5A7317701B5800DCDAD2 /* ScaleRuler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScaleRuler.h; sourceTree = "<group>"; };
@@ -5389,6 +5393,8 @@
 				AABDD49817437B3600A0D6E9 /* PM2ViewController.h */,
 				AABDD49917437B3600A0D6E9 /* PM2ViewController.m */,
 				AABDD49B17437B3600A0D6E9 /* PM2ViewController.xib */,
+				AA8608F4177AA702008EBC95 /* MainQ.h */,
+				AA8608F5177AA703008EBC95 /* MainQ.m */,
 				AAAD5A71176E1F7800DCDAD2 /* Buttons and Labels */,
 				AA511CD3174F1E7600F46B1A /* MapSources */,
 				AAAD5A7217700B0300DCDAD2 /* GPS */,
@@ -10734,6 +10740,7 @@
 				AAEE0CBE1776562500549A7D /* LinePropStorageViewController.m in Sources */,
 				AAEE0CC2177669DB00549A7D /* LinePropPickerViewController.m in Sources */,
 				AAEE0CC61779448B00549A7D /* GPSTrack.m in Sources */,
+				AA8608F6177AA703008EBC95 /* MainQ.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -10764,6 +10771,7 @@
 				AAEE0CBF1776562500549A7D /* LinePropStorageViewController.m in Sources */,
 				AAEE0CC3177669DB00549A7D /* LinePropPickerViewController.m in Sources */,
 				AAEE0CC71779448B00549A7D /* GPSTrack.m in Sources */,
+				AA8608F7177AA703008EBC95 /* MainQ.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -43,8 +43,9 @@
     mapScrollView=[DrawableMapScrollView sharedMap];
     [mapScrollView setFrame:CGRectMake(bazel,bazel,height,width)];  //TODO: change height and width back
     //create a mapsource object
-    mapSources=[[MapSources alloc]init];
-    mapSources.mapType=googleMap;
+    mapSources=[MapSources sharedManager]; //[[MapSources alloc]init];
+    [[MainQ sharedManager] register:mapSources withID:MAPSOURCE];
+    [mapSources setMapSourceType:googleMap];
     //specifying mapsource
     mapScrollView.mapsourceDelegate=mapSources;
 	//display map view

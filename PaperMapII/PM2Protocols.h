@@ -13,6 +13,7 @@
 @protocol PM2MapSourceDelegate <NSObject>
 @optional
 - (void)mapTile:(MapTile *)tile;
+- (void)setMapSourceType:(int)mapType1;
 @end
 
 @protocol PM2SingleTapHandleDelegate <NSObject>
@@ -23,11 +24,12 @@
 @protocol PM2MapTapHandleDelegate <NSObject>
 @optional
 //- (void)tapDetectView:(TapDetectView *)view gotSingleTapAtPoint:(CGPoint)tapPoint;
-- (void)tapDetectView:(TapDetectView *)view gotDoubleTapAtPoint:(CGPoint)tapPoint;
-- (void)tapDetectView:(TapDetectView *)view gotTwoFingerTapAtPoint:(CGPoint)tapPoint;
+- (void)tapDetectView:(UIView *)view gotDoubleTapAtPoint:(CGPoint)tapPoint;
+- (void)tapDetectView:(UIView *)view gotTwoFingerTapAtPoint:(CGPoint)tapPoint;
 @end
 
 @protocol PM2RecordingDelegate <NSObject>
 @optional
 - (void)mapLevel:(int)maplevel singleTapAtPoint:(CGPoint)tapPoint;
 @end
+

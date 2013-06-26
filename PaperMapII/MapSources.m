@@ -9,7 +9,15 @@
 #import "MapSources.h"
 #import "MapTile.h"
 @implementation MapSources
-@synthesize mapType;
+
++ (id)sharedManager {
+    static MapSources *sharedMyManager = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        sharedMyManager = [[self alloc] init];
+    });
+    return sharedMyManager;
+}
 
 -(NSString *)getPathName:(int)res row:(int)row col:(int)col{
 	switch (res) {
@@ -153,7 +161,7 @@
         imgname=nil;
         [tile1 setImage:img];
 		return;
-	}else if((tile1.res<5)&&(mapType==googleSat)){   
+	}else if((tile1.res<5)&&(mapType==googleSat)){
         imgname=[[NSString alloc]initWithFormat:@"Sat%d_%d_%d.jpg", tile1.res, tile1.row, tile1.modeCol];
         UIImage *img=[UIImage imageNamed:imgname];
         imgname=nil;
@@ -259,5 +267,8 @@
     }else
         [tile1 setImage:NULL];
 
+}
+- (void)setMapSourceType:(MapType)mapType1{
+    mapType=mapType1;
 }
 @end

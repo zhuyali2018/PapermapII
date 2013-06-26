@@ -10,6 +10,7 @@
 #import "LineProperty.h"
 #import "Recorder.h"
 #import "Track.h"
+#import "MainQ.h"
 @implementation DrawingBoard
 
 @synthesize ptList;

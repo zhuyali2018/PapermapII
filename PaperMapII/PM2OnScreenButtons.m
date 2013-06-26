@@ -6,10 +6,8 @@
 //  Copyright (c) 2013 Yali Zhu. All rights reserved.
 //
 #import "AllImports.h"
-#import "PM2AppDelegate.h"
-#import "PM2ViewController.h"
 #import "PM2OnScreenButtons.h"
-#import "GPSTrackPOIBoard.h"
+//#import "GPSTrackPOIBoard.h"
 #import "DrawingBoard.h"
 #import "ScaleRuler.h"
 #import "MapCenterIndicator.h"
@@ -17,6 +15,8 @@
 #import "Track.h"
 #import "MapTile.h"
 #import "MapSources.h"
+#import "MainQ.h"
+#import "PM2Protocols.h"
 
 @implementation PM2OnScreenButtons
 @synthesize drawButton,fdrawButton,colorButton;
@@ -102,7 +102,7 @@
 }
 -(void) addMapTypeButton{
     mapTypeButton=[UIButton buttonWithType:(UIButtonTypeRoundedRect)];
-    [mapTypeButton setTitle:@"Map" forState:UIControlStateNormal];
+    [mapTypeButton setTitle:@"Sat" forState:UIControlStateNormal];
     [mapTypeButton addTarget:self action:@selector(toggleMapType:) forControlEvents:UIControlEventTouchUpInside];
     [_baseView addSubview:mapTypeButton];
 }
@@ -131,9 +131,12 @@
     [_baseView addSubview:stopGpsButton];
 }
 
--(void)cleanUpTrack{  
+-(void)cleanUpTrack{
+    MainQ * mQ=[MainQ sharedManager];
+    UIView * v =(UIView *)[mQ getTargetRef:GPSTRACKPOIBOARD];
+    if(!v) return;
     [_routRecorder unloadTracks];
-    [mapScrollView.zoomView.gpsTrackPOIBoard setNeedsDisplay];
+    [v setNeedsDisplay];
 }
 -(void) colorPicker{
     NSLOG8(@"ColorPicker button tapped!");
@@ -164,14 +167,13 @@
 }
 -(void) addMessageLabel{
     messageLabel=[[UILabel alloc] initWithFrame:CGRectMake(0, 40, 720, 40)];
-	//[messageLabel setBackgroundColor:[UIColor clearColor]];
     [messageLabel setBackgroundColor:[UIColor colorWithRed:0.3 green:0.4 blue:0.5 alpha:0.7]];
 	[messageLabel setTextColor:[UIColor greenColor]];
 	[messageLabel setShadowColor:[UIColor blackColor]];
 	[messageLabel setShadowOffset:CGSizeMake(1.0, 1.0)];
 	[messageLabel setFont:[UIFont boldSystemFontOfSize:20]];
-	//[messageLabel setText:[NSString stringWithFormat:@" %d", mapScrollView.maplevel]];
     [_baseView addSubview:messageLabel];
+    [[MainQ sharedManager] register:messageLabel withID:MESSAGELABEL];  //register to receive text for displaying and other settings
 }
 -(void)addMapCenterIndicator:(UIView*)vc{
     int screenH=[vc bounds].size.width;
@@ -192,11 +194,8 @@
 	[resLabel setShadowColor:[UIColor blackColor]];
 	[resLabel setShadowOffset:CGSizeMake(1.0, 1.0)];
 	[resLabel setFont:[UIFont boldSystemFontOfSize:20]];
-	[resLabel setText:[NSString stringWithFormat:@" %d", mapScrollView.maplevel]];
     [_baseView addSubview:resLabel];
-}
--(void)updateMapLevel{
-    [resLabel setText:[NSString stringWithFormat:@" %d", mapScrollView.maplevel]];
+    [[MainQ sharedManager] register:resLabel withID:MAPLEVEL];
 }
 -(void)addUndoButton{
     undoButton=[UIButton buttonWithType:(UIButtonTypeRoundedRect)];
@@ -219,26 +218,36 @@
     [_baseView addSubview:drawButton];
 }
 -(void)undoDrawing:(UIButton *)bn{
+    MainQ * mQ=[MainQ sharedManager];
+    UIView * v =(UIView *)[mQ getTargetRef:GPSTRACKPOIBOARD];
+    UIView * dv =(UIView *)[mQ getTargetRef:DRAWINGBOARD];
+    if (!v)return;
     [self.routRecorder undo];
     NSLOG5(@"Undo drawing called");
-    [self.mapScrollView.zoomView.gpsTrackPOIBoard setNeedsDisplay];
-    [self.mapScrollView.zoomView.gpsTrackPOIBoard.drawingBoard setNeedsDisplay];
+    [v setNeedsDisplay];
+    [dv setNeedsDisplay];
 }
 -(void)switchToFreeDraw:(UIButton *)bn{
+    MainQ * mQ=[MainQ sharedManager];
+    UIView * dv =(UIView *)[mQ getTargetRef:DRAWINGBOARD];
     NSLOG4(@"Free Draw button tapped. Button title is %@",[bn.titleLabel text]);
     if ([[bn.titleLabel text] compare:@"Free Draw"]==NSOrderedSame) {
         [bn setTitle:@"No Free Draw" forState:UIControlStateNormal];
         self.mapScrollView.freeDraw=true;
-        self.mapScrollView.zoomView.gpsTrackPOIBoard.drawingBoard.preDraw=FALSE;
+        //self.mapScrollView.zoomView.gpsTrackPOIBoard.drawingBoard.preDraw=FALSE;
+        ((DrawingBoard *)dv).preDraw=FALSE;
         [self.routRecorder startNewTrack];
     }else{
         [bn setTitle:@"Free Draw" forState:UIControlStateNormal];
         self.mapScrollView.freeDraw=false;
-        self.mapScrollView.zoomView.gpsTrackPOIBoard.drawingBoard.preDraw=TRUE;
+        ((DrawingBoard *)dv).preDraw=TRUE;
     }
 }
 
 -(void)startDrawingRecorder:(UIButton *)bn{
+    MainQ * mQ=[MainQ sharedManager];
+    DrawingBoard * dv =(DrawingBoard *)[mQ getTargetRef:DRAWINGBOARD];
+    UIView * v =(UIView *)[mQ getTargetRef:GPSTRACKPOIBOARD];
     NSLOG4(@"Button title is %@",[bn.titleLabel text]);
     if ([[bn.titleLabel text] compare:@"Draw"]==NSOrderedSame) {
         [bn setTitle:@"Exit Draw" forState:UIControlStateNormal];
@@ -249,7 +258,7 @@
         [self.mapScrollView setScrollEnabled:NO];
         self.mapScrollView.freeDraw=false;
         self.mapScrollView.bDrawing=true;
-        self.mapScrollView.zoomView.gpsTrackPOIBoard.drawingBoard.preDraw=true;
+        dv.preDraw=true;
         [fdrawButton setHidden:FALSE];
     }else{
         [bn setTitle:@"Draw" forState:UIControlStateNormal];
@@ -258,37 +267,46 @@
         NSLOG4(@"Recorder Stopped!");
         self.mapScrollView.mapPined=FALSE;
         [self.mapScrollView setScrollEnabled:YES];
-        [self.mapScrollView.zoomView.gpsTrackPOIBoard.drawingBoard clearAll];
-        self.mapScrollView.zoomView.gpsTrackPOIBoard.drawingBoard.firstPt=CGPointMake(0,0);
-        self.mapScrollView.zoomView.gpsTrackPOIBoard.drawingBoard.lastPt=CGPointMake(0,0);
-        [self.mapScrollView.zoomView.gpsTrackPOIBoard setNeedsDisplay];
+        [dv clearAll];
+        dv.firstPt=CGPointMake(0,0);
+        dv.lastPt=CGPointMake(0,0);
+        [v setNeedsDisplay];
         //reset the free draw button too
         [fdrawButton setTitle:@"Free Draw" forState:UIControlStateNormal];
         self.mapScrollView.freeDraw=false;
-        self.mapScrollView.zoomView.gpsTrackPOIBoard.drawingBoard.preDraw=TRUE;
+        dv.preDraw=TRUE;
         [fdrawButton setHidden:TRUE];
     }
 }
 -(void)toggleMapType:(UIButton *)bn{
     NSLOG9(@"toggleMapType here !");
-    PM2AppDelegate * dele= [[UIApplication sharedApplication] delegate];
+    MainQ * mQ=[MainQ sharedManager];
+    id<PM2MapSourceDelegate> mapSrc=(id<PM2MapSourceDelegate>)[mQ getTargetRef:MAPSOURCE];
     if ([[bn.titleLabel text] compare:@"Map"]==NSOrderedSame) {
         [bn setTitle:@"Sat" forState:UIControlStateNormal];
-        dele.viewController.mapSources.mapType=googleSat;
+        [mapSrc setMapSourceType:googleMap];
     }else{
         [bn setTitle:@"Map" forState:UIControlStateNormal];
-        dele.viewController.mapSources.mapType=googleMap;
+        [mapSrc setMapSourceType:googleSat];
     }
     [[DrawableMapScrollView sharedMap] reloadData];
     [[DrawableMapScrollView sharedMap] setNeedsDisplay];
 }
 -(void)unloadGPSTrack:(UIButton *)bn{
+    MainQ * mQ=[MainQ sharedManager];
+    UIView * v =(UIView *)[mQ getTargetRef:GPSTRACKPOIBOARD];
+    if (!v)return;
+
     [_routRecorder unloadGPSTracks];
-    [mapScrollView.zoomView.gpsTrackPOIBoard setNeedsDisplay];
+    [v setNeedsDisplay];
 }
 -(void)unloadDrawings:(UIButton *)bn{
+    MainQ * mQ=[MainQ sharedManager];
+    UIView * v =(UIView *)[mQ getTargetRef:GPSTRACKPOIBOARD];
+    if (!v)return;
+
     [_routRecorder unloadDrawings];
-    [mapScrollView.zoomView.gpsTrackPOIBoard setNeedsDisplay];
+    [v setNeedsDisplay];
 }
 -(void)add_SpeedPanel{
     //Speed panel
@@ -327,6 +345,7 @@
 		[unitLabel setText:@"MPH"];
 	}
     [_baseView addSubview:speedLabel];
+    [[MainQ sharedManager] register:speedLabel withID:SPEEDLABEL];
 }
 -(void)add_HeightPanel{
     int screenH=[_baseView frame].size.height;
@@ -339,6 +358,7 @@
 	//[heightLabel setText:[NSString stringWithFormat:@" %4.1fm ",128.2]];
 	[heightLabel setTextAlignment:UITextAlignmentRight];
     [_baseView addSubview:heightLabel];
+    [[MainQ sharedManager] register:heightLabel withID:ALTITUDELABEL];  //register to receive text for displaying and other settings
 }
 -(void)add_TripMeter{
     int screenH=[_baseView frame].size.height;
@@ -351,5 +371,6 @@
 	//[tripLabel setText:[NSString stringWithFormat:@" %4.1fm ",128.2]];
 	[tripLabel setTextAlignment:UITextAlignmentRight];
     [_baseView addSubview:tripLabel];
+    [[MainQ sharedManager] register:tripLabel withID:TRIPMETER];
 }
 @end
