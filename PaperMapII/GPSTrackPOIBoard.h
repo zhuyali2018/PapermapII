@@ -23,7 +23,9 @@
 @property int maplevel;
 
 @property (nonatomic) DrawingBoard * drawingBoard;          //freeDrawingBoard in PM1
+@property (nonatomic, strong) UIImageView * arrow;
 
 -(int)ModeAdjust:(int)x res:(int)r;
-
+-(void) showArrow;
+-(void) hideArrow;
 @end

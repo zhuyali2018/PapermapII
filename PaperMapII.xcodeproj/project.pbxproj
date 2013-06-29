@@ -14,6 +14,12 @@
 		AA729A54175870D800F6AF78 /* LineProperty.m in Sources */ = {isa = PBXBuildFile; fileRef = AA729A52175870D800F6AF78 /* LineProperty.m */; };
 		AA8608F6177AA703008EBC95 /* MainQ.m in Sources */ = {isa = PBXBuildFile; fileRef = AA8608F5177AA703008EBC95 /* MainQ.m */; };
 		AA8608F7177AA703008EBC95 /* MainQ.m in Sources */ = {isa = PBXBuildFile; fileRef = AA8608F5177AA703008EBC95 /* MainQ.m */; };
+		AA8608FA177BEF6B008EBC95 /* MainMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA8608F9177BEF6B008EBC95 /* MainMenuViewController.m */; };
+		AA8608FB177BEF6B008EBC95 /* MainMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA8608F9177BEF6B008EBC95 /* MainMenuViewController.m */; };
+		AA8608FE177C593E008EBC95 /* MenuItem.m in Sources */ = {isa = PBXBuildFile; fileRef = AA8608FD177C593E008EBC95 /* MenuItem.m */; };
+		AA8608FF177C593E008EBC95 /* MenuItem.m in Sources */ = {isa = PBXBuildFile; fileRef = AA8608FD177C593E008EBC95 /* MenuItem.m */; };
+		AA860901177F22F9008EBC95 /* Arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = AA860900177F22F9008EBC95 /* Arrow.png */; };
+		AA860902177F22F9008EBC95 /* Arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = AA860900177F22F9008EBC95 /* Arrow.png */; };
 		AAAD5A6F176E1F5900DCDAD2 /* PM2OnScreenButtons.m in Sources */ = {isa = PBXBuildFile; fileRef = AAAD5A6E176E1F5900DCDAD2 /* PM2OnScreenButtons.m */; };
 		AAAD5A70176E1F5900DCDAD2 /* PM2OnScreenButtons.m in Sources */ = {isa = PBXBuildFile; fileRef = AAAD5A6E176E1F5900DCDAD2 /* PM2OnScreenButtons.m */; };
 		AAAD5A7517701B5800DCDAD2 /* ScaleRuler.m in Sources */ = {isa = PBXBuildFile; fileRef = AAAD5A7417701B5800DCDAD2 /* ScaleRuler.m */; };
@@ -3507,6 +3513,11 @@
 		AA729A52175870D800F6AF78 /* LineProperty.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LineProperty.m; sourceTree = "<group>"; };
 		AA8608F4177AA702008EBC95 /* MainQ.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainQ.h; sourceTree = "<group>"; };
 		AA8608F5177AA703008EBC95 /* MainQ.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainQ.m; sourceTree = "<group>"; };
+		AA8608F8177BEF6B008EBC95 /* MainMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainMenuViewController.h; sourceTree = "<group>"; };
+		AA8608F9177BEF6B008EBC95 /* MainMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainMenuViewController.m; sourceTree = "<group>"; };
+		AA8608FC177C593E008EBC95 /* MenuItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuItem.h; sourceTree = "<group>"; };
+		AA8608FD177C593E008EBC95 /* MenuItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuItem.m; sourceTree = "<group>"; };
+		AA860900177F22F9008EBC95 /* Arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Arrow.png; sourceTree = "<group>"; };
 		AAAD5A6D176E1F5900DCDAD2 /* PM2OnScreenButtons.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PM2OnScreenButtons.h; sourceTree = "<group>"; };
 		AAAD5A6E176E1F5900DCDAD2 /* PM2OnScreenButtons.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PM2OnScreenButtons.m; sourceTree = "<group>"; };
 		AAAD5A7317701B5800DCDAD2 /* ScaleRuler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScaleRuler.h; sourceTree = "<group>"; };
@@ -5335,6 +5346,10 @@
 				AAEE0CBD1776562500549A7D /* LinePropStorageViewController.m */,
 				AAEE0CC0177669DB00549A7D /* LinePropPickerViewController.h */,
 				AAEE0CC1177669DB00549A7D /* LinePropPickerViewController.m */,
+				AA8608F8177BEF6B008EBC95 /* MainMenuViewController.h */,
+				AA8608F9177BEF6B008EBC95 /* MainMenuViewController.m */,
+				AA8608FC177C593E008EBC95 /* MenuItem.h */,
+				AA8608FD177C593E008EBC95 /* MenuItem.m */,
 			);
 			name = "Buttons and Labels";
 			sourceTree = "<group>";
@@ -5342,6 +5357,7 @@
 		AAAD5A7217700B0300DCDAD2 /* GPS */ = {
 			isa = PBXGroup;
 			children = (
+				AA860900177F22F9008EBC95 /* Arrow.png */,
 				AAAD5A7B177034AF00DCDAD2 /* GPSReceiver.h */,
 				AAAD5A7C177034AF00DCDAD2 /* GPSReceiver.m */,
 				AAAD5A8117714CDB00DCDAD2 /* GPSNode.h */,
@@ -8975,6 +8991,7 @@
 				AABDE8F1174755C000A0D6E9 /* Sat4_9_7.jpg in Resources */,
 				AABDE8F3174755C000A0D6E9 /* Sat4_9_8.jpg in Resources */,
 				AABDE8F5174755C000A0D6E9 /* Sat4_9_9.jpg in Resources */,
+				AA860901177F22F9008EBC95 /* Arrow.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -10687,6 +10704,7 @@
 				AABDE8F2174755C000A0D6E9 /* Sat4_9_7.jpg in Resources */,
 				AABDE8F4174755C000A0D6E9 /* Sat4_9_8.jpg in Resources */,
 				AABDE8F6174755C000A0D6E9 /* Sat4_9_9.jpg in Resources */,
+				AA860902177F22F9008EBC95 /* Arrow.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -10741,6 +10759,8 @@
 				AAEE0CC2177669DB00549A7D /* LinePropPickerViewController.m in Sources */,
 				AAEE0CC61779448B00549A7D /* GPSTrack.m in Sources */,
 				AA8608F6177AA703008EBC95 /* MainQ.m in Sources */,
+				AA8608FA177BEF6B008EBC95 /* MainMenuViewController.m in Sources */,
+				AA8608FE177C593E008EBC95 /* MenuItem.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -10772,6 +10792,8 @@
 				AAEE0CC3177669DB00549A7D /* LinePropPickerViewController.m in Sources */,
 				AAEE0CC71779448B00549A7D /* GPSTrack.m in Sources */,
 				AA8608F7177AA703008EBC95 /* MainQ.m in Sources */,
+				AA8608FB177BEF6B008EBC95 /* MainMenuViewController.m in Sources */,
+				AA8608FF177C593E008EBC95 /* MenuItem.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

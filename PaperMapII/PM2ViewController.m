@@ -65,13 +65,8 @@
     [self.view setBackgroundColor:[UIColor darkGrayColor]];
     [self add_MapScrollView];    //add map tile scroll view
     [self addOnScreeButtons];
-    //TODO: remove following lines for release
-    //set drawing line property
-    //LineProperty * lp=[LineProperty sharedDrawingLineProperty];
-    //lp.red=0;lp.green=0.8;lp.blue=0.2;lp.alpha=0.8;lp.lineWidth=3;
-    //LineProperty * gp=[LineProperty sharedGPSTrackProperty];   //gpsTrackProperty
-    //gp.red=0;gp.green=0;gp.blue=1.0;gp.alpha=0.8;gp.lineWidth=3;
     
+    [self didRotateFromInterfaceOrientation:UIInterfaceOrientationPortrait];
     //TODO: Fix the following 2 lines not working, why?
     //UIApplication *app=[UIApplication sharedApplication];
 	//[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillTerminate:) name:UIApplicationWillTerminateNotification object:app];

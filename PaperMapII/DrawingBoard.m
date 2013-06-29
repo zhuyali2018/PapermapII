@@ -13,6 +13,7 @@
 #import "MainQ.h"
 @implementation DrawingBoard
 
+
 @synthesize ptList;
 
 - (id)initWithFrame:(CGRect)frame
@@ -92,4 +93,5 @@
 	ptList=nil;
 	[self setNeedsDisplay];
 }
+
 @end

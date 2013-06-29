@@ -370,6 +370,8 @@
 -(void)showSpeed:(CLLocationSpeed)speed{
     MainQ * mQ=[MainQ sharedManager];
     UILabel * lb=(UILabel *)[mQ getTargetRef:SPEEDLABEL];
+    UILabel * altlb=(UILabel *)[mQ getTargetRef:ALTITUDELABEL];
+    UILabel * trplb=(UILabel *)[mQ getTargetRef:TRIPMETER];
     if(!lb) return;
     bool bMetric=false;
     if(speed>1){    //> 2.25 mph
@@ -394,6 +396,7 @@
 	}else{
 		lb.hidden=YES;  //<==YES;
 	}
+    altlb.hidden=trplb.hidden=lb.hidden;
 	//---------------
 }
 bool bStartGPSNode;

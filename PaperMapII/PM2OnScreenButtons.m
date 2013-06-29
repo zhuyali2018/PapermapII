@@ -7,17 +7,14 @@
 //
 #import "AllImports.h"
 #import "PM2OnScreenButtons.h"
-//#import "GPSTrackPOIBoard.h"
 #import "DrawingBoard.h"
 #import "ScaleRuler.h"
 #import "MapCenterIndicator.h"
 #import "GPSReceiver.h"
-#import "Track.h"
 #import "MapTile.h"
-#import "MapSources.h"
 #import "MainQ.h"
 #import "PM2Protocols.h"
-
+#import "MenuItem.h"
 @implementation PM2OnScreenButtons
 @synthesize drawButton,fdrawButton,colorButton;
 @synthesize mapScrollView;
@@ -25,11 +22,13 @@
 @synthesize messageLabel;
 @synthesize gpsReceiver;
 @synthesize colorPickPopover;
+@synthesize menuPopover;
 @synthesize linePropertyViewCtrlr;
+@synthesize menuController;
 
 @synthesize cleanupButton;
 @synthesize gpsButton;
-@synthesize stopGpsButton;
+//@synthesize stopGpsButton;
 @synthesize undoButton;
 @synthesize mapTypeButton;
 @synthesize unloadDrawingButton;
@@ -37,6 +36,8 @@
 @synthesize speedLabel;
 @synthesize heightLabel;
 @synthesize tripLabel;
+@synthesize menuButton;
+
 
 + (id)sharedBnManager {
     static PM2OnScreenButtons *onScreenbuttons = nil;
@@ -64,7 +65,7 @@
     [self addMapCenterIndicator:vc];
     [self addMessageLabel];
     [self addGPSButton];
-    [self addStopGPSButton];
+    //[self addStopGPSButton];
     [self addTrackCleanupButton];
     [self addColorButton];
     [self addMapTypeButton];
@@ -74,6 +75,7 @@
     [self add_SpeedPanel];
     [self add_HeightPanel];
     [self add_TripMeter];
+    [self add_MainMenu];
 }
 -(void)repositionButtonsFromX:(int)x Y:(int)y{
     int w=150;
@@ -81,12 +83,13 @@
     [fdrawButton            setFrame:CGRectMake(x, y=y+50, w, 30)];
     [undoButton             setFrame:CGRectMake(x, y=y+50, w, 30)];
     [gpsButton              setFrame:CGRectMake(x, y=y+50, w, 30)];
-    [stopGpsButton          setFrame:CGRectMake(x, y=y+50, w, 30)];
+//    [stopGpsButton          setFrame:CGRectMake(x, y=y+50, w, 30)];
     [cleanupButton          setFrame:CGRectMake(x, y=y+50, w, 30)];
     [colorButton            setFrame:CGRectMake(x, y=y+50, w, 30)];
     [mapTypeButton          setFrame:CGRectMake(x, y=y+50, w, 30)];
     [unloadDrawingButton    setFrame:CGRectMake(x, y=y+50, w, 30)];
     [unloadGPSTrackButton   setFrame:CGRectMake(x, y=y+50, w, 30)];
+    [menuButton             setFrame:CGRectMake(x, y=y+50, w, 30)];
 }
 -(void)addUnloadDrawingButton{
     unloadDrawingButton=[UIButton buttonWithType:(UIButtonTypeRoundedRect)];
@@ -119,18 +122,56 @@
     [_baseView addSubview:cleanupButton];
 }
 -(void) addGPSButton{
-    gpsButton=[UIButton buttonWithType:(UIButtonTypeRoundedRect)];
+    gpsButton=[UIButton buttonWithType:(UIButtonTypeCustom)];
     [gpsButton setTitle:@"Start GPS" forState:UIControlStateNormal];
-    [gpsButton addTarget:self action:@selector(startGPS) forControlEvents:UIControlEventTouchUpInside];
+    
+    [gpsButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
+	[gpsButton setTitleShadowColor:[UIColor blackColor]  forState:UIControlStateNormal];
+	//[gpsButton setShadowOffset:CGSizeMake(1.0, 1.0)];
+	
+    [gpsButton setBackgroundColor:[UIColor lightGrayColor]];
+    [gpsButton addTarget:self action:@selector(startGPS:) forControlEvents:UIControlEventTouchUpInside];
     [_baseView addSubview:gpsButton];
 }
--(void) addStopGPSButton{
-    stopGpsButton=[UIButton buttonWithType:(UIButtonTypeRoundedRect)];
-    [stopGpsButton setTitle:@"Stop GPS" forState:UIControlStateNormal];
-    [stopGpsButton addTarget:self action:@selector(stopGPS) forControlEvents:UIControlEventTouchUpInside];
-    [_baseView addSubview:stopGpsButton];
-}
+//-(void) addStopGPSButton{
+//    stopGpsButton=[UIButton buttonWithType:(UIButtonTypeRoundedRect)];
+//    [stopGpsButton setTitle:@"Stop GPS" forState:UIControlStateNormal];
+//    [stopGpsButton addTarget:self action:@selector(stopGPS:) forControlEvents:UIControlEventTouchUpInside];
+//    [_baseView addSubview:stopGpsButton];
+//}
 
+-(void) add_MainMenu{
+    menuButton=[UIButton buttonWithType:(UIButtonTypeRoundedRect)];
+    [menuButton setTitle:@"Menu" forState:UIControlStateNormal];
+    [menuButton addTarget:self action:@selector(showMenu) forControlEvents:UIControlEventTouchUpInside];
+    [_baseView addSubview:menuButton];
+}
+-(void)showMenu{
+    
+    MenuItem * m=[[MenuItem alloc]init];
+    [m myTest];
+
+}
+-(void)showMenu1{
+    NSLOG10(@"showMenu button tapped!");
+    if (menuPopover == nil) {
+        Class cls = NSClassFromString(@"UIPopoverController");
+        if (cls != nil) {
+			menuController=[[MainMenuViewController alloc] init];
+            [menuController setTitle:@"Main Menu"];
+            
+			UINavigationController * ctrl=[[UINavigationController alloc]initWithRootViewController:menuController];
+			UIPopoverController *aPopoverController =[[cls alloc] initWithContentViewController:ctrl];
+		    self.menuPopover = aPopoverController;
+        }
+    }
+    if([menuPopover isPopoverVisible]){
+		[menuPopover dismissPopoverAnimated:YES];
+	}else{
+		[menuPopover setPopoverContentSize:CGSizeMake(350,700) animated:YES];
+        [menuPopover presentPopoverFromRect:menuButton.frame inView:_baseView permittedArrowDirections:UIPopoverArrowDirectionAny  animated:YES];
+	}
+}
 -(void)cleanUpTrack{
     MainQ * mQ=[MainQ sharedManager];
     UIView * v =(UIView *)[mQ getTargetRef:GPSTRACKPOIBOARD];
@@ -159,11 +200,34 @@
         [colorPickPopover presentPopoverFromRect:colorButton.frame inView:_baseView permittedArrowDirections:UIPopoverArrowDirectionAny  animated:YES];
 	}
 }
--(void) startGPS{    
-    [gpsReceiver start];
+-(void) startGPS:(id)bn0{
+    UIButton* bn=bn0;
+    
+    MainQ * mQ=[MainQ sharedManager];
+    UIView * v =(UIView *)[mQ getTargetRef:GPSARROW];
+    
+    if ([[bn.titleLabel text] compare:@"Stop GPS"]!=NSOrderedSame) {
+        [gpsReceiver start];
+        [bn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        [bn setTitle:@"Stop GPS" forState:UIControlStateNormal];
+        [bn setBackgroundColor:[UIColor redColor]];
+        if (!v)return;
+            v.hidden=NO;
+    }else{
+        [gpsReceiver stop];
+        [gpsButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
+        [gpsButton setBackgroundColor:[UIColor lightGrayColor]];
+        [bn setTitle:@"Start GPS" forState:UIControlStateNormal];
+        [speedLabel setHidden:YES];
+        if (!v)return;
+            v.hidden=YES;
+    }
 }
--(void) stopGPS{
+-(void) stopGPS:(id)bn{
     [gpsReceiver stop];
+    //UIButton* b=bn;
+    [gpsButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [gpsButton setBackgroundColor:[UIColor lightGrayColor]];
 }
 -(void) addMessageLabel{
     messageLabel=[[UILabel alloc] initWithFrame:CGRectMake(0, 40, 720, 40)];
@@ -323,7 +387,7 @@
 	[speedLabel setText:[NSString stringWithFormat:@" %4.1f  ",128.2]];
 	[speedLabel setTextAlignment:UITextAlignmentRight];
     [_baseView addSubview:speedLabel];
-	speedLabel.hidden=NO;  //TODO: change to YES;
+	speedLabel.hidden=YES;  //TODO: change to YES;
 	
 	//unit label
 	UILabel * unitLabel=[[UILabel alloc] initWithFrame:CGRectMake(340, 90, 60, 40)];
@@ -355,6 +419,7 @@
 	[heightLabel setShadowColor:[UIColor blackColor]];
 	[heightLabel setShadowOffset:CGSizeMake(2.0, 2.0)];
 	[heightLabel setFont:[UIFont boldSystemFontOfSize:40]];
+    heightLabel.hidden=YES;
 	//[heightLabel setText:[NSString stringWithFormat:@" %4.1fm ",128.2]];
 	[heightLabel setTextAlignment:UITextAlignmentRight];
     [_baseView addSubview:heightLabel];
@@ -368,6 +433,7 @@
 	[tripLabel setShadowColor:[UIColor blackColor]];
 	[tripLabel setShadowOffset:CGSizeMake(2.0, 2.0)];
 	[tripLabel setFont:[UIFont boldSystemFontOfSize:40]];
+    tripLabel.hidden=YES;
 	//[tripLabel setText:[NSString stringWithFormat:@" %4.1fm ",128.2]];
 	[tripLabel setTextAlignment:UITextAlignmentRight];
     [_baseView addSubview:tripLabel];
