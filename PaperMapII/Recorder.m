@@ -16,6 +16,11 @@
 #import "GPSTrackPOIBoard.h"
 #import "GPSTrack.h"
 #import "MainQ.h"
+#import "GPSTrackPOIBoard.h"
+#import "PM2AppDelegate.h"
+#import "PM2ViewController.h"
+
+#define PI 3.1415926f
 
 @implementation Recorder
 
@@ -343,6 +348,34 @@
     [self showSpeed:newLocation.speed];
     [self showAltitude:newLocation.altitude];
     [self showTripMeter];
+    [self updateArrowDirection:newLocation.course*PI/180];
+}
+bool centerCurrentLocation = TRUE;   //TODO: move this to property settings
+bool directionUp=FALSE;              //TODO: move this to property settings
+float mapLeftThereDirection=0;       //TODO: assign and keep it an appropriate value
+-(void)updateArrowDirection:(float)direction{
+	//update arrow direction
+	CGAffineTransform transform = CGAffineTransformMakeRotation(-3.1415926f/2+direction);
+	if (directionUp&&centerCurrentLocation) {
+		transform = CGAffineTransformMakeRotation(-3.1415926f/2);
+	}else if (directionUp&&!centerCurrentLocation) {
+		transform = CGAffineTransformMakeRotation(-3.1415926f/2+direction-mapLeftThereDirection);
+	}
+    MainQ * mQ=[MainQ sharedManager];
+    UIImageView * arrow =(UIImageView *)[mQ getTargetRef:GPSARROW];
+    GPSTrackPOIBoard * trackBoard=(GPSTrackPOIBoard *)[mQ getTargetRef:GPSTRACKPOIBOARD];
+    arrow.transform=transform;
+    
+    //update the arrow position
+    CGPoint arrowCenter=[trackBoard ConvertPoint:(GPSNode *)[self.gpsTrack.nodes lastObject]];
+    PM2AppDelegate * appD=[[UIApplication sharedApplication] delegate];
+	CGPoint arrowCenter0=[trackBoard  convertPoint:arrowCenter toView:appD.viewController.view];
+    
+    [UIView beginAnimations:@"MoveArrow" context:nil];
+    [UIView setAnimationDuration:0.3];
+    [UIView setAnimationDelay:0];
+        arrow.center=arrowCenter0;
+    [UIView commitAnimations];
 }
 -(void)showTripMeter{
     if(!_gpsRecording)return;
@@ -370,8 +403,8 @@
 -(void)showSpeed:(CLLocationSpeed)speed{
     MainQ * mQ=[MainQ sharedManager];
     UILabel * lb=(UILabel *)[mQ getTargetRef:SPEEDLABEL];
-    UILabel * altlb=(UILabel *)[mQ getTargetRef:ALTITUDELABEL];
-    UILabel * trplb=(UILabel *)[mQ getTargetRef:TRIPMETER];
+    //UILabel * altlb=(UILabel *)[mQ getTargetRef:ALTITUDELABEL];
+    //UILabel * trplb=(UILabel *)[mQ getTargetRef:TRIPMETER];
     if(!lb) return;
     bool bMetric=false;
     if(speed>1){    //> 2.25 mph
@@ -396,7 +429,7 @@
 	}else{
 		lb.hidden=YES;  //<==YES;
 	}
-    altlb.hidden=trplb.hidden=lb.hidden;
+    //altlb.hidden=trplb.hidden=lb.hidden;
 	//---------------
 }
 bool bStartGPSNode;
@@ -448,7 +481,7 @@ int n=0;  //gps node counter
         self.gpsTrack.nodes=[self addGPSNode:node to:self.gpsTrack.nodes];
         self.gpsTrack.tripmeter=totalTrip;
     }
-    //lastGpsNode=node;  //TODO: handle the lastGPSNode properly, if no need, just delete it!
+    lastGpsNode=node;  //TODO: handle the lastGPSNode properly, if no need, just delete it!
     [[DrawableMapScrollView sharedMap].zoomView.gpsTrackPOIBoard setNeedsDisplay];
 }
 -(void)centerPositionAtX:(int) x Y:(int) y{
@@ -456,7 +489,7 @@ int n=0;  //gps node counter
     CGRect  visibleBounds = [mapWindow bounds];     //Check this should return a size of 1280x1280 instead of 1024x768 for rotating purpose
 	CGFloat zm=[mapWindow zoomScale];
 	CGPoint offset=CGPointMake(x*zm-visibleBounds.size.width/2, y*zm-visibleBounds.size.height/2);
-	[mapWindow setContentOffset:offset animated:YES];
+	[mapWindow setContentOffset:offset animated:YES];   //this is where it makes map move smoothly
 }
 /*
 -(void) addGPSNode:(GPSNode *)node{
@@ -476,7 +509,7 @@ int n=0;  //gps node counter
     }
     return [self addAnyModeAdjustedNode:arrGpsNodes Node:node Mode:self.mapMode];
 }
-#define PI 3.1415926
+//#define PI 3.1415926
 -(double)GetScreenY:(double)lat{
 	double y1=lat*PI/180;
 	double y=0.5*log((1+sin(y1))/(1-sin(y1)));

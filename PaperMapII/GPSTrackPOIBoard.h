@@ -12,6 +12,7 @@
 @class Track;
 @class GPSNode;
 @class TapDetectView;
+@class Node;
 
 @interface GPSTrackPOIBoard : UIView
 
@@ -21,11 +22,10 @@
 @property (nonatomic,weak) NSMutableArray * ptrToGpsTrackArray;   //pointer to an array of tracks
 @property (nonatomic,weak) GPSNode * ptrToLastGpsNode;
 @property int maplevel;
-
+@property bool GPSRunning;
 @property (nonatomic) DrawingBoard * drawingBoard;          //freeDrawingBoard in PM1
-@property (nonatomic, strong) UIImageView * arrow;
 
 -(int)ModeAdjust:(int)x res:(int)r;
--(void) showArrow;
--(void) hideArrow;
+-(CGPoint)ConvertPoint:(Node *)node;
+
 @end

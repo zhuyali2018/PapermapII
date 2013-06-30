@@ -23,7 +23,7 @@
 @synthesize maplevel;
 @synthesize drawingBoard;
 @synthesize ptrToLastGpsNode;
-@synthesize arrow;
+@synthesize GPSRunning;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -33,13 +33,6 @@
         drawingBoard=[[DrawingBoard alloc]initWithFrame:frame];	
 		[drawingBoard setBackgroundColor:[UIColor clearColor]];	
 		[self addSubview:drawingBoard];
-        
-        arrow=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"Arrow.png"]];
-        [self addSubview:arrow];
-        arrow.hidden=NO;
-        
-        [[MainQ sharedManager] register:drawingBoard withID:DRAWINGBOARD];
-        [[MainQ sharedManager] register:arrow withID:GPSARROW];      
      }
     return self;
 }
@@ -141,13 +134,12 @@
 		GPSNode * tmpN=[track.nodes objectAtIndex:i];
         CGPoint tmpP=[self ConvertPoint:tmpN];
 		CGContextAddLineToPoint(context, tmpP.x, tmpP.y);
-        [arrow setFrame:CGRectMake(tmpP.x-17,tmpP.y-17,35,35)];
 	}
     //draw to the lastGPSNode if it is not 0
-    if ((ptrToLastGpsNode.x>0) &&(ptrToLastGpsNode.y>0)){
-        CGPoint tmpP=[self ConvertPoint:ptrToLastGpsNode];
-        CGContextAddLineToPoint(context, tmpP.x, tmpP.y);
-    }
+//    if ((ptrToLastGpsNode.x>0) &&(ptrToLastGpsNode.y>0)){
+//        CGPoint tmpP=[self ConvertPoint:ptrToLastGpsNode];
+//        CGContextAddLineToPoint(context, tmpP.x, tmpP.y);
+//    }
 	CGContextStrokePath(context);
 }
 -(void)drawLines:(CGContextRef)context{
@@ -197,12 +189,6 @@
     CGContextRef context = UIGraphicsGetCurrentContext();
     [self drawLines:context];
     [self drawGpsTracks:context];
-}
--(void)showArrow{
-    arrow.hidden=NO;
-}
--(void)hideArrow{
-    arrow.hidden=YES;
 }
 
 @end

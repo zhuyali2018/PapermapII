@@ -7,6 +7,7 @@
 //
 #import "AllImports.h"
 #import "PM2OnScreenButtons.h"
+#import "GPSTrackPOIBoard.h"
 #import "DrawingBoard.h"
 #import "ScaleRuler.h"
 #import "MapCenterIndicator.h"
@@ -37,7 +38,7 @@
 @synthesize heightLabel;
 @synthesize tripLabel;
 @synthesize menuButton;
-
+@synthesize arrow;
 
 + (id)sharedBnManager {
     static PM2OnScreenButtons *onScreenbuttons = nil;
@@ -76,6 +77,7 @@
     [self add_HeightPanel];
     [self add_TripMeter];
     [self add_MainMenu];
+    [self add_GPSArrow];
 }
 -(void)repositionButtonsFromX:(int)x Y:(int)y{
     int w=150;
@@ -205,14 +207,20 @@
     
     MainQ * mQ=[MainQ sharedManager];
     UIView * v =(UIView *)[mQ getTargetRef:GPSARROW];
+    GPSTrackPOIBoard * gv =(GPSTrackPOIBoard *)[mQ getTargetRef:GPSTRACKPOIBOARD];
     
+    if(!v) return;
+
+    //if GPS is not started yet
     if ([[bn.titleLabel text] compare:@"Stop GPS"]!=NSOrderedSame) {
         [gpsReceiver start];
         [bn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         [bn setTitle:@"Stop GPS" forState:UIControlStateNormal];
         [bn setBackgroundColor:[UIColor redColor]];
         if (!v)return;
-            v.hidden=NO;
+        v.hidden=NO;
+        if(gv)
+            gv.GPSRunning=TRUE;
     }else{
         [gpsReceiver stop];
         [gpsButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
@@ -220,7 +228,10 @@
         [bn setTitle:@"Start GPS" forState:UIControlStateNormal];
         [speedLabel setHidden:YES];
         if (!v)return;
-            v.hidden=YES;
+        v.hidden=NO;  //TODO:need to be Yes
+        if(gv)
+            gv.GPSRunning=FALSE;
+        arrow.hidden=YES;
     }
 }
 -(void) stopGPS:(id)bn{
@@ -419,7 +430,7 @@
 	[heightLabel setShadowColor:[UIColor blackColor]];
 	[heightLabel setShadowOffset:CGSizeMake(2.0, 2.0)];
 	[heightLabel setFont:[UIFont boldSystemFontOfSize:40]];
-    heightLabel.hidden=YES;
+    //heightLabel.hidden=YES;
 	//[heightLabel setText:[NSString stringWithFormat:@" %4.1fm ",128.2]];
 	[heightLabel setTextAlignment:UITextAlignmentRight];
     [_baseView addSubview:heightLabel];
@@ -433,10 +444,17 @@
 	[tripLabel setShadowColor:[UIColor blackColor]];
 	[tripLabel setShadowOffset:CGSizeMake(2.0, 2.0)];
 	[tripLabel setFont:[UIFont boldSystemFontOfSize:40]];
-    tripLabel.hidden=YES;
+    //tripLabel.hidden=YES;
 	//[tripLabel setText:[NSString stringWithFormat:@" %4.1fm ",128.2]];
 	[tripLabel setTextAlignment:UITextAlignmentRight];
     [_baseView addSubview:tripLabel];
     [[MainQ sharedManager] register:tripLabel withID:TRIPMETER];
+}
+-(void)add_GPSArrow{
+    arrow=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"Arrow.png"]];
+    [_baseView addSubview:arrow];
+    arrow.hidden=NO;   //TODO:need to be YES
+    
+    [[MainQ sharedManager] register:arrow withID:GPSARROW];
 }
 @end

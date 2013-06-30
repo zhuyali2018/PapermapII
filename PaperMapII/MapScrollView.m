@@ -14,6 +14,8 @@
 #import "PM2OnScreenButtons.h"
 #import "ScaleRuler.h"
 #import "MainQ.h"
+#import "PM2AppDelegate.h"
+#import "PM2ViewController.h"
 
 @implementation MapScrollView
 
@@ -360,14 +362,25 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
 	return true;   //always return true to update the tile while making move map with drawing smooth
 	//return correct||resolutionChanged;
 }
- 
+-(void) updateArrowPosition{
+    //update the arrow position
+    MainQ * mQ=[MainQ sharedManager];
+    UIImageView * arrow =(UIImageView *)[mQ getTargetRef:GPSARROW];
+    
+    GPSTrackPOIBoard * trackBoard=self.zoomView.gpsTrackPOIBoard;
+    GPSNode * node=((Recorder *)[Recorder sharedRecorder]).lastGpsNode;
+    CGPoint arrowCenter=[trackBoard ConvertPoint:(Node *)node];
+    PM2AppDelegate * appD=[[UIApplication sharedApplication] delegate];
+	CGPoint arrowCenter0=[trackBoard  convertPoint:arrowCenter toView:appD.viewController.view];
+    arrow.center=arrowCenter0;
+}
 - (void)layoutSubviews{
     [[ScaleRuler shareScaleRuler:CGRectMake(30, 0,700,30)] updateRuler:self];
     if (self.zooming){
         NSLOG(@"self.zooming, exit layoutSubviews:W:%.f, H:%.f",self.contentSize.width,self.contentSize.height);
         return;
     }
-    
+    [self updateArrowPosition];
     NSLOG(@"in layoutSubviews");
     NSLOG(@"ContentOffset:x:%.f, y:%.f",self.contentOffset.x,self.contentOffset.y);
     NSLOG(@"ContentSize:W:%.f, H:%.f\n\n",self.contentSize.width,self.contentSize.height);

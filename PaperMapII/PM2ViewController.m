@@ -66,10 +66,13 @@
     [self add_MapScrollView];    //add map tile scroll view
     [self addOnScreeButtons];
     
-    [self didRotateFromInterfaceOrientation:UIInterfaceOrientationPortrait];
+    //[self didRotateFromInterfaceOrientation:UIInterfaceOrientationLandscapeRight];  //this line does not work here, too early. do it in viewDidAppear !
     //TODO: Fix the following 2 lines not working, why?
     //UIApplication *app=[UIApplication sharedApplication];
 	//[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillTerminate:) name:UIApplicationWillTerminateNotification object:app];
+}
+-(void)viewDidAppear:(BOOL)animated{
+    [self didRotateFromInterfaceOrientation:UIInterfaceOrientationLandscapeRight];
 }
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {

@@ -41,6 +41,7 @@
 @property (strong, nonatomic) UIPopoverController* menuPopover;
 @property (strong, nonatomic) LinePropertyViewController * linePropertyViewCtrlr;
 @property (strong, nonatomic) MainMenuViewController * menuController;
+@property (nonatomic, strong) UIImageView * arrow;
 + (id)sharedBnManager;
 -(void)addButtons:(UIView *)vc;
 -(void)repositionButtonsFromX:(int)x Y:(int)y;
