@@ -145,16 +145,10 @@
 -(void) add_MainMenu{
     menuButton=[UIButton buttonWithType:(UIButtonTypeRoundedRect)];
     [menuButton setTitle:@"Menu" forState:UIControlStateNormal];
-    [menuButton addTarget:self action:@selector(showMenu1) forControlEvents:UIControlEventTouchUpInside];
+    [menuButton addTarget:self action:@selector(showMenu) forControlEvents:UIControlEventTouchUpInside];
     [_baseView addSubview:menuButton];
 }
 -(void)showMenu{
-    
-    MenuItem * m=[[MenuItem alloc]init];
-    [m myTest];
-
-}
--(void)showMenu1{
     NSLOG10(@"showMenu button tapped!");
     if (menuPopover == nil) {
         Class cls = NSClassFromString(@"UIPopoverController");

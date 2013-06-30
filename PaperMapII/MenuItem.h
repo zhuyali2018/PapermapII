@@ -9,12 +9,10 @@
 #import <Foundation/Foundation.h>
 
 @interface MenuItem : NSObject
-@property (nonatomic,strong)NSString * text;
+
+@property (nonatomic,strong)NSString* text;
 @property SEL menuItemHandler;
+
 - (id) initWithTitle:(NSString *)title;
 
-//- (void) menuItemHandler;
-- (void) test:(NSNumber *)n;
-- (void) test2:(NSNumber *)n;
--(void) myTest;
 @end

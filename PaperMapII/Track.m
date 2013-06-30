@@ -11,6 +11,8 @@
 @implementation Track
 @synthesize filename;
 @synthesize nodes,lineProperty;
+@synthesize title;
+
 - (id)init {
     self = [super init];
     if (self) {
@@ -24,7 +26,7 @@
     NSDate * now = [NSDate date];
     NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
     [outputFormatter setDateFormat:@"yyyy.MM.dd HH:mm:ss"];
-    _title = [outputFormatter stringFromDate:now];
+    title = [outputFormatter stringFromDate:now];
     [outputFormatter setDateFormat:@"yyyy-MM-dd_HH-mm-ss-SSS.trk"];
     filename = [outputFormatter stringFromDate:now];
 }
