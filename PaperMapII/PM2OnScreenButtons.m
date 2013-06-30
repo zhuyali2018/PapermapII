@@ -145,7 +145,7 @@
 -(void) add_MainMenu{
     menuButton=[UIButton buttonWithType:(UIButtonTypeRoundedRect)];
     [menuButton setTitle:@"Menu" forState:UIControlStateNormal];
-    [menuButton addTarget:self action:@selector(showMenu) forControlEvents:UIControlEventTouchUpInside];
+    [menuButton addTarget:self action:@selector(showMenu1) forControlEvents:UIControlEventTouchUpInside];
     [_baseView addSubview:menuButton];
 }
 -(void)showMenu{
@@ -241,7 +241,11 @@
     [gpsButton setBackgroundColor:[UIColor lightGrayColor]];
 }
 -(void) addMessageLabel{
-    messageLabel=[[UILabel alloc] initWithFrame:CGRectMake(0, 40, 720, 40)];
+
+    //int screenW=[_baseView bounds].size.width;
+	int screenH=[_baseView bounds].size.height;
+
+    messageLabel=[[UILabel alloc] initWithFrame:CGRectMake(0, screenH-40, 720, 40)];
     [messageLabel setBackgroundColor:[UIColor colorWithRed:0.3 green:0.4 blue:0.5 alpha:0.7]];
 	[messageLabel setTextColor:[UIColor greenColor]];
 	[messageLabel setShadowColor:[UIColor blackColor]];
@@ -253,7 +257,7 @@
 -(void)addMapCenterIndicator:(UIView*)vc{
     int screenH=[vc bounds].size.width;
 	int screenW=[vc bounds].size.height;
-    MapCenterIndicator * mc=[MapCenterIndicator sharedMapCenter:CGRectMake(screenW/2-10-1, (screenH-20)/2-10+9, 20, 20)];
+    MapCenterIndicator * mc=[MapCenterIndicator sharedMapCenter:CGRectMake(screenW/2-10-1, (screenH-20)/2-10+0, 20, 20)];
     [vc addSubview:mc];
 }
     

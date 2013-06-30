@@ -17,6 +17,7 @@
     dispatch_once(&onceToken, ^{
         sharedMyManager = [[self alloc] initWithFrame:frame];
     });
+    [sharedMyManager setFrame:frame];
     return sharedMyManager;
 }
 - (id)initWithFrame:(CGRect)frame
