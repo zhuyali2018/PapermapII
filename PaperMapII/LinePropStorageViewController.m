@@ -25,7 +25,7 @@ const static int NUM=5;     //number of stored property
         [self.view setBackgroundColor:[UIColor redColor]];
         propBns     =[[NSMutableArray alloc]initWithCapacity:NUM];
         propChgBns  =[[NSMutableArray alloc]initWithCapacity:NUM];
-        for (int i=0; i<NUM; i++) {   //TODO:donot hardcode the size
+        for (int i=0; i<NUM; i++) {   //TODO:do not hardcode the size
             PropertyButton *bn=[[PropertyButton alloc] initWithFrame:CGRectMake(15, 10+70*i,  240, 60)];
             bn.ID=i+1;
             NSString *t=[[NSString alloc]initWithFormat:@"Stored Property %d:",i+1];

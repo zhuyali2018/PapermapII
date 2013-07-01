@@ -67,12 +67,12 @@
     [self addMessageLabel];
     [self addGPSButton];
     //[self addStopGPSButton];
-    [self addTrackCleanupButton];
+    //[self addTrackCleanupButton];
     [self addColorButton];
     [self addMapTypeButton];
     [self addUnloadDrawingButton];
-    [self addUnloadGPSTrackButton];
-    [self repositionButtonsFromX:800 Y:0];
+    //[self addUnloadGPSTrackButton];
+    //[self repositionButtonsFromX:800 Y:0];
     [self add_SpeedPanel];
     [self add_HeightPanel];
     [self add_TripMeter];
@@ -80,22 +80,24 @@
     [self add_GPSArrow];
 }
 -(void)repositionButtonsFromX:(int)x Y:(int)y{
-    int w=150;
-    [drawButton             setFrame:CGRectMake(x, y=y+50, w, 30)];
-    [fdrawButton            setFrame:CGRectMake(x, y=y+50, w, 30)];
-    [undoButton             setFrame:CGRectMake(x, y=y+50, w, 30)];
-    [gpsButton              setFrame:CGRectMake(x, y=y+50, w, 30)];
-//    [stopGpsButton          setFrame:CGRectMake(x, y=y+50, w, 30)];
-    [cleanupButton          setFrame:CGRectMake(x, y=y+50, w, 30)];
-    [colorButton            setFrame:CGRectMake(x, y=y+50, w, 30)];
-    [mapTypeButton          setFrame:CGRectMake(x, y=y+50, w, 30)];
-    [unloadDrawingButton    setFrame:CGRectMake(x, y=y+50, w, 30)];
-    [unloadGPSTrackButton   setFrame:CGRectMake(x, y=y+50, w, 30)];
-    [menuButton             setFrame:CGRectMake(x, y=y+50, w, 30)];
+    int w=100;
+    int h=60;
+    int s=60;   //row apart
+    [drawButton             setFrame:CGRectMake(x, y=y+s, w, h)];
+    [fdrawButton            setFrame:CGRectMake(x, y=y+s, w, h)];
+    [undoButton             setFrame:CGRectMake(x, y=y+s, w, h)];
+    [gpsButton              setFrame:CGRectMake(x, y=y+s, w, h)];
+//    [stopGpsButton          setFrame:CGRectMake(x, y=y+s, w, h)];
+//    [cleanupButton          setFrame:CGRectMake(x, y=y+s, w, h)];
+    [colorButton            setFrame:CGRectMake(x, y=y+s, w, h)];
+    [mapTypeButton          setFrame:CGRectMake(x, y=y+s, w, h)];
+    [unloadDrawingButton    setFrame:CGRectMake(x, y=y+s, w, h)];
+//    [unloadGPSTrackButton   setFrame:CGRectMake(x, y=y+s, w, h)];
+    [menuButton             setFrame:CGRectMake(x, y=y+s, w, h)];
 }
 -(void)addUnloadDrawingButton{
     unloadDrawingButton=[UIButton buttonWithType:(UIButtonTypeRoundedRect)];
-    [unloadDrawingButton setTitle:@"Unload Drawings" forState:UIControlStateNormal];
+    [unloadDrawingButton setTitle:@"Del Drawings" forState:UIControlStateNormal];
     [unloadDrawingButton addTarget:self action:@selector(unloadDrawings:) forControlEvents:UIControlEventTouchUpInside];
     [_baseView addSubview:unloadDrawingButton];
 }
@@ -164,8 +166,10 @@
     if([menuPopover isPopoverVisible]){
 		[menuPopover dismissPopoverAnimated:YES];
 	}else{
-		[menuPopover setPopoverContentSize:CGSizeMake(350,700) animated:YES];
-        [menuPopover presentPopoverFromRect:menuButton.frame inView:_baseView permittedArrowDirections:UIPopoverArrowDirectionAny  animated:YES];
+		[menuPopover setPopoverContentSize:CGSizeMake(350,1024) animated:YES];
+        //[menuPopover presentPopoverFromRect:menuButton.frame inView:_baseView permittedArrowDirections:UIPopoverArrowDirectionAny  animated:YES];
+        //[menuPopover presentPopoverFromRect:CGRectMake(0, 0, 1, 1) inView:_baseView permittedArrowDirections:UIPopoverArrowDirectionAny  animated:YES];
+        [menuPopover presentPopoverFromRect:CGRectMake(-30, -30, 0, 0) inView:_baseView permittedArrowDirections:UIPopoverArrowDirectionAny  animated:YES];
 	}
 }
 -(void)cleanUpTrack{

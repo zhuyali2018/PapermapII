@@ -33,6 +33,7 @@
         drawingBoard=[[DrawingBoard alloc]initWithFrame:frame];	
 		[drawingBoard setBackgroundColor:[UIColor clearColor]];	
 		[self addSubview:drawingBoard];
+        [[MainQ sharedManager] register:drawingBoard withID:DRAWINGBOARD];
      }
     return self;
 }

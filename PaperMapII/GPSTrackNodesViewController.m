@@ -1,24 +1,24 @@
 //
-//  GPSTrackListTableViewController.m
+//  GPSTrackNodesViewController.m
 //  PaperMapII
 //
 //  Created by Yali Zhu on 6/30/13.
 //  Copyright (c) 2013 Yali Zhu. All rights reserved.
 //
 
-#import "GPSTrackListTableViewController.h"
-#import "Recorder.h"
-#import "GPSTrack.h"
-#import "GPSTrackViewController.h"
+#import "GPSTrackNodesViewController.h"
+#import "GPSNode.h"
+#import "GPSNodeViewController.h"
 #import "MapScrollView.h"
 #import "DrawableMapScrollView.h"
-#import "GPSNode.h"
+#import "Recorder.h"
 
-@interface GPSTrackListTableViewController ()
+@interface GPSTrackNodesViewController ()
 
 @end
 
-@implementation GPSTrackListTableViewController
+@implementation GPSTrackNodesViewController
+@synthesize gpsTrack;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -37,12 +37,9 @@
     // self.clearsSelectionOnViewWillAppear = NO;
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
--(void)viewWillAppear:(BOOL)animated{
-    NSLog(@"Will will appear - GPSTrackListTableView");
-    [self.tableView reloadData];
-}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -60,7 +57,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return [[Recorder sharedRecorder].gpsTrackArray count];
+    return [gpsTrack.nodes count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -73,11 +70,13 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
+    
     // Configure the cell...
-    GPSTrack * tk=[Recorder sharedRecorder].gpsTrackArray[indexPath.row];
-    //cell.textLabel.text=tk.title;
-    cell.textLabel.text=[[NSString alloc]initWithFormat:@"%3d - %@",indexPath.row,tk.title];
+    GPSNode * node=gpsTrack.nodes[indexPath.row];
+    NSString * tm=[NSDateFormatter localizedStringFromDate:node.timestamp dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterMediumStyle];
+    cell.textLabel.text=[[NSString alloc]initWithFormat:@"%3d - %@",indexPath.row,tm];
     return cell;
+
 }
 
 /*
@@ -89,15 +88,11 @@
 }
 */
 
-//delete button is pressed in the table view
+/*
+// Override to support editing the table view.
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-//        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Delete Confirmation" message:@"Are You Sure ?" delegate:nil cancelButtonTitle:@"Cancel"otherButtonTitles:@"OK", nil];
-//        [alertView showWithCompletion:^(UIAlertView *alertView, NSInteger buttonIndex) {
-//            // handle the button click
-//        }];
-        [[Recorder sharedRecorder].gpsTrackArray removeObjectAtIndex:indexPath.row];
         // Delete the row from the data source
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
     }   
@@ -105,7 +100,7 @@
         // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
     }   
 }
-
+*/
 
 /*
 // Override to support rearranging the table view.
@@ -127,23 +122,13 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Navigation logic may go here. Create and push another view controller.
-    /*
-     <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-     // ...
-     // Pass the selected object to the new view controller.
-     [self.navigationController pushViewController:detailViewController animated:YES];
-     */
-    GPSTrack * tk=[Recorder sharedRecorder].gpsTrackArray[indexPath.row];
-    
-    GPSTrackViewController * gpsTrackViewCtrlr=[[GPSTrackViewController alloc]initWithNibName:@"GPSTrackViewController" bundle:nil];
-    gpsTrackViewCtrlr.gpsTrack=tk;
-    [gpsTrackViewCtrlr setTitle:tk.title];
-    if ([tk.nodes count]>0) {
-        GPSNode * node=tk.nodes[0];
-        [self centerMapTo:node];
-    }
-    [self.navigationController pushViewController:gpsTrackViewCtrlr animated:YES];
+    GPSNodeViewController *nodeViewer=[[GPSNodeViewController alloc]initWithNibName:@"GPSNodeViewController" bundle:nil];
+    GPSNode * node=gpsTrack.nodes[indexPath.row];
+    [self centerMapTo:node];
+    nodeViewer.node=node;
+    NSString * tm=[NSDateFormatter localizedStringFromDate:nodeViewer.node.timestamp dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterMediumStyle];
+    [nodeViewer setTitle:tm];
+    [self.navigationController pushViewController:nodeViewer animated:YES];
 }
 -(void)centerMapTo:(GPSNode *)node{
     MapScrollView * map=((MapScrollView *)[DrawableMapScrollView sharedMap]);

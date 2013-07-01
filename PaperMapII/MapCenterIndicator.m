@@ -54,8 +54,11 @@
 - (void)drawRect:(CGRect)rect {
     // Drawing code
 	if(bShowCenter){
-		[self drawLineFrom:CGPointMake(0,10) to:CGPointMake(20, 10) withColor:[UIColor blueColor] andWidth:1];
-		[self drawLineFrom:CGPointMake(10, 0) to:CGPointMake(10, 20) withColor:[UIColor blueColor] andWidth:1];
+        [self drawLineFrom:CGPointMake(0,10) to:CGPointMake(20, 10) withColor:[UIColor yellowColor] andWidth:5];
+		[self drawLineFrom:CGPointMake(10, 0) to:CGPointMake(10, 20) withColor:[UIColor yellowColor] andWidth:5];
+        
+        [self drawLineFrom:CGPointMake(2,10) to:CGPointMake(18, 10) withColor:[UIColor blueColor] andWidth:1];
+		[self drawLineFrom:CGPointMake(10, 2) to:CGPointMake(10, 18) withColor:[UIColor blueColor] andWidth:1];
 	}
 }
 @end

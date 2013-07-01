@@ -315,6 +315,9 @@
     if(!_gpsRecording){   //if not recording, do not create the node for the node
         return;
     }
+    if(self.gpsTrack.timestamp < newLocation.timestamp)
+        return; //do not record those before the track was created
+    
      //========Accuracy is enough, go ahead and record it=================
     double Lat=newLocation.coordinate.latitude;
 	double Long=newLocation.coordinate.longitude;

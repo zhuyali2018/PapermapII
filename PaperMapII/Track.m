@@ -12,7 +12,7 @@
 @synthesize filename;
 @synthesize nodes,lineProperty;
 @synthesize title;
-
+@synthesize timestamp;
 - (id)init {
     self = [super init];
     if (self) {
@@ -24,6 +24,7 @@
 }
 -(void)InitializeFilenameAndTitle{
     NSDate * now = [NSDate date];
+    timestamp=now;
     NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
     [outputFormatter setDateFormat:@"yyyy.MM.dd HH:mm:ss"];
     title = [outputFormatter stringFromDate:now];
@@ -38,6 +39,7 @@
         self.visible        =[coder decodeBoolForKey:@"VISIBLE"];
         self.filename       =[coder decodeObjectForKey:@"FILENAME"];
         self.title          =[coder decodeObjectForKey:@"TITLE"];
+        self.timestamp      =[coder decodeObjectForKey:@"TIMESTAMP"];
 	}
 	return self;
 }
@@ -47,6 +49,7 @@
     [coder encodeBool:self.visible          forKey:@"VISIBLE"];
     [coder encodeObject:self.filename       forKey:@"FILENAME"];
     [coder encodeObject:self.title          forKey:@"TITLE"];
+    [coder encodeObject:self.timestamp      forKey:@"TIMESTAMP"];
 }
 -(id)copyWithZone:(NSZone *)zone {
 	Track * tkCopy=[[[self class] allocWithZone:zone] init];
@@ -55,6 +58,7 @@
     tkCopy.visible=self.visible;
     tkCopy.filename=self.filename;
     tkCopy.title=self.title;
+    tkCopy.timestamp=self.timestamp;
 	return tkCopy;
 }
 

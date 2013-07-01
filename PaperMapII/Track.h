@@ -17,6 +17,6 @@
 @property bool visible;
 @property (nonatomic,copy) NSString * filename;
 @property (nonatomic,copy) NSString * title;
-
+@property NSDate * timestamp;
 //-(void)InitializeFilenameAndTitle;
 @end
