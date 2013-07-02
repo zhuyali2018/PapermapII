@@ -13,11 +13,13 @@
 @synthesize nodes,lineProperty;
 @synthesize title;
 @synthesize timestamp;
+@synthesize visible;
+
 - (id)init {
     self = [super init];
     if (self) {
         // Initialize self.
-        _visible=true;
+        visible=true;
         [self InitializeFilenameAndTitle];
     }
     return self;

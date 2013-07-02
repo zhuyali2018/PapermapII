@@ -32,6 +32,7 @@
 @synthesize propBn;
 @synthesize lbAvgSpeed;
 @synthesize lbTotalTime;
+@synthesize visibleSwitchBn;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -60,6 +61,11 @@
     NSTimeInterval tm=[t2 timeIntervalSinceDate:t1];
     lbAvgSpeed.text=[[NSString alloc]initWithFormat:@"%5.1f MPH",(gpsTrack.tripmeter*3600/1609)/tm];
     lbTotalTime.text=[[NSString alloc]initWithFormat:@"%02.0f:%02.0f:%02.0f",floor(tm/3600),fmod(floor(tm/60),60),fmod(tm,60)];
+    if (gpsTrack.visible) {
+        [visibleSwitchBn setTitle:@"Visible" forState:UIControlStateNormal];
+    }else{
+        [visibleSwitchBn setTitle:@"Hidden" forState:UIControlStateNormal];
+    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -92,5 +98,16 @@
         gpsTrackName.text=gpsTrack.title;
         [bnEdit setTitle:@"Edit"forState:UIControlStateNormal];
     }
+}
+- (IBAction) visibleBnClicked:(id)sender{
+    if ([[visibleSwitchBn.titleLabel text] compare:@"Visible"]==NSOrderedSame) {
+        [visibleSwitchBn setTitle:@"Hidden" forState:UIControlStateNormal];
+        gpsTrack.visible=FALSE;
+    }else{
+        [visibleSwitchBn setTitle:@"Visible" forState:UIControlStateNormal];
+        gpsTrack.visible=TRUE;
+    }
+    PM2AppDelegate * appD=[[UIApplication sharedApplication] delegate];
+	[appD.viewController.mapScrollView.zoomView.gpsTrackPOIBoard setNeedsDisplay];  //update the map with new track property
 }
 @end

@@ -16,6 +16,7 @@
 @property (nonatomic,strong) IBOutlet UILabel * lbTimeCreated;
 @property (nonatomic,strong) IBOutlet UIButton * bnViewDetails;
 @property (nonatomic,strong) IBOutlet UIButton * bnEdit;
+@property (nonatomic,strong) IBOutlet UIButton * visibleSwitchBn;
 @property (nonatomic,strong) IBOutlet UITextField * txtEdit;
 @property (nonatomic,strong) IBOutlet UILabel * lbTotalTime;
 @property (nonatomic,strong) IBOutlet UILabel * lbAvgSpeed;
@@ -25,4 +26,5 @@
 -(IBAction)viewDetailsBnClicked:(id)sender;
 -(IBAction)editBnClicked:(id)sender;
 - (IBAction) pickLineProperty:(id)sender;
+- (IBAction) visibleBnClicked:(id)sender;
 @end

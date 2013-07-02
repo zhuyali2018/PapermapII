@@ -15,6 +15,7 @@
 #import "LineProperty.h"
 #import "Recorder.h"
 #import "MainQ.h"
+#import "GPSTrack.h"
 
 @implementation GPSTrackPOIBoard
 
@@ -182,8 +183,9 @@
     
     //Drawing lines
     for (int i=0; i<[ptrToGpsTrackArray count]; i++) {     //loop through each track arrays of track arrays
-        //NSLOG10(@"Draw To track[%d]",i );
-        [self gpsDrawTrack:ptrToGpsTrackArray[i] context:context lastTrack:((i+1)==[ptrToGpsTrackArray count])];
+        if (((GPSTrack *)ptrToGpsTrackArray[i]).visible) {
+            [self gpsDrawTrack:ptrToGpsTrackArray[i] context:context lastTrack:((i+1)==[ptrToGpsTrackArray count])];
+        }
     }
 }
 // Only override drawRect: if you perform custom drawing.

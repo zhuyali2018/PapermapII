@@ -81,7 +81,7 @@
 	int screenH=[[self view] bounds].size.height;
     [self.mapScrollView setFrame:CGRectMake(0, 0, screenW,screenH)];
     PM2OnScreenButtons * bns=[PM2OnScreenButtons sharedBnManager];
-    [bns repositionButtonsFromX:screenW-110 Y:200];
+    [bns repositionButtonsFromX:screenW-110 Y:150];
     NSLOG9(@"did Rotate !!!");
     [((PM2OnScreenButtons *)[PM2OnScreenButtons sharedBnManager]).speedLabel  setFrame:CGRectMake(0,  screenH-180, 400, 140)];
     [((PM2OnScreenButtons *)[PM2OnScreenButtons sharedBnManager]).heightLabel setFrame:CGRectMake(402,screenH-80,  300,  40)];
