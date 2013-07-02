@@ -27,6 +27,7 @@
 @property (nonatomic, strong) UIButton *unloadDrawingButton;
 @property (nonatomic, strong) UIButton *unloadGPSTrackButton;
 @property (nonatomic, strong) UIButton *menuButton;
+@property (nonatomic, strong) UIButton * centerBn;
 @property (nonatomic, strong) UILabel * speedLabel;
 @property (nonatomic, strong) UILabel *heightLabel;
 @property (nonatomic, strong) UILabel *tripLabel;

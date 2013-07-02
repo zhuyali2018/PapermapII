@@ -16,6 +16,7 @@
 #import "ZoomView.h"
 #import "GPSTrackPOIBoard.h"
 #import "MapScrollView.h"
+#import "GPSNode.h"
 
 @interface GPSTrackViewController ()
 
@@ -29,6 +30,8 @@
 @synthesize bnEdit;
 @synthesize txtEdit;
 @synthesize propBn;
+@synthesize lbAvgSpeed;
+@synthesize lbTotalTime;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -45,15 +48,18 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     gpsTrackName.text=gpsTrack.title;
-    lbGpsTrackLength.text=[[NSString alloc]initWithFormat:@"%d meters",gpsTrack.tripmeter];
+    lbGpsTrackLength.text=[[NSString alloc]initWithFormat:@"%3.1f miles (%d meters)",(float)gpsTrack.tripmeter/1609,gpsTrack.tripmeter];
     //lbTimeCreated.text=[gpsTrack.timestamp description];
     lbTimeCreated.text = [NSDateFormatter localizedStringFromDate:gpsTrack.timestamp dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterMediumStyle];
     txtEdit.hidden=YES;
     [propBn.titleLabel setText:@"GPS Track Property:"];
     propBn.lineProperty=gpsTrack.lineProperty;
     [propBn setBackgroundImage:[UIImage imageNamed:@"icon72x72.png"] forState:UIControlStateHighlighted];  //TODO: Choose a better image here
-    
-    
+    NSDate * t1=((GPSNode *)gpsTrack.nodes[0]).timestamp;
+    NSDate * t2=((GPSNode *)[gpsTrack.nodes lastObject]).timestamp;
+    NSTimeInterval tm=[t2 timeIntervalSinceDate:t1];
+    lbAvgSpeed.text=[[NSString alloc]initWithFormat:@"%5.1f MPH",(gpsTrack.tripmeter*3600/1609)/tm];
+    lbTotalTime.text=[[NSString alloc]initWithFormat:@"%02.0f:%02.0f:%02.0f",floor(tm/3600),fmod(floor(tm/60),60),fmod(tm,60)];
 }
 
 - (void)didReceiveMemoryWarning

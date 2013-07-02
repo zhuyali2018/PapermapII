@@ -17,6 +17,8 @@
 @property (nonatomic,strong) IBOutlet UIButton * bnViewDetails;
 @property (nonatomic,strong) IBOutlet UIButton * bnEdit;
 @property (nonatomic,strong) IBOutlet UITextField * txtEdit;
+@property (nonatomic,strong) IBOutlet UILabel * lbTotalTime;
+@property (nonatomic,strong) IBOutlet UILabel * lbAvgSpeed;
 
 @property (nonatomic,strong) IBOutlet PropertyButton * propBn;
 

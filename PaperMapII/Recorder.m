@@ -27,6 +27,8 @@
 @synthesize trackArray,gpsTrackArray;
 @synthesize lastGpsNode;
 
+bool centerPos;
+
 + (Recorder *)sharedRecorder{
     static Recorder *sharedMyManager = nil;
     static dispatch_once_t onceToken;
@@ -312,11 +314,11 @@
 #pragma mark ------------------ CLLocationManagerDelegate method -------------
 - (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation{
     [self displayAccuracy:newLocation];
-    if(!_gpsRecording){   //if not recording, do not create the node for the node
+    if(!_gpsRecording){   //if not recording, do not create the node
         return;
     }
-    if(self.gpsTrack.timestamp < newLocation.timestamp)
-        return; //do not record those before the track was created
+    //if(self.gpsTrack.timestamp < newLocation.timestamp)
+    //    return; //do not record those before the track was created
     
      //========Accuracy is enough, go ahead and record it=================
     double Lat=newLocation.coordinate.latitude;
@@ -333,7 +335,12 @@
 	int y=pow(2,res)*1.422222222*(90-[self GetScreenY:Lat]);		 //256/180=1.4222222222
 	
     //center the current position
-    [self centerPositionAtX:x Y:y];
+    if(centerPos)
+        [self centerPositionAtX:x Y:y];
+    
+     //show speed panel
+    [self showSpeed:newLocation.speed];
+    [self showAltitude:newLocation.altitude];
     
     if(newLocation.horizontalAccuracy>10){ //if acuracy is not accurate enough, do nothing further
         return;
@@ -345,11 +352,8 @@
     GPSNode *node=[[GPSNode alloc]initWithPoint:GPSPoint mapLevel:resM];
     
     //add a gps node to our node array for gps track
-    [self addGpsNode:node with:newLocation];
+    [self addGpsNode:node with:newLocation];   
     
-    //show speed panel
-    [self showSpeed:newLocation.speed];
-    [self showAltitude:newLocation.altitude];
     [self showTripMeter];
     [self updateArrowDirection:newLocation.course*PI/180];
 }
@@ -370,15 +374,21 @@ float mapLeftThereDirection=0;       //TODO: assign and keep it an appropriate v
     arrow.transform=transform;
     
     //update the arrow position
-    CGPoint arrowCenter=[trackBoard ConvertPoint:(GPSNode *)[self.gpsTrack.nodes lastObject]];
+    CGPoint arrowCenter;
+    if ((lastGpsNode.x>0)&&(lastGpsNode.y>0)) {
+        arrowCenter=[trackBoard ConvertPoint:lastGpsNode];
+    }else{
+        arrowCenter=[trackBoard ConvertPoint:(GPSNode *)[self.gpsTrack.nodes lastObject]];
+    }
     PM2AppDelegate * appD=[[UIApplication sharedApplication] delegate];
 	CGPoint arrowCenter0=[trackBoard  convertPoint:arrowCenter toView:appD.viewController.view];
     
-    [UIView beginAnimations:@"MoveArrow" context:nil];
-    [UIView setAnimationDuration:0.3];
-    [UIView setAnimationDelay:0];
+    //No Animation !!!
+//    [UIView beginAnimations:@"MoveArrow" context:nil];
+//    [UIView setAnimationDuration:0.3];
+//    [UIView setAnimationDelay:0];
         arrow.center=arrowCenter0;
-    [UIView commitAnimations];
+//    [UIView commitAnimations];
 }
 -(void)showTripMeter{
     if(!_gpsRecording)return;
@@ -387,7 +397,7 @@ float mapLeftThereDirection=0;       //TODO: assign and keep it an appropriate v
     if(!lb) return;
     NSString *tripString;
     if (totalTrip<1000) {
-        tripString=[[NSString alloc] initWithFormat:@"%4.1fm ", totalTrip];
+        tripString=[[NSString alloc] initWithFormat:@"%4.1fm (%.0f ft)", totalTrip,totalTrip*3.28084];
     }else if (totalTrip<1600) {
         tripString=[[NSString alloc] initWithFormat:@"%4.1fkm ", totalTrip/1000];
     }else{
@@ -400,7 +410,7 @@ float mapLeftThereDirection=0;       //TODO: assign and keep it an appropriate v
     UILabel * lb=(UILabel *)[mQ getTargetRef:ALTITUDELABEL];
     if(!lb) return;
     NSString *altString;
-    altString=[[NSString alloc] initWithFormat:@"%4.1fm ", altitude];
+    altString=[[NSString alloc] initWithFormat:@"%4.1fm (%.0f ft) ", altitude, altitude*3.28084];
     [lb setText:altString];
 }
 -(void)showSpeed:(CLLocationSpeed)speed{
@@ -410,7 +420,7 @@ float mapLeftThereDirection=0;       //TODO: assign and keep it an appropriate v
     //UILabel * trplb=(UILabel *)[mQ getTargetRef:TRIPMETER];
     if(!lb) return;
     bool bMetric=false;
-    if(speed>1){    //> 2.25 mph
+    if(speed>0.6){    //> 1.34 mph
         if(bMetric){
 			float howfast=speed*(3600.00/1000);
 			NSString *speedString;
@@ -445,17 +455,17 @@ int n=0;  //gps node counter
     
     CLLocationSpeed speed=newLocation.speed;
     int minDistance=20;
-	if(speed>1){                 //>2.22 mph
+	if(speed>0.6){                 //>1.34 mph
 		//speed sensitive point distance on gps track, added on 10/24/2010
 		if (speed<2) {			 //about 4 mph
-			minDistance=5;       //max accuracy is 5 meters
+			minDistance=4;       //max accuracy is 5 meters
 		}else if (speed<5) {	 //about 11 mph
-			minDistance=10;
+			minDistance=5;
 		}else if (speed > 20) {  //about 45 mph
-			minDistance=40;
+			minDistance=20;
         }else if (speed > 30) {  //about 63 mph
-			minDistance=50;
-		}else if (speed > 100) {  //about 225 mph, for airplan
+			minDistance=30;
+		}else if (speed > 100) {  //about 225 mph, for airplane
             minDistance=500;
         }
     }
@@ -473,18 +483,25 @@ int n=0;  //gps node counter
             node.distanceFromLastNode=distance;  //distanceFromLastNode is set here
 		}
     }
+    
+    node.timestamp=newLocation.timestamp;
+    node.altitude=newLocation.altitude;
+    node.speed=newLocation.speed;
+    node.longitude=newLocation.coordinate.longitude;
+    node.latitude=newLocation.coordinate.latitude;
+    node.direction=newLocation.course;
+    node.distanceFromStart=totalTrip;
     if(bFarEnough){
-        node.timestamp=newLocation.timestamp;
-        node.altitude=newLocation.altitude;
-        node.speed=newLocation.speed;
-        node.longitude=newLocation.coordinate.longitude;
-        node.latitude=newLocation.coordinate.latitude;
-        node.direction=newLocation.course;
-        node.distanceFromStart=totalTrip;
         self.gpsTrack.nodes=[self addGPSNode:node to:self.gpsTrack.nodes];
         self.gpsTrack.tripmeter=totalTrip;
     }
-    lastGpsNode=node;  //TODO: handle the lastGPSNode properly, if no need, just delete it!
+    if (_gpsRecording==true) {
+        lastGpsNode=[node copy];  //TODO: handle the lastGPSNode properly, if no need, just delete it!
+    }else{
+        lastGpsNode.x=0;
+        lastGpsNode.y=0;
+    }
+    //NSLOG10(@"Recorder.lastGpsNode=(%d,%d)",lastGpsNode.x,lastGpsNode.y);
     [[DrawableMapScrollView sharedMap].zoomView.gpsTrackPOIBoard setNeedsDisplay];
 }
 -(void)centerPositionAtX:(int) x Y:(int) y{

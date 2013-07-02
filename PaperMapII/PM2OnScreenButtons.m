@@ -39,6 +39,7 @@
 @synthesize tripLabel;
 @synthesize menuButton;
 @synthesize arrow;
+@synthesize centerBn;
 
 + (id)sharedBnManager {
     static PM2OnScreenButtons *onScreenbuttons = nil;
@@ -78,6 +79,7 @@
     [self add_TripMeter];
     [self add_MainMenu];
     [self add_GPSArrow];
+    [self add_CenterBn];
 }
 -(void)repositionButtonsFromX:(int)x Y:(int)y{
     int w=100;
@@ -85,6 +87,7 @@
     int s=60;   //row apart
     [drawButton             setFrame:CGRectMake(x, y=y+s, w, h)];
     [fdrawButton            setFrame:CGRectMake(x, y=y+s, w, h)];
+    [centerBn            setFrame:CGRectMake(x, y=y+s, w, h)];
     [undoButton             setFrame:CGRectMake(x, y=y+s, w, h)];
     [gpsButton              setFrame:CGRectMake(x, y=y+s, w, h)];
 //    [stopGpsButton          setFrame:CGRectMake(x, y=y+s, w, h)];
@@ -94,6 +97,12 @@
     [unloadDrawingButton    setFrame:CGRectMake(x, y=y+s, w, h)];
 //    [unloadGPSTrackButton   setFrame:CGRectMake(x, y=y+s, w, h)];
     [menuButton             setFrame:CGRectMake(x, y=y+s, w, h)];
+}
+-(void)add_CenterBn{
+    centerBn=[UIButton buttonWithType:(UIButtonTypeRoundedRect)];
+    [centerBn setTitle:@"Center Cur" forState:UIControlStateNormal];
+    [centerBn addTarget:self action:@selector(centerCurrentPosition:) forControlEvents:UIControlEventTouchUpInside];
+    [_baseView addSubview:centerBn];
 }
 -(void)addUnloadDrawingButton{
     unloadDrawingButton=[UIButton buttonWithType:(UIButtonTypeRoundedRect)];
@@ -426,12 +435,12 @@
 }
 -(void)add_HeightPanel{
     int screenH=[_baseView frame].size.height;
-	heightLabel=[[UILabel alloc] initWithFrame:CGRectMake(402,screenH-80, 200, 40)];
+	heightLabel=[[UILabel alloc] initWithFrame:CGRectMake(402,screenH-80, 300, 40)];
 	[heightLabel setBackgroundColor:[UIColor colorWithRed:0.2 green:0.4 blue:0.4 alpha:0.5]];
 	[heightLabel setTextColor:[UIColor yellowColor]];
 	[heightLabel setShadowColor:[UIColor blackColor]];
 	[heightLabel setShadowOffset:CGSizeMake(2.0, 2.0)];
-	[heightLabel setFont:[UIFont boldSystemFontOfSize:40]];
+	[heightLabel setFont:[UIFont boldSystemFontOfSize:30]];
     //heightLabel.hidden=YES;
 	//[heightLabel setText:[NSString stringWithFormat:@" %4.1fm ",128.2]];
 	[heightLabel setTextAlignment:UITextAlignmentRight];
@@ -440,12 +449,12 @@
 }
 -(void)add_TripMeter{
     int screenH=[_baseView frame].size.height;
-	tripLabel=[[UILabel alloc] initWithFrame:CGRectMake(402,screenH-122, 200, 40)];
+	tripLabel=[[UILabel alloc] initWithFrame:CGRectMake(402,screenH-122, 300, 40)];
 	[tripLabel setBackgroundColor:[UIColor colorWithRed:0.2 green:0.7 blue:0.2 alpha:0.5]];
 	[tripLabel setTextColor:[UIColor yellowColor]];
 	[tripLabel setShadowColor:[UIColor blackColor]];
 	[tripLabel setShadowOffset:CGSizeMake(2.0, 2.0)];
-	[tripLabel setFont:[UIFont boldSystemFontOfSize:40]];
+	[tripLabel setFont:[UIFont boldSystemFontOfSize:30]];
     //tripLabel.hidden=YES;
 	//[tripLabel setText:[NSString stringWithFormat:@" %4.1fm ",128.2]];
 	[tripLabel setTextAlignment:UITextAlignmentRight];
@@ -458,5 +467,16 @@
     arrow.hidden=NO;   //TODO:need to be YES
     
     [[MainQ sharedManager] register:arrow withID:GPSARROW];
+}
+extern bool centerPos;
+-(void)centerCurrentPosition:(id)sender{
+    if ([[centerBn.titleLabel text] compare:@"Center Cur"]==NSOrderedSame) {
+        //center position;
+        centerPos=true;
+        [centerBn setTitle:@"No center" forState:UIControlStateNormal];
+    }else{
+        centerPos=false;
+        [centerBn setTitle:@"Center Cur" forState:UIControlStateNormal];
+    }
 }
 @end

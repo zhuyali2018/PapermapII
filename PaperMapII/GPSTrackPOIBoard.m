@@ -22,7 +22,7 @@
 @synthesize ptrToTrackArray,ptrToGpsTrackArray;
 @synthesize maplevel;
 @synthesize drawingBoard;
-@synthesize ptrToLastGpsNode;
+//@synthesize ptrToLastGpsNode;
 @synthesize GPSRunning;
 
 - (id)initWithFrame:(CGRect)frame
@@ -117,7 +117,7 @@
 	}
 	CGContextStrokePath(context);
 }
--(void)gpsDrawTrack:(Track *)track context:(CGContextRef)context{
+-(void)gpsDrawTrack:(Track *)track context:(CGContextRef)context lastTrack:(BOOL)lastTrack{
     if(!track) return;
     if(nil==track.nodes)
         return;
@@ -137,11 +137,16 @@
 		CGContextAddLineToPoint(context, tmpP.x, tmpP.y);
 	}
     //draw to the lastGPSNode if it is not 0
-//    if ((ptrToLastGpsNode.x>0) &&(ptrToLastGpsNode.y>0)){
-//        CGPoint tmpP=[self ConvertPoint:ptrToLastGpsNode];
-//        CGContextAddLineToPoint(context, tmpP.x, tmpP.y);
-//    }
+    GPSNode * lastGpsNode=[Recorder sharedRecorder].lastGpsNode;
+    if ((lastGpsNode.x>0) &&(lastGpsNode.y>0)&&lastTrack){
+        CGPoint tmpP=[self ConvertPoint:lastGpsNode];
+        CGContextAddLineToPoint(context, tmpP.x, tmpP.y);
+        //NSLOG10(@"Draw To lastGpsNode=(%d,%d) LastTrack?%d",lastGpsNode.x,lastGpsNode.y,lastTrack);
+    }
+    //NSLOG10(@"==>Draw To lastGpsNode=(%d,%d) LastTrack?%d",lastGpsNode.x,lastGpsNode.y,lastTrack);
+
 	CGContextStrokePath(context);
+    //NSLOG10(@"lastGpsNode=(%d,%d)",ptrToLastGpsNode.x,ptrToLastGpsNode.y);
 }
 -(void)drawLines:(CGContextRef)context{
     if (maplevel<2) {
@@ -173,14 +178,12 @@
     if ([ptrToGpsTrackArray count]==0) {  // if 0 element
         return;
     }
-    if (!ptrToLastGpsNode) {  //if not initialized
-        ptrToLastGpsNode=((Recorder *)[Recorder sharedRecorder]).lastGpsNode;
-    }
     CGContextSetShouldAntialias(context, YES);   //make line smoother ?
     
     //Drawing lines
     for (int i=0; i<[ptrToGpsTrackArray count]; i++) {     //loop through each track arrays of track arrays
-        [self gpsDrawTrack:ptrToGpsTrackArray[i] context:context];
+        //NSLOG10(@"Draw To track[%d]",i );
+        [self gpsDrawTrack:ptrToGpsTrackArray[i] context:context lastTrack:((i+1)==[ptrToGpsTrackArray count])];
     }
 }
 // Only override drawRect: if you perform custom drawing.
