@@ -126,6 +126,7 @@
     GPSNode * node=gpsTrack.nodes[indexPath.row];
     [self centerMapTo:node];
     nodeViewer.node=node;
+    nodeViewer.gpsTrack=gpsTrack;
     NSString * tm=[NSDateFormatter localizedStringFromDate:nodeViewer.node.timestamp dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterMediumStyle];
     [nodeViewer setTitle:tm];
     [self.navigationController pushViewController:nodeViewer animated:YES];
@@ -139,5 +140,12 @@
 	
     //center the current position
     [[Recorder sharedRecorder] centerPositionAtX:x Y:y];
+}
+-(UITableViewCellAccessoryType)tableView:(UITableView *)tableView accessoryTypeForRowWithIndexPath:(NSIndexPath *)indexPath{
+	return UITableViewCellAccessoryDetailDisclosureButton;
+}
+-(void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath{
+    GPSNode * node=gpsTrack.nodes[indexPath.row];
+    [self centerMapTo:node];
 }
 @end
