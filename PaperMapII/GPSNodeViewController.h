@@ -21,6 +21,7 @@
 @property (nonatomic,strong) IBOutlet UILabel * lblSpd;
 @property (nonatomic,strong) IBOutlet UILabel * lblDis1;
 @property (nonatomic,strong) IBOutlet UILabel * lblDis2;
+@property (nonatomic,strong) IBOutlet UILabel * lblDisInMile;
 @property (nonatomic,strong) IBOutlet UILabel * lblTim;
 @property (nonatomic,strong) IBOutlet UIButton * fButton;   //forward button
 @property (nonatomic,strong) IBOutlet UIButton * bButton;   //backward button

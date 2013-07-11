@@ -33,3 +33,7 @@
 - (void)mapLevel:(int)maplevel singleTapAtPoint:(CGPoint)tapPoint;
 @end
 
+@protocol OnOffBnDelegate <NSObject>
+@optional
+- (void)launchThisFn:(NSString *)fn;
+@end

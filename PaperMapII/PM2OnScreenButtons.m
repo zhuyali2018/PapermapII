@@ -17,7 +17,11 @@
 #import "PM2Protocols.h"
 #import "MenuItem.h"
 @implementation PM2OnScreenButtons
-@synthesize drawButton,fdrawButton,colorButton;
+
+@synthesize bnStart;
+@synthesize drawButton;
+@synthesize fdrawButton;
+@synthesize colorButton;
 @synthesize mapScrollView;
 @synthesize resLabel;
 @synthesize messageLabel;
@@ -59,6 +63,7 @@
 }
 -(void)addButtons:(UIView *)vc{
     _baseView=vc;
+    [self add_bnStart];
     [self addDrawButton];
     [self addFreeDrawButton];
     [self addUndoButton];
@@ -71,32 +76,148 @@
     //[self addTrackCleanupButton];
     [self addColorButton];
     [self addMapTypeButton];
-    [self addUnloadDrawingButton];
+    //[self addUnloadDrawingButton];
     //[self addUnloadGPSTrackButton];
     //[self repositionButtonsFromX:800 Y:0];
     [self add_SpeedPanel];
     [self add_HeightPanel];
     [self add_TripMeter];
-    [self add_MainMenu];
     [self add_GPSArrow];
     [self add_CenterBn];
+    [self add_MainMenu];
 }
+-(void)add_bnStart{
+    bnStart=[UIButton buttonWithType:(UIButtonTypeRoundedRect)];
+    [bnStart setTitle:@"Buttons" forState:UIControlStateNormal];
+    [bnStart addTarget:self action:@selector(showButtons) forControlEvents:UIControlEventTouchUpInside];
+    [_baseView addSubview:bnStart];
+    [self positionStartBn];    
+    [self setButtonsVisible:NO];
+}
+-(void)positionStartBn{
+    int screenW=[[UIScreen mainScreen] bounds].size.width;
+	int screenH=[[UIScreen mainScreen] bounds].size.height;
+    [self positionStartBnWidth:screenW Height:screenH];
+}
+-(void)positionStartBnWidth:(int)w Height:(int)h{
+    int x=w-80;
+    int y=h-70+20;
+    CGRect frame=CGRectMake(x, y, 80, 50);
+    [bnStart setFrame:frame];
+}
+-(void)showButtons{
+    [UIView animateWithDuration:0.5
+                          delay:0.0
+                        options: UIViewAnimationOptionCurveEaseIn //UIViewAnimationOptionCurveLinear
+                     animations:^{
+                         [self setButtonsVisible:YES];
+                         [self setButtonsToPosition:YES];
+                     }
+                     completion:^(BOOL finished){
+                         NSLOG8(@"Done!");
+                     }];
+}
+-(void) setButtonsVisible:(bool)bVisible{
+    drawButton.hidden   =!bVisible;
+    colorButton.hidden  =!bVisible;
+    gpsButton.hidden    =!bVisible;
+    mapTypeButton.hidden=!bVisible;
+    centerBn.hidden     =!bVisible;
+    menuButton.hidden   =!bVisible;
+}
+-(void) setButtonsToPosition:(bool)bVisible{
+    int screenW=[_baseView bounds].size.width;
+    int x=screenW-110;
+    int y=150;
+    if(bVisible){
+        [self repositionButtonsFromX:x Y:y];
+    }else{
+        [self repositionButtonsFromX:x+800 Y:y];
+    }
+}
+
 -(void)repositionButtonsFromX:(int)x Y:(int)y{
     int w=100;
     int h=60;
     int s=60;   //row apart
-    [drawButton             setFrame:CGRectMake(x, y=y+s, w, h)];
-    [fdrawButton            setFrame:CGRectMake(x, y=y+s, w, h)];
-    [centerBn            setFrame:CGRectMake(x, y=y+s, w, h)];
-    [undoButton             setFrame:CGRectMake(x, y=y+s, w, h)];
+    if (undoButton.withGroup) [undoButton  setFrame:CGRectMake(x+200, y=y+s, w, h)];
+    if (fdrawButton.withGroup)[fdrawButton setFrame:CGRectMake(x+200, y,     w, h)];
+    if (drawButton.withGroup) [drawButton  setFrame:CGRectMake(x,     y,     w, h)];
+    
+    [centerBn               setFrame:CGRectMake(x, y=y+s, w, h)];
     [gpsButton              setFrame:CGRectMake(x, y=y+s, w, h)];
-//    [stopGpsButton          setFrame:CGRectMake(x, y=y+s, w, h)];
-//    [cleanupButton          setFrame:CGRectMake(x, y=y+s, w, h)];
     [colorButton            setFrame:CGRectMake(x, y=y+s, w, h)];
     [mapTypeButton          setFrame:CGRectMake(x, y=y+s, w, h)];
-    [unloadDrawingButton    setFrame:CGRectMake(x, y=y+s, w, h)];
-//    [unloadGPSTrackButton   setFrame:CGRectMake(x, y=y+s, w, h)];
     [menuButton             setFrame:CGRectMake(x, y=y+s, w, h)];
+    
+    
+}
+-(void)startDrawingRecorder:(OnOffButton *)bn{
+    MainQ * mQ=[MainQ sharedManager];
+    DrawingBoard * dv =(DrawingBoard *)[mQ getTargetRef:DRAWINGBOARD];
+    UIView * v =(UIView *)[mQ getTargetRef:GPSTRACKPOIBOARD];
+    if (bn.btnOn) {   //start drawing mode
+        [self.routRecorder start];   //user tap to enter into drawing state here
+        NSLOG4(@"Recorder started!");
+        self.mapScrollView.mapPined=TRUE;
+        [self.mapScrollView setScrollEnabled:NO];
+        self.mapScrollView.freeDraw=false;
+        self.mapScrollView.bDrawing=true;
+        dv.preDraw=true;
+        //[fdrawButton setHidden:FALSE];
+        bn.withGroup=false;
+        undoButton.withGroup=false;
+        fdrawButton.withGroup=false;
+        [self showDrawingButtons];
+        bnStart.hidden=YES;
+    }else{
+        //[bn setTitle:@"Draw" forState:UIControlStateNormal];
+        [self.routRecorder stop];
+        NSLOG4(@"Recorder Stopped!");
+        self.mapScrollView.mapPined=FALSE;
+        [self.mapScrollView setScrollEnabled:YES];
+        [dv clearAll];
+        dv.firstPt=CGPointMake(0,0);
+        dv.lastPt=CGPointMake(0,0);
+        [v setNeedsDisplay];
+        //reset the free draw button too
+        self.mapScrollView.freeDraw=false;
+        dv.preDraw=TRUE;
+        fdrawButton.withGroup=YES;
+        undoButton.withGroup=YES;
+        drawButton.withGroup=YES;
+        //[self setButtonsToPosition:NO];
+        [self hideDrawingButtons];
+        bnStart.hidden=NO;
+    }
+}
+//show drawing related buttons
+//such as free drawing, undo buttons
+-(void)showDrawingButtons{
+    [UIView animateWithDuration:0.5
+                          delay:0.0
+                        options: UIViewAnimationOptionCurveEaseIn //UIViewAnimationOptionCurveLinear
+                     animations:^{
+                         [self setButtonsToPosition:NO];        //hide all buttons
+                         drawButton.hidden=NO;
+                         [drawButton  setFrame:CGRectMake(0,   40, 80,  60)];
+                         [fdrawButton setFrame:CGRectMake(80,  40, 120, 60)];
+                         [undoButton  setFrame:CGRectMake(200, 40, 80,  60)];
+                     }
+                     completion:^(BOOL finished){
+                         NSLOG8(@"Done!");
+                     }];
+}
+-(void)hideDrawingButtons{
+    [UIView animateWithDuration:0.5
+                          delay:0.0
+                        options: UIViewAnimationOptionCurveEaseIn //UIViewAnimationOptionCurveLinear
+                     animations:^{
+                         [self setButtonsToPosition:NO];
+                     }
+                     completion:^(BOOL finished){
+                         NSLOG8(@"Done!");
+                     }];
 }
 -(void)add_CenterBn{
     centerBn=[UIButton buttonWithType:(UIButtonTypeRoundedRect)];
@@ -152,7 +273,6 @@
 //    [stopGpsButton addTarget:self action:@selector(stopGPS:) forControlEvents:UIControlEventTouchUpInside];
 //    [_baseView addSubview:stopGpsButton];
 //}
-
 -(void) add_MainMenu{
     menuButton=[UIButton buttonWithType:(UIButtonTypeRoundedRect)];
     [menuButton setTitle:@"Menu" forState:UIControlStateNormal];
@@ -283,25 +403,39 @@
     [_baseView addSubview:resLabel];
     [[MainQ sharedManager] register:resLabel withID:MAPLEVEL];
 }
--(void)addUndoButton{
-    undoButton=[UIButton buttonWithType:(UIButtonTypeRoundedRect)];
-    [undoButton setTitle:@"Undo" forState:UIControlStateNormal];
-    [undoButton addTarget:self action:@selector(undoDrawing:) forControlEvents:UIControlEventTouchUpInside];
-    [_baseView addSubview:undoButton];
-}
--(void)addFreeDrawButton{
-    fdrawButton=[UIButton buttonWithType:(UIButtonTypeRoundedRect)];
+-(void)addFreeDrawButton{    
+    fdrawButton=[[OnOffButton alloc] init];
     [fdrawButton setTitle:@"Free Draw" forState:UIControlStateNormal];
-    [fdrawButton addTarget:self action:@selector(switchToFreeDraw:) forControlEvents:UIControlEventTouchUpInside];
+    [fdrawButton setOffText:@"Free Draw"];
+    [fdrawButton setOnText: @"Line Draw"];
+    fdrawButton.OffBackgroundColor=[UIColor blueColor];
+    fdrawButton.OnBackgroundColor=[UIColor orangeColor];
+    [fdrawButton setBackgroundColor:fdrawButton.OffBackgroundColor];
+    fdrawButton.onOffBnDelegate=self;
+    fdrawButton.tapEventHandler=@selector(switchToFreeDraw:);
     [_baseView addSubview:fdrawButton];
-    //[fdrawButton setEnabled:FALSE];
-    [fdrawButton setHidden:TRUE];
+
 }
 -(void)addDrawButton{
-    drawButton=[UIButton buttonWithType:(UIButtonTypeRoundedRect)];
+    //drawButton=[UIButton buttonWithType:(UIButtonTypeRoundedRect)];
+    drawButton=[[OnOffButton alloc] init];
     [drawButton setTitle:@"Draw" forState:UIControlStateNormal];
-    [drawButton addTarget:self action:@selector(startDrawingRecorder:) forControlEvents:UIControlEventTouchUpInside];
+    [drawButton setOffText:@"Draw"];
+    [drawButton setOnText: @"Exit Draw"];
+    drawButton.onOffBnDelegate=self;
+    //[drawButton addTarget:self action:@selector(startDrawingRecorder:) forControlEvents:UIControlEventTouchUpInside];
+    drawButton.tapEventHandler=@selector(startDrawingRecorder:);
     [_baseView addSubview:drawButton];
+}
+-(void)addUndoButton{
+    //undoButton=[UIButton buttonWithType:(UIButtonTypeRoundedRect)];
+    undoButton=[[OnOffButton alloc] init];
+    [undoButton setTitle:@"Undo" forState:UIControlStateNormal];
+    undoButton.pushButton=true;
+    undoButton.onOffBnDelegate=self;
+    //[undoButton addTarget:self action:@selector(undoDrawing:) forControlEvents:UIControlEventTouchUpInside];
+    undoButton.tapEventHandler=@selector(undoDrawing:);
+    [_baseView addSubview:undoButton];
 }
 -(void)undoDrawing:(UIButton *)bn{
     MainQ * mQ=[MainQ sharedManager];
@@ -313,55 +447,20 @@
     [v setNeedsDisplay];
     [dv setNeedsDisplay];
 }
--(void)switchToFreeDraw:(UIButton *)bn{
+-(void)switchToFreeDraw:(OnOffButton *)bn{
     MainQ * mQ=[MainQ sharedManager];
     UIView * dv =(UIView *)[mQ getTargetRef:DRAWINGBOARD];
     NSLOG4(@"Free Draw button tapped. Button title is %@",[bn.titleLabel text]);
-    if ([[bn.titleLabel text] compare:@"Free Draw"]==NSOrderedSame) {
-        [bn setTitle:@"No Free Draw" forState:UIControlStateNormal];
+    //if ([[bn.titleLabel text] compare:@"Free Draw"]==NSOrderedSame) {
+    if (bn.btnOn) {
+        //[bn setTitle:@"No Free Draw" forState:UIControlStateNormal];
         self.mapScrollView.freeDraw=true;
-        //self.mapScrollView.zoomView.gpsTrackPOIBoard.drawingBoard.preDraw=FALSE;
         ((DrawingBoard *)dv).preDraw=FALSE;
         [self.routRecorder startNewTrack];
     }else{
-        [bn setTitle:@"Free Draw" forState:UIControlStateNormal];
+        //[bn setTitle:@"Free Draw" forState:UIControlStateNormal];
         self.mapScrollView.freeDraw=false;
         ((DrawingBoard *)dv).preDraw=TRUE;
-    }
-}
-
--(void)startDrawingRecorder:(UIButton *)bn{
-    MainQ * mQ=[MainQ sharedManager];
-    DrawingBoard * dv =(DrawingBoard *)[mQ getTargetRef:DRAWINGBOARD];
-    UIView * v =(UIView *)[mQ getTargetRef:GPSTRACKPOIBOARD];
-    NSLOG4(@"Button title is %@",[bn.titleLabel text]);
-    if ([[bn.titleLabel text] compare:@"Draw"]==NSOrderedSame) {
-        [bn setTitle:@"Exit Draw" forState:UIControlStateNormal];
-        
-        [self.routRecorder start];   //user tap to enter into drawing state here
-        NSLOG4(@"Recorder started!");
-        self.mapScrollView.mapPined=TRUE;
-        [self.mapScrollView setScrollEnabled:NO];
-        self.mapScrollView.freeDraw=false;
-        self.mapScrollView.bDrawing=true;
-        dv.preDraw=true;
-        [fdrawButton setHidden:FALSE];
-    }else{
-        [bn setTitle:@"Draw" forState:UIControlStateNormal];
-        
-        [self.routRecorder stop];
-        NSLOG4(@"Recorder Stopped!");
-        self.mapScrollView.mapPined=FALSE;
-        [self.mapScrollView setScrollEnabled:YES];
-        [dv clearAll];
-        dv.firstPt=CGPointMake(0,0);
-        dv.lastPt=CGPointMake(0,0);
-        [v setNeedsDisplay];
-        //reset the free draw button too
-        [fdrawButton setTitle:@"Free Draw" forState:UIControlStateNormal];
-        self.mapScrollView.freeDraw=false;
-        dv.preDraw=TRUE;
-        [fdrawButton setHidden:TRUE];
     }
 }
 -(void)toggleMapType:(UIButton *)bn{

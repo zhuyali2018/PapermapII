@@ -59,7 +59,10 @@
     NSDate * t1=((GPSNode *)gpsTrack.nodes[0]).timestamp;
     NSDate * t2=((GPSNode *)[gpsTrack.nodes lastObject]).timestamp;
     NSTimeInterval tm=[t2 timeIntervalSinceDate:t1];
-    lbAvgSpeed.text=[[NSString alloc]initWithFormat:@"%5.1f MPH",(gpsTrack.tripmeter*3600/1609)/tm];
+    double miles=gpsTrack.tripmeter/1609;
+    double f2=miles*3600;
+    float avgSpd=f2/tm;
+    lbAvgSpeed.text=[[NSString alloc]initWithFormat:@"%5.1f MPH",avgSpd];
     lbTotalTime.text=[[NSString alloc]initWithFormat:@"%02.0f:%02.0f:%02.0f",floor(tm/3600),fmod(floor(tm/60),60),fmod(tm,60)];
     if (gpsTrack.visible) {
         [visibleSwitchBn setTitle:@"Visible" forState:UIControlStateNormal];

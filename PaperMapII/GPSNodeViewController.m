@@ -39,9 +39,10 @@
     self.lblLon.text=[[NSString alloc]initWithFormat:@"%8.4f degrees",node.longitude];
     self.lblAlt.text=[[NSString alloc]initWithFormat:@"%8.0f meters",node.altitude];
     self.lblDir.text=[[NSString alloc]initWithFormat:@"%8.1f degrees",node.direction];
-    self.lblSpd.text=[[NSString alloc]initWithFormat:@"%8.1f MPH",node.speed*3600/1609];
+    self.lblSpd.text=[[NSString alloc]initWithFormat:@"%8.1f MPH",node.speed*3600/1609.34f];
     self.lblDis1.text=[[NSString alloc]initWithFormat:@"%8.0f meters",node.distanceFromLastNode];
     self.lblDis2.text=[[NSString alloc]initWithFormat:@"%8.0f meters",node.distanceFromStart];
+    self.lblDisInMile.text=[[NSString alloc]initWithFormat:@"%8.1f miles",node.distanceFromStart/1069.34f];
     idx=[gpsTrack.nodes indexOfObject:node];
 }
 

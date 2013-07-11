@@ -3502,6 +3502,8 @@
 		AAEE0CC3177669DB00549A7D /* LinePropPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AAEE0CC1177669DB00549A7D /* LinePropPickerViewController.m */; };
 		AAEE0CC61779448B00549A7D /* GPSTrack.m in Sources */ = {isa = PBXBuildFile; fileRef = AAEE0CC51779448A00549A7D /* GPSTrack.m */; };
 		AAEE0CC71779448B00549A7D /* GPSTrack.m in Sources */ = {isa = PBXBuildFile; fileRef = AAEE0CC51779448A00549A7D /* GPSTrack.m */; };
+		AAF8D165178D1B5B00611A86 /* OnOffButton.m in Sources */ = {isa = PBXBuildFile; fileRef = AAF8D164178D1B5B00611A86 /* OnOffButton.m */; };
+		AAF8D166178D1B5B00611A86 /* OnOffButton.m in Sources */ = {isa = PBXBuildFile; fileRef = AAF8D164178D1B5B00611A86 /* OnOffButton.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -5312,6 +5314,8 @@
 		AAEE0CC1177669DB00549A7D /* LinePropPickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LinePropPickerViewController.m; sourceTree = "<group>"; };
 		AAEE0CC41779448A00549A7D /* GPSTrack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPSTrack.h; sourceTree = "<group>"; };
 		AAEE0CC51779448A00549A7D /* GPSTrack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPSTrack.m; sourceTree = "<group>"; };
+		AAF8D163178D1B5B00611A86 /* OnOffButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnOffButton.h; sourceTree = "<group>"; };
+		AAF8D164178D1B5B00611A86 /* OnOffButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OnOffButton.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -5356,6 +5360,8 @@
 			children = (
 				AAAD5A6D176E1F5900DCDAD2 /* PM2OnScreenButtons.h */,
 				AAAD5A6E176E1F5900DCDAD2 /* PM2OnScreenButtons.m */,
+				AAF8D163178D1B5B00611A86 /* OnOffButton.h */,
+				AAF8D164178D1B5B00611A86 /* OnOffButton.m */,
 				AAAD5A7317701B5800DCDAD2 /* ScaleRuler.h */,
 				AAAD5A7417701B5800DCDAD2 /* ScaleRuler.m */,
 				AAAD5A7717702BE200DCDAD2 /* MapCenterIndicator.h */,
@@ -10801,6 +10807,7 @@
 				AAE6DF5F1780C3BC003F230F /* GPSTrackViewController.m in Sources */,
 				AAE6DF651780C93B003F230F /* GPSTrackNodesViewController.m in Sources */,
 				AAE6DF6A1780CD7C003F230F /* GPSNodeViewController.m in Sources */,
+				AAF8D165178D1B5B00611A86 /* OnOffButton.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -10838,6 +10845,7 @@
 				AAE6DF601780C3BC003F230F /* GPSTrackViewController.m in Sources */,
 				AAE6DF661780C93B003F230F /* GPSTrackNodesViewController.m in Sources */,
 				AAE6DF6B1780CD7C003F230F /* GPSNodeViewController.m in Sources */,
+				AAF8D166178D1B5B00611A86 /* OnOffButton.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
