@@ -541,7 +541,7 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
     
     //update the maplevel display
     MainQ * mQ=[MainQ sharedManager];
-    UILabel * lb=(UILabel *)[mQ getTargetRef:MESSAGELABEL];
+    UILabel * lb=(UILabel *)[mQ getTargetRef:MAPRES];
     if(lb){                     //added for update maplevel label
         [lb setText:[NSString stringWithFormat:@" %d", maplevel]];
     }

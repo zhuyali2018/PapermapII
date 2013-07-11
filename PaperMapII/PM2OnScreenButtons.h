@@ -19,10 +19,13 @@
 @interface PM2OnScreenButtons : NSObject <OnOffBnDelegate>
 @property (nonatomic, strong) UIButton * bnStart;       //all onscreen control buttons and menus starts from here
 @property (nonatomic, strong) OnOffButton *drawButton;
-@property (nonatomic, strong) OnOffButton *undoButton;
-@property (nonatomic, strong) UIButton *colorButton;
 @property (nonatomic, strong) OnOffButton *fdrawButton;
-@property (nonatomic, strong) UIButton *gpsButton;
+@property (nonatomic, strong) OnOffButton *undoButton;
+
+@property (nonatomic, strong) OnOffButton *gpsButton;
+@property (nonatomic, strong) OnOffButton * centerBn;
+
+@property (nonatomic, strong) UIButton *colorButton;
 //@property (nonatomic, strong) UIButton *stopGpsButton;
 @property (nonatomic, strong) UIButton *cleanupButton;
 
@@ -30,7 +33,7 @@
 @property (nonatomic, strong) UIButton *unloadDrawingButton;
 @property (nonatomic, strong) UIButton *unloadGPSTrackButton;
 @property (nonatomic, strong) UIButton *menuButton;
-@property (nonatomic, strong) UIButton * centerBn;
+
 @property (nonatomic, strong) UILabel * speedLabel;
 @property (nonatomic, strong) UILabel *heightLabel;
 @property (nonatomic, strong) UILabel *tripLabel;

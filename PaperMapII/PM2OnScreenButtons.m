@@ -19,8 +19,14 @@
 @implementation PM2OnScreenButtons
 
 @synthesize bnStart;
+
 @synthesize drawButton;
 @synthesize fdrawButton;
+@synthesize undoButton;
+
+@synthesize gpsButton;
+@synthesize centerBn;
+
 @synthesize colorButton;
 @synthesize mapScrollView;
 @synthesize resLabel;
@@ -32,9 +38,7 @@
 @synthesize menuController;
 
 @synthesize cleanupButton;
-@synthesize gpsButton;
-//@synthesize stopGpsButton;
-@synthesize undoButton;
+
 @synthesize mapTypeButton;
 @synthesize unloadDrawingButton;
 @synthesize unloadGPSTrackButton;
@@ -43,7 +47,7 @@
 @synthesize tripLabel;
 @synthesize menuButton;
 @synthesize arrow;
-@synthesize centerBn;
+
 
 + (id)sharedBnManager {
     static PM2OnScreenButtons *onScreenbuttons = nil;
@@ -61,6 +65,7 @@
     }
     return self;
 }
+#pragma mark ------------methods----------------
 -(void)addButtons:(UIView *)vc{
     _baseView=vc;
     [self add_bnStart];
@@ -86,6 +91,7 @@
     [self add_CenterBn];
     [self add_MainMenu];
 }
+#pragma mark ------------start button methods----------------
 -(void)add_bnStart{
     bnStart=[UIButton buttonWithType:(UIButtonTypeRoundedRect)];
     [bnStart setTitle:@"Buttons" forState:UIControlStateNormal];
@@ -144,14 +150,13 @@
     if (fdrawButton.withGroup)[fdrawButton setFrame:CGRectMake(x+200, y,     w, h)];
     if (drawButton.withGroup) [drawButton  setFrame:CGRectMake(x,     y,     w, h)];
     
-    [centerBn               setFrame:CGRectMake(x, y=y+s, w, h)];
-    [gpsButton              setFrame:CGRectMake(x, y=y+s, w, h)];
-    [colorButton            setFrame:CGRectMake(x, y=y+s, w, h)];
-    [mapTypeButton          setFrame:CGRectMake(x, y=y+s, w, h)];
-    [menuButton             setFrame:CGRectMake(x, y=y+s, w, h)];
-    
-    
+    if (centerBn.withGroup)   [centerBn    setFrame:CGRectMake(x+200, y=y+s+1, w, h)];
+    if (gpsButton.withGroup)  [gpsButton   setFrame:CGRectMake(x,     y,     w, h)];
+    [colorButton            setFrame:CGRectMake(x, y=y+s+1, w, h)];
+    [mapTypeButton          setFrame:CGRectMake(x, y=y+s+1, w, h)];
+    [menuButton             setFrame:CGRectMake(x, y=y+s+1, w, h)];
 }
+#pragma mark ------------drawing button methods----------------
 -(void)startDrawingRecorder:(OnOffButton *)bn{
     MainQ * mQ=[MainQ sharedManager];
     DrawingBoard * dv =(DrawingBoard *)[mQ getTargetRef:DRAWINGBOARD];
@@ -219,12 +224,161 @@
                          NSLOG8(@"Done!");
                      }];
 }
+-(void)addFreeDrawButton{
+    fdrawButton=[[OnOffButton alloc] init];
+    [fdrawButton setTitle:@"Free Draw" forState:UIControlStateNormal];
+    [fdrawButton setOffText:@"Free Draw"];
+    [fdrawButton setOnText: @"Line Draw"];
+    fdrawButton.OffBackgroundColor=[UIColor blueColor];
+    fdrawButton.OnBackgroundColor=[UIColor orangeColor];
+    [fdrawButton setBackgroundColor:fdrawButton.OffBackgroundColor];
+    fdrawButton.onOffBnDelegate=self;
+    fdrawButton.tapEventHandler=@selector(switchToFreeDraw:);
+    [_baseView addSubview:fdrawButton];
+    
+}
+-(void)addDrawButton{
+    //drawButton=[UIButton buttonWithType:(UIButtonTypeRoundedRect)];
+    drawButton=[[OnOffButton alloc] init];
+    [drawButton setTitle:@"Draw" forState:UIControlStateNormal];
+    [drawButton setOffText:@"Draw"];
+    [drawButton setOnText: @"Exit Draw"];
+    drawButton.onOffBnDelegate=self;
+    //[drawButton addTarget:self action:@selector(startDrawingRecorder:) forControlEvents:UIControlEventTouchUpInside];
+    drawButton.tapEventHandler=@selector(startDrawingRecorder:);
+    [_baseView addSubview:drawButton];
+}
+-(void)addUndoButton{
+    //undoButton=[UIButton buttonWithType:(UIButtonTypeRoundedRect)];
+    undoButton=[[OnOffButton alloc] init];
+    [undoButton setTitle:@"Undo" forState:UIControlStateNormal];
+    undoButton.pushButton=true;
+    undoButton.onOffBnDelegate=self;
+    //[undoButton addTarget:self action:@selector(undoDrawing:) forControlEvents:UIControlEventTouchUpInside];
+    undoButton.tapEventHandler=@selector(undoDrawing:);
+    [_baseView addSubview:undoButton];
+}
+-(void)undoDrawing:(UIButton *)bn{
+    MainQ * mQ=[MainQ sharedManager];
+    UIView * v =(UIView *)[mQ getTargetRef:GPSTRACKPOIBOARD];
+    UIView * dv =(UIView *)[mQ getTargetRef:DRAWINGBOARD];
+    if (!v)return;
+    [self.routRecorder undo];
+    NSLOG5(@"Undo drawing called");
+    [v setNeedsDisplay];
+    [dv setNeedsDisplay];
+}
+-(void)switchToFreeDraw:(OnOffButton *)bn{
+    MainQ * mQ=[MainQ sharedManager];
+    UIView * dv =(UIView *)[mQ getTargetRef:DRAWINGBOARD];
+    NSLOG4(@"Free Draw button tapped. Button title is %@",[bn.titleLabel text]);
+    //if ([[bn.titleLabel text] compare:@"Free Draw"]==NSOrderedSame) {
+    if (bn.btnOn) {
+        //[bn setTitle:@"No Free Draw" forState:UIControlStateNormal];
+        self.mapScrollView.freeDraw=true;
+        ((DrawingBoard *)dv).preDraw=FALSE;
+        [self.routRecorder startNewTrack];
+    }else{
+        //[bn setTitle:@"Free Draw" forState:UIControlStateNormal];
+        self.mapScrollView.freeDraw=false;
+        ((DrawingBoard *)dv).preDraw=TRUE;
+    }
+}
+
+#pragma mark ------------gps button methods----------------
+-(void) addGPSButton{
+    gpsButton=[[OnOffButton alloc] init];
+    [gpsButton setTitle:@"Start GPS" forState:UIControlStateNormal];
+    [gpsButton setOffText:@"Start GPS"];
+    [gpsButton setOnText: @"Stop GPS"];
+    gpsButton.onOffBnDelegate=self;
+    gpsButton.tapEventHandler=@selector(startGPS:);
+    [_baseView addSubview:gpsButton];
+}
 -(void)add_CenterBn{
-    centerBn=[UIButton buttonWithType:(UIButtonTypeRoundedRect)];
+    centerBn=[[OnOffButton alloc] init];
     [centerBn setTitle:@"Center Cur" forState:UIControlStateNormal];
-    [centerBn addTarget:self action:@selector(centerCurrentPosition:) forControlEvents:UIControlEventTouchUpInside];
+    [centerBn setOffText:@"Center Cur"];
+    [centerBn setOnText: @"No Center"];
+    centerBn.onOffBnDelegate=self;
+    centerBn.tapEventHandler=@selector(centerCurrentPosition:);
     [_baseView addSubview:centerBn];
 }
+extern bool centerPos;
+-(void)centerCurrentPosition:(id)sender{
+    //if ([[centerBn.titleLabel text] compare:@"Center Cur"]==NSOrderedSame) {
+    if(centerBn.btnOn){
+        //center position;
+        centerPos=true;
+        //[centerBn setTitle:@"No center" forState:UIControlStateNormal];
+    }else{
+        centerPos=false;
+        //[centerBn setTitle:@"Center Cur" forState:UIControlStateNormal];
+    }
+}
+-(void) startGPS:(OnOffButton *)bn{
+    
+    MainQ * mQ=[MainQ sharedManager];
+    UIView * v =(UIView *)[mQ getTargetRef:GPSARROW];
+    GPSTrackPOIBoard * gv =(GPSTrackPOIBoard *)[mQ getTargetRef:GPSTRACKPOIBOARD];
+    
+    if(!v) return;
+    
+    //if GPS is not started yet
+    //if ([[bn.titleLabel text] compare:@"Stop GPS"]!=NSOrderedSame) {
+    if(bn.btnOn){
+        [gpsReceiver start];
+        if (!v)return;
+        v.hidden=NO;
+        if(gv)
+            gv.GPSRunning=TRUE;
+        
+        bn.withGroup=false;
+        centerBn.withGroup=false;
+        [self showGPSButtons];
+        //bnStart.hidden=YES;
+    }else{
+        [gpsReceiver stop];
+        [speedLabel setHidden:YES];
+        if (!v)return;
+        v.hidden=NO;  //TODO:need to be Yes
+        if(gv)
+            gv.GPSRunning=FALSE;
+        arrow.hidden=YES;
+        
+        bn.withGroup=YES;
+        centerBn.withGroup=YES;
+        //[self hideGPSButtons];
+        //bnStart.hidden=NO;
+        [self hideDrawingButtons];
+    }
+}
+-(void)showGPSButtons{
+    [UIView animateWithDuration:0.5
+                          delay:0.0
+                        options: UIViewAnimationOptionCurveEaseIn //UIViewAnimationOptionCurveLinear
+                     animations:^{
+                         [self setButtonsToPosition:NO];        //hide all buttons
+                         drawButton.hidden=NO;
+                         [gpsButton  setFrame:CGRectMake(0,   40, 120,  60)];
+                         [centerBn   setFrame:CGRectMake(122, 40, 120, 60)];
+                     }
+                     completion:^(BOOL finished){
+                         NSLOG8(@"Done!");
+                     }];
+}
+-(void)hideGPSButtons{
+    [UIView animateWithDuration:0.5
+                          delay:0.0
+                        options: UIViewAnimationOptionCurveEaseIn //UIViewAnimationOptionCurveLinear
+                     animations:^{
+                         [self setButtonsToPosition:NO];
+                     }
+                     completion:^(BOOL finished){
+                         NSLOG8(@"Done!");
+                     }];
+}
+#pragma mark ------------other methods----------------
 -(void)addUnloadDrawingButton{
     unloadDrawingButton=[UIButton buttonWithType:(UIButtonTypeRoundedRect)];
     [unloadDrawingButton setTitle:@"Del Drawings" forState:UIControlStateNormal];
@@ -255,18 +409,7 @@
     [cleanupButton addTarget:self action:@selector(cleanUpTrack) forControlEvents:UIControlEventTouchUpInside];
     [_baseView addSubview:cleanupButton];
 }
--(void) addGPSButton{
-    gpsButton=[UIButton buttonWithType:(UIButtonTypeCustom)];
-    [gpsButton setTitle:@"Start GPS" forState:UIControlStateNormal];
-    
-    [gpsButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
-	[gpsButton setTitleShadowColor:[UIColor blackColor]  forState:UIControlStateNormal];
-	//[gpsButton setShadowOffset:CGSizeMake(1.0, 1.0)];
-	
-    [gpsButton setBackgroundColor:[UIColor lightGrayColor]];
-    [gpsButton addTarget:self action:@selector(startGPS:) forControlEvents:UIControlEventTouchUpInside];
-    [_baseView addSubview:gpsButton];
-}
+
 //-(void) addStopGPSButton{
 //    stopGpsButton=[UIButton buttonWithType:(UIButtonTypeRoundedRect)];
 //    [stopGpsButton setTitle:@"Stop GPS" forState:UIControlStateNormal];
@@ -329,38 +472,7 @@
         [colorPickPopover presentPopoverFromRect:colorButton.frame inView:_baseView permittedArrowDirections:UIPopoverArrowDirectionAny  animated:YES];
 	}
 }
--(void) startGPS:(id)bn0{
-    UIButton* bn=bn0;
-    
-    MainQ * mQ=[MainQ sharedManager];
-    UIView * v =(UIView *)[mQ getTargetRef:GPSARROW];
-    GPSTrackPOIBoard * gv =(GPSTrackPOIBoard *)[mQ getTargetRef:GPSTRACKPOIBOARD];
-    
-    if(!v) return;
 
-    //if GPS is not started yet
-    if ([[bn.titleLabel text] compare:@"Stop GPS"]!=NSOrderedSame) {
-        [gpsReceiver start];
-        [bn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        [bn setTitle:@"Stop GPS" forState:UIControlStateNormal];
-        [bn setBackgroundColor:[UIColor redColor]];
-        if (!v)return;
-        v.hidden=NO;
-        if(gv)
-            gv.GPSRunning=TRUE;
-    }else{
-        [gpsReceiver stop];
-        [gpsButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
-        [gpsButton setBackgroundColor:[UIColor lightGrayColor]];
-        [bn setTitle:@"Start GPS" forState:UIControlStateNormal];
-        [speedLabel setHidden:YES];
-        if (!v)return;
-        v.hidden=NO;  //TODO:need to be Yes
-        if(gv)
-            gv.GPSRunning=FALSE;
-        arrow.hidden=YES;
-    }
-}
 -(void) stopGPS:(id)bn{
     [gpsReceiver stop];
     //UIButton* b=bn;
@@ -401,67 +513,7 @@
 	[resLabel setShadowOffset:CGSizeMake(1.0, 1.0)];
 	[resLabel setFont:[UIFont boldSystemFontOfSize:20]];
     [_baseView addSubview:resLabel];
-    [[MainQ sharedManager] register:resLabel withID:MAPLEVEL];
-}
--(void)addFreeDrawButton{    
-    fdrawButton=[[OnOffButton alloc] init];
-    [fdrawButton setTitle:@"Free Draw" forState:UIControlStateNormal];
-    [fdrawButton setOffText:@"Free Draw"];
-    [fdrawButton setOnText: @"Line Draw"];
-    fdrawButton.OffBackgroundColor=[UIColor blueColor];
-    fdrawButton.OnBackgroundColor=[UIColor orangeColor];
-    [fdrawButton setBackgroundColor:fdrawButton.OffBackgroundColor];
-    fdrawButton.onOffBnDelegate=self;
-    fdrawButton.tapEventHandler=@selector(switchToFreeDraw:);
-    [_baseView addSubview:fdrawButton];
-
-}
--(void)addDrawButton{
-    //drawButton=[UIButton buttonWithType:(UIButtonTypeRoundedRect)];
-    drawButton=[[OnOffButton alloc] init];
-    [drawButton setTitle:@"Draw" forState:UIControlStateNormal];
-    [drawButton setOffText:@"Draw"];
-    [drawButton setOnText: @"Exit Draw"];
-    drawButton.onOffBnDelegate=self;
-    //[drawButton addTarget:self action:@selector(startDrawingRecorder:) forControlEvents:UIControlEventTouchUpInside];
-    drawButton.tapEventHandler=@selector(startDrawingRecorder:);
-    [_baseView addSubview:drawButton];
-}
--(void)addUndoButton{
-    //undoButton=[UIButton buttonWithType:(UIButtonTypeRoundedRect)];
-    undoButton=[[OnOffButton alloc] init];
-    [undoButton setTitle:@"Undo" forState:UIControlStateNormal];
-    undoButton.pushButton=true;
-    undoButton.onOffBnDelegate=self;
-    //[undoButton addTarget:self action:@selector(undoDrawing:) forControlEvents:UIControlEventTouchUpInside];
-    undoButton.tapEventHandler=@selector(undoDrawing:);
-    [_baseView addSubview:undoButton];
-}
--(void)undoDrawing:(UIButton *)bn{
-    MainQ * mQ=[MainQ sharedManager];
-    UIView * v =(UIView *)[mQ getTargetRef:GPSTRACKPOIBOARD];
-    UIView * dv =(UIView *)[mQ getTargetRef:DRAWINGBOARD];
-    if (!v)return;
-    [self.routRecorder undo];
-    NSLOG5(@"Undo drawing called");
-    [v setNeedsDisplay];
-    [dv setNeedsDisplay];
-}
--(void)switchToFreeDraw:(OnOffButton *)bn{
-    MainQ * mQ=[MainQ sharedManager];
-    UIView * dv =(UIView *)[mQ getTargetRef:DRAWINGBOARD];
-    NSLOG4(@"Free Draw button tapped. Button title is %@",[bn.titleLabel text]);
-    //if ([[bn.titleLabel text] compare:@"Free Draw"]==NSOrderedSame) {
-    if (bn.btnOn) {
-        //[bn setTitle:@"No Free Draw" forState:UIControlStateNormal];
-        self.mapScrollView.freeDraw=true;
-        ((DrawingBoard *)dv).preDraw=FALSE;
-        [self.routRecorder startNewTrack];
-    }else{
-        //[bn setTitle:@"Free Draw" forState:UIControlStateNormal];
-        self.mapScrollView.freeDraw=false;
-        ((DrawingBoard *)dv).preDraw=TRUE;
-    }
+    [[MainQ sharedManager] register:resLabel withID:MAPRES];
 }
 -(void)toggleMapType:(UIButton *)bn{
     NSLOG9(@"toggleMapType here !");
@@ -567,15 +619,5 @@
     
     [[MainQ sharedManager] register:arrow withID:GPSARROW];
 }
-extern bool centerPos;
--(void)centerCurrentPosition:(id)sender{
-    if ([[centerBn.titleLabel text] compare:@"Center Cur"]==NSOrderedSame) {
-        //center position;
-        centerPos=true;
-        [centerBn setTitle:@"No center" forState:UIControlStateNormal];
-    }else{
-        centerPos=false;
-        [centerBn setTitle:@"Center Cur" forState:UIControlStateNormal];
-    }
-}
+
 @end
