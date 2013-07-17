@@ -223,6 +223,7 @@ bool centerPos;
     }
     Node *node=[[Node alloc]initWithPoint:tapPoint mapLevel:maplevel];
     self.track.nodes=[self addAnyModeAdjustedNode:self.track.nodes Node:node Mode:self.mapMode];
+    [self.track saveNodes];     //save it for every nodes
 }
 
 //=====add a node to array arrNodes=================
@@ -353,7 +354,7 @@ bool centerPos;
     
     //add a gps node to our node array for gps track
     [self addGpsNode:node with:newLocation];   
-    
+    [self.gpsTrack saveNodes];        //TODO: may need to change to saving every 5 nodes or more for performance
     [self showTripMeter];
     [self updateArrowDirection:newLocation.course*PI/180];
 }

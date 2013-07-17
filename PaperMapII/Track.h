@@ -15,8 +15,11 @@
 @property (nonatomic,strong) NSArray * nodes;
 @property (nonatomic,strong) LineProperty * lineProperty;
 @property bool visible;
+@property float version;                //track class version, for saving purpose
 @property (nonatomic,copy) NSString * filename;
 @property (nonatomic,copy) NSString * title;
 @property NSDate * timestamp;
+-(bool)saveNodes;
+-(bool)readNodes;
 //-(void)InitializeFilenameAndTitle;
 @end

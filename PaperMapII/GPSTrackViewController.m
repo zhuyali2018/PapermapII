@@ -106,9 +106,13 @@
     if ([[visibleSwitchBn.titleLabel text] compare:@"Visible"]==NSOrderedSame) {
         [visibleSwitchBn setTitle:@"Hidden" forState:UIControlStateNormal];
         gpsTrack.visible=FALSE;
+        [gpsTrack saveNodes];
     }else{
         [visibleSwitchBn setTitle:@"Visible" forState:UIControlStateNormal];
         gpsTrack.visible=TRUE;
+        if (!gpsTrack.nodes) {      //read in nodes only if nodes not read in yet
+            [gpsTrack readNodes];
+        }
     }
     PM2AppDelegate * appD=[[UIApplication sharedApplication] delegate];
 	[appD.viewController.mapScrollView.zoomView.gpsTrackPOIBoard setNeedsDisplay];  //update the map with new track property
