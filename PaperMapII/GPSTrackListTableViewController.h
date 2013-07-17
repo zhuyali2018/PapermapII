@@ -7,7 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "AllImports.h"
 
 @interface GPSTrackListTableViewController : UITableViewController
-
+@property ListType listType;
+- (id)initWithType:(ListType)listType;
 @end

@@ -13,6 +13,8 @@
 #import "MapScrollView.h"
 #import "DrawableMapScrollView.h"
 #import "GPSNode.h"
+#import "MainQ.h"
+#import "GPSTrackPOIBoard.h"
 
 @interface GPSTrackListTableViewController ()
 
@@ -28,7 +30,15 @@
     }
     return self;
 }
-
+- (id)initWithType:(ListType)listType
+{
+    self = [super init];
+    if (self) {
+        // Custom initialization
+        _listType=listType;
+    }
+    return self;
+}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -60,6 +70,9 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
+    if (_listType==DRAWLIST) {
+        return [[Recorder sharedRecorder].trackArray count];
+    }
     return [[Recorder sharedRecorder].gpsTrackArray count];
 }
 
@@ -74,6 +87,12 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
     // Configure the cell...
+    if (_listType==DRAWLIST) {
+        GPSTrack * tk=[Recorder sharedRecorder].trackArray[indexPath.row];
+        //cell.textLabel.text=tk.title;
+        cell.textLabel.text=[[NSString alloc]initWithFormat:@"%3d - %@",indexPath.row,tk.title];
+        return cell;
+    }
     GPSTrack * tk=[Recorder sharedRecorder].gpsTrackArray[indexPath.row];
     //cell.textLabel.text=tk.title;
     cell.textLabel.text=[[NSString alloc]initWithFormat:@"%3d - %@",indexPath.row,tk.title];
@@ -97,7 +116,11 @@
 //        [alertView showWithCompletion:^(UIAlertView *alertView, NSInteger buttonIndex) {
 //            // handle the button click
 //        }];
-        [[Recorder sharedRecorder].gpsTrackArray removeObjectAtIndex:indexPath.row];
+        if (_listType==DRAWLIST) {
+            [[Recorder sharedRecorder].trackArray removeObjectAtIndex:indexPath.row];
+        }else{
+            [[Recorder sharedRecorder].gpsTrackArray removeObjectAtIndex:indexPath.row];
+        }
         // Delete the row from the data source
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
     }   
@@ -134,17 +157,27 @@
      // Pass the selected object to the new view controller.
      [self.navigationController pushViewController:detailViewController animated:YES];
      */
-    GPSTrack * tk=[Recorder sharedRecorder].gpsTrackArray[indexPath.row];
     
-    GPSTrackViewController * gpsTrackViewCtrlr=[[GPSTrackViewController alloc]initWithNibName:@"GPSTrackViewController" bundle:nil];
-    gpsTrackViewCtrlr.gpsTrack=tk;
-    [gpsTrackViewCtrlr setTitle:tk.title];
-    if ([tk.nodes count]>0) {
-        GPSNode * node=tk.nodes[0];
-        [self centerMapTo:node];
+    if (_listType==DRAWLIST) {
+        Track * tk=[Recorder sharedRecorder].trackArray[indexPath.row];
+        if ([tk.nodes count]>0) {
+            Node * node=tk.nodes[0];
+            [self centerMapToDrawNode:node];
+        }
+    }else{
+        GPSTrack * tk=[Recorder sharedRecorder].gpsTrackArray[indexPath.row];
+        
+        GPSTrackViewController * gpsTrackViewCtrlr=[[GPSTrackViewController alloc]initWithNibName:@"GPSTrackViewController" bundle:nil];
+        gpsTrackViewCtrlr.gpsTrack=tk;
+        [gpsTrackViewCtrlr setTitle:tk.title];
+        if ([tk.nodes count]>0) {
+            GPSNode * node=tk.nodes[0];
+            [self centerMapTo:node];
+        }
+        [self.navigationController pushViewController:gpsTrackViewCtrlr animated:YES];
     }
-    [self.navigationController pushViewController:gpsTrackViewCtrlr animated:YES];
 }
+//TODO: did not do mode adjust
 -(void)centerMapTo:(GPSNode *)node{
     MapScrollView * map=((MapScrollView *)[DrawableMapScrollView sharedMap]);
     int res=map.maplevel;
@@ -154,5 +187,13 @@
 	
     //center the current position
     [[Recorder sharedRecorder] centerPositionAtX:x Y:y];
+}
+//TODO: not working properly
+-(void)centerMapToDrawNode:(Node *)node{
+    MainQ * mQ=[MainQ sharedManager];
+    GPSTrackPOIBoard * gb =(GPSTrackPOIBoard *)[mQ getTargetRef:GPSTRACKPOIBOARD];
+    CGPoint gp=[gb ConvertPoint:node];
+    //center the current position
+    [[Recorder sharedRecorder] centerPositionAtX:gp.x Y:gp.y];
 }
 @end

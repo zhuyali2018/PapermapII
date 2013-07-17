@@ -23,7 +23,7 @@
     if (self) {
         // Custom initialization
         NSArray * drawingMenu=[[NSArray alloc]initWithObjects:
-                    [[MenuItem alloc]initWithTitle:@"Save Drawing As"],
+                    [[MenuItem alloc]initWithTitle:@"Drawings"],
                     [[MenuItem alloc]initWithTitle:@"Load Drawing"],
                     [[MenuItem alloc]initWithTitle:@"Add Drawing from File"], nil];
         
@@ -66,15 +66,24 @@
 #define PRCIN_SECTION 5
 
 #define GPSTRACKS 0
-
+#define DRAWINGS  0
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     ((MenuItem *)menuMatrix[GPS_SECTION][GPSTRACKS]).menuItemHandler=@selector(showGPSTrackList:);
+    
+    ((MenuItem *)menuMatrix[DRAW_SECTION][GPSTRACKS]).menuItemHandler=@selector(showDrawingList:);
 }
+#pragma mark - -------------menu item handlers-------------------
 -(void)showGPSTrackList:(NSString *) menuTitle{
     NSLOG10(@"executing showGPSTrackList from %@",menuTitle);
     GPSTrackListTableViewController * gpsV=[[GPSTrackListTableViewController alloc] init];
+    [gpsV setTitle:menuTitle];
+    [self.navigationController pushViewController:gpsV animated:YES];
+}
+-(void)showDrawingList:(NSString *) menuTitle{
+    NSLOG10(@"executing showDrawingList from %@",menuTitle);
+    GPSTrackListTableViewController * gpsV=[[GPSTrackListTableViewController alloc] initWithType:DRAWLIST];
     [gpsV setTitle:menuTitle];
     [self.navigationController pushViewController:gpsV animated:YES];
 }
