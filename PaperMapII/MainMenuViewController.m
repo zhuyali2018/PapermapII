@@ -72,7 +72,7 @@
     [super viewDidLoad];
     ((MenuItem *)menuMatrix[GPS_SECTION][GPSTRACKS]).menuItemHandler=@selector(showGPSTrackList:);
     
-    ((MenuItem *)menuMatrix[DRAW_SECTION][GPSTRACKS]).menuItemHandler=@selector(showDrawingList:);
+    ((MenuItem *)menuMatrix[DRAW_SECTION][DRAWINGS]).menuItemHandler=@selector(showDrawingList:);
 }
 #pragma mark - -------------menu item handlers-------------------
 -(void)showGPSTrackList:(NSString *) menuTitle{

@@ -87,6 +87,9 @@
 	return tkCopy;
 }
 -(bool)saveNodes{
+    if (!nodes) {
+        return true; //no saving of null to overwrite possible data
+    }
     NSMutableData * data=[[NSMutableData alloc] init];
     NSKeyedArchiver * archiver=[[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
     [archiver encodeObject:nodes forKey:@"TRACKNODES"];
@@ -95,6 +98,9 @@
     return [data writeToFile:[self dataFilePath] atomically:YES];
 }
 -(bool)readNodes{
+    if (nodes) {
+        return true;        //nodes already loaded
+    }
     NSString * filePath=[self dataFilePath];
     //NSLog(@"data file path=%@",filePath);
     if([[NSFileManager defaultManager] fileExistsAtPath:filePath]){

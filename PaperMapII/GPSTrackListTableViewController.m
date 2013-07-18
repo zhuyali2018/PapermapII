@@ -93,7 +93,12 @@
         cell.textLabel.text=[[NSString alloc]initWithFormat:@"%3d - %@",indexPath.row,tk.title];
         return cell;
     }
+    //configure the cell for GPS Track list
     GPSTrack * tk=[Recorder sharedRecorder].gpsTrackArray[indexPath.row];
+    if (tk.visible) {
+        cell.textLabel.textColor=[UIColor blackColor];
+    }else
+        cell.textLabel.textColor=[UIColor lightGrayColor];
     //cell.textLabel.text=tk.title;
     cell.textLabel.text=[[NSString alloc]initWithFormat:@"%3d - %@",indexPath.row,tk.title];
     return cell;
@@ -192,8 +197,9 @@
 -(void)centerMapToDrawNode:(Node *)node{
     MainQ * mQ=[MainQ sharedManager];
     GPSTrackPOIBoard * gb =(GPSTrackPOIBoard *)[mQ getTargetRef:GPSTRACKPOIBOARD];
-    CGPoint gp=[gb ConvertPoint:node];
-    //center the current position
-    [[Recorder sharedRecorder] centerPositionAtX:gp.x Y:gp.y];
+    int mapL=gb.maplevel;
+    int x=node.x*pow(2,mapL-node.r);
+    int y=node.y*pow(2,mapL-node.r);
+    [[Recorder sharedRecorder] centerPositionAtX:x Y:y];
 }
 @end
