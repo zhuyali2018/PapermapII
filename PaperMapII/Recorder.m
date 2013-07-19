@@ -507,9 +507,10 @@ int n=0;  //gps node counter
 }
 -(void)centerPositionAtX:(int) x Y:(int) y{
     DrawableMapScrollView * mapWindow=[DrawableMapScrollView sharedMap];
+    int adjX=[mapWindow.zoomView.gpsTrackPOIBoard ModeAdjust:x res:mapWindow.maplevel];
     CGRect  visibleBounds = [mapWindow bounds];     //Check this should return a size of 1280x1280 instead of 1024x768 for rotating purpose
 	CGFloat zm=[mapWindow zoomScale];
-	CGPoint offset=CGPointMake(x*zm-visibleBounds.size.width/2, y*zm-visibleBounds.size.height/2);
+	CGPoint offset=CGPointMake(adjX*zm-visibleBounds.size.width/2, y*zm-visibleBounds.size.height/2);
 	[mapWindow setContentOffset:offset animated:YES];   //this is where it makes map move smoothly
 }
 /*

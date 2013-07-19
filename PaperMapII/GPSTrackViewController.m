@@ -33,6 +33,7 @@
 @synthesize lbAvgSpeed;
 @synthesize lbTotalTime;
 @synthesize visibleSwitchBn;
+@synthesize lbNumberOfNodes;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -64,6 +65,7 @@
     float avgSpd=f2/tm;
     lbAvgSpeed.text=[[NSString alloc]initWithFormat:@"%5.1f MPH",avgSpd];
     lbTotalTime.text=[[NSString alloc]initWithFormat:@"%02.0f:%02.0f:%02.0f",floor(tm/3600),fmod(floor(tm/60),60),fmod(tm,60)];
+    self.lbNumberOfNodes.text=[[NSString alloc]initWithFormat:@"%3d",[gpsTrack.nodes count]];
     if (gpsTrack.visible) {
         [visibleSwitchBn setTitle:@"Visible" forState:UIControlStateNormal];
     }else{

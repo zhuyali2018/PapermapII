@@ -12,7 +12,7 @@
 @property     int x;   //col
 @property     int y;   //row
 @property     int r;   //resolution
-
+//@property     bool e;  //EastHemisphare;   //true:East Hemisphere, false: Western Hemisphere
 -(id)initWithPoint:(CGPoint)pt mapLevel:(int)maplevel;
 -(id)copyWithZone:(NSZone *)zone;
 -(id)initWithCoder:(NSCoder *)coder;

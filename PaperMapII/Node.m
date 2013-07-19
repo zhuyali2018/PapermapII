@@ -15,6 +15,7 @@
     nodeCopy.x=self.x;
     nodeCopy.y=self.y;
     nodeCopy.r=self.r;
+//    nodeCopy.e=self.e;
     return nodeCopy;
 }
 
@@ -29,6 +30,7 @@
 		self.r=[coder decodeIntForKey:@"res"];
 		self.x=[coder decodeIntForKey:@"pointx"];
 		self.y=[coder decodeIntForKey:@"pointy"];
+//        self.e=[coder decodeBoolForKey:@"east"];
 	}
 	return self;
 }
@@ -36,5 +38,6 @@
 	[coder encodeInt:x forKey:@"pointx"];
 	[coder encodeInt:y forKey:@"pointy"];
     [coder encodeInt:r forKey:@"res"];
+//    [coder encodeBool:e forKey:@"east"];
 }
 @end
