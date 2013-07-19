@@ -105,6 +105,7 @@
         drawTrack.visible=TRUE;
         if (!drawTrack.nodes) {      //read in nodes only if nodes not read in yet
             [drawTrack readNodes];
+            self.lbNumberOfNodes.text=[[NSString alloc]initWithFormat:@"%3d",[drawTrack.nodes count]];
         }
     }
     PM2AppDelegate * appD=[[UIApplication sharedApplication] delegate];

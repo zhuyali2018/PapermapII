@@ -57,15 +57,7 @@
     [propBn.titleLabel setText:@"GPS Track Property:"];
     propBn.lineProperty=gpsTrack.lineProperty;
     [propBn setBackgroundImage:[UIImage imageNamed:@"icon72x72.png"] forState:UIControlStateHighlighted];  //TODO: Choose a better image here
-    NSDate * t1=((GPSNode *)gpsTrack.nodes[0]).timestamp;
-    NSDate * t2=((GPSNode *)[gpsTrack.nodes lastObject]).timestamp;
-    NSTimeInterval tm=[t2 timeIntervalSinceDate:t1];
-    double miles=gpsTrack.tripmeter/1609;
-    double f2=miles*3600;
-    float avgSpd=f2/tm;
-    lbAvgSpeed.text=[[NSString alloc]initWithFormat:@"%5.1f MPH",avgSpd];
-    lbTotalTime.text=[[NSString alloc]initWithFormat:@"%02.0f:%02.0f:%02.0f",floor(tm/3600),fmod(floor(tm/60),60),fmod(tm,60)];
-    self.lbNumberOfNodes.text=[[NSString alloc]initWithFormat:@"%3d",[gpsTrack.nodes count]];
+    [self displayTrackInfo];
     if (gpsTrack.visible) {
         [visibleSwitchBn setTitle:@"Visible" forState:UIControlStateNormal];
     }else{
@@ -114,9 +106,23 @@
         gpsTrack.visible=TRUE;
         if (!gpsTrack.nodes) {      //read in nodes only if nodes not read in yet
             [gpsTrack readNodes];
+            [self displayTrackInfo];
         }
     }
     PM2AppDelegate * appD=[[UIApplication sharedApplication] delegate];
 	[appD.viewController.mapScrollView.zoomView.gpsTrackPOIBoard setNeedsDisplay];  //update the map with new track property
+}
+-(void)displayTrackInfo{
+    NSDate * t1=((GPSNode *)gpsTrack.nodes[0]).timestamp;
+    NSDate * t2=((GPSNode *)[gpsTrack.nodes lastObject]).timestamp;
+    NSTimeInterval tm=[t2 timeIntervalSinceDate:t1];
+    
+    double miles=gpsTrack.tripmeter/1609;
+    double f2=miles*3600;
+    float avgSpd=f2/tm;
+    lbAvgSpeed.text=[[NSString alloc]initWithFormat:@"%5.1f MPH",avgSpd];
+    lbTotalTime.text=[[NSString alloc]initWithFormat:@"%02.0f:%02.0f:%02.0f",floor(tm/3600),fmod(floor(tm/60),60),fmod(tm,60)];
+    
+    self.lbNumberOfNodes.text=[[NSString alloc]initWithFormat:@"%3d",[gpsTrack.nodes count]];
 }
 @end
