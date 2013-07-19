@@ -165,7 +165,8 @@
     
     //Drawing lines
     for (int i=0; i<[ptrToTrackArray count]; i++) {     //loop through each track in track array
-        [self tapDrawTrack:ptrToTrackArray[i] context:context];
+        if (((Track *)ptrToTrackArray[i]).visible)
+            [self tapDrawTrack:ptrToTrackArray[i] context:context];
     }
 }
 -(void)drawGpsTracks:(CGContextRef)context{

@@ -15,6 +15,7 @@
 #import "GPSNode.h"
 #import "MainQ.h"
 #import "GPSTrackPOIBoard.h"
+#import "DrawingViewController.h"
 
 @interface GPSTrackListTableViewController ()
 
@@ -89,6 +90,10 @@
     // Configure the cell...
     if (_listType==DRAWLIST) {
         GPSTrack * tk=[Recorder sharedRecorder].trackArray[indexPath.row];
+        if (tk.visible) {
+            cell.textLabel.textColor=[UIColor blackColor];
+        }else
+            cell.textLabel.textColor=[UIColor lightGrayColor];
         //cell.textLabel.text=tk.title;
         cell.textLabel.text=[[NSString alloc]initWithFormat:@"%3d - %@",indexPath.row,tk.title];
         return cell;
@@ -168,6 +173,11 @@
         if ([tk.nodes count]>0) {
             Node * node=tk.nodes[0];
             [self centerMapToDrawNode:node];
+            
+            DrawingViewController *dvc=[[DrawingViewController alloc]initWithNibName:@"DrawingViewController" bundle:nil];
+            dvc.drawTrack=tk;
+            [dvc setTitle:tk.title];
+            [self.navigationController pushViewController:dvc animated:YES];
         }
     }else{
         GPSTrack * tk=[Recorder sharedRecorder].gpsTrackArray[indexPath.row];

@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		AA04240417526D91004970B4 /* TapDetectView.m in Sources */ = {isa = PBXBuildFile; fileRef = AA04240317526D91004970B4 /* TapDetectView.m */; };
 		AA04240517526D91004970B4 /* TapDetectView.m in Sources */ = {isa = PBXBuildFile; fileRef = AA04240317526D91004970B4 /* TapDetectView.m */; };
+		AA05FAA91798DEBF00B78243 /* DrawingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA05FAA71798DEBF00B78243 /* DrawingViewController.m */; };
+		AA05FAAA1798DEBF00B78243 /* DrawingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AA05FAA81798DEBF00B78243 /* DrawingViewController.xib */; };
 		AA511CD6174F1F0F00F46B1A /* MapSources.m in Sources */ = {isa = PBXBuildFile; fileRef = AA511CD5174F1F0F00F46B1A /* MapSources.m */; };
 		AA729A53175870D800F6AF78 /* LineProperty.m in Sources */ = {isa = PBXBuildFile; fileRef = AA729A52175870D800F6AF78 /* LineProperty.m */; };
 		AA729A54175870D800F6AF78 /* LineProperty.m in Sources */ = {isa = PBXBuildFile; fileRef = AA729A52175870D800F6AF78 /* LineProperty.m */; };
@@ -3519,6 +3521,9 @@
 /* Begin PBXFileReference section */
 		AA04240217526D91004970B4 /* TapDetectView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TapDetectView.h; path = BasicMapTiles/TapDetectView.h; sourceTree = "<group>"; };
 		AA04240317526D91004970B4 /* TapDetectView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TapDetectView.m; path = BasicMapTiles/TapDetectView.m; sourceTree = "<group>"; };
+		AA05FAA61798DEBF00B78243 /* DrawingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DrawingViewController.h; sourceTree = "<group>"; };
+		AA05FAA71798DEBF00B78243 /* DrawingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DrawingViewController.m; sourceTree = "<group>"; };
+		AA05FAA81798DEBF00B78243 /* DrawingViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DrawingViewController.xib; sourceTree = "<group>"; };
 		AA1B5345175EE308005355C3 /* AllImports.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AllImports.h; path = ../AllImports.h; sourceTree = "<group>"; };
 		AA511CD2174F152100F46B1A /* PM2Protocols.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PM2Protocols.h; sourceTree = "<group>"; };
 		AA511CD4174F1F0F00F46B1A /* MapSources.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapSources.h; sourceTree = "<group>"; };
@@ -5388,6 +5393,9 @@
 				AAE6DF671780CD7A003F230F /* GPSNodeViewController.h */,
 				AAE6DF681780CD7B003F230F /* GPSNodeViewController.m */,
 				AAE6DF691780CD7B003F230F /* GPSNodeViewController.xib */,
+				AA05FAA61798DEBF00B78243 /* DrawingViewController.h */,
+				AA05FAA71798DEBF00B78243 /* DrawingViewController.m */,
+				AA05FAA81798DEBF00B78243 /* DrawingViewController.xib */,
 			);
 			name = "Buttons and Labels";
 			sourceTree = "<group>";
@@ -9032,6 +9040,7 @@
 				AA860901177F22F9008EBC95 /* Arrow.png in Resources */,
 				AAE6DF611780C3BC003F230F /* GPSTrackViewController.xib in Resources */,
 				AAE6DF6C1780CD7C003F230F /* GPSNodeViewController.xib in Resources */,
+				AA05FAAA1798DEBF00B78243 /* DrawingViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -10808,6 +10817,7 @@
 				AAE6DF651780C93B003F230F /* GPSTrackNodesViewController.m in Sources */,
 				AAE6DF6A1780CD7C003F230F /* GPSNodeViewController.m in Sources */,
 				AAF8D165178D1B5B00611A86 /* OnOffButton.m in Sources */,
+				AA05FAA91798DEBF00B78243 /* DrawingViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
