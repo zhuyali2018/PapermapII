@@ -24,7 +24,6 @@
 @property (nonatomic,strong) GPSNode * lastGpsNode;
 @property bool recording; //if it is recording
 @property bool gpsRecording; //if it is recording
-@property bool mapMode;  //Eastern mode (false) or Western mode (true);
 
 - (void) start;
 - (void) stop;

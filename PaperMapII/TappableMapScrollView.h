@@ -9,11 +9,13 @@
 #import "MapScrollView.h"
 #import "TapDetectView.h"
 @interface TappableMapScrollView : MapScrollView <PM2MapTapHandleDelegate,PM2SingleTapHandleDelegate>
-@property int lastMaplevel;   //TODO: Remove this unused
+@property int lastMaplevel;   
 @property bool mapPined;
-@property bool freeDraw;        
+@property bool freeDraw;
+@property bool bDrawing;  //if the map is in drawing mode
+
 @property (nonatomic,strong)TapDetectView * tapDetectView;
 @property (nonatomic) id<PM2RecordingDelegate> recordingDelegate;
-@property bool bDrawing;  //if the map is in drawing mode
+
 - (void)tappedView:(UIView *)view singleTapAtPoint:(CGPoint)tapPoint;
 @end

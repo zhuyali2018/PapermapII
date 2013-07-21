@@ -20,6 +20,9 @@
 @implementation MapScrollView
 
 @synthesize zoomView;
+@synthesize gpsTrackPOIBoard;
+@synthesize drawingBoard;
+
 //@synthesize maplevel;
 
 
@@ -31,7 +34,7 @@ CGPoint savedOffset;
 
 -(void)setMaplevel:(int)maplevel1{
     maplevel=maplevel1;
-    self.zoomView.gpsTrackPOIBoard.maplevel=maplevel;
+    self.gpsTrackPOIBoard.maplevel=maplevel;  //TODO: handle maplevel properly (there are 3 references in gpsTrackBOIBoard)
     NSLOG3(@"MapLevel set to %d on gpsTrackPOIBoard",maplevel);
 }
 -(int)maplevel{
@@ -300,7 +303,20 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
         zoomView=[[ZoomView alloc] initWithFrame:CGRectMake(bz,bz,1000, 1000)];
         [zoomView setBackgroundColor:[UIColor lightGrayColor]];
         [self addSubview:zoomView];
-        zoomView.gpsTrackPOIBoard.pMode=&Mode;    //pass address to pMode on gpsTrackPOIBoard
+        //gpsTrackPOIBoard.pMode=&Mode;    //pass address to pMode on gpsTrackPOIBoard TODO: handle Mode properly
+        
+        //creategpsTrackPOIBoardView
+        gpsTrackPOIBoard = [[GPSTrackPOIBoard alloc] initWithFrame:CGRectMake(100,100,frame.size.width-200,frame.size.height-200)];
+		[self.zoomView addSubview:gpsTrackPOIBoard];
+        //[gpsTrackPOIBoard setBackgroundColor:[UIColor colorWithRed:0.8 green:0.2 blue:0.2 alpha:0.5]];
+        [gpsTrackPOIBoard setBackgroundColor:[UIColor clearColor]];    //without this line, map view will be blocked black
+        [[MainQ sharedManager] register:gpsTrackPOIBoard withID:GPSTRACKPOIBOARD];
+
+        //create drawing board
+        drawingBoard=[[DrawingBoard alloc]initWithFrame:frame];
+		[drawingBoard setBackgroundColor:[UIColor clearColor]];
+		[gpsTrackPOIBoard addSubview:drawingBoard];
+        [[MainQ sharedManager] register:drawingBoard withID:DRAWINGBOARD];
         
         [self initVisibleVarArrays];
         //maplevel=level;
@@ -343,8 +359,8 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
 		y1=y0+(visibleBounds.size.height-2*DrawingFrameBezel)/[self zoomScale];
 		
 		//[viewFlattener.drawLineView setFrame:CGRectMake(x0,y0,x1-x0,y1-y0)];
-        [zoomView.gpsTrackPOIBoard setFrame:CGRectMake(x0,y0,x1-x0,y1-y0)];
-		[zoomView.gpsTrackPOIBoard.drawingBoard  setFrame:CGRectMake(0,0,x1-x0,y1-y0)];   //version 4.0
+        [gpsTrackPOIBoard setFrame:CGRectMake(x0,y0,x1-x0,y1-y0)];
+		[drawingBoard  setFrame:CGRectMake(0,0,x1-x0,y1-y0)];   //version 4.0
 		init=false;
 	} // else{[viewFlattener.drawLineView setFrame:CGRectMake(x0,y0,x1-x0,y1-y0)];}
 	BOOL correct=(x0>X0)||(x1<X1)||(y0>Y0)||(y1<Y1);
@@ -354,9 +370,9 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
 		y0=([self contentOffset].y+        DrawingFrameBezel)/[self zoomScale];
 		x1=x0+(visibleBounds.size.width- 2*DrawingFrameBezel)/[self zoomScale];
 		y1=y0+(visibleBounds.size.height-2*DrawingFrameBezel)/[self zoomScale];
-		[zoomView.gpsTrackPOIBoard setFrame:CGRectMake(x0,y0,x1-x0,y1-y0)];
-		[zoomView.gpsTrackPOIBoard.drawingBoard setFrame:CGRectMake(0,0,x1-x0,y1-y0)];   //version 4.0
-		[zoomView.gpsTrackPOIBoard setNeedsDisplay];   //redrawLines
+		[gpsTrackPOIBoard setFrame:CGRectMake(x0,y0,x1-x0,y1-y0)];
+		[drawingBoard setFrame:CGRectMake(0,0,x1-x0,y1-y0)];   //version 4.0
+		[gpsTrackPOIBoard setNeedsDisplay];   //redrawLines
         //[viewFlattener.drawLineView setNeedsLayout];   //redrawLines
 	}
 	return true;   //always return true to update the tile while making move map with drawing smooth
@@ -367,11 +383,11 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
     MainQ * mQ=[MainQ sharedManager];
     UIImageView * arrow =(UIImageView *)[mQ getTargetRef:GPSARROW];
     
-    GPSTrackPOIBoard * trackBoard=self.zoomView.gpsTrackPOIBoard;
+    //GPSTrackPOIBoard * trackBoard=self.zoomView.gpsTrackPOIBoard;
     GPSNode * node=((Recorder *)[Recorder sharedRecorder]).lastGpsNode;
-    CGPoint arrowCenter=[trackBoard ConvertPoint:(Node *)node];
+    CGPoint arrowCenter=[gpsTrackPOIBoard ConvertPoint:(Node *)node];
     PM2AppDelegate * appD=[[UIApplication sharedApplication] delegate];
-	CGPoint arrowCenter0=[trackBoard  convertPoint:arrowCenter toView:appD.viewController.view];
+	CGPoint arrowCenter0=[gpsTrackPOIBoard  convertPoint:arrowCenter toView:appD.viewController.view];
     arrow.center=arrowCenter0;
 }
 - (void)layoutSubviews{
@@ -395,7 +411,8 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
             offset.x-=Size.width/2;
             [self setContentOffset:offset];
             [self unLoadAllMapTiles];
-            [self setNeedsDisplay];[self.zoomView.gpsTrackPOIBoard setNeedsDisplay];
+            [self setNeedsDisplay];
+            [gpsTrackPOIBoard setNeedsDisplay];
              Mode=!Mode;
             return;
         }
@@ -408,7 +425,8 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
             offset.x+=Size.width/2;
             [self setContentOffset:offset];
             [self unLoadAllMapTiles];
-            [self setNeedsDisplay];[self.zoomView.gpsTrackPOIBoard setNeedsDisplay];
+            [self setNeedsDisplay];
+            [gpsTrackPOIBoard setNeedsDisplay];
             Mode=!Mode;
             return;
         }
@@ -487,7 +505,7 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
 	CGRect fr1=CGRectMake(0, 0, calSide, calSide);
 	[self.zoomView.basicMapLayer setFrame:fr1];
 	[self.zoomView.tileContainer setFrame:fr1];
-	[self.zoomView.gpsTrackPOIBoard.tapDetectView setFrame:fr1];
+	[gpsTrackPOIBoard.tapDetectView setFrame:fr1];
 }
 
 #pragma mark ----------------------------
@@ -588,5 +606,7 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
 	//return nil;  //return nil if you do not zooming to occur
     return zoomView;
 }
-
+- (bool)getMode{
+    return Mode;
+}
 @end

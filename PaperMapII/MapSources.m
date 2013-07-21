@@ -204,7 +204,7 @@
     return;
 }
 -(void)loadImageInBackground:(MapTile *)tile1{
-    int satVersion=130;  //TODO: Replaced this hardcoded 113 with some code !!!
+    int satVersion=132;  //TODO: Replaced this hardcoded 113 with some code !!!
     int x=tile1.col; //save here and check at the buttom
     int y=tile1.row;
     int r=tile1.res;

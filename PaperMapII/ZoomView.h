@@ -14,5 +14,5 @@
 
 @property (nonatomic, strong)TileContainer *tileContainer;
 @property (nonatomic, strong)TileContainer *basicMapLayer;
-@property (nonatomic, strong)GPSTrackPOIBoard *gpsTrackPOIBoard;
+
 @end

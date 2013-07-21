@@ -21,7 +21,7 @@
 #import "PM2ViewController.h"
 
 #define PI 3.1415926f
-
+#define MAPMODE [[DrawableMapScrollView sharedMap] getMode]
 @implementation Recorder
 
 @synthesize trackArray,gpsTrackArray;
@@ -46,7 +46,6 @@ bool centerPos;
             self.trackArray=[[NSMutableArray alloc]initWithCapacity:5];  //initialize track array here
         if(gpsTrackArray)
             gpsTrackArray=[[NSMutableArray alloc]initWithCapacity:5];  //initialize track array here
-        self.mapMode=*[DrawableMapScrollView sharedMap].zoomView.gpsTrackPOIBoard.pMode;;
     }
     return self;
 }
@@ -222,7 +221,7 @@ bool centerPos;
         return;
     }
     Node *node=[[Node alloc]initWithPoint:tapPoint mapLevel:maplevel];
-    self.track.nodes=[self addAnyModeAdjustedNode:self.track.nodes Node:node Mode:self.mapMode];
+    self.track.nodes=[self addAnyModeAdjustedNode:self.track.nodes Node:node Mode:MAPMODE];
     [self.track saveNodes];     //save it for every nodes
 }
 
@@ -239,7 +238,7 @@ bool centerPos;
            ((lastNode.x>=middleVerticalLine)&&(node.x>=middleVerticalLine))){
             arrNodes=[self addNode:node to:arrNodes];
         }else{
-             if (!self.mapMode) {  //mapmode adjust x of node and last node;
+             if (!MAPMODE) {  //mapmode adjust x of node and last node;
                 Node * adjNode=[node copy];
                 Node * adjLastNode=[lastNode copy];
                  
@@ -305,7 +304,7 @@ bool centerPos;
     return arrNodes;
 }
 -(int)ModeAdjust:(int)x res:(int)r{
-    if(self.mapMode)
+    if(MAPMODE)
         return x;
     int H=TSIZE*pow(2,r-1);
     if(x<H)
@@ -503,11 +502,11 @@ int n=0;  //gps node counter
         lastGpsNode.y=0;
     }
     //NSLOG10(@"Recorder.lastGpsNode=(%d,%d)",lastGpsNode.x,lastGpsNode.y);
-    [[DrawableMapScrollView sharedMap].zoomView.gpsTrackPOIBoard setNeedsDisplay];
+    [[DrawableMapScrollView sharedMap].gpsTrackPOIBoard setNeedsDisplay];
 }
 -(void)centerPositionAtX:(int) x Y:(int) y{
     DrawableMapScrollView * mapWindow=[DrawableMapScrollView sharedMap];
-    int adjX=[mapWindow.zoomView.gpsTrackPOIBoard ModeAdjust:x res:mapWindow.maplevel];
+    int adjX=[mapWindow.gpsTrackPOIBoard ModeAdjust:x res:mapWindow.maplevel];
     CGRect  visibleBounds = [mapWindow bounds];     //Check this should return a size of 1280x1280 instead of 1024x768 for rotating purpose
 	CGFloat zm=[mapWindow zoomScale];
 	CGPoint offset=CGPointMake(adjX*zm-visibleBounds.size.width/2, y*zm-visibleBounds.size.height/2);
@@ -529,7 +528,7 @@ int n=0;  //gps node counter
     if(!_gpsRecording){   //if not recording, do not create the node for the node
         return arrGpsNodes;
     }
-    return [self addAnyModeAdjustedNode:arrGpsNodes Node:node Mode:self.mapMode];
+    return [self addAnyModeAdjustedNode:arrGpsNodes Node:node Mode:MAPMODE];
 }
 //#define PI 3.1415926
 -(double)GetScreenY:(double)lat{

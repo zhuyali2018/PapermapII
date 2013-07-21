@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 #import "ZoomView.h"
+#import "GPSTrackPOIBoard.h"
 #import "PM2Protocols.h"
 
 @interface MapScrollView : UIScrollView <UIScrollViewDelegate>{
@@ -24,10 +25,14 @@
 -(void)setMaplevel:(int)maplevel;
 
 //@property int maplevel;
-@property (nonatomic, strong)ZoomView *zoomView;
+@property (nonatomic, strong) ZoomView *zoomView;
+@property (nonatomic, strong) GPSTrackPOIBoard *gpsTrackPOIBoard;
+@property (nonatomic, strong) DrawingBoard * drawingBoard;          //freeDrawingBoard in PM1
+
 @property (nonatomic) id<PM2MapSourceDelegate> mapsourceDelegate;
 - (UIView *)dequeueReusableTile;
 - (void)saveMapState;
 - (void)restoreMapState;
 - (void)reloadData;
+- (bool)getMode;
 @end

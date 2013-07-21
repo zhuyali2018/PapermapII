@@ -74,7 +74,7 @@
     propBn.lineProperty=drawTrack.lineProperty;
     [propBn setNeedsDisplay];   //update the property page with new track property
     PM2AppDelegate * appD=[[UIApplication sharedApplication] delegate];
-	[appD.viewController.mapScrollView.zoomView.gpsTrackPOIBoard setNeedsDisplay];  //update the map with new track property
+	[appD.viewController.mapScrollView.gpsTrackPOIBoard setNeedsDisplay];  //update the map with new track property
 }
 -(IBAction)viewDetailsBnClicked:(id)sender{
 //    GPSTrackNodesViewController * gpsTrackNodesViewCtrlr=[[GPSTrackNodesViewController alloc]init];
@@ -109,7 +109,7 @@
         }
     }
     PM2AppDelegate * appD=[[UIApplication sharedApplication] delegate];
-	[appD.viewController.mapScrollView.zoomView.gpsTrackPOIBoard setNeedsDisplay];  //update the map with new track property
+	[appD.viewController.mapScrollView.gpsTrackPOIBoard setNeedsDisplay];  //update the map with new track property
 }
 
 -(IBAction)fButonClicked:(id)sender{

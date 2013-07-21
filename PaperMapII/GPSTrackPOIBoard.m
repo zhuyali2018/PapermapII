@@ -16,13 +16,16 @@
 #import "Recorder.h"
 #import "MainQ.h"
 #import "GPSTrack.h"
+#import "DrawableMapScrollView.h"
+
+#define MAPMODE [[DrawableMapScrollView sharedMap] getMode]
 
 @implementation GPSTrackPOIBoard
 
 @synthesize tapDetectView;
 @synthesize ptrToTrackArray,ptrToGpsTrackArray;
 @synthesize maplevel;
-@synthesize drawingBoard;
+
 //@synthesize ptrToLastGpsNode;
 @synthesize GPSRunning;
 
@@ -31,15 +34,11 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-        drawingBoard=[[DrawingBoard alloc]initWithFrame:frame];	
-		[drawingBoard setBackgroundColor:[UIColor clearColor]];	
-		[self addSubview:drawingBoard];
-        [[MainQ sharedManager] register:drawingBoard withID:DRAWINGBOARD];
-     }
+    }
     return self;
 }
 -(int)ModeAdjust:(int)x res:(int)r{
-    if(*self.pMode)
+    if(MAPMODE)
         return x;
     int H=TSIZE*pow(2,r-1);
     if(x<H)

@@ -192,7 +192,7 @@
         [self.navigationController pushViewController:gpsTrackViewCtrlr animated:YES];
     }
 }
-//TODO: did not do mode adjust
+
 -(void)centerMapTo:(GPSNode *)node{
     MapScrollView * map=((MapScrollView *)[DrawableMapScrollView sharedMap]);
     int res=map.maplevel;
@@ -203,7 +203,7 @@
     //center the current position
     [[Recorder sharedRecorder] centerPositionAtX:x Y:y];
 }
-//TODO: not working properly
+
 -(void)centerMapToDrawNode:(Node *)node{
     MainQ * mQ=[MainQ sharedManager];
     GPSTrackPOIBoard * gb =(GPSTrackPOIBoard *)[mQ getTargetRef:GPSTRACKPOIBOARD];
