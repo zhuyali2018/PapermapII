@@ -26,7 +26,6 @@
 @property (nonatomic, strong) OnOffButton * centerBn;
 
 @property (nonatomic, strong) UIButton *colorButton;
-//@property (nonatomic, strong) UIButton *stopGpsButton;
 @property (nonatomic, strong) UIButton *cleanupButton;
 
 @property (nonatomic, strong) UIButton *mapTypeButton;

@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "MenuItem.h"
+#import "ExpandableMenuViewController.h"
 
-@interface MainMenuViewController : UITableViewController
+@interface MainMenuViewController : UITableViewController <TrackHandleDelegate>
 
 @property (nonatomic,strong)NSArray * menuMatrix;
 

@@ -109,8 +109,9 @@
             [self displayTrackInfo];
         }
     }
-    PM2AppDelegate * appD=[[UIApplication sharedApplication] delegate];
-	[appD.viewController.mapScrollView.gpsTrackPOIBoard setNeedsDisplay];  //update the map with new track property
+    //PM2AppDelegate * appD=[[UIApplication sharedApplication] delegate];
+	//[appD.viewController.mapScrollView.gpsTrackPOIBoard setNeedsDisplay];  //update the map with new track property
+    [[DrawableMapScrollView sharedMap].gpsTrackPOIBoard setNeedsDisplay];
 }
 -(void)displayTrackInfo{
     NSDate * t1=((GPSNode *)gpsTrack.nodes[0]).timestamp;

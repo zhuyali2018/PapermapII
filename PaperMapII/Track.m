@@ -13,17 +13,31 @@
 @implementation Track
 @synthesize filename;
 @synthesize nodes,lineProperty;
-@synthesize title;
+//@synthesize title;
 @synthesize timestamp;
-@synthesize visible;
+//@synthesize visible;
 
+-(void)setTitle:(NSString *)title1{
+    self.mainText=title1;
+}
+-(NSString *)title{
+    return self.mainText;
+}
+
+-(void)setVisible:(bool)v{
+    self.selected=v;
+}
+-(bool)visible{
+    return self.selected;
+}
 - (id)init {
-    self = [super init];
+    self = [super initWithTitle:@"-"];  //this line is important, or not menu will show up
     if (self) {
         // Initialize self.
         visible=true;
         _version=0;
         [self InitializeFilenameAndTitle];
+        [super initInternalItems];
     }
     return self;
 }
@@ -32,13 +46,13 @@
     timestamp=now;
     NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
     [outputFormatter setDateFormat:@"yyyy.MM.dd HH:mm:ss"];
-    title = [outputFormatter stringFromDate:now];
+    self.title = [outputFormatter stringFromDate:now];
     [outputFormatter setDateFormat:@"yyyy-MM-dd_HH-mm-ss-SSS"];
     filename = [[outputFormatter stringFromDate:now] stringByAppendingString:@".trk"];
 }
 #pragma mark ----------------
 -(id)initWithCoder:(NSCoder *)coder{
-	if(self=[super init]){
+    if(self=[super initWithCoder:coder]){
         self.lineProperty   =[coder decodeObjectForKey:@"LINEPROPERTY"];
         self.filename       =[coder decodeObjectForKey:@"FILENAME"];
         self.title          =[coder decodeObjectForKey:@"TITLE"];
@@ -54,10 +68,12 @@
                 [self readNodes];
         }
         self.version    =CURRENTVERSION;      //version 2.0 for saving
+        [super initInternalItems];
     }
 	return self;
 }
 -(void)encodeWithCoder:(NSCoder *)coder{
+    [super encodeWithCoder:coder];
 	//[coder encodeObject:self.nodes          forKey:@"NODES"];
     if(self.version==2.0)
         [self saveNodes];

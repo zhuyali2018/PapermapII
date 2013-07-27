@@ -8,10 +8,11 @@
 #import "AllImports.h"
 #import "MainMenuViewController.h"
 #import "GPSTrackListTableViewController.h"
-
-@interface MainMenuViewController ()
-
-@end
+#import "Recorder.h"
+#import "GPSTrackViewController.h"
+#import "MapScrollView.h"
+#import "DrawableMapScrollView.h"
+#import "GPSNode.h"
 
 @implementation MainMenuViewController
 
@@ -76,11 +77,44 @@
 }
 #pragma mark - -------------menu item handlers-------------------
 -(void)showGPSTrackList:(NSString *) menuTitle{
+    ExpandableMenuViewController *xmvc = [[ExpandableMenuViewController alloc] initWithStyle:UITableViewStylePlain];
+    xmvc.trackList=[Recorder sharedRecorder].gpsTrackArray;
+    xmvc.trackHandlerDelegate=self;
     NSLOG10(@"executing showGPSTrackList from %@",menuTitle);
-    GPSTrackListTableViewController * gpsV=[[GPSTrackListTableViewController alloc] init];
-    [gpsV setTitle:menuTitle];
-    [self.navigationController pushViewController:gpsV animated:YES];
+    [xmvc setTitle:menuTitle];
+    [self.navigationController pushViewController:xmvc animated:YES];
 }
+- (void)tappedOnIndexPath:(NSIndexPath *)indexPath{
+    NSLog(@"you clicked on row %d",indexPath.row);
+    
+    GPSTrack * tk=[Recorder sharedRecorder].gpsTrackArray[indexPath.row];
+    
+    GPSTrackViewController * gpsTrackViewCtrlr=[[GPSTrackViewController alloc]initWithNibName:@"GPSTrackViewController" bundle:nil];
+    gpsTrackViewCtrlr.gpsTrack=tk;
+    [gpsTrackViewCtrlr setTitle:tk.title];
+    if ([tk.nodes count]>0) {
+        GPSNode * node=tk.nodes[0];
+        [self centerMapTo:node];
+    }
+    [self.navigationController pushViewController:gpsTrackViewCtrlr animated:YES];
+}
+-(void)centerMapTo:(GPSNode *)node{
+    MapScrollView * map=((MapScrollView *)[DrawableMapScrollView sharedMap]);
+    int res=map.maplevel;
+    //x,y used to center the map below
+	int x=pow(2,res)*0.711111111*(node.longitude+180);                      //256/360=0.7111111111
+	int y=pow(2,res)*1.422222222*(90-[[Recorder sharedRecorder] GetScreenY:node.latitude]);		 //256/180=1.4222222222
+	
+    //center the current position
+    [[Recorder sharedRecorder] centerPositionAtX:x Y:y];
+}
+
+//-(void)showGPSTrackList:(NSString *) menuTitle{
+//    NSLOG10(@"executing showGPSTrackList from %@",menuTitle);
+//    GPSTrackListTableViewController * gpsV=[[GPSTrackListTableViewController alloc] init];
+//    [gpsV setTitle:menuTitle];
+//    [self.navigationController pushViewController:gpsV animated:YES];
+//}
 -(void)showDrawingList:(NSString *) menuTitle{
     NSLOG10(@"executing showDrawingList from %@",menuTitle);
     GPSTrackListTableViewController * gpsV=[[GPSTrackListTableViewController alloc] initWithType:DRAWLIST];

@@ -9,17 +9,28 @@
 //  name, title, visible
 
 #import <Foundation/Foundation.h>
+#import "MenuNode.h"
+
 @class LineProperty;
-@interface Track : NSObject<NSCoding,NSCopying>
+@interface Track : MenuNode<NSCoding,NSCopying>{
+    NSString * title;
+    bool visible;
+}
 
 @property (nonatomic,strong) NSArray * nodes;
 @property (nonatomic,strong) LineProperty * lineProperty;
-@property bool visible;
+//@property bool visible;
 @property float version;                //track class version, for saving purpose
 @property (nonatomic,copy) NSString * filename;
-@property (nonatomic,copy) NSString * title;
+//@property (nonatomic,copy) NSString * title;
 @property NSDate * timestamp;
 -(bool)saveNodes;
 -(bool)readNodes;
 //-(void)InitializeFilenameAndTitle;
+
+-(void)setTitle:(NSString *)title1;
+-(NSString *)title;
+
+-(void)setVisible:(bool)v;
+-(bool)visible;
 @end
