@@ -23,6 +23,12 @@
 @property (nonatomic,strong) IBOutlet UILabel * lbNumberOfNodes;
 @property (nonatomic,strong) IBOutlet PropertyButton * propBn;
 
+
+@property (nonatomic,strong) IBOutlet UILabel * lbNameTrackLength;
+@property (nonatomic,strong) IBOutlet UILabel * lbNameTotalTile;
+@property (nonatomic,strong) IBOutlet UILabel * lbNameAvgSpeed;
+@property (nonatomic,strong) IBOutlet UILabel * lbNameNodeNumber;
+
 -(IBAction)viewDetailsBnClicked:(id)sender;
 -(IBAction)editBnClicked:(id)sender;
 - (IBAction) pickLineProperty:(id)sender;

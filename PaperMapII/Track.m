@@ -64,7 +64,8 @@
         }else if(self.version==2.0f){
             self.nodes      =[coder decodeObjectForKey:@"NODES"];
         }else if(self.version==CURRENTVERSION){
-            if(visible)
+            //if(visible)
+            if(self.selected)       //on initialization, load those that are visible
                 [self readNodes];
         }
         self.version    =CURRENTVERSION;      //version 2.0 for saving

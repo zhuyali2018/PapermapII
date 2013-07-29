@@ -84,10 +84,10 @@
     [xmvc setTitle:menuTitle];
     [self.navigationController pushViewController:xmvc animated:YES];
 }
-- (void)tappedOnIndexPath:(NSIndexPath *)indexPath{
-    NSLog(@"you clicked on row %d",indexPath.row);
+- (void)tappedOnIndexPath:(int)row{
+    NSLog(@"you clicked on row %d",row);
     
-    GPSTrack * tk=[Recorder sharedRecorder].gpsTrackArray[indexPath.row];
+    GPSTrack * tk=[Recorder sharedRecorder].gpsTrackArray[row];
     
     GPSTrackViewController * gpsTrackViewCtrlr=[[GPSTrackViewController alloc]initWithNibName:@"GPSTrackViewController" bundle:nil];
     gpsTrackViewCtrlr.gpsTrack=tk;

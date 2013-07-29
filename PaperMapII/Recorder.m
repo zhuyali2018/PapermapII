@@ -59,6 +59,7 @@ bool centerPos;
     if (!_track) {
         return;
     }
+    _track.selected=true;   //auto select new drawing, of course !
     _recording=true;
     self.track.lineProperty=[[LineProperty sharedDrawingLineProperty] copy];
     if(!self.trackArray){   //when first time starting recorder, ini track array
@@ -77,6 +78,7 @@ bool centerPos;
     if (!_gpsTrack) {
         return;
     }
+    _gpsTrack.selected=true;  //auto select new GPS Track !
     _gpsRecording=true;
     self.gpsTrack.lineProperty=[[LineProperty sharedGPSTrackProperty] copy];   //TODO: change to GPS used line property
     if(!self.gpsTrackArray){   //when first time starting recorder, ini track array
@@ -91,6 +93,7 @@ bool centerPos;
     currentLocation=0;
     totalTrip=0;
     n=0;
+    [self saveAllGpsTracks];  //to provent from crashing and losing data during GPS Recording
 }
 -(void) startNewTrack{
     //initialize a track

@@ -35,6 +35,8 @@
 @synthesize visibleSwitchBn;
 @synthesize lbNumberOfNodes;
 
+@synthesize lbNameAvgSpeed,lbNameNodeNumber,lbNameTotalTile,lbNameTrackLength;
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -50,18 +52,33 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     gpsTrackName.text=gpsTrack.title;
-    lbGpsTrackLength.text=[[NSString alloc]initWithFormat:@"%3.1f miles (%d meters)",(float)gpsTrack.tripmeter/1609,gpsTrack.tripmeter];
-    //lbTimeCreated.text=[gpsTrack.timestamp description];
     lbTimeCreated.text = [NSDateFormatter localizedStringFromDate:gpsTrack.timestamp dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterMediumStyle];
     txtEdit.hidden=YES;
-    [propBn.titleLabel setText:@"GPS Track Property:"];
+    
+    if (gpsTrack.folder) {
+        lbGpsTrackLength.hidden=YES;
+        propBn.hidden=YES;
+        visibleSwitchBn.hidden=YES;
+        lbAvgSpeed.hidden=YES;
+        lbTotalTime.hidden=YES;
+        lbNumberOfNodes.hidden=YES;
+        self.bnViewDetails.hidden=YES;
+        lbNameTrackLength.hidden=YES;
+        lbNameTotalTile.hidden=YES;
+        lbNameAvgSpeed.hidden=YES;
+        lbNameNodeNumber.hidden=YES;
+        return;
+    }
+    lbGpsTrackLength.text=[[NSString alloc]initWithFormat:@"%3.1f miles (%d meters)",(float)gpsTrack.tripmeter/1609,gpsTrack.tripmeter];
+    //lbTimeCreated.text=[gpsTrack.timestamp description];
+     [propBn.titleLabel setText:@"GPS Track Property:"];
     propBn.lineProperty=gpsTrack.lineProperty;
     [propBn setBackgroundImage:[UIImage imageNamed:@"icon72x72.png"] forState:UIControlStateHighlighted];  //TODO: Choose a better image here
     [self displayTrackInfo];
-    if (gpsTrack.visible) {
-        [visibleSwitchBn setTitle:@"Visible" forState:UIControlStateNormal];
+    if (gpsTrack.selected) {
+        [visibleSwitchBn setTitle:@"Hide" forState:UIControlStateNormal];
     }else{
-        [visibleSwitchBn setTitle:@"Hidden" forState:UIControlStateNormal];
+        [visibleSwitchBn setTitle:@"Show" forState:UIControlStateNormal];
     }
 }
 
@@ -94,6 +111,8 @@
         gpsTrack.title=txtEdit.text;
         gpsTrackName.text=gpsTrack.title;
         [bnEdit setTitle:@"Edit"forState:UIControlStateNormal];
+        gpsTrack.mainLabel.text=gpsTrack.title;
+        //[gpsTrack.mainLabel setNeedsDisplay];
     }
 }
 - (IBAction) visibleBnClicked:(id)sender{
@@ -114,6 +133,12 @@
     [[DrawableMapScrollView sharedMap].gpsTrackPOIBoard setNeedsDisplay];
 }
 -(void)displayTrackInfo{
+    if (!gpsTrack.nodes) {
+        return;
+    }
+    if ([gpsTrack.nodes count]==0) {
+        return;
+    }
     NSDate * t1=((GPSNode *)gpsTrack.nodes[0]).timestamp;
     NSDate * t2=((GPSNode *)[gpsTrack.nodes lastObject]).timestamp;
     NSTimeInterval tm=[t2 timeIntervalSinceDate:t1];
