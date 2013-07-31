@@ -9,10 +9,10 @@
 //  name, title, visible
 
 #import <Foundation/Foundation.h>
+#import "MenuDataSource.h"
 #import "MenuNode.h"
-
 @class LineProperty;
-@interface Track : MenuNode<NSCoding,NSCopying>{
+@interface Track : MenuNode<NSCoding,NSCopying,MenuDataSource>{
     NSString * title;
     bool visible;
 }

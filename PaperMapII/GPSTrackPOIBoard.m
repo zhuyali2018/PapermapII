@@ -17,6 +17,7 @@
 #import "MainQ.h"
 #import "GPSTrack.h"
 #import "DrawableMapScrollView.h"
+#import "MenuNode.h"
 
 #define MAPMODE [[DrawableMapScrollView sharedMap] getMode]
 
@@ -164,7 +165,7 @@
     
     //Drawing lines
     for (int i=0; i<[ptrToTrackArray count]; i++) {     //loop through each track in track array
-        if (((Track *)ptrToTrackArray[i]).visible)
+        if (((MenuNode *)ptrToTrackArray[i]).selected)
             [self tapDrawTrack:ptrToTrackArray[i] context:context];
     }
 }
@@ -183,7 +184,7 @@
     
     //Drawing lines
     for (int i=0; i<[ptrToGpsTrackArray count]; i++) {     //loop through each track arrays of track arrays
-        if (((GPSTrack *)ptrToGpsTrackArray[i]).visible) {
+        if (((MenuNode *)ptrToGpsTrackArray[i]).selected) {
             [self gpsDrawTrack:ptrToGpsTrackArray[i] context:context lastTrack:((i+1)==[ptrToGpsTrackArray count])];
         }
     }

@@ -3532,6 +3532,7 @@
 		AA05FAA71798DEBF00B78243 /* DrawingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DrawingViewController.m; sourceTree = "<group>"; };
 		AA05FAA81798DEBF00B78243 /* DrawingViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DrawingViewController.xib; sourceTree = "<group>"; };
 		AA1B5345175EE308005355C3 /* AllImports.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AllImports.h; path = ../AllImports.h; sourceTree = "<group>"; };
+		AA37A63217A8C8CC0056F836 /* MenuDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuDataSource.h; sourceTree = "<group>"; };
 		AA511CD2174F152100F46B1A /* PM2Protocols.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PM2Protocols.h; sourceTree = "<group>"; };
 		AA511CD4174F1F0F00F46B1A /* MapSources.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapSources.h; sourceTree = "<group>"; };
 		AA511CD5174F1F0F00F46B1A /* MapSources.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapSources.m; sourceTree = "<group>"; };
@@ -7284,6 +7285,7 @@
 				AAF57C3B17A37F8E00C87DEA /* MenuNode.m */,
 				AAF57C3C17A37F8E00C87DEA /* ExpandableMenuViewController.h */,
 				AAF57C3D17A37F8E00C87DEA /* ExpandableMenuViewController.m */,
+				AA37A63217A8C8CC0056F836 /* MenuDataSource.h */,
 			);
 			name = "CollapsableMenu Files";
 			sourceTree = "<group>";

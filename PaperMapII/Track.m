@@ -10,6 +10,10 @@
 
 #import "Track.h"
 #import "LineProperty.h"
+#import "DrawableMapScrollView.h"
+#import "GPSNode.h"
+#import "Recorder.h"
+
 @implementation Track
 @synthesize filename;
 @synthesize nodes,lineProperty;
@@ -38,6 +42,7 @@
         _version=0;
         [self InitializeFilenameAndTitle];
         [super initInternalItems];
+        self.dataSource=self;
     }
     return self;
 }
@@ -53,6 +58,7 @@
 #pragma mark ----------------
 -(id)initWithCoder:(NSCoder *)coder{
     if(self=[super initWithCoder:coder]){
+        self.dataSource=self;
         self.lineProperty   =[coder decodeObjectForKey:@"LINEPROPERTY"];
         self.filename       =[coder decodeObjectForKey:@"FILENAME"];
         self.title          =[coder decodeObjectForKey:@"TITLE"];
@@ -136,4 +142,34 @@
 	NSString * documentsDirectory=[paths objectAtIndex:0];
 	return [documentsDirectory stringByAppendingPathComponent:filename];
 }
+-(void)centerMapTo:(GPSNode *)node1{
+    MapScrollView * map=((MapScrollView *)[DrawableMapScrollView sharedMap]);
+    int res=map.maplevel;
+    //x,y used to center the map below
+	int x=pow(2,res)*0.711111111*(node1.longitude+180);                      //256/360=0.7111111111
+	int y=pow(2,res)*1.422222222*(90-[[Recorder sharedRecorder] GetScreenY:node1.latitude]);		 //256/180=1.4222222222
+	
+    //center the current position
+    [[Recorder sharedRecorder] centerPositionAtX:x Y:y];
+}
+#pragma mark --------Menu datasource properties------------
+-(void)loadNodes{
+    [self readNodes];
+}//reading in the nodes array from file
+-(NSUInteger)numberOfNodes{
+    if (self.nodes) {
+        return [nodes count];
+    }
+    return 0;
+}
+-(void)onCheckBox{      //execute when the menu item is tapped
+    NSLog(@"Center map on my first node position");
+    if (!self.folder) {   //folder may not contain such Track properties as nodes array
+        [self centerMapTo:nodes[0]];
+    }
+    [[DrawableMapScrollView sharedMap].gpsTrackPOIBoard setNeedsDisplay];  //for track update
+}
+//-(NSString *)getMenuTitle{
+//    return title;
+//}
 @end
