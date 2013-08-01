@@ -72,16 +72,17 @@
     self.lblSpd.text=[[NSString alloc]initWithFormat:@"%8.1f MPH",node1.speed*3600/1609];
     self.lblDis1.text=[[NSString alloc]initWithFormat:@"%8.0f meters",node1.distanceFromLastNode];
     self.lblDis2.text=[[NSString alloc]initWithFormat:@"%8.0f meters",node1.distanceFromStart];
-    [self centerMapTo:node1];
+    //[self centerMapTo:node1];
+    [[DrawableMapScrollView sharedMap] centerMapTo:node1];
 }
--(void)centerMapTo:(GPSNode *)node1{
-    MapScrollView * map=((MapScrollView *)[DrawableMapScrollView sharedMap]);
-    int res=map.maplevel;
-    //x,y used to center the map below
-	int x=pow(2,res)*0.711111111*(node1.longitude+180);                      //256/360=0.7111111111
-	int y=pow(2,res)*1.422222222*(90-[[Recorder sharedRecorder] GetScreenY:node1.latitude]);		 //256/180=1.4222222222
-	
-    //center the current position
-    [[Recorder sharedRecorder] centerPositionAtX:x Y:y];
-}
+//-(void)centerMapTo:(GPSNode *)node1{
+//    MapScrollView * map=((MapScrollView *)[DrawableMapScrollView sharedMap]);
+//    int res=map.maplevel;
+//    //x,y used to center the map below
+//	int x=pow(2,res)*0.711111111*(node1.longitude+180);                      //256/360=0.7111111111
+//	int y=pow(2,res)*1.422222222*(90-[[Recorder sharedRecorder] GetScreenY:node1.latitude]);		 //256/180=1.4222222222
+//	
+//    //center the current position
+//    [[Recorder sharedRecorder] centerPositionAtX:x Y:y];
+//}
 @end

@@ -172,8 +172,8 @@
         Track * tk=[Recorder sharedRecorder].trackArray[indexPath.row];
         if ([tk.nodes count]>0) {
             Node * node=tk.nodes[0];
-            [self centerMapToDrawNode:node];
-            
+            //[self centerMapToDrawNode:node];
+            [[DrawableMapScrollView sharedMap] centerMapTo:node];
             DrawingViewController *dvc=[[DrawingViewController alloc]initWithNibName:@"DrawingViewController" bundle:nil];
             dvc.drawTrack=tk;
             [dvc setTitle:tk.title];
@@ -187,29 +187,30 @@
         [gpsTrackViewCtrlr setTitle:tk.title];
         if ([tk.nodes count]>0) {
             GPSNode * node=tk.nodes[0];
-            [self centerMapTo:node];
+            //[self centerMapTo:node];
+            [[DrawableMapScrollView sharedMap] centerMapTo:node];
         }
         [self.navigationController pushViewController:gpsTrackViewCtrlr animated:YES];
     }
 }
 
--(void)centerMapTo:(GPSNode *)node{
-    MapScrollView * map=((MapScrollView *)[DrawableMapScrollView sharedMap]);
-    int res=map.maplevel;
-    //x,y used to center the map below
-	int x=pow(2,res)*0.711111111*(node.longitude+180);                      //256/360=0.7111111111
-	int y=pow(2,res)*1.422222222*(90-[[Recorder sharedRecorder] GetScreenY:node.latitude]);		 //256/180=1.4222222222
-	
-    //center the current position
-    [[Recorder sharedRecorder] centerPositionAtX:x Y:y];
-}
+//-(void)centerMapTo:(GPSNode *)node{
+//    MapScrollView * map=((MapScrollView *)[DrawableMapScrollView sharedMap]);
+//    int res=map.maplevel;
+//    //x,y used to center the map below
+//	int x=pow(2,res)*0.711111111*(node.longitude+180);                      //256/360=0.7111111111
+//	int y=pow(2,res)*1.422222222*(90-[[Recorder sharedRecorder] GetScreenY:node.latitude]);		 //256/180=1.4222222222
+//	
+//    //center the current position
+//    [[Recorder sharedRecorder] centerPositionAtX:x Y:y];
+//}
 
--(void)centerMapToDrawNode:(Node *)node{
-    MainQ * mQ=[MainQ sharedManager];
-    GPSTrackPOIBoard * gb =(GPSTrackPOIBoard *)[mQ getTargetRef:GPSTRACKPOIBOARD];
-    int mapL=gb.maplevel;
-    int x=node.x*pow(2,mapL-node.r);
-    int y=node.y*pow(2,mapL-node.r);
-    [[Recorder sharedRecorder] centerPositionAtX:x Y:y];
-}
+//-(void)centerMapToDrawNode:(Node *)node{
+//    MainQ * mQ=[MainQ sharedManager];
+//    GPSTrackPOIBoard * gb =(GPSTrackPOIBoard *)[mQ getTargetRef:GPSTRACKPOIBOARD];
+//    int mapL=gb.maplevel;
+//    int x=node.x*pow(2,mapL-node.r);
+//    int y=node.y*pow(2,mapL-node.r);
+//    [[Recorder sharedRecorder] centerPositionAtX:x Y:y];
+//}
 @end

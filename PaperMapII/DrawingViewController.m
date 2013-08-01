@@ -73,8 +73,7 @@
     drawTrack.lineProperty=[[LineProperty sharedDrawingLineProperty] copy];
     propBn.lineProperty=drawTrack.lineProperty;
     [propBn setNeedsDisplay];   //update the property page with new track property
-    PM2AppDelegate * appD=[[UIApplication sharedApplication] delegate];
-	[appD.viewController.mapScrollView.gpsTrackPOIBoard setNeedsDisplay];  //update the map with new track property
+    [[DrawableMapScrollView sharedMap] refresh];//update the map with new track property
 }
 -(IBAction)viewDetailsBnClicked:(id)sender{
 //    GPSTrackNodesViewController * gpsTrackNodesViewCtrlr=[[GPSTrackNodesViewController alloc]init];
@@ -108,8 +107,7 @@
             self.lbNumberOfNodes.text=[[NSString alloc]initWithFormat:@"%3d",[drawTrack.nodes count]];
         }
     }
-    PM2AppDelegate * appD=[[UIApplication sharedApplication] delegate];
-	[appD.viewController.mapScrollView.gpsTrackPOIBoard setNeedsDisplay];  //update the map with new track property
+    [[DrawableMapScrollView sharedMap] refresh]; //update the map with new track property
 }
 
 -(IBAction)fButonClicked:(id)sender{
@@ -131,16 +129,16 @@
     [self updateWith:(Node *)node1];
 }
 -(void)updateWith:(Node *)node1{
-    
     lbNumberOfNodes.text=[[NSString alloc]initWithFormat:@"%d / %d",idx+1,[drawTrack.nodes count]];
-    [self centerMapToDrawNode:node1];
+    [[DrawableMapScrollView sharedMap] centerMapTo:node1];
+    //[self centerMapToDrawNode:node1];
 }
--(void)centerMapToDrawNode:(Node *)node{
-    MainQ * mQ=[MainQ sharedManager];
-    GPSTrackPOIBoard * gb =(GPSTrackPOIBoard *)[mQ getTargetRef:GPSTRACKPOIBOARD];
-    int mapL=gb.maplevel;
-    int x=node.x*pow(2,mapL-node.r);
-    int y=node.y*pow(2,mapL-node.r);
-    [[Recorder sharedRecorder] centerPositionAtX:x Y:y];
-}
+//-(void)centerMapToDrawNode:(Node *)node{
+//    MainQ * mQ=[MainQ sharedManager];
+//    GPSTrackPOIBoard * gb =(GPSTrackPOIBoard *)[mQ getTargetRef:GPSTRACKPOIBOARD];
+//    int mapL=gb.maplevel;
+//    int x=node.x*pow(2,mapL-node.r);
+//    int y=node.y*pow(2,mapL-node.r);
+//    [[Recorder sharedRecorder] centerPositionAtX:x Y:y];
+//}
 @end

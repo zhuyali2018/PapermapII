@@ -142,16 +142,25 @@
 	NSString * documentsDirectory=[paths objectAtIndex:0];
 	return [documentsDirectory stringByAppendingPathComponent:filename];
 }
--(void)centerMapTo:(GPSNode *)node1{
-    MapScrollView * map=((MapScrollView *)[DrawableMapScrollView sharedMap]);
-    int res=map.maplevel;
-    //x,y used to center the map below
-	int x=pow(2,res)*0.711111111*(node1.longitude+180);                      //256/360=0.7111111111
-	int y=pow(2,res)*1.422222222*(90-[[Recorder sharedRecorder] GetScreenY:node1.latitude]);		 //256/180=1.4222222222
-	
-    //center the current position
-    [[Recorder sharedRecorder] centerPositionAtX:x Y:y];
-}
+//-(void)centerMapTo:(Node *)node1{
+//    MapScrollView * map=((MapScrollView *)[DrawableMapScrollView sharedMap]);
+//    int res=map.maplevel;
+//    int r=node1.r;
+//    int x=node1.x*pow(2, res-r);
+//    int y=node1.y*pow(2, res-r);
+//    //center the current position
+//    [[Recorder sharedRecorder] centerPositionAtX:x Y:y];
+//}
+//-(void)centerMapTo:(GPSNode *)node1{
+//    MapScrollView * map=((MapScrollView *)[DrawableMapScrollView sharedMap]);
+//    int res=map.maplevel;
+//    //x,y used to center the map below
+//	int x=pow(2,res)*0.711111111*(node1.longitude+180);                      //256/360=0.7111111111
+//	int y=pow(2,res)*1.422222222*(90-[[Recorder sharedRecorder] GetScreenY:node1.latitude]);		 //256/180=1.4222222222
+//	
+//    //center the current position
+//    [[Recorder sharedRecorder] centerPositionAtX:x Y:y];
+//}
 #pragma mark --------Menu datasource properties------------
 -(void)loadNodes{
     [self readNodes];
@@ -165,11 +174,17 @@
 -(void)onCheckBox{      //execute when the menu item is tapped
     NSLog(@"Center map on my first node position");
     if (!self.folder) {   //folder may not contain such Track properties as nodes array
-        [self centerMapTo:nodes[0]];
+        //[self centerMapTo:nodes[0]];
+        if ([nodes count]>0) {
+            [[DrawableMapScrollView sharedMap] centerMapTo:nodes[0]];
+        }
     }
-    [[DrawableMapScrollView sharedMap].gpsTrackPOIBoard setNeedsDisplay];  //for track update
+    [[DrawableMapScrollView sharedMap] refresh];  //for track update
 }
 //-(NSString *)getMenuTitle{
 //    return title;
 //}
+-(NSDate *)getTimeStamp{
+    return timestamp;
+}
 @end

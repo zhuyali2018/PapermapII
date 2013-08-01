@@ -124,28 +124,30 @@
 {
     GPSNodeViewController *nodeViewer=[[GPSNodeViewController alloc]initWithNibName:@"GPSNodeViewController" bundle:nil];
     GPSNode * node=gpsTrack.nodes[indexPath.row];
-    [self centerMapTo:node];
+    //[self centerMapTo:node];
+    [[DrawableMapScrollView sharedMap] centerMapTo:node];
     nodeViewer.node=node;
     nodeViewer.gpsTrack=gpsTrack;
     NSString * tm=[NSDateFormatter localizedStringFromDate:nodeViewer.node.timestamp dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterMediumStyle];
     [nodeViewer setTitle:tm];
     [self.navigationController pushViewController:nodeViewer animated:YES];
 }
--(void)centerMapTo:(GPSNode *)node{
-    MapScrollView * map=((MapScrollView *)[DrawableMapScrollView sharedMap]);
-    int res=map.maplevel;
-    //x,y used to center the map below
-	int x=pow(2,res)*0.711111111*(node.longitude+180);                      //256/360=0.7111111111
-	int y=pow(2,res)*1.422222222*(90-[[Recorder sharedRecorder] GetScreenY:node.latitude]);		 //256/180=1.4222222222
-	
-    //center the current position
-    [[Recorder sharedRecorder] centerPositionAtX:x Y:y];
-}
+//-(void)centerMapTo:(GPSNode *)node{
+//    MapScrollView * map=((MapScrollView *)[DrawableMapScrollView sharedMap]);
+//    int res=map.maplevel;
+//    //x,y used to center the map below
+//	int x=pow(2,res)*0.711111111*(node.longitude+180);                      //256/360=0.7111111111
+//	int y=pow(2,res)*1.422222222*(90-[[Recorder sharedRecorder] GetScreenY:node.latitude]);		 //256/180=1.4222222222
+//	
+//    //center the current position
+//    [[Recorder sharedRecorder] centerPositionAtX:x Y:y];
+//}
 -(UITableViewCellAccessoryType)tableView:(UITableView *)tableView accessoryTypeForRowWithIndexPath:(NSIndexPath *)indexPath{
 	return UITableViewCellAccessoryDetailDisclosureButton;
 }
 -(void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath{
     GPSNode * node=gpsTrack.nodes[indexPath.row];
-    [self centerMapTo:node];
+    //[self centerMapTo:node];
+    [[DrawableMapScrollView sharedMap] centerMapTo:node];
 }
 @end

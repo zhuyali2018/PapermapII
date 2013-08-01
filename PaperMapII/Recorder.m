@@ -327,20 +327,16 @@ bool centerPos;
     double Lat=newLocation.coordinate.latitude;
 	double Long=newLocation.coordinate.longitude;
 	
-	int res=((MapScrollView *)[DrawableMapScrollView sharedMap]).maplevel;
+	//int res=((MapScrollView *)[DrawableMapScrollView sharedMap]).maplevel;
 	int resM=18;   //use max resolution for best accuracy  //v163
 	
 	int xM=pow(2,resM)*0.711111111*(Long+180);						 //256/360=0.7111111111
 	int yM=pow(2,resM)*1.422222222*(90-[self GetScreenY:Lat]);		 //256/180=1.4222222222
 	
     //x,y used to center the map below
-	int x=pow(2,res)*0.711111111*(Long+180);						 //256/360=0.7111111111
-	int y=pow(2,res)*1.422222222*(90-[self GetScreenY:Lat]);		 //256/180=1.4222222222
+	//int x=pow(2,res)*0.711111111*(Long+180);						 //256/360=0.7111111111
+	//int y=pow(2,res)*1.422222222*(90-[self GetScreenY:Lat]);		 //256/180=1.4222222222
 	
-    //center the current position
-    if(centerPos)
-        [self centerPositionAtX:x Y:y];
-    
      //show speed panel
     [self showSpeed:newLocation.speed];
     [self showAltitude:newLocation.altitude];
@@ -354,6 +350,11 @@ bool centerPos;
 	GPSPoint.y=yM;
     GPSNode *node=[[GPSNode alloc]initWithPoint:GPSPoint mapLevel:resM];
     
+    //center the current position
+    if(centerPos)
+        //[self centerPositionAtX:x Y:y];
+        [[DrawableMapScrollView sharedMap] centerMapTo:node];
+
     //add a gps node to our node array for gps track
     [self addGpsNode:node with:newLocation];   
     [self.gpsTrack saveNodes];        //TODO: may need to change to saving every 5 nodes or more for performance
@@ -505,16 +506,17 @@ int n=0;  //gps node counter
         lastGpsNode.y=0;
     }
     //NSLOG10(@"Recorder.lastGpsNode=(%d,%d)",lastGpsNode.x,lastGpsNode.y);
-    [[DrawableMapScrollView sharedMap].gpsTrackPOIBoard setNeedsDisplay];
+    //[[DrawableMapScrollView sharedMap].gpsTrackPOIBoard setNeedsDisplay];
+    [[DrawableMapScrollView sharedMap] refresh];
 }
--(void)centerPositionAtX:(int) x Y:(int) y{
-    DrawableMapScrollView * mapWindow=[DrawableMapScrollView sharedMap];
-    int adjX=[mapWindow.gpsTrackPOIBoard ModeAdjust:x res:mapWindow.maplevel];
-    CGRect  visibleBounds = [mapWindow bounds];     //Check this should return a size of 1280x1280 instead of 1024x768 for rotating purpose
-	CGFloat zm=[mapWindow zoomScale];
-	CGPoint offset=CGPointMake(adjX*zm-visibleBounds.size.width/2, y*zm-visibleBounds.size.height/2);
-	[mapWindow setContentOffset:offset animated:YES];   //this is where it makes map move smoothly
-}
+//-(void)centerPositionAtX:(int) x Y:(int) y{
+//    DrawableMapScrollView * mapWindow=[DrawableMapScrollView sharedMap];
+//    int adjX=[mapWindow.gpsTrackPOIBoard ModeAdjust:x res:mapWindow.maplevel];
+//    CGRect  visibleBounds = [mapWindow bounds];     //Check this should return a size of 1280x1280 instead of 1024x768 for rotating purpose
+//	CGFloat zm=[mapWindow zoomScale];
+//	CGPoint offset=CGPointMake(adjX*zm-visibleBounds.size.width/2, y*zm-visibleBounds.size.height/2);
+//	[mapWindow setContentOffset:offset animated:YES];   //this is where it makes map move smoothly
+//}
 /*
 -(void) addGPSNode:(GPSNode *)node{
     if(!_gpsRecording){   //if not recording, do not create the node for the node

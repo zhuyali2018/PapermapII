@@ -84,42 +84,51 @@
     [xmvc setTitle:menuTitle];
     [self.navigationController pushViewController:xmvc animated:YES];
 }
-- (void)tappedOnIndexPath:(int)row{
+- (void)tappedOnIndexPath:(int)row ID:(int)myid{
     NSLog(@"you clicked on row %d",row);
     
-    GPSTrack * tk=[Recorder sharedRecorder].gpsTrackArray[row];
-    
     GPSTrackViewController * gpsTrackViewCtrlr=[[GPSTrackViewController alloc]initWithNibName:@"GPSTrackViewController" bundle:nil];
+    
+    GPSTrack * tk;
+    if (myid==DRAWLIST) {
+        tk=[Recorder sharedRecorder].trackArray[row];
+        gpsTrackViewCtrlr.listType=DRAWLIST;
+    }else
+        tk=[Recorder sharedRecorder].gpsTrackArray[row];
+    
     gpsTrackViewCtrlr.gpsTrack=tk;
-    [gpsTrackViewCtrlr setTitle:tk.title];
-    if ([tk.nodes count]>0) {
-        GPSNode * node=tk.nodes[0];
-        [self centerMapTo:node];
+    if (tk.folder) {
+        [gpsTrackViewCtrlr setTitle:tk.mainText];
+    }else{
+        [gpsTrackViewCtrlr setTitle:tk.mainText];
+        if ([tk.nodes count]>0) {
+            GPSNode * node=tk.nodes[0];
+            //[self centerMapTo:node];
+            [[DrawableMapScrollView sharedMap] centerMapTo:node];
+        }
     }
     [self.navigationController pushViewController:gpsTrackViewCtrlr animated:YES];
 }
--(void)centerMapTo:(GPSNode *)node{
-    MapScrollView * map=((MapScrollView *)[DrawableMapScrollView sharedMap]);
-    int res=map.maplevel;
-    //x,y used to center the map below
-	int x=pow(2,res)*0.711111111*(node.longitude+180);                      //256/360=0.7111111111
-	int y=pow(2,res)*1.422222222*(90-[[Recorder sharedRecorder] GetScreenY:node.latitude]);		 //256/180=1.4222222222
-	
-    //center the current position
-    [[Recorder sharedRecorder] centerPositionAtX:x Y:y];
-}
-
 //-(void)showGPSTrackList:(NSString *) menuTitle{
 //    NSLOG10(@"executing showGPSTrackList from %@",menuTitle);
 //    GPSTrackListTableViewController * gpsV=[[GPSTrackListTableViewController alloc] init];
 //    [gpsV setTitle:menuTitle];
 //    [self.navigationController pushViewController:gpsV animated:YES];
 //}
--(void)showDrawingList:(NSString *) menuTitle{
+//-(void)showDrawingList:(NSString *) menuTitle{
+//    NSLOG10(@"executing showDrawingList from %@",menuTitle);
+//    GPSTrackListTableViewController * gpsV=[[GPSTrackListTableViewController alloc] initWithType:DRAWLIST];
+//    [gpsV setTitle:menuTitle];
+//    [self.navigationController pushViewController:gpsV animated:YES];
+//}
+-(void)showDrawingList:(NSString *) menuTitle{    
+    ExpandableMenuViewController *xmvc = [[ExpandableMenuViewController alloc] initWithStyle:UITableViewStylePlain];
+    xmvc.trackList=[Recorder sharedRecorder].trackArray;
+    xmvc.trackHandlerDelegate=self;
+    xmvc.id=DRAWLIST;
     NSLOG10(@"executing showDrawingList from %@",menuTitle);
-    GPSTrackListTableViewController * gpsV=[[GPSTrackListTableViewController alloc] initWithType:DRAWLIST];
-    [gpsV setTitle:menuTitle];
-    [self.navigationController pushViewController:gpsV animated:YES];
+    [xmvc setTitle:menuTitle];
+    [self.navigationController pushViewController:xmvc animated:YES];
 }
 - (void)didReceiveMemoryWarning
 {

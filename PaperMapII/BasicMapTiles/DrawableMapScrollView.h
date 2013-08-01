@@ -11,4 +11,7 @@
 @interface DrawableMapScrollView : TappableMapScrollView
 
 + (DrawableMapScrollView *)sharedMap;
+-(void)refresh;
+-(void)refreshDrawingBoard;
+-(void)centerMapTo:(Node *)node;
 @end

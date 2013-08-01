@@ -5,7 +5,7 @@
 //  Created by Yali Zhu on 6/30/13.
 //  Copyright (c) 2013 Yali Zhu. All rights reserved.
 //
-
+#import "AllImports.h"
 #import "GPSTrackViewController.h"
 #import "GPSTrackNodesViewController.h"
 #import "LinePropStorageViewController.h"
@@ -36,6 +36,7 @@
 @synthesize lbNumberOfNodes;
 
 @synthesize lbNameAvgSpeed,lbNameNodeNumber,lbNameTotalTile,lbNameTrackLength;
+@synthesize listType;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -51,10 +52,7 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    gpsTrackName.text=gpsTrack.title;
-    lbTimeCreated.text = [NSDateFormatter localizedStringFromDate:gpsTrack.timestamp dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterMediumStyle];
     txtEdit.hidden=YES;
-    
     if (gpsTrack.folder) {
         lbGpsTrackLength.hidden=YES;
         propBn.hidden=YES;
@@ -67,14 +65,24 @@
         lbNameTotalTile.hidden=YES;
         lbNameAvgSpeed.hidden=YES;
         lbNameNodeNumber.hidden=YES;
+        gpsTrackName.text=gpsTrack.mainText;
+        lbTimeCreated.text = [NSDateFormatter localizedStringFromDate:gpsTrack.cdate dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterMediumStyle];
         return;
     }
-    lbGpsTrackLength.text=[[NSString alloc]initWithFormat:@"%3.1f miles (%d meters)",(float)gpsTrack.tripmeter/1609,gpsTrack.tripmeter];
-    //lbTimeCreated.text=[gpsTrack.timestamp description];
-     [propBn.titleLabel setText:@"GPS Track Property:"];
-    propBn.lineProperty=gpsTrack.lineProperty;
+    gpsTrackName.text=gpsTrack.title;
+    lbTimeCreated.text = [NSDateFormatter localizedStringFromDate:gpsTrack.timestamp dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterMediumStyle];
+    if (listType!=DRAWLIST) {
+        lbGpsTrackLength.text=[[NSString alloc]initWithFormat:@"%3.1f miles (%d meters)",(float)gpsTrack.tripmeter/1609,gpsTrack.tripmeter];
+        [propBn.titleLabel setText:@"GPS Track Property:"];
+        propBn.lineProperty=gpsTrack.lineProperty;
+    }else {
+        [propBn.titleLabel setText:@"Drawing Property:"];
+        propBn.lineProperty=gpsTrack.lineProperty;
+    }
     [propBn setBackgroundImage:[UIImage imageNamed:@"icon72x72.png"] forState:UIControlStateHighlighted];  //TODO: Choose a better image here
-    [self displayTrackInfo];
+    if (listType!=DRAWLIST) {
+        [self displayTrackInfo];
+    }
     if (gpsTrack.selected) {
         [visibleSwitchBn setTitle:@"Hide" forState:UIControlStateNormal];
     }else{
@@ -91,8 +99,7 @@
     gpsTrack.lineProperty=[[LineProperty sharedGPSTrackProperty] copy];
     propBn.lineProperty=gpsTrack.lineProperty;
     [propBn setNeedsDisplay];   //update the property page with new track property
-    PM2AppDelegate * appD=[[UIApplication sharedApplication] delegate];
-	[appD.viewController.mapScrollView.gpsTrackPOIBoard setNeedsDisplay];  //update the map with new track property
+    [[DrawableMapScrollView sharedMap] refresh];
 }
 -(IBAction)viewDetailsBnClicked:(id)sender{
     GPSTrackNodesViewController * gpsTrackNodesViewCtrlr=[[GPSTrackNodesViewController alloc]init];
@@ -104,14 +111,14 @@
     if ([[bnEdit.titleLabel text] compare:@"Save"]!=NSOrderedSame) {
         NSLog(@"editBnClicked");
         txtEdit.hidden=NO;
-        txtEdit.text=gpsTrack.title;
+        txtEdit.text=gpsTrack.mainText;
         [bnEdit setTitle:@"Save"forState:UIControlStateNormal];
     }else{ //save changes
         txtEdit.hidden=YES;
-        gpsTrack.title=txtEdit.text;
-        gpsTrackName.text=gpsTrack.title;
+        gpsTrack.mainText=txtEdit.text;//gpsTrack.title=txtEdit.text;
+        gpsTrackName.text=gpsTrack.mainText;//gpsTrack.title;
         [bnEdit setTitle:@"Edit"forState:UIControlStateNormal];
-        gpsTrack.mainLabel.text=gpsTrack.title;
+        gpsTrack.mainLabel.text=gpsTrack.mainText;//gpsTrack.title;
         //[gpsTrack.mainLabel setNeedsDisplay];
     }
 }
@@ -125,12 +132,12 @@
         gpsTrack.visible=TRUE;
         if (!gpsTrack.nodes) {      //read in nodes only if nodes not read in yet
             [gpsTrack readNodes];
-            [self displayTrackInfo];
+            if (listType!=DRAWLIST) {
+                [self displayTrackInfo];
+            }
         }
     }
-    //PM2AppDelegate * appD=[[UIApplication sharedApplication] delegate];
-	//[appD.viewController.mapScrollView.gpsTrackPOIBoard setNeedsDisplay];  //update the map with new track property
-    [[DrawableMapScrollView sharedMap].gpsTrackPOIBoard setNeedsDisplay];
+    [[DrawableMapScrollView sharedMap] refresh];
 }
 -(void)displayTrackInfo{
     if (!gpsTrack.nodes) {

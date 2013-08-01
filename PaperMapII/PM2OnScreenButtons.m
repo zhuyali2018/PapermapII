@@ -160,7 +160,6 @@
 -(void)startDrawingRecorder:(OnOffButton *)bn{
     MainQ * mQ=[MainQ sharedManager];
     DrawingBoard * dv =(DrawingBoard *)[mQ getTargetRef:DRAWINGBOARD];
-    UIView * v =(UIView *)[mQ getTargetRef:GPSTRACKPOIBOARD];
     if (bn.btnOn) {   //start drawing mode
         [self.routRecorder start];   //user tap to enter into drawing state here
         NSLOG4(@"Recorder started!");
@@ -184,7 +183,7 @@
         [dv clearAll];
         dv.firstPt=CGPointMake(0,0);
         dv.lastPt=CGPointMake(0,0);
-        [v setNeedsDisplay];
+        [mapScrollView refresh];
         //reset the free draw button too
         self.mapScrollView.freeDraw=false;
         dv.preDraw=TRUE;
@@ -259,14 +258,10 @@
     [_baseView addSubview:undoButton];
 }
 -(void)undoDrawing:(UIButton *)bn{
-    MainQ * mQ=[MainQ sharedManager];
-    UIView * v =(UIView *)[mQ getTargetRef:GPSTRACKPOIBOARD];
-    UIView * dv =(UIView *)[mQ getTargetRef:DRAWINGBOARD];
-    if (!v)return;
     [self.routRecorder undo];
     NSLOG5(@"Undo drawing called");
-    [v setNeedsDisplay];
-    [dv setNeedsDisplay];
+    [mapScrollView refresh];
+    [mapScrollView refreshDrawingBoard];
 }
 -(void)switchToFreeDraw:(OnOffButton *)bn{
     MainQ * mQ=[MainQ sharedManager];
@@ -449,7 +444,7 @@ extern bool centerPos;
     UIView * v =(UIView *)[mQ getTargetRef:GPSTRACKPOIBOARD];
     if(!v) return;
     [_routRecorder unloadTracks];
-    [v setNeedsDisplay];
+    [mapScrollView refresh];
 }
 -(void) colorPicker{
     NSLOG8(@"ColorPicker button tapped!");
@@ -526,24 +521,16 @@ extern bool centerPos;
         [bn setTitle:@"Map" forState:UIControlStateNormal];
         [mapSrc setMapSourceType:googleSat];
     }
-    [[DrawableMapScrollView sharedMap] reloadData];
-    [[DrawableMapScrollView sharedMap] setNeedsDisplay];
+    [mapScrollView reloadData];
+    [mapScrollView refresh];
 }
 -(void)unloadGPSTrack:(UIButton *)bn{
-    MainQ * mQ=[MainQ sharedManager];
-    UIView * v =(UIView *)[mQ getTargetRef:GPSTRACKPOIBOARD];
-    if (!v)return;
-
     [_routRecorder unloadGPSTracks];
-    [v setNeedsDisplay];
+    [mapScrollView refresh];
 }
 -(void)unloadDrawings:(UIButton *)bn{
-    MainQ * mQ=[MainQ sharedManager];
-    UIView * v =(UIView *)[mQ getTargetRef:GPSTRACKPOIBOARD];
-    if (!v)return;
-
     [_routRecorder unloadDrawings];
-    [v setNeedsDisplay];
+    [mapScrollView refresh];
 }
 -(void)add_SpeedPanel{
     //Speed panel

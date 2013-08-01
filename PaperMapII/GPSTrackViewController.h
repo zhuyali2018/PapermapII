@@ -11,6 +11,7 @@
 #import "PropertyButton.h"
 @interface GPSTrackViewController : UIViewController
 @property (nonatomic,strong) GPSTrack * gpsTrack;
+@property ListType listType;
 @property (nonatomic,strong) IBOutlet UILabel * gpsTrackName;
 @property (nonatomic,strong) IBOutlet UILabel * lbGpsTrackLength;
 @property (nonatomic,strong) IBOutlet UILabel * lbTimeCreated;

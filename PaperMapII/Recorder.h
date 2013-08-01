@@ -41,7 +41,7 @@
 - (void)initializeAllTracks;
 - (void)initializeAllGpsTracks;
 - (double)GetScreenY:(double)lat;
-- (void)centerPositionAtX:(int) x Y:(int) y;
+//- (void)centerPositionAtX:(int) x Y:(int) y;
 
 + (Recorder *)sharedRecorder;
 -(NSArray*) addAnyModeAdjustedNode:(NSArray*)arrNodes Node:(Node *)node Mode:(bool)mode;
