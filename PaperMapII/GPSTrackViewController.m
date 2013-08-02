@@ -75,12 +75,18 @@
         lbGpsTrackLength.text=[[NSString alloc]initWithFormat:@"%3.1f miles (%d meters)",(float)gpsTrack.tripmeter/1609,gpsTrack.tripmeter];
         [propBn.titleLabel setText:@"GPS Track Property:"];
         propBn.lineProperty=gpsTrack.lineProperty;
+        
     }else {
+        lbNameTrackLength.hidden=YES;
+        lbNameTotalTile.hidden=YES;
+        lbNameAvgSpeed.hidden=YES;
         [propBn.titleLabel setText:@"Drawing Property:"];
         propBn.lineProperty=gpsTrack.lineProperty;
     }
     [propBn setBackgroundImage:[UIImage imageNamed:@"icon72x72.png"] forState:UIControlStateHighlighted];  //TODO: Choose a better image here
     if (listType!=DRAWLIST) {
+        [self displayGPSTrackInfo];
+    }else{
         [self displayTrackInfo];
     }
     if (gpsTrack.selected) {
@@ -123,23 +129,25 @@
     }
 }
 - (IBAction) visibleBnClicked:(id)sender{
-    if ([[visibleSwitchBn.titleLabel text] compare:@"Visible"]==NSOrderedSame) {
-        [visibleSwitchBn setTitle:@"Hidden" forState:UIControlStateNormal];
+    if ([[visibleSwitchBn.titleLabel text] compare:@"Hide"]==NSOrderedSame) {
+        [visibleSwitchBn setTitle:@"Show" forState:UIControlStateNormal];
         gpsTrack.visible=FALSE;
         [gpsTrack saveNodes];
     }else{
-        [visibleSwitchBn setTitle:@"Visible" forState:UIControlStateNormal];
+        [visibleSwitchBn setTitle:@"Hide" forState:UIControlStateNormal];
         gpsTrack.visible=TRUE;
         if (!gpsTrack.nodes) {      //read in nodes only if nodes not read in yet
             [gpsTrack readNodes];
-            if (listType!=DRAWLIST) {
-                [self displayTrackInfo];
-            }
+        }
+        if (listType!=DRAWLIST) {
+            [self displayGPSTrackInfo];
+        }else{
+            [self displayTrackInfo];
         }
     }
     [[DrawableMapScrollView sharedMap] refresh];
 }
--(void)displayTrackInfo{
+-(void)displayGPSTrackInfo{
     if (!gpsTrack.nodes) {
         return;
     }
@@ -158,4 +166,24 @@
     
     self.lbNumberOfNodes.text=[[NSString alloc]initWithFormat:@"%3d",[gpsTrack.nodes count]];
 }
+-(void)displayTrackInfo{
+    if (!gpsTrack.nodes) {
+        return;
+    }
+    if ([gpsTrack.nodes count]==0) {
+        return;
+    }
+//    NSDate * t1=((GPSNode *)gpsTrack.nodes[0]).timestamp;
+//    NSDate * t2=((GPSNode *)[gpsTrack.nodes lastObject]).timestamp;
+//    NSTimeInterval tm=[t2 timeIntervalSinceDate:t1];
+    
+    //double miles=gpsTrack.tripmeter/1609;
+    //double f2=miles*3600;
+    //float avgSpd=f2/tm;
+    //lbAvgSpeed.text=[[NSString alloc]initWithFormat:@"%5.1f MPH",avgSpd];
+    //lbTotalTime.text=[[NSString alloc]initWithFormat:@"%02.0f:%02.0f:%02.0f",floor(tm/3600),fmod(floor(tm/60),60),fmod(tm,60)];
+    
+    self.lbNumberOfNodes.text=[[NSString alloc]initWithFormat:@"%3d",[gpsTrack.nodes count]];
+}
+
 @end

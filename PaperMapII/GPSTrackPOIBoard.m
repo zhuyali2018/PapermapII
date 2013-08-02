@@ -82,6 +82,9 @@
 	CGContextStrokePath(context);
 }
 -(void)tapDrawTrack:(Track *)track context:(CGContextRef)context{
+    if (track.folder) {  //very important, or it will crash for ever, deadloop
+        return;
+    }
     if(!track) return;
     if(nil==track.nodes)
         return;
@@ -120,6 +123,9 @@
 }
 -(void)gpsDrawTrack:(Track *)track context:(CGContextRef)context lastTrack:(BOOL)lastTrack{
     if(!track) return;
+    if (track.folder) {
+        return;
+    }
     if(nil==track.nodes)
         return;
     int count=[track.nodes count];

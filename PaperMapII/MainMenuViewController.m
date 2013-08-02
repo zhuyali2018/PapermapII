@@ -103,11 +103,14 @@
         [gpsTrackViewCtrlr setTitle:tk.mainText];
         if ([tk.nodes count]>0) {
             GPSNode * node=tk.nodes[0];
-            //[self centerMapTo:node];
             [[DrawableMapScrollView sharedMap] centerMapTo:node];
         }
     }
     [self.navigationController pushViewController:gpsTrackViewCtrlr animated:YES];
+}
+- (void)onFolderCheckBox{
+    NSLog(@"onFolderCheckBox");
+    [[DrawableMapScrollView sharedMap] refresh];
 }
 //-(void)showGPSTrackList:(NSString *) menuTitle{
 //    NSLOG10(@"executing showGPSTrackList from %@",menuTitle);
