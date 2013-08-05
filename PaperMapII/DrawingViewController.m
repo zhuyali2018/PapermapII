@@ -133,12 +133,4 @@
     [[DrawableMapScrollView sharedMap] centerMapTo:node1];
     //[self centerMapToDrawNode:node1];
 }
-//-(void)centerMapToDrawNode:(Node *)node{
-//    MainQ * mQ=[MainQ sharedManager];
-//    GPSTrackPOIBoard * gb =(GPSTrackPOIBoard *)[mQ getTargetRef:GPSTRACKPOIBOARD];
-//    int mapL=gb.maplevel;
-//    int x=node.x*pow(2,mapL-node.r);
-//    int y=node.y*pow(2,mapL-node.r);
-//    [[Recorder sharedRecorder] centerPositionAtX:x Y:y];
-//}
 @end

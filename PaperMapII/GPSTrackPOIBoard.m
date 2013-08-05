@@ -28,7 +28,7 @@
 @synthesize maplevel;
 
 //@synthesize ptrToLastGpsNode;
-@synthesize GPSRunning;
+//@synthesize GPSRunning;
 
 - (id)initWithFrame:(CGRect)frame
 {

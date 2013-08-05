@@ -63,5 +63,10 @@
     int y=node.y*pow(2,mapL-node.r);
     [self centerPositionAtX:x Y:y];
 }
-
+-(void)setPreDraw:(bool)predraw{
+    self.drawingBoard.preDraw=predraw;
+}
+-(void)clearAll{
+    [self.drawingBoard clearAll];
+}
 @end

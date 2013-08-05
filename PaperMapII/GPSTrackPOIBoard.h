@@ -22,7 +22,7 @@
 @property (nonatomic,weak) NSMutableArray * ptrToGpsTrackArray;   //pointer to an array of tracks
 @property (nonatomic,weak) GPSNode * ptrToLastGpsNode;
 @property int maplevel;
-@property bool GPSRunning;
+//@property bool GPSRunning;
 
 -(int)ModeAdjust:(int)x res:(int)r;
 -(CGPoint)ConvertPoint:(Node *)node;

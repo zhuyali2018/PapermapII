@@ -101,6 +101,7 @@ bool centerPos;
     LineProperty *lp=_track.lineProperty;   //save the line property 
     _track=[[Track alloc] init];
     if (!_track) return;                    //return if failed
+    _track.selected=true;                   //was using the default which is false, drawing not showing !!!
     _track.lineProperty=lp;                 //TODO: this may need to get from setings directly
     if(!self.trackArray){   //when first time starting recorder, ini track array
         self.trackArray=[[NSMutableArray alloc]initWithCapacity:5];
@@ -226,6 +227,7 @@ bool centerPos;
     Node *node=[[Node alloc]initWithPoint:tapPoint mapLevel:maplevel];
     self.track.nodes=[self addAnyModeAdjustedNode:self.track.nodes Node:node Mode:MAPMODE];
     [self.track saveNodes];     //save it for every nodes
+    [[DrawableMapScrollView sharedMap] refresh];
 }
 
 //=====add a node to array arrNodes=================
@@ -374,7 +376,7 @@ float mapLeftThereDirection=0;       //TODO: assign and keep it an appropriate v
 	}
     MainQ * mQ=[MainQ sharedManager];
     UIImageView * arrow =(UIImageView *)[mQ getTargetRef:GPSARROW];
-    GPSTrackPOIBoard * trackBoard=(GPSTrackPOIBoard *)[mQ getTargetRef:GPSTRACKPOIBOARD];
+    GPSTrackPOIBoard * trackBoard=[DrawableMapScrollView sharedMap].gpsTrackPOIBoard; //(GPSTrackPOIBoard *)[mQ getTargetRef:GPSTRACKPOIBOARD];
     arrow.transform=transform;
     
     //update the arrow position

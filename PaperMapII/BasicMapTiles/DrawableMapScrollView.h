@@ -14,4 +14,6 @@
 -(void)refresh;
 -(void)refreshDrawingBoard;
 -(void)centerMapTo:(Node *)node;
+-(void)setPreDraw:(bool)predraw;
+-(void)clearAll;
 @end

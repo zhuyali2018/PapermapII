@@ -158,8 +158,6 @@
 }
 #pragma mark ------------drawing button methods----------------
 -(void)startDrawingRecorder:(OnOffButton *)bn{
-    MainQ * mQ=[MainQ sharedManager];
-    DrawingBoard * dv =(DrawingBoard *)[mQ getTargetRef:DRAWINGBOARD];
     if (bn.btnOn) {   //start drawing mode
         [self.routRecorder start];   //user tap to enter into drawing state here
         NSLOG4(@"Recorder started!");
@@ -167,30 +165,25 @@
         [self.mapScrollView setScrollEnabled:NO];
         self.mapScrollView.freeDraw=false;
         self.mapScrollView.bDrawing=true;
-        dv.preDraw=true;
-        //[fdrawButton setHidden:FALSE];
+        [self.mapScrollView setPreDraw:true];  //dv.preDraw=true;
         bn.withGroup=false;
         undoButton.withGroup=false;
         fdrawButton.withGroup=false;
         [self showDrawingButtons];
         bnStart.hidden=YES;
     }else{
-        //[bn setTitle:@"Draw" forState:UIControlStateNormal];
         [self.routRecorder stop];
         NSLOG4(@"Recorder Stopped!");
         self.mapScrollView.mapPined=FALSE;
         [self.mapScrollView setScrollEnabled:YES];
-        [dv clearAll];
-        dv.firstPt=CGPointMake(0,0);
-        dv.lastPt=CGPointMake(0,0);
+        [self.mapScrollView clearAll];
         [mapScrollView refresh];
         //reset the free draw button too
         self.mapScrollView.freeDraw=false;
-        dv.preDraw=TRUE;
+        [self.mapScrollView setFreeDraw:TRUE]; //dv.preDraw=TRUE;
         fdrawButton.withGroup=YES;
         undoButton.withGroup=YES;
         drawButton.withGroup=YES;
-        //[self setButtonsToPosition:NO];
         [self hideDrawingButtons];
         bnStart.hidden=NO;
     }
@@ -264,20 +257,14 @@
     [mapScrollView refreshDrawingBoard];
 }
 -(void)switchToFreeDraw:(OnOffButton *)bn{
-    MainQ * mQ=[MainQ sharedManager];
-    UIView * dv =(UIView *)[mQ getTargetRef:DRAWINGBOARD];
-    NSLOG4(@"Free Draw button tapped. Button title is %@",[bn.titleLabel text]);
-    //if ([[bn.titleLabel text] compare:@"Free Draw"]==NSOrderedSame) {
     if (bn.btnOn) {
-        //[bn setTitle:@"No Free Draw" forState:UIControlStateNormal];
         self.mapScrollView.freeDraw=true;
-        ((DrawingBoard *)dv).preDraw=FALSE;
+        [self.mapScrollView setPreDraw:FALSE];
         [self.routRecorder startNewTrack];
     }else{
-        //[bn setTitle:@"Free Draw" forState:UIControlStateNormal];
         self.mapScrollView.freeDraw=false;
-        ((DrawingBoard *)dv).preDraw=TRUE;
-    }
+        [self.mapScrollView setPreDraw:TRUE];
+   }
 }
 
 #pragma mark ------------gps button methods----------------
@@ -315,19 +302,13 @@ extern bool centerPos;
     
     MainQ * mQ=[MainQ sharedManager];
     UIView * v =(UIView *)[mQ getTargetRef:GPSARROW];
-    GPSTrackPOIBoard * gv =(GPSTrackPOIBoard *)[mQ getTargetRef:GPSTRACKPOIBOARD];
     
     if(!v) return;
     
-    //if GPS is not started yet
-    //if ([[bn.titleLabel text] compare:@"Stop GPS"]!=NSOrderedSame) {
     if(bn.btnOn){
         [gpsReceiver start];
         if (!v)return;
         v.hidden=NO;
-        if(gv)
-            gv.GPSRunning=TRUE;
-        
         bn.withGroup=false;
         centerBn.withGroup=false;
         [self showGPSButtons];
@@ -337,8 +318,7 @@ extern bool centerPos;
         [speedLabel setHidden:YES];
         if (!v)return;
         v.hidden=NO;  //TODO:need to be Yes
-        if(gv)
-            gv.GPSRunning=FALSE;
+        
         arrow.hidden=YES;
         
         bn.withGroup=YES;
@@ -440,9 +420,6 @@ extern bool centerPos;
 	}
 }
 -(void)cleanUpTrack{
-    MainQ * mQ=[MainQ sharedManager];
-    UIView * v =(UIView *)[mQ getTargetRef:GPSTRACKPOIBOARD];
-    if(!v) return;
     [_routRecorder unloadTracks];
     [mapScrollView refresh];
 }

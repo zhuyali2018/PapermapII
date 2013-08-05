@@ -12,6 +12,12 @@
 		AA05FAA91798DEBF00B78243 /* DrawingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA05FAA71798DEBF00B78243 /* DrawingViewController.m */; };
 		AA05FAAA1798DEBF00B78243 /* DrawingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AA05FAA81798DEBF00B78243 /* DrawingViewController.xib */; };
 		AA511CD6174F1F0F00F46B1A /* MapSources.m in Sources */ = {isa = PBXBuildFile; fileRef = AA511CD5174F1F0F00F46B1A /* MapSources.m */; };
+		AA59B92817ADBF6400092996 /* checkbox0.png in Resources */ = {isa = PBXBuildFile; fileRef = AA59B92617ADBF6400092996 /* checkbox0.png */; };
+		AA59B92917ADBF6400092996 /* checkbox1.png in Resources */ = {isa = PBXBuildFile; fileRef = AA59B92717ADBF6400092996 /* checkbox1.png */; };
+		AA59B92C17ADC10300092996 /* folder0.png in Resources */ = {isa = PBXBuildFile; fileRef = AA59B92A17ADC10300092996 /* folder0.png */; };
+		AA59B92D17ADC10300092996 /* folder1.png in Resources */ = {isa = PBXBuildFile; fileRef = AA59B92B17ADC10300092996 /* folder1.png */; };
+		AA59B93817AF52CB00092996 /* ExpandableMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA59B93517AF52CB00092996 /* ExpandableMenuViewController.m */; };
+		AA59B93917AF52CB00092996 /* MenuNode.m in Sources */ = {isa = PBXBuildFile; fileRef = AA59B93717AF52CB00092996 /* MenuNode.m */; };
 		AA729A53175870D800F6AF78 /* LineProperty.m in Sources */ = {isa = PBXBuildFile; fileRef = AA729A52175870D800F6AF78 /* LineProperty.m */; };
 		AA729A54175870D800F6AF78 /* LineProperty.m in Sources */ = {isa = PBXBuildFile; fileRef = AA729A52175870D800F6AF78 /* LineProperty.m */; };
 		AA8608F6177AA703008EBC95 /* MainQ.m in Sources */ = {isa = PBXBuildFile; fileRef = AA8608F5177AA703008EBC95 /* MainQ.m */; };
@@ -3504,13 +3510,7 @@
 		AAEE0CC3177669DB00549A7D /* LinePropPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AAEE0CC1177669DB00549A7D /* LinePropPickerViewController.m */; };
 		AAEE0CC61779448B00549A7D /* GPSTrack.m in Sources */ = {isa = PBXBuildFile; fileRef = AAEE0CC51779448A00549A7D /* GPSTrack.m */; };
 		AAEE0CC71779448B00549A7D /* GPSTrack.m in Sources */ = {isa = PBXBuildFile; fileRef = AAEE0CC51779448A00549A7D /* GPSTrack.m */; };
-		AAF57C3E17A37F8E00C87DEA /* MenuNode.m in Sources */ = {isa = PBXBuildFile; fileRef = AAF57C3B17A37F8E00C87DEA /* MenuNode.m */; };
-		AAF57C3F17A37F8E00C87DEA /* ExpandableMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AAF57C3D17A37F8E00C87DEA /* ExpandableMenuViewController.m */; };
 		AAF57C4517A37FFC00C87DEA /* trail.png in Resources */ = {isa = PBXBuildFile; fileRef = AAF57C4017A37FFC00C87DEA /* trail.png */; };
-		AAF57C4617A37FFC00C87DEA /* checkbox1.png in Resources */ = {isa = PBXBuildFile; fileRef = AAF57C4117A37FFC00C87DEA /* checkbox1.png */; };
-		AAF57C4717A37FFC00C87DEA /* checkbox0.png in Resources */ = {isa = PBXBuildFile; fileRef = AAF57C4217A37FFC00C87DEA /* checkbox0.png */; };
-		AAF57C4817A37FFC00C87DEA /* folder0.png in Resources */ = {isa = PBXBuildFile; fileRef = AAF57C4317A37FFC00C87DEA /* folder0.png */; };
-		AAF57C4917A37FFC00C87DEA /* folder1.png in Resources */ = {isa = PBXBuildFile; fileRef = AAF57C4417A37FFC00C87DEA /* folder1.png */; };
 		AAF8D165178D1B5B00611A86 /* OnOffButton.m in Sources */ = {isa = PBXBuildFile; fileRef = AAF8D164178D1B5B00611A86 /* OnOffButton.m */; };
 		AAF8D166178D1B5B00611A86 /* OnOffButton.m in Sources */ = {isa = PBXBuildFile; fileRef = AAF8D164178D1B5B00611A86 /* OnOffButton.m */; };
 /* End PBXBuildFile section */
@@ -3536,6 +3536,14 @@
 		AA511CD2174F152100F46B1A /* PM2Protocols.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PM2Protocols.h; sourceTree = "<group>"; };
 		AA511CD4174F1F0F00F46B1A /* MapSources.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapSources.h; sourceTree = "<group>"; };
 		AA511CD5174F1F0F00F46B1A /* MapSources.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapSources.m; sourceTree = "<group>"; };
+		AA59B92617ADBF6400092996 /* checkbox0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checkbox0.png; sourceTree = "<group>"; };
+		AA59B92717ADBF6400092996 /* checkbox1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checkbox1.png; sourceTree = "<group>"; };
+		AA59B92A17ADC10300092996 /* folder0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = folder0.png; sourceTree = "<group>"; };
+		AA59B92B17ADC10300092996 /* folder1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = folder1.png; sourceTree = "<group>"; };
+		AA59B93417AF52CB00092996 /* ExpandableMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExpandableMenuViewController.h; sourceTree = "<group>"; };
+		AA59B93517AF52CB00092996 /* ExpandableMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExpandableMenuViewController.m; sourceTree = "<group>"; };
+		AA59B93617AF52CB00092996 /* MenuNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuNode.h; sourceTree = "<group>"; };
+		AA59B93717AF52CB00092996 /* MenuNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuNode.m; sourceTree = "<group>"; };
 		AA729A51175870D800F6AF78 /* LineProperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LineProperty.h; sourceTree = "<group>"; };
 		AA729A52175870D800F6AF78 /* LineProperty.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LineProperty.m; sourceTree = "<group>"; };
 		AA8608F4177AA702008EBC95 /* MainQ.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainQ.h; sourceTree = "<group>"; };
@@ -5327,15 +5335,7 @@
 		AAEE0CC1177669DB00549A7D /* LinePropPickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LinePropPickerViewController.m; sourceTree = "<group>"; };
 		AAEE0CC41779448A00549A7D /* GPSTrack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPSTrack.h; sourceTree = "<group>"; };
 		AAEE0CC51779448A00549A7D /* GPSTrack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPSTrack.m; sourceTree = "<group>"; };
-		AAF57C3A17A37F8E00C87DEA /* MenuNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MenuNode.h; path = "../../../../Test projects/CollapsableMenu/CollapsableMenu/MenuNode.h"; sourceTree = "<group>"; };
-		AAF57C3B17A37F8E00C87DEA /* MenuNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MenuNode.m; path = "../../../../Test projects/CollapsableMenu/CollapsableMenu/MenuNode.m"; sourceTree = "<group>"; };
-		AAF57C3C17A37F8E00C87DEA /* ExpandableMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ExpandableMenuViewController.h; path = "../../../../Test projects/CollapsableMenu/CollapsableMenu/ExpandableMenuViewController.h"; sourceTree = "<group>"; };
-		AAF57C3D17A37F8E00C87DEA /* ExpandableMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ExpandableMenuViewController.m; path = "../../../../Test projects/CollapsableMenu/CollapsableMenu/ExpandableMenuViewController.m"; sourceTree = "<group>"; };
 		AAF57C4017A37FFC00C87DEA /* trail.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = trail.png; path = "../../../../Test projects/CollapsableMenu/CollapsableMenu/trail.png"; sourceTree = "<group>"; };
-		AAF57C4117A37FFC00C87DEA /* checkbox1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = checkbox1.png; path = "../../../../Test projects/CollapsableMenu/CollapsableMenu/checkbox1.png"; sourceTree = "<group>"; };
-		AAF57C4217A37FFC00C87DEA /* checkbox0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = checkbox0.png; path = "../../../../Test projects/CollapsableMenu/CollapsableMenu/checkbox0.png"; sourceTree = "<group>"; };
-		AAF57C4317A37FFC00C87DEA /* folder0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = folder0.png; path = "../../../../Test projects/CollapsableMenu/CollapsableMenu/folder0.png"; sourceTree = "<group>"; };
-		AAF57C4417A37FFC00C87DEA /* folder1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = folder1.png; path = "../../../../Test projects/CollapsableMenu/CollapsableMenu/folder1.png"; sourceTree = "<group>"; };
 		AAF8D163178D1B5B00611A86 /* OnOffButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnOffButton.h; sourceTree = "<group>"; };
 		AAF8D164178D1B5B00611A86 /* OnOffButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OnOffButton.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -7276,15 +7276,15 @@
 		AAF57C3917A37F4900C87DEA /* CollapsableMenu Files */ = {
 			isa = PBXGroup;
 			children = (
+				AA59B93417AF52CB00092996 /* ExpandableMenuViewController.h */,
+				AA59B93517AF52CB00092996 /* ExpandableMenuViewController.m */,
+				AA59B93617AF52CB00092996 /* MenuNode.h */,
+				AA59B93717AF52CB00092996 /* MenuNode.m */,
 				AAF57C4017A37FFC00C87DEA /* trail.png */,
-				AAF57C4117A37FFC00C87DEA /* checkbox1.png */,
-				AAF57C4217A37FFC00C87DEA /* checkbox0.png */,
-				AAF57C4317A37FFC00C87DEA /* folder0.png */,
-				AAF57C4417A37FFC00C87DEA /* folder1.png */,
-				AAF57C3A17A37F8E00C87DEA /* MenuNode.h */,
-				AAF57C3B17A37F8E00C87DEA /* MenuNode.m */,
-				AAF57C3C17A37F8E00C87DEA /* ExpandableMenuViewController.h */,
-				AAF57C3D17A37F8E00C87DEA /* ExpandableMenuViewController.m */,
+				AA59B92A17ADC10300092996 /* folder0.png */,
+				AA59B92B17ADC10300092996 /* folder1.png */,
+				AA59B92617ADBF6400092996 /* checkbox0.png */,
+				AA59B92717ADBF6400092996 /* checkbox1.png */,
 				AA37A63217A8C8CC0056F836 /* MenuDataSource.h */,
 			);
 			name = "CollapsableMenu Files";
@@ -9077,10 +9077,10 @@
 				AAE6DF6C1780CD7C003F230F /* GPSNodeViewController.xib in Resources */,
 				AA05FAAA1798DEBF00B78243 /* DrawingViewController.xib in Resources */,
 				AAF57C4517A37FFC00C87DEA /* trail.png in Resources */,
-				AAF57C4617A37FFC00C87DEA /* checkbox1.png in Resources */,
-				AAF57C4717A37FFC00C87DEA /* checkbox0.png in Resources */,
-				AAF57C4817A37FFC00C87DEA /* folder0.png in Resources */,
-				AAF57C4917A37FFC00C87DEA /* folder1.png in Resources */,
+				AA59B92817ADBF6400092996 /* checkbox0.png in Resources */,
+				AA59B92917ADBF6400092996 /* checkbox1.png in Resources */,
+				AA59B92C17ADC10300092996 /* folder0.png in Resources */,
+				AA59B92D17ADC10300092996 /* folder1.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -10858,8 +10858,8 @@
 				AAE6DF6A1780CD7C003F230F /* GPSNodeViewController.m in Sources */,
 				AAF8D165178D1B5B00611A86 /* OnOffButton.m in Sources */,
 				AA05FAA91798DEBF00B78243 /* DrawingViewController.m in Sources */,
-				AAF57C3E17A37F8E00C87DEA /* MenuNode.m in Sources */,
-				AAF57C3F17A37F8E00C87DEA /* ExpandableMenuViewController.m in Sources */,
+				AA59B93817AF52CB00092996 /* ExpandableMenuViewController.m in Sources */,
+				AA59B93917AF52CB00092996 /* MenuNode.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

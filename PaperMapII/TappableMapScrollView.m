@@ -95,6 +95,8 @@
     }
     if (self.mapPined) {
         if(self.freeDraw){
+            self.drawingBoard.firstPt=CGPointMake(0,0);
+            self.drawingBoard.lastPt=CGPointMake(0,0);
             CGPoint tapPt=[view convertPoint:tapPoint  toView:self.drawingBoard];
             if((tapPoint.x==0)&&(tapPoint.y==0)){       //if tapPoint is (0,0), it is a signal to start a new track
                 [self.drawingBoard clearAll];               //clear all points and call setNeedsDisplay
@@ -127,7 +129,7 @@
             }
             //normal tap line segment drawing:
             if (self.drawingBoard.firstPt.x==0) {                                             //if first point not set, set it and start next segment of drawing
-                if (self.drawingBoard.lastPt.x!=0) {                                                //if the last point set, but first not set,move last to first, but do not save
+                if (self.drawingBoard.lastPt.x!=0) {                                          //if the last point set, but first not set,move last to first, but do not save
                     self.drawingBoard.firstPt=self.drawingBoard.lastPt;
                 }else{                                                                          //if firsst point and last point are both 0, 
                     self.drawingBoard.firstPt=[view convertPoint:tapPoint  toView:self.drawingBoard];   //first point of rubberband drawing has to be set.
