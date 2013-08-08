@@ -18,6 +18,14 @@
 		AA59B92D17ADC10300092996 /* folder1.png in Resources */ = {isa = PBXBuildFile; fileRef = AA59B92B17ADC10300092996 /* folder1.png */; };
 		AA59B93817AF52CB00092996 /* ExpandableMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA59B93517AF52CB00092996 /* ExpandableMenuViewController.m */; };
 		AA59B93917AF52CB00092996 /* MenuNode.m in Sources */ = {isa = PBXBuildFile; fileRef = AA59B93717AF52CB00092996 /* MenuNode.m */; };
+		AA59B93D17B0D6E700092996 /* POI.m in Sources */ = {isa = PBXBuildFile; fileRef = AA59B93C17B0D6E700092996 /* POI.m */; };
+		AA59B94017B210CC00092996 /* TextInput.m in Sources */ = {isa = PBXBuildFile; fileRef = AA59B93F17B210CC00092996 /* TextInput.m */; };
+		AA59B94717B355F800092996 /* Blue_flag.png in Resources */ = {isa = PBXBuildFile; fileRef = AA59B94117B355F700092996 /* Blue_flag.png */; };
+		AA59B94817B355F800092996 /* Green_flag.png in Resources */ = {isa = PBXBuildFile; fileRef = AA59B94217B355F700092996 /* Green_flag.png */; };
+		AA59B94917B355F800092996 /* Orange_flag.png in Resources */ = {isa = PBXBuildFile; fileRef = AA59B94317B355F800092996 /* Orange_flag.png */; };
+		AA59B94A17B355F800092996 /* Purple_flag.png in Resources */ = {isa = PBXBuildFile; fileRef = AA59B94417B355F800092996 /* Purple_flag.png */; };
+		AA59B94B17B355F800092996 /* Red_flag.png in Resources */ = {isa = PBXBuildFile; fileRef = AA59B94517B355F800092996 /* Red_flag.png */; };
+		AA59B94C17B355F800092996 /* Yellow_flag.png in Resources */ = {isa = PBXBuildFile; fileRef = AA59B94617B355F800092996 /* Yellow_flag.png */; };
 		AA729A53175870D800F6AF78 /* LineProperty.m in Sources */ = {isa = PBXBuildFile; fileRef = AA729A52175870D800F6AF78 /* LineProperty.m */; };
 		AA729A54175870D800F6AF78 /* LineProperty.m in Sources */ = {isa = PBXBuildFile; fileRef = AA729A52175870D800F6AF78 /* LineProperty.m */; };
 		AA8608F6177AA703008EBC95 /* MainQ.m in Sources */ = {isa = PBXBuildFile; fileRef = AA8608F5177AA703008EBC95 /* MainQ.m */; };
@@ -3544,6 +3552,16 @@
 		AA59B93517AF52CB00092996 /* ExpandableMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExpandableMenuViewController.m; sourceTree = "<group>"; };
 		AA59B93617AF52CB00092996 /* MenuNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuNode.h; sourceTree = "<group>"; };
 		AA59B93717AF52CB00092996 /* MenuNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuNode.m; sourceTree = "<group>"; };
+		AA59B93B17B0D6E700092996 /* POI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = POI.h; sourceTree = "<group>"; };
+		AA59B93C17B0D6E700092996 /* POI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = POI.m; sourceTree = "<group>"; };
+		AA59B93E17B210CC00092996 /* TextInput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextInput.h; sourceTree = "<group>"; };
+		AA59B93F17B210CC00092996 /* TextInput.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextInput.m; sourceTree = "<group>"; };
+		AA59B94117B355F700092996 /* Blue_flag.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Blue_flag.png; sourceTree = "<group>"; };
+		AA59B94217B355F700092996 /* Green_flag.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Green_flag.png; sourceTree = "<group>"; };
+		AA59B94317B355F800092996 /* Orange_flag.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Orange_flag.png; sourceTree = "<group>"; };
+		AA59B94417B355F800092996 /* Purple_flag.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Purple_flag.png; sourceTree = "<group>"; };
+		AA59B94517B355F800092996 /* Red_flag.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Red_flag.png; sourceTree = "<group>"; };
+		AA59B94617B355F800092996 /* Yellow_flag.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Yellow_flag.png; sourceTree = "<group>"; };
 		AA729A51175870D800F6AF78 /* LineProperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LineProperty.h; sourceTree = "<group>"; };
 		AA729A52175870D800F6AF78 /* LineProperty.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LineProperty.m; sourceTree = "<group>"; };
 		AA8608F4177AA702008EBC95 /* MainQ.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainQ.h; sourceTree = "<group>"; };
@@ -5377,6 +5395,23 @@
 			name = MapSources;
 			sourceTree = "<group>";
 		};
+		AA59B93A17B0D6C800092996 /* POI */ = {
+			isa = PBXGroup;
+			children = (
+				AA59B94117B355F700092996 /* Blue_flag.png */,
+				AA59B94217B355F700092996 /* Green_flag.png */,
+				AA59B94317B355F800092996 /* Orange_flag.png */,
+				AA59B94417B355F800092996 /* Purple_flag.png */,
+				AA59B94517B355F800092996 /* Red_flag.png */,
+				AA59B94617B355F800092996 /* Yellow_flag.png */,
+				AA59B93E17B210CC00092996 /* TextInput.h */,
+				AA59B93F17B210CC00092996 /* TextInput.m */,
+				AA59B93B17B0D6E700092996 /* POI.h */,
+				AA59B93C17B0D6E700092996 /* POI.m */,
+			);
+			name = POI;
+			sourceTree = "<group>";
+		};
 		AAAD5A71176E1F7800DCDAD2 /* Buttons and Labels */ = {
 			isa = PBXGroup;
 			children = (
@@ -5467,6 +5502,7 @@
 		AABDD48617437B3600A0D6E9 /* PaperMapII */ = {
 			isa = PBXGroup;
 			children = (
+				AA59B93A17B0D6C800092996 /* POI */,
 				AAF57C3917A37F4900C87DEA /* CollapsableMenu Files */,
 				AABDD48F17437B3600A0D6E9 /* PM2AppDelegate.h */,
 				AABDD49017437B3600A0D6E9 /* PM2AppDelegate.m */,
@@ -9081,6 +9117,12 @@
 				AA59B92917ADBF6400092996 /* checkbox1.png in Resources */,
 				AA59B92C17ADC10300092996 /* folder0.png in Resources */,
 				AA59B92D17ADC10300092996 /* folder1.png in Resources */,
+				AA59B94717B355F800092996 /* Blue_flag.png in Resources */,
+				AA59B94817B355F800092996 /* Green_flag.png in Resources */,
+				AA59B94917B355F800092996 /* Orange_flag.png in Resources */,
+				AA59B94A17B355F800092996 /* Purple_flag.png in Resources */,
+				AA59B94B17B355F800092996 /* Red_flag.png in Resources */,
+				AA59B94C17B355F800092996 /* Yellow_flag.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -10860,6 +10902,8 @@
 				AA05FAA91798DEBF00B78243 /* DrawingViewController.m in Sources */,
 				AA59B93817AF52CB00092996 /* ExpandableMenuViewController.m in Sources */,
 				AA59B93917AF52CB00092996 /* MenuNode.m in Sources */,
+				AA59B93D17B0D6E700092996 /* POI.m in Sources */,
+				AA59B94017B210CC00092996 /* TextInput.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -300,15 +300,10 @@ extern bool centerPos;
 }
 -(void) startGPS:(OnOffButton *)bn{
     
-    MainQ * mQ=[MainQ sharedManager];
-    UIView * v =(UIView *)[mQ getTargetRef:GPSARROW];
-    
-    if(!v) return;
-    
-    if(bn.btnOn){
+     if(bn.btnOn){
         [gpsReceiver start];
-        if (!v)return;
-        v.hidden=NO;
+        //if (!v)return;
+        arrow.hidden=NO;
         bn.withGroup=false;
         centerBn.withGroup=false;
         [self showGPSButtons];
@@ -316,8 +311,8 @@ extern bool centerPos;
     }else{
         [gpsReceiver stop];
         [speedLabel setHidden:YES];
-        if (!v)return;
-        v.hidden=NO;  //TODO:need to be Yes
+        //if (!v)return;
+        //v.hidden=NO;  //TODO:need to be Yes
         
         arrow.hidden=YES;
         

@@ -31,6 +31,7 @@
 @protocol PM2RecordingDelegate <NSObject>
 @optional
 - (void)mapLevel:(int)maplevel singleTapAtPoint:(CGPoint)tapPoint;
+- (BOOL)getPOICreating;
 @end
 
 @protocol OnOffBnDelegate <NSObject>

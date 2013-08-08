@@ -13,6 +13,7 @@
 #import "MapScrollView.h"
 #import "DrawableMapScrollView.h"
 #import "GPSNode.h"
+#import "PM2OnScreenButtons.h"
 
 @implementation MainMenuViewController
 
@@ -68,14 +69,26 @@
 
 #define GPSTRACKS 0
 #define DRAWINGS  0
+#define CREATEPOI  0
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     ((MenuItem *)menuMatrix[GPS_SECTION][GPSTRACKS]).menuItemHandler=@selector(showGPSTrackList:);
     
     ((MenuItem *)menuMatrix[DRAW_SECTION][DRAWINGS]).menuItemHandler=@selector(showDrawingList:);
+    
+    ((MenuItem *)menuMatrix[POI_SECTION][CREATEPOI]).menuItemHandler=@selector(CreatePoi);
 }
 #pragma mark - -------------menu item handlers-------------------
+-(void)CreatePoi{
+    NSLog(@"Tap on the map to Create a POI");
+    PM2OnScreenButtons * OSB=[PM2OnScreenButtons sharedBnManager];
+    if([OSB.menuPopover isPopoverVisible]){
+        [OSB.menuPopover dismissPopoverAnimated:YES];
+    }
+    Recorder * recorder=[Recorder sharedRecorder];
+    recorder.POICreating=true;
+}
 -(void)showGPSTrackList:(NSString *) menuTitle{
     ExpandableMenuViewController *xmvc = [[ExpandableMenuViewController alloc] initWithStyle:UITableViewStylePlain];
     xmvc.trackList=[Recorder sharedRecorder].gpsTrackArray;

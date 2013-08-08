@@ -14,12 +14,14 @@
 @class TapDetectView;
 @class Node;
 
-@interface GPSTrackPOIBoard : UIView
+@interface GPSTrackPOIBoard : UIView<UITextFieldDelegate>
 
 //@property (nonatomic) BOOL * pMode;
 @property (nonatomic,weak) TapDetectView * tapDetectView;
 @property (nonatomic,weak) NSMutableArray * ptrToTrackArray;   //pointer to an array of tracks
 @property (nonatomic,weak) NSMutableArray * ptrToGpsTrackArray;   //pointer to an array of tracks
+@property (nonatomic,weak) NSMutableArray * ptrToPoiArray;   //pointer to an array of tracks
+
 @property (nonatomic,weak) GPSNode * ptrToLastGpsNode;
 @property int maplevel;
 //@property bool GPSRunning;

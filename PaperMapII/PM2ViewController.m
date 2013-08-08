@@ -56,6 +56,7 @@
     mapScrollView.recordingDelegate=[Recorder sharedRecorder];
     [[Recorder sharedRecorder] initializeAllTracks];
     [[Recorder sharedRecorder] initializeAllGpsTracks];
+    [[Recorder sharedRecorder] initializeAllPOIs];
 }
 
 
@@ -100,5 +101,6 @@
     [mapScrollView saveMapState];
     [[Recorder sharedRecorder] saveAllTracks];
     [[Recorder sharedRecorder] saveAllGpsTracks];
+    [[Recorder sharedRecorder] saveAllPOIs];
 }
 @end

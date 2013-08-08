@@ -89,6 +89,19 @@
 #pragma mark -----------------HandleSingleTap Delegate method------
 
 - (void)tappedView:(UIView *)view singleTapAtPoint:(CGPoint)tapPoint{
+    if (tapPoint.x!=0) {  //x==0 for drawing
+        bool POICreating=FALSE;
+        if ([recordingDelegate respondsToSelector:@selector(getPOICreating)]){
+            POICreating=[recordingDelegate getPOICreating];
+        }
+        if(POICreating){
+            if ([recordingDelegate respondsToSelector:@selector(mapLevel:singleTapAtPoint:)]){
+                tapPoint.x=[self.gpsTrackPOIBoard ModeAdjust:tapPoint.x res:self.maplevel];   //mode adjust the coordinate x
+                [recordingDelegate mapLevel:self.maplevel singleTapAtPoint:tapPoint];
+            }
+            return;
+        }
+    }
     NSLOG3(@"singleTapAtPoint - need to call external handler here 2");
     if (!self.bDrawing) {
         return;

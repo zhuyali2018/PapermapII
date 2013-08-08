@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import<CoreLocation/CoreLocation.h>
 #import "PM2Protocols.h"
+
+
 @class Track;
 @class LineProperty;
 @class GPSTrack;
@@ -19,12 +21,13 @@
 
 @property (nonatomic,strong) NSMutableArray * trackArray;
 @property (nonatomic,strong) NSMutableArray * gpsTrackArray;
+@property (nonatomic,strong) NSMutableArray * poiArray;
 @property (nonatomic,strong) Track * track;
 @property (nonatomic,strong) GPSTrack * gpsTrack;
 @property (nonatomic,strong) GPSNode * lastGpsNode;
 @property bool recording; //if it is recording
 @property bool gpsRecording; //if it is recording
-
+@property bool POICreating;
 - (void) start;
 - (void) stop;
 - (void) mapLevel:(int)maplevel singleTapAtPoint:(CGPoint)tapPoint;
@@ -38,8 +41,10 @@
 - (void)unloadDrawings;
 - (void)saveAllTracks;
 - (void)saveAllGpsTracks;
+- (void)saveAllPOIs;
 - (void)initializeAllTracks;
 - (void)initializeAllGpsTracks;
+- (void)initializeAllPOIs;
 - (double)GetScreenY:(double)lat;
 //- (void)centerPositionAtX:(int) x Y:(int) y;
 

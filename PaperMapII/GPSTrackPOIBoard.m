@@ -18,13 +18,15 @@
 #import "GPSTrack.h"
 #import "DrawableMapScrollView.h"
 #import "MenuNode.h"
+#import "POI.h"
+#import "TextInput.h"
 
 #define MAPMODE [[DrawableMapScrollView sharedMap] getMode]
 
 @implementation GPSTrackPOIBoard
 
 @synthesize tapDetectView;
-@synthesize ptrToTrackArray,ptrToGpsTrackArray;
+@synthesize ptrToTrackArray,ptrToGpsTrackArray,ptrToPoiArray;
 @synthesize maplevel;
 
 //@synthesize ptrToLastGpsNode;
@@ -195,13 +197,90 @@
         }
     }
 }
+-(void)addInputLabel:(POI *)poi At:(CGPoint)pt{
+	if((poi.title==nil)||(poi.title.length==0)){  //input label
+		CGRect inputRect=CGRectMake(pt.x-15, pt.y, 128, 25);
+		CGRect cvtedRect=[self convertRect:inputRect toView:tapDetectView];
+        
+		TextInput *label = [[TextInput alloc] initWithFrame:cvtedRect];
+		[label setTextAlignment:UITextAlignmentLeft];
+		[label setBackgroundColor:[UIColor redColor]];
+		[label setTextColor:[UIColor yellowColor]];
+		//[label setShadowColor:[UIColor blackColor]];
+		//[label setShadowOffset:CGSizeMake(1.5, 2.0)];
+		[label setFont:[UIFont systemFontOfSize:16]];
+		
+		//[label setText:[NSString stringWithFormat:@"%@", title]];
+		label.delegate=self;
+		label.poi=poi;
+		[tapDetectView addSubview:label];
+		return;
+	}
+	//UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(pt.x-15, pt.y, 128, 25)];
+	UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(pt.x-15, pt.y, 200, 25)]; //1029
+    //UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(pt.x-15, pt.y-10, 200, 25)]; //version 5.05
+	[label setTextAlignment:UITextAlignmentLeft];
+	[label setBackgroundColor:[UIColor clearColor]];
+	[label setTextColor:[UIColor yellowColor]];
+	[label setShadowColor:[UIColor blackColor]];
+	//[label setShadowOffset:CGSizeMake(1.5, 2.0)];
+    [label setShadowOffset:CGSizeMake(1.0, 1.0)];   //version 5.05
+	//[label setFont:[UIFont systemFontOfSize:16]];
+	[label setFont:[UIFont systemFontOfSize:12]];   //1029
+	[label setText:[NSString stringWithFormat:@"%@", poi.title]];
+	[self addSubview:label];
+}
+-(CGPoint)ConvertPoint1:(POI *)node{
+    int delta=maplevel-node.res;
+	float zoomFactor = pow(2, delta * -1);
+	CGPoint p;
+	p.x=node.x/zoomFactor;
+	p.y=node.y/zoomFactor;    //map node position to current maplevel with point p
+	CGPoint p2=[tapDetectView convertPoint:p toView:self];  //map the point p to gpsTrackPoiBoard view
+	return p2;
+}
+-(void)drawPOIs{
+    //remove subviews first, even count ==0
+    for (UIView *view in [self subviews]) {
+            [view removeFromSuperview];
+    }
+    [self addSubview:[DrawableMapScrollView sharedMap].drawingBoard];  //version 4.0
+    
+    NSArray * flagNameArray=[NSArray arrayWithObjects:@"Blue_flag.png",@"Purple_flag.png",@"Green_flag.png",@"Yellow_flag.png",@"Orange_flag.png",@"Red_flag.png",nil];
+    // Drawing code
+    if (!ptrToPoiArray) {  //if not initialized
+        ptrToPoiArray=((Recorder *)[Recorder sharedRecorder]).poiArray;
+    }
+    if ([ptrToPoiArray count]==0) {  // if 0 element
+        return;
+    }
+    for (POI *poi in ptrToPoiArray) {
+		NSString * flagName=[[NSString alloc]initWithString:(NSString *)[flagNameArray objectAtIndex:(int)poi.nType]];
+		UIImageView * imgv=[[UIImageView alloc] initWithImage:[UIImage imageNamed:flagName]];
+		
+		CGPoint ctr=[self ConvertPoint1:poi];
+		CGPoint rt=CGPointMake(ctr.x+imgv.frame.size.width/2-5, ctr.y-imgv.frame.size.height/2);
+		imgv.center=rt;
+		[self addSubview:imgv];
+		
+		CGPoint lbPt=CGPointMake(rt.x, rt.y-imgv.frame.size.height);
+		[self addInputLabel:poi At:lbPt];
+	}
+
+}
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.
 - (void)drawRect:(CGRect)rect
 {
+    [self drawPOIs];
     CGContextRef context = UIGraphicsGetCurrentContext();
     [self drawLines:context];
     [self drawGpsTracks:context];
 }
-
+#pragma mark UITextField Delegate methods
+- (void)textFieldDidEndEditing:(UITextField *)textField{
+	((TextInput *)(textField)).poi.title=[textField.text copy];
+	[textField removeFromSuperview];
+	[self setNeedsDisplay];
+}
 @end

@@ -19,6 +19,8 @@
 #import "GPSTrackPOIBoard.h"
 #import "PM2AppDelegate.h"
 #import "PM2ViewController.h"
+#import "POI.h"
+
 
 #define PI 3.1415926f
 #define MAPMODE [[DrawableMapScrollView sharedMap] getMode]
@@ -26,6 +28,8 @@
 
 @synthesize trackArray,gpsTrackArray;
 @synthesize lastGpsNode;
+@synthesize POICreating;
+@synthesize poiArray;
 
 bool centerPos;
 
@@ -166,7 +170,11 @@ bool centerPos;
 	NSString * documentsDirectory=[paths objectAtIndex:0];
 	return [documentsDirectory stringByAppendingPathComponent:@"GpsList.plist"];
 }
-
+-(NSString *)poiFilePath{
+	NSArray * paths=NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask,YES);
+	NSString * documentsDirectory=[paths objectAtIndex:0];
+	return [documentsDirectory stringByAppendingPathComponent:@"PoiList.plist"];
+}
 -(void) saveAllTracks{
      NSMutableData * data=[[NSMutableData alloc] init];
      NSKeyedArchiver * archiver=[[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
@@ -183,7 +191,14 @@ bool centerPos;
 
     [data writeToFile:[self gpsDataFilePath] atomically:YES];
 }
-
+-(void) saveAllPOIs{
+    NSMutableData * data=[[NSMutableData alloc] init];
+    NSKeyedArchiver * archiver=[[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
+    [archiver encodeObject:poiArray forKey:@"poiArray"];
+    [archiver finishEncoding];
+    
+    [data writeToFile:[self poiFilePath] atomically:YES];
+}
 -(void)initializeAllTracks{
     //initialize arrAllTracks
     NSString * filePath=[self dataFilePath];
@@ -213,10 +228,42 @@ bool centerPos;
     if(!gpsTrackArray)
         gpsTrackArray=[[NSMutableArray alloc]initWithCapacity:2];
 }
-
+-(void)initializeAllPOIs{
+    //initialize arrAllTracks
+    NSString * filePath=[self poiFilePath];
+    //NSLog(@"data file path=%@",filePath);
+    if([[NSFileManager defaultManager] fileExistsAtPath:filePath]){
+        NSData * data=[[NSData alloc] initWithContentsOfFile:filePath];
+        NSKeyedUnarchiver *unarchiver=[[NSKeyedUnarchiver alloc] initForReadingWithData:data];
+        
+        poiArray=[unarchiver decodeObjectForKey:@"poiArray"];
+        [unarchiver finishDecoding];
+    }
+    
+    if(!poiArray)
+        poiArray=[[NSMutableArray alloc]initWithCapacity:2];
+}
+-(void) createPOI:(CGPoint)poiPoint{
+	POI *poi=[[POI alloc] initWithPoint:poiPoint];
+	poi.res=[DrawableMapScrollView sharedMap].maplevel;
+	poi.title=nil;
+    
+    if(!poiArray){   //when first time starting recorder, ini poi array
+        poiArray=[[NSMutableArray alloc]initWithCapacity:5];
+    }
+    [poiArray addObject:poi];
+    [[DrawableMapScrollView sharedMap] refresh];
+}
 #pragma mark ------------------PM2RecordingDelegate method---------
 
 - (void)mapLevel:(int)maplevel singleTapAtPoint:(CGPoint)tapPoint{
+    if(POICreating){
+        [self createPOI:tapPoint];
+		POICreating=FALSE;
+		//[self showHelpMessages:USEPINCH];
+		return; 
+    }
+    ////////////////drawing code follows///////////////////////////
     if(!_recording){   //if not recording, do not create the node for the tappoint
         return;
     }
@@ -229,7 +276,9 @@ bool centerPos;
     [self.track saveNodes];     //save it for every nodes
     [[DrawableMapScrollView sharedMap] refresh];
 }
-
+- (BOOL)getPOICreating{
+    return POICreating;
+}
 //=====add a node to array arrNodes=================
 -(NSArray *) addAnyModeAdjustedNode:(NSArray*)arrNodes Node:(Node *)node Mode:(bool)mode{
     if ([arrNodes count]<1) {
