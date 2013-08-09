@@ -26,6 +26,11 @@
 		AA59B94A17B355F800092996 /* Purple_flag.png in Resources */ = {isa = PBXBuildFile; fileRef = AA59B94417B355F800092996 /* Purple_flag.png */; };
 		AA59B94B17B355F800092996 /* Red_flag.png in Resources */ = {isa = PBXBuildFile; fileRef = AA59B94517B355F800092996 /* Red_flag.png */; };
 		AA59B94C17B355F800092996 /* Yellow_flag.png in Resources */ = {isa = PBXBuildFile; fileRef = AA59B94617B355F800092996 /* Yellow_flag.png */; };
+		AA59B95017B48CCA00092996 /* POIEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA59B94E17B48CC900092996 /* POIEditViewController.m */; };
+		AA59B95117B48CCA00092996 /* POIEditViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AA59B94F17B48CC900092996 /* POIEditViewController.xib */; };
+		AA59B95417B48F2E00092996 /* UIChkButton.m in Sources */ = {isa = PBXBuildFile; fileRef = AA59B95317B48F2E00092996 /* UIChkButton.m */; };
+		AA59B95717B48F7A00092996 /* checked.png in Resources */ = {isa = PBXBuildFile; fileRef = AA59B95517B48F7900092996 /* checked.png */; };
+		AA59B95817B48F7A00092996 /* unchecked.png in Resources */ = {isa = PBXBuildFile; fileRef = AA59B95617B48F7900092996 /* unchecked.png */; };
 		AA729A53175870D800F6AF78 /* LineProperty.m in Sources */ = {isa = PBXBuildFile; fileRef = AA729A52175870D800F6AF78 /* LineProperty.m */; };
 		AA729A54175870D800F6AF78 /* LineProperty.m in Sources */ = {isa = PBXBuildFile; fileRef = AA729A52175870D800F6AF78 /* LineProperty.m */; };
 		AA8608F6177AA703008EBC95 /* MainQ.m in Sources */ = {isa = PBXBuildFile; fileRef = AA8608F5177AA703008EBC95 /* MainQ.m */; };
@@ -3562,6 +3567,13 @@
 		AA59B94417B355F800092996 /* Purple_flag.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Purple_flag.png; sourceTree = "<group>"; };
 		AA59B94517B355F800092996 /* Red_flag.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Red_flag.png; sourceTree = "<group>"; };
 		AA59B94617B355F800092996 /* Yellow_flag.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Yellow_flag.png; sourceTree = "<group>"; };
+		AA59B94D17B48CC900092996 /* POIEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = POIEditViewController.h; sourceTree = "<group>"; };
+		AA59B94E17B48CC900092996 /* POIEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = POIEditViewController.m; sourceTree = "<group>"; };
+		AA59B94F17B48CC900092996 /* POIEditViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = POIEditViewController.xib; sourceTree = "<group>"; };
+		AA59B95217B48F2E00092996 /* UIChkButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIChkButton.h; sourceTree = "<group>"; };
+		AA59B95317B48F2E00092996 /* UIChkButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIChkButton.m; sourceTree = "<group>"; };
+		AA59B95517B48F7900092996 /* checked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checked.png; sourceTree = "<group>"; };
+		AA59B95617B48F7900092996 /* unchecked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = unchecked.png; sourceTree = "<group>"; };
 		AA729A51175870D800F6AF78 /* LineProperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LineProperty.h; sourceTree = "<group>"; };
 		AA729A52175870D800F6AF78 /* LineProperty.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LineProperty.m; sourceTree = "<group>"; };
 		AA8608F4177AA702008EBC95 /* MainQ.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainQ.h; sourceTree = "<group>"; };
@@ -5404,6 +5416,13 @@
 				AA59B94417B355F800092996 /* Purple_flag.png */,
 				AA59B94517B355F800092996 /* Red_flag.png */,
 				AA59B94617B355F800092996 /* Yellow_flag.png */,
+				AA59B95517B48F7900092996 /* checked.png */,
+				AA59B95617B48F7900092996 /* unchecked.png */,
+				AA59B95217B48F2E00092996 /* UIChkButton.h */,
+				AA59B95317B48F2E00092996 /* UIChkButton.m */,
+				AA59B94D17B48CC900092996 /* POIEditViewController.h */,
+				AA59B94E17B48CC900092996 /* POIEditViewController.m */,
+				AA59B94F17B48CC900092996 /* POIEditViewController.xib */,
 				AA59B93E17B210CC00092996 /* TextInput.h */,
 				AA59B93F17B210CC00092996 /* TextInput.m */,
 				AA59B93B17B0D6E700092996 /* POI.h */,
@@ -9123,6 +9142,9 @@
 				AA59B94A17B355F800092996 /* Purple_flag.png in Resources */,
 				AA59B94B17B355F800092996 /* Red_flag.png in Resources */,
 				AA59B94C17B355F800092996 /* Yellow_flag.png in Resources */,
+				AA59B95117B48CCA00092996 /* POIEditViewController.xib in Resources */,
+				AA59B95717B48F7A00092996 /* checked.png in Resources */,
+				AA59B95817B48F7A00092996 /* unchecked.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -10904,6 +10926,8 @@
 				AA59B93917AF52CB00092996 /* MenuNode.m in Sources */,
 				AA59B93D17B0D6E700092996 /* POI.m in Sources */,
 				AA59B94017B210CC00092996 /* TextInput.m in Sources */,
+				AA59B95017B48CCA00092996 /* POIEditViewController.m in Sources */,
+				AA59B95417B48F2E00092996 /* UIChkButton.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

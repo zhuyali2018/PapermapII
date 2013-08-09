@@ -14,6 +14,7 @@
 #import "DrawableMapScrollView.h"
 #import "GPSNode.h"
 #import "PM2OnScreenButtons.h"
+#import "POIEditViewController.h"
 
 @implementation MainMenuViewController
 
@@ -70,6 +71,8 @@
 #define GPSTRACKS 0
 #define DRAWINGS  0
 #define CREATEPOI  0
+#define MODIFYPOI  1
+#define GOTOAPOI  3
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -78,6 +81,9 @@
     ((MenuItem *)menuMatrix[DRAW_SECTION][DRAWINGS]).menuItemHandler=@selector(showDrawingList:);
     
     ((MenuItem *)menuMatrix[POI_SECTION][CREATEPOI]).menuItemHandler=@selector(CreatePoi);
+    ((MenuItem *)menuMatrix[POI_SECTION][MODIFYPOI]).menuItemHandler=@selector(ModifyPoi:);
+    
+    ((MenuItem *)menuMatrix[POI_SECTION][GOTOAPOI]).menuItemHandler=@selector(GotoAPoi:);
 }
 #pragma mark - -------------menu item handlers-------------------
 -(void)CreatePoi{
@@ -88,6 +94,26 @@
     }
     Recorder * recorder=[Recorder sharedRecorder];
     recorder.POICreating=true;
+}
+-(void)ModifyPoi:(NSString *) menuTitle{
+    NSLog(@"Tap on the map to Modify a POI");
+    //Showing POI list
+    ExpandableMenuViewController *xmvc = [[ExpandableMenuViewController alloc] initWithStyle:UITableViewStylePlain];
+    xmvc.trackList=[Recorder sharedRecorder].poiArray;
+    xmvc.trackHandlerDelegate=self;
+    xmvc.id=POILIST;
+    [xmvc setTitle:menuTitle];
+    [self.navigationController pushViewController:xmvc animated:YES];
+}
+-(void)GotoAPoi:(NSString *) menuTitle{
+    NSLog(@"Tap on the map to GOTO a POI");
+    //Showing POI list
+    ExpandableMenuViewController *xmvc = [[ExpandableMenuViewController alloc] initWithStyle:UITableViewStylePlain];
+    xmvc.trackList=[Recorder sharedRecorder].poiArray;
+    xmvc.trackHandlerDelegate=self;
+    xmvc.id=GOTOPOI;
+    [xmvc setTitle:menuTitle];
+    [self.navigationController pushViewController:xmvc animated:YES];
 }
 -(void)showGPSTrackList:(NSString *) menuTitle{
     ExpandableMenuViewController *xmvc = [[ExpandableMenuViewController alloc] initWithStyle:UITableViewStylePlain];
@@ -106,6 +132,29 @@
     if (myid==DRAWLIST) {
         tk=[Recorder sharedRecorder].trackArray[row];
         gpsTrackViewCtrlr.listType=DRAWLIST;
+    }else if (myid==POILIST) {
+        POI * poi=[Recorder sharedRecorder].poiArray[row];
+        if (!poi.folder) {
+             POIEditViewController * poiEditViewController=[[POIEditViewController alloc]initWithNibName:@"POIEditViewController" bundle:nil];
+            //poiEditViewController.rootView=parent;
+            [poiEditViewController setTitle:@"Modify POI"];
+            poiEditViewController.poi=poi;
+            [self.navigationController pushViewController:poiEditViewController animated:YES];
+            return;
+        }
+        tk=(MenuNode *)[Recorder sharedRecorder].poiArray[row];
+    }else if (myid==GOTOPOI) {
+        POI * poi=[Recorder sharedRecorder].poiArray[row];
+        if (!poi.folder) {
+            [[DrawableMapScrollView sharedMap] centerMapToPOI:poi];
+            PM2OnScreenButtons * OSB=[PM2OnScreenButtons sharedBnManager];
+            if([OSB.menuPopover isPopoverVisible]){
+                [OSB.menuPopover dismissPopoverAnimated:YES];
+            }
+            return;
+        }
+        //if folder on POI list
+        tk=poi;
     }else
         tk=[Recorder sharedRecorder].gpsTrackArray[row];
     

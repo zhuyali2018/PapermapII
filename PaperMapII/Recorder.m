@@ -247,6 +247,7 @@ bool centerPos;
 	POI *poi=[[POI alloc] initWithPoint:poiPoint];
 	poi.res=[DrawableMapScrollView sharedMap].maplevel;
 	poi.title=nil;
+    poi.selected=true;
     
     if(!poiArray){   //when first time starting recorder, ini poi array
         poiArray=[[NSMutableArray alloc]initWithCapacity:5];

@@ -12,7 +12,7 @@
 #import "ZoomView.h"
 #import "MainQ.h"
 #import "Node.h"
-
+#include "POI.h"
 @implementation DrawableMapScrollView
 
 
@@ -61,6 +61,12 @@
     int mapL=self.gpsTrackPOIBoard.maplevel;
     int x=node.x*pow(2,mapL-node.r);
     int y=node.y*pow(2,mapL-node.r);
+    [self centerPositionAtX:x Y:y];
+}
+-(void)centerMapToPOI:(POI *)node{
+    int mapL=self.gpsTrackPOIBoard.maplevel;
+    int x=node.x*pow(2,mapL-node.res);
+    int y=node.y*pow(2,mapL-node.res);
     [self centerPositionAtX:x Y:y];
 }
 -(void)setPreDraw:(bool)predraw{

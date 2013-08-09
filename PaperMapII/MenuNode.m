@@ -84,9 +84,13 @@
     UIButton * bn=sender;
     
     if((!self.folder)&&(_selected)){
-        [self.dataSource loadNodes];
-        if ([self.dataSource numberOfNodes]==0) {
-            return;
+        if ([self.dataSource respondsToSelector:@selector(loadNodes)]){
+            [self.dataSource loadNodes];
+            if ([self.dataSource respondsToSelector:@selector(numberOfNodes)]){
+                if ([self.dataSource numberOfNodes]==0) {
+                    return;
+                }
+            }
         }
     }
     
@@ -98,7 +102,8 @@
     [bn setNeedsDisplay];   //update the checkbox image
 
     if(!_folder){
-        [self.dataSource onCheckBox];  //center and update track on map
+        if ([self.dataSource respondsToSelector:@selector(onCheckBox)])
+            [self.dataSource onCheckBox];  //center and update track on map
         return;
     }
     int myIndex=[emvc.trackList indexOfObject:self];
@@ -114,7 +119,8 @@
         nd.selected=_selected;
         
         if(nd.selected){
-            [nd.dataSource loadNodes];   //should be [nd.dataSource loadNodes], not [self.datasource loadNodes]
+            if ([self.dataSource respondsToSelector:@selector(loadNodes)])
+                [nd.dataSource loadNodes];   //should be [nd.dataSource loadNodes], not [self.datasource loadNodes]
             [nd.checkbox setImage:[UIImage imageNamed:@"checkbox1.png"] forState:UIControlStateNormal];
         }else{
             [nd.checkbox setImage:[UIImage imageNamed:@"checkbox0.png"] forState:UIControlStateNormal];
@@ -123,16 +129,15 @@
         [nd updateAppearance];
         
     }
-//    if (!self.dataSource) {
-//        <#statements#>
-//    }
-    [self.dataSource onCheckBox];
+    if ([self.dataSource respondsToSelector:@selector(onCheckBox)])
+        [self.dataSource onCheckBox];
 }
 -(void)updateAppearance{
     
     if(self.selected){
         if (!self.folder)
-            [self.dataSource loadNodes];
+            if ([self.dataSource respondsToSelector:@selector(loadNodes)])
+                [self.dataSource loadNodes];
         [self.checkbox setImage:[UIImage imageNamed:@"checkbox1.png"] forState:UIControlStateNormal];
     }else{
         [self.checkbox setImage:[UIImage imageNamed:@"checkbox0.png"] forState:UIControlStateNormal];
@@ -174,6 +179,15 @@
             [checkbox setFrame:CGRectMake(-30, -8, 90, 60)];
         }
     }
+    [mainLabel setText:mainText];      //key for updating
+    
+    NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
+    [outputFormatter setDateFormat:@"yyyy.MM.dd HH:mm:ss"];
+    if (self.folder) {
+        [subLabel setText:[outputFormatter stringFromDate:cdate]];
+    }else
+        [subLabel setText:[outputFormatter stringFromDate:[self.dataSource getTimeStamp]]];
+    
     [icon setNeedsDisplay];
 }
 -(id)copyWithZone:(NSZone *)zone {

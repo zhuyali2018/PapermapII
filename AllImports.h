@@ -11,7 +11,7 @@
 
 const static int TSIZE=256;     // tile size
 
-typedef enum  {GPSLIST,DRAWLIST} ListType;  //GPSTrack List or Drawing List table
+typedef enum  {GPSLIST,DRAWLIST,POILIST,GOTOPOI} ListType;  //GPSTrack List or Drawing List table
 
 const static bool showLog=false;
 #define NSLOG(fmt, ...) if(showLog) NSLog((@"%s " fmt), __PRETTY_FUNCTION__,##__VA_ARGS__)

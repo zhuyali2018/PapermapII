@@ -231,10 +231,12 @@
 	[self addSubview:label];
 }
 -(CGPoint)ConvertPoint1:(POI *)node{
+    //Mode Adjust node.x:
+    int nodeX=[self ModeAdjust:node.x res:node.res];
     int delta=maplevel-node.res;
 	float zoomFactor = pow(2, delta * -1);
 	CGPoint p;
-	p.x=node.x/zoomFactor;
+	p.x=nodeX/zoomFactor;
 	p.y=node.y/zoomFactor;    //map node position to current maplevel with point p
 	CGPoint p2=[tapDetectView convertPoint:p toView:self];  //map the point p to gpsTrackPoiBoard view
 	return p2;
@@ -255,6 +257,12 @@
         return;
     }
     for (POI *poi in ptrToPoiArray) {
+        if (poi.folder) {  //folder can not be drawn or showing on map !
+            continue;
+        }
+        if (!poi.selected) {
+            continue;
+        }
 		NSString * flagName=[[NSString alloc]initWithString:(NSString *)[flagNameArray objectAtIndex:(int)poi.nType]];
 		UIImageView * imgv=[[UIImageView alloc] initWithImage:[UIImage imageNamed:flagName]];
 		
@@ -280,6 +288,7 @@
 #pragma mark UITextField Delegate methods
 - (void)textFieldDidEndEditing:(UITextField *)textField{
 	((TextInput *)(textField)).poi.title=[textField.text copy];
+    [((TextInput *)(textField)).poi updateAppearance];
 	[textField removeFromSuperview];
 	[self setNeedsDisplay];
 }

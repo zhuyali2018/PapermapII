@@ -8,6 +8,7 @@
 
 #import "POI.h"
 #import "AllImports.h"
+#import "DrawableMapScrollView.h"
 
 @implementation POI
 
@@ -25,8 +26,13 @@
 
 
 - (id)initWithPoint:(CGPoint)pt{
-	x=pt.x;
-	y=pt.y;
+    self = [super initWithTitle:nil];
+    if (self) {
+        x=pt.x;
+        y=pt.y;
+        //[super initInternalItems];
+        self.dataSource=self;
+    }
 	return self;
 }
 #pragma mark NSCoding
@@ -45,7 +51,8 @@
 	
 }
 -(id)initWithCoder:(NSCoder *)coder{
-    if(self=[super initWithCoder:coder]){    
+    if(self=[super initWithCoder:coder]){
+        self.dataSource=self;
 		self.res=[coder decodeIntForKey:@"res"];
 		self.x=[coder decodeIntForKey:@"pointx"];
 		self.y=[coder decodeIntForKey:@"pointy"];
@@ -75,7 +82,14 @@
 	//nodeCopy.imageView=[self.imageView copy];
 	return nodeCopy;
 }
-
-
-
+-(void)onCheckBox{      //execute when the menu item is tapped
+    NSLog(@"Center map on my first node position");
+//    if (!self.folder) {   //folder may not contain such POI properties as nodes array
+//        [[DrawableMapScrollView sharedMap] centerMapToPOI:self];
+//    }
+    [[DrawableMapScrollView sharedMap] refresh];  //for track update
+}
+-(NSDate *)getTimeStamp{
+    return self.cdate;
+}
 @end
