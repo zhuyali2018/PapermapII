@@ -13,6 +13,8 @@
 #import "TappableMapScrollView.h"
 #import "DrawingBoard.h"
 #import "GPSTrackPOIBoard.h"
+#import "Recorder.h"
+#import "DrawableMapScrollView.h"
 
 @implementation TappableMapScrollView
 @synthesize tapDetectView;
@@ -91,6 +93,7 @@
 - (void)tappedView:(UIView *)view singleTapAtPoint:(CGPoint)tapPoint{
     if (tapPoint.x!=0) {  //x==0 for drawing
         bool POICreating=FALSE;
+        bool POIMoving=FALSE;
         if ([recordingDelegate respondsToSelector:@selector(getPOICreating)]){
             POICreating=[recordingDelegate getPOICreating];
         }
@@ -101,8 +104,23 @@
             }
             return;
         }
+        if ([recordingDelegate respondsToSelector:@selector(POIMoving)]){
+            POIMoving=[recordingDelegate getPOIMoving];
+        }
+        if(POIMoving){
+            if ([recordingDelegate respondsToSelector:@selector(mapLevel:singleTapAtPoint:)]){
+                tapPoint.x=[self.gpsTrackPOIBoard ModeAdjust:tapPoint.x res:self.maplevel];   //mode adjust the coordinate x
+                [recordingDelegate mapLevel:self.maplevel singleTapAtPoint:tapPoint];
+            }
+            return;
+        }
     }
-    NSLOG3(@"singleTapAtPoint - need to call external handler here 2");
+    if ([Recorder sharedRecorder].POIMoving) {  //when touch up, end the poi moving state
+        [Recorder sharedRecorder].POIMoving=false;
+        [[DrawableMapScrollView sharedMap] setScrollEnabled:NO]; 
+        return;
+    }
+    NSLOG10(@"singleTapAtPoint - need to call external handler here 2");
     if (!self.bDrawing) {
         return;
     }

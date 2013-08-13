@@ -28,6 +28,7 @@
 @property bool recording; //if it is recording
 @property bool gpsRecording; //if it is recording
 @property bool POICreating;
+@property bool POIMoving;
 - (void) start;
 - (void) stop;
 - (void) mapLevel:(int)maplevel singleTapAtPoint:(CGPoint)tapPoint;

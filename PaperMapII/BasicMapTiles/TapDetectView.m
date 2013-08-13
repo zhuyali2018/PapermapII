@@ -153,7 +153,7 @@ CGPoint midpointBetweenPoints(CGPoint a, CGPoint b) {
 
 
 - (void)handleSingleTapTouchUp:(CGPoint)atPoint{
-	NSLOG4(@"handleSingleTapTouchUp - TapPoint:%.0f,%.0f",atPoint.x,atPoint.y);
+	NSLOG10(@"handleSingleTapTouchUp - TapPoint:%.0f,%.0f",atPoint.x,atPoint.y);
 	if ([drawDelegate respondsToSelector:@selector(tappedView:singleTapAtPoint:)])
         [drawDelegate tappedView:self singleTapAtPoint:atPoint];
 }

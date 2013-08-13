@@ -28,7 +28,7 @@
 
 @synthesize trackArray,gpsTrackArray;
 @synthesize lastGpsNode;
-@synthesize POICreating;
+@synthesize POICreating,POIMoving;
 @synthesize poiArray;
 
 bool centerPos;
@@ -256,6 +256,30 @@ bool centerPos;
     [[DrawableMapScrollView sharedMap] refresh];
 }
 #pragma mark ------------------PM2RecordingDelegate method---------
+-(BOOL)closeEnoughForCurrentRes:(POI *) poi from:(CGPoint)tapPoint{
+    if (poi.folder) {
+        return FALSE;
+    }
+	if (poi.res==[DrawableMapScrollView sharedMap].maplevel) {
+		if((abs(poi.x-tapPoint.x)<50)&&((abs(poi.y-tapPoint.y)<50))){
+			poi.x=tapPoint.x-0;
+			poi.y=tapPoint.y-0;
+			return TRUE;
+		}
+		return FALSE;
+	}
+	CGFloat totalPixOld=256*pow(2,poi.res);
+	CGFloat totalPixCur=256*pow(2,[DrawableMapScrollView sharedMap].maplevel);
+	CGFloat x=poi.x*totalPixCur/totalPixOld;
+	CGFloat y=poi.y*totalPixCur/totalPixOld;
+	if((abs(x-tapPoint.x)<50)&&((abs(y-tapPoint.y)<50))){
+		poi.res=[DrawableMapScrollView sharedMap].maplevel;
+		poi.x=tapPoint.x-0;
+		poi.y=tapPoint.y-0;
+		return TRUE;
+	}
+	return FALSE;
+}
 
 - (void)mapLevel:(int)maplevel singleTapAtPoint:(CGPoint)tapPoint{
     if(POICreating){
@@ -263,6 +287,17 @@ bool centerPos;
 		POICreating=FALSE;
 		//[self showHelpMessages:USEPINCH];
 		return; 
+    }else if(POIMoving){
+        for (POI *poi in poiArray) {
+            if (!poi.selected) {
+                continue;
+            }
+			if ([self closeEnoughForCurrentRes:poi from:tapPoint]) {
+				[[DrawableMapScrollView sharedMap] refresh];
+				break;
+			}
+		}
+        return;
     }
     ////////////////drawing code follows///////////////////////////
     if(!_recording){   //if not recording, do not create the node for the tappoint
@@ -279,6 +314,9 @@ bool centerPos;
 }
 - (BOOL)getPOICreating{
     return POICreating;
+}
+- (BOOL)getPOIMoving{
+    return POIMoving;
 }
 //=====add a node to array arrNodes=================
 -(NSArray *) addAnyModeAdjustedNode:(NSArray*)arrNodes Node:(Node *)node Mode:(bool)mode{

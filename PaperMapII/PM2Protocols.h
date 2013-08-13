@@ -32,6 +32,7 @@
 @optional
 - (void)mapLevel:(int)maplevel singleTapAtPoint:(CGPoint)tapPoint;
 - (BOOL)getPOICreating;
+- (BOOL)getPOIMoving;
 @end
 
 @protocol OnOffBnDelegate <NSObject>

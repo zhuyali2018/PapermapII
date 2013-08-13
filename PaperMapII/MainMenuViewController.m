@@ -68,11 +68,12 @@
 #define  HELP_SECTION 3
 #define PRCIN_SECTION 5
 
-#define GPSTRACKS 0
-#define DRAWINGS  0
-#define CREATEPOI  0
-#define MODIFYPOI  1
-#define GOTOAPOI  3
+#define GPSTRACKS   0
+#define DRAWINGS    0
+#define CREATEPOI   0
+#define MODIFYPOI   1
+#define MOVEAPOI    2
+#define GOTOAPOI    3
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -82,7 +83,7 @@
     
     ((MenuItem *)menuMatrix[POI_SECTION][CREATEPOI]).menuItemHandler=@selector(CreatePoi);
     ((MenuItem *)menuMatrix[POI_SECTION][MODIFYPOI]).menuItemHandler=@selector(ModifyPoi:);
-    
+    ((MenuItem *)menuMatrix[POI_SECTION][MOVEAPOI]).menuItemHandler=@selector(MoveAPoi:);
     ((MenuItem *)menuMatrix[POI_SECTION][GOTOAPOI]).menuItemHandler=@selector(GotoAPoi:);
 }
 #pragma mark - -------------menu item handlers-------------------
@@ -104,6 +105,17 @@
     xmvc.id=POILIST;
     [xmvc setTitle:menuTitle];
     [self.navigationController pushViewController:xmvc animated:YES];
+}
+-(void)MoveAPoi:(NSString *) menuTitle{
+    NSLog(@"Tap on and Hold a POI and Move to destination and then let your fingure go");
+    
+    PM2OnScreenButtons * OSB=[PM2OnScreenButtons sharedBnManager];
+    if([OSB.menuPopover isPopoverVisible]){
+        [OSB.menuPopover dismissPopoverAnimated:YES];
+    }
+    Recorder * recorder=[Recorder sharedRecorder];
+    recorder.POIMoving=true;
+    [[DrawableMapScrollView sharedMap] setScrollEnabled:NO];
 }
 -(void)GotoAPoi:(NSString *) menuTitle{
     NSLog(@"Tap on the map to GOTO a POI");
