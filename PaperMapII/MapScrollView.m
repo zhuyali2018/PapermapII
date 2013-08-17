@@ -382,7 +382,9 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
     //update the arrow position
     MainQ * mQ=[MainQ sharedManager];
     UIImageView * arrow =(UIImageView *)[mQ getTargetRef:GPSARROW];
-    
+    if ([arrow isEqual:@"0"]) {
+        return;
+    }
     //GPSTrackPOIBoard * trackBoard=self.zoomView.gpsTrackPOIBoard;
     GPSNode * node=((Recorder *)[Recorder sharedRecorder]).lastGpsNode;
     CGPoint arrowCenter=[gpsTrackPOIBoard ConvertPoint:(Node *)node];
@@ -483,6 +485,7 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
     Mode=[defaults boolForKey:MODE];
 	self.maplevel=[defaults integerForKey:MAPLEVEL];
     if (self.maplevel==0) {
+        self.maplevel=2;
         return;     //it means the state has never beensaved
     }
 	// if the saved level is less than minMapLevel, that means data is corrupted, start over
@@ -560,7 +563,7 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
     //update the maplevel display
     MainQ * mQ=[MainQ sharedManager];
     UILabel * lb=(UILabel *)[mQ getTargetRef:MAPRES];
-    if(lb){                     //added for update maplevel label
+    if (![lb isEqual:@"0"]) {   //added for update maplevel label
         [lb setText:[NSString stringWithFormat:@" %d", maplevel]];
     }
     

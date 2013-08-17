@@ -18,6 +18,8 @@
 @synthesize pushButton;
 @synthesize OnBackgroundColor;
 @synthesize OffBackgroundColor;
+@synthesize offImage,onImage;
+@synthesize textLabel;
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
@@ -30,12 +32,16 @@
         OnBackgroundColor=[UIColor redColor];
         [self setBackgroundColor:OffBackgroundColor];
         [self addTarget:self action:@selector(buttonTapped) forControlEvents:UIControlEventTouchUpInside];
+        textLabel=[[UILabel alloc]initWithFrame:CGRectMake(0, 40, 100, 29)];
+        textLabel.textAlignment=NSTextAlignmentCenter;
+        [textLabel setBackgroundColor:[UIColor clearColor]];
+        [self addSubview:textLabel];
     }
     return self;
 }
 - (id)init
 {
-    CGRect frame=CGRectMake(0, 0, 60, 60);
+    CGRect frame=CGRectMake(0, 0, 100, 69);
     
     self = [super initWithFrame:frame];
     if (self) {
@@ -43,10 +49,14 @@
         btnOn=false;
         withGroup=true;
         pushButton=false;
-        OffBackgroundColor=[UIColor lightGrayColor];
-        OnBackgroundColor=[UIColor redColor];
+        OffBackgroundColor=[UIColor clearColor];
+        OnBackgroundColor=[UIColor clearColor];
         [self setBackgroundColor:OffBackgroundColor];
         [self addTarget:self action:@selector(buttonTapped) forControlEvents:UIControlEventTouchUpInside];
+        textLabel=[[UILabel alloc]initWithFrame:CGRectMake(0, 40, 100, 29)];
+        textLabel.textAlignment=NSTextAlignmentCenter;
+        [textLabel setBackgroundColor:[UIColor clearColor]];
+        [self addSubview:textLabel];
     }
     return self;
 }
@@ -55,26 +65,35 @@
     [self setFrame:fr];
 }
 
-/*
+
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.
 - (void)drawRect:(CGRect)rect
 {
     // Drawing code
+    [self setImage:offImage forState:UIControlStateNormal];
+    if (pushButton) {
+        [self setImage:onImage forState:UIControlStateHighlighted];
+    }
+    [textLabel setText:self.onText];
 }
-*/
+
 
 -(void)buttonTapped{
     if (pushButton) {
         [self setTitleColor:[UIColor redColor] forState:UIControlStateHighlighted];
-    }else{
+     }else{
         btnOn=!btnOn;
         if (btnOn) {
             [self setBackgroundColor:OnBackgroundColor];
             [self setTitle:onText forState:UIControlStateNormal];
+            [self setImage:onImage forState:UIControlStateNormal];
+            [textLabel setText:onText];
         }else{
             [self setTitle:offText forState:UIControlStateNormal];
             [self setBackgroundColor:OffBackgroundColor];
+            [self setImage:offImage forState:UIControlStateNormal];
+            [textLabel setText:offText];
         }
     }
     if (tapEventHandler) {

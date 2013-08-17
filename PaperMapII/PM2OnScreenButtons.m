@@ -47,7 +47,9 @@
 @synthesize tripLabel;
 @synthesize menuButton;
 @synthesize arrow;
-
+@synthesize toolbar;
+@synthesize menuBn;
+//@synthesize drawBn;
 
 + (id)sharedBnManager {
     static PM2OnScreenButtons *onScreenbuttons = nil;
@@ -66,9 +68,95 @@
     return self;
 }
 #pragma mark ------------methods----------------
+-(void)addToolBar:(UIView *)vc{
+    //[self addDrawButton];
+    [self addButtons:vc];
+    toolbar = [UIToolbar new];
+	toolbar.barStyle = UIBarStyleBlackTranslucent;
+	//[toolbar sizeToFit];
+    
+    int screenW=[[UIScreen mainScreen] bounds].size.width;
+	int screenH=[[UIScreen mainScreen] bounds].size.height;
+	CGFloat toolbarHeight = 40;
+    [toolbar setFrame:CGRectMake(0,screenH-toolbarHeight,screenW,toolbarHeight)];
+    [vc addSubview:toolbar];
+    [self add_buttonsToToolbar:NO];
+}
+-(void)add_buttonsToToolbar:(bool)noGotoBn{
+	// create draw button
+	UIButton * drawBn1 =[UIButton buttonWithType:UIButtonTypeRoundedRect];
+	[drawBn1 setFrame:CGRectMake(0, 0, 80, 30)];
+	[drawBn1 setBackgroundImage:[UIImage imageNamed:@"button_00.png"] forState:UIControlStateNormal];
+	[drawBn1 setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [drawBn1 setTitleColor:[UIColor blackColor] forState:UIControlStateHighlighted];
+    [drawBn1 addTarget:self action:@selector(startDrawingRecorder1:) forControlEvents:UIControlEventTouchUpInside];
+	[drawBn1 setTitle:@"Draw" forState:UIControlStateNormal];
+
+    UIButton * gpsBn1 =[UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [gpsBn1 setFrame:CGRectMake(0, 0, 80, 30)];
+    [gpsBn1 setBackgroundImage:[UIImage imageNamed:@"button_00.png"] forState:UIControlStateNormal];
+    [gpsBn1 setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [gpsBn1 setTitleColor:[UIColor blackColor] forState:UIControlStateHighlighted];
+    [gpsBn1 addTarget:self action:@selector(startGPS:) forControlEvents:UIControlEventTouchUpInside];
+    [gpsBn1 setTitle:@"Start GPS" forState:UIControlStateNormal];
+    
+    UIButton * colorBn1 =[UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [colorBn1 setFrame:CGRectMake(0, 0, 90, 30)];
+    [colorBn1 setBackgroundImage:[UIImage imageNamed:@"button_00.png"] forState:UIControlStateNormal];
+    [colorBn1 setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [colorBn1 setTitleColor:[UIColor blackColor] forState:UIControlStateHighlighted];
+    [colorBn1 addTarget:self action:@selector(colorPicker) forControlEvents:UIControlEventTouchUpInside];
+    [colorBn1 setTitle:@"Line Color" forState:UIControlStateNormal];
+    
+//	//creating color setting button
+//	settingsBn=[UIButton buttonWithType:UIButtonTypeRoundedRect];
+//	[settingsBn setFrame:CGRectMake(0,0, 80, 30)];
+//	[settingsBn setBackgroundImage:[UIImage imageNamed:@"button_00.png"] forState:UIControlStateNormal];
+//	[settingsBn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+//	[settingsBn addTarget:self action:@selector(displaySettingsOrUndoDrawing:) forControlEvents:UIControlEventTouchUpInside];
+//	[settingsBn setTitle:LA(@"Settings") forState:UIControlStateNormal];
+//	//create hide/show line button
+//	hideLineBn=[UIButton buttonWithType:UIButtonTypeRoundedRect];
+//	[hideLineBn setFrame:CGRectMake(0, 0, 80, 30)];
+//	[hideLineBn setBackgroundImage:[UIImage imageNamed:@"button_00.png"] forState:UIControlStateNormal];
+//	[hideLineBn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+//	[hideLineBn addTarget:self action:@selector(hideDrawing) forControlEvents:UIControlEventTouchUpInside];
+//	[hideLineBn setTitle:LA(@"Hide line") forState:UIControlStateNormal];
+	
+	//Add an x button for locking up the screen
+	UIButton * xButton=[UIButton buttonWithType:UIButtonTypeCustom];
+	[xButton setBackgroundImage:[UIImage imageNamed:@"xButton.png"] forState:UIControlStateNormal];
+	[xButton setFrame:CGRectMake(0,0, 25, 25)];
+	[xButton addTarget:self action:@selector(lockUpScreen) forControlEvents:UIControlEventTouchUpInside];
+    
+	menuBn = [[UIBarButtonItem alloc] initWithTitle:@"Menu" style:UIBarButtonItemStyleBordered target:self action:@selector(showMenu)];
+	UIBarButtonItem * gotoBn = [[UIBarButtonItem alloc] initWithTitle:(@"goto") style:UIBarButtonItemStyleBordered target:self action:@selector(GotoMenu)];
+	UIBarButtonItem *flexItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace	 target:nil action:nil];
+	
+	UIBarButtonItem *drawBn = [[UIBarButtonItem alloc] initWithCustomView:drawBn1];
+    UIBarButtonItem *gpsBn  = [[UIBarButtonItem alloc] initWithCustomView:gpsBn1];
+    UIBarButtonItem *colorBn  = [[UIBarButtonItem alloc] initWithCustomView:colorBn1];
+	//UIBarButtonItem *setBn=[[UIBarButtonItem alloc] initWithCustomView:settingsBn];
+	//UIBarButtonItem *hideBn=[[UIBarButtonItem alloc] initWithCustomView:hideLineBn];
+	UIBarButtonItem *xBn=[[UIBarButtonItem alloc] initWithCustomView:xButton];
+	//UIBarButtonItem *status=[[UIBarButtonItem alloc] initWithCustomView:statusLabel];
+	
+	//NSArray *items=[NSArray arrayWithObjects: menuBn,gotoBn,status,flexItem,xBn,hideBn,setBn,drawBn, nil];
+    NSArray *items;
+    if (noGotoBn) {
+        items=[NSArray arrayWithObjects: menuBn,flexItem,xBn,gpsBn,drawBn, nil];
+    }else{
+        items=[NSArray arrayWithObjects: menuBn,gotoBn,flexItem,xBn,colorBn,gpsBn,drawBn, nil];
+	}
+    
+	[toolbar setItems:items animated:NO];
+	
+	//[self displaySettingsOrUndoDrawing:nil];   //load the settings without showing so that the line property for drawing and GPS track could be available
+}
+#pragma mark -----------------------------
 -(void)addButtons:(UIView *)vc{
     _baseView=vc;
-    [self add_bnStart];
+    [self add_bnStart];  //TODO: Comment this line out
     [self addDrawButton];
     [self addFreeDrawButton];
     [self addUndoButton];
@@ -133,18 +221,15 @@
 }
 -(void) setButtonsToPosition:(bool)bVisible{
     int screenW=[_baseView bounds].size.width;
+    int screenH=[_baseView bounds].size.height;
     int x=screenW-110;
-    int y=150;
-    if(bVisible){
-        [self repositionButtonsFromX:x Y:y];
-    }else{
-        [self repositionButtonsFromX:x+800 Y:y];
-    }
+    int y=screenH;        //TODO: remove the /2 for production
+    [self repositionButtonsFromX:x Y:y];
 }
 
 -(void)repositionButtonsFromX:(int)x Y:(int)y{
     int w=100;
-    int h=60;
+    int h=69;
     int s=60;   //row apart
     if (undoButton.withGroup) [undoButton  setFrame:CGRectMake(x+200, y=y+s, w, h)];
     if (fdrawButton.withGroup)[fdrawButton setFrame:CGRectMake(x+200, y,     w, h)];
@@ -153,10 +238,20 @@
     if (centerBn.withGroup)   [centerBn    setFrame:CGRectMake(x+200, y=y+s+1, w, h)];
     if (gpsButton.withGroup)  [gpsButton   setFrame:CGRectMake(x,     y,     w, h)];
     [colorButton            setFrame:CGRectMake(x, y=y+s+1, w, h)];
-    [mapTypeButton          setFrame:CGRectMake(x, y=y+s+1, w, h)];
+    [mapTypeButton          setFrame:CGRectMake(x+w/2, 20, w/2, h/2)]; y=y+s+1-300;   //right upper corner sat button
     [menuButton             setFrame:CGRectMake(x, y=y+s+1, w, h)];
 }
 #pragma mark ------------drawing button methods----------------
+-(void)startDrawingRecorder1:(UIButton *)tbn{
+    OnOffButton * bn = drawButton;
+    [bn buttonTapped];
+    if (bn.btnOn) {
+        [tbn setTitle:@"Exit" forState:UIControlStateNormal];
+    }else{
+        [tbn setTitle:@"Draw" forState:UIControlStateNormal];
+    }
+    //[self startDrawingRecorder:bn];  //buttonTapped method will cann this line too
+}
 -(void)startDrawingRecorder:(OnOffButton *)bn{
     if (bn.btnOn) {   //start drawing mode
         [self.routRecorder start];   //user tap to enter into drawing state here
@@ -196,10 +291,11 @@
                         options: UIViewAnimationOptionCurveEaseIn //UIViewAnimationOptionCurveLinear
                      animations:^{
                          [self setButtonsToPosition:NO];        //hide all buttons
-                         drawButton.hidden=NO;
-                         [drawButton  setFrame:CGRectMake(0,   40, 80,  60)];
-                         [fdrawButton setFrame:CGRectMake(80,  40, 120, 60)];
-                         [undoButton  setFrame:CGRectMake(200, 40, 80,  60)];
+                         drawButton.hidden=YES;
+                         //place draw buttons at upper left corner
+                         //[drawButton  setFrame:CGRectMake(0,   40, 80,  60)];
+                         [fdrawButton setFrame:CGRectMake(20,  40, 100, 69)];
+                         [undoButton  setFrame:CGRectMake(130, 40, 100, 69)];
                      }
                      completion:^(BOOL finished){
                          NSLOG8(@"Done!");
@@ -217,13 +313,22 @@
                      }];
 }
 -(void)addFreeDrawButton{
+//    fdrawButton=[[OnOffButton alloc] init];
+//    [fdrawButton setTitle:@"Free Draw" forState:UIControlStateNormal];
+//    [fdrawButton setOffText:@"Free Draw"];
+//    [fdrawButton setOnText: @"Line Draw"];
+//    fdrawButton.OffBackgroundColor=[UIColor blueColor];
+//    fdrawButton.OnBackgroundColor=[UIColor orangeColor];
+//    [fdrawButton setBackgroundColor:fdrawButton.OffBackgroundColor];
+//    fdrawButton.onOffBnDelegate=self;
+//    fdrawButton.tapEventHandler=@selector(switchToFreeDraw:);
+//    [_baseView addSubview:fdrawButton];
     fdrawButton=[[OnOffButton alloc] init];
-    [fdrawButton setTitle:@"Free Draw" forState:UIControlStateNormal];
     [fdrawButton setOffText:@"Free Draw"];
-    [fdrawButton setOnText: @"Line Draw"];
-    fdrawButton.OffBackgroundColor=[UIColor blueColor];
-    fdrawButton.OnBackgroundColor=[UIColor orangeColor];
-    [fdrawButton setBackgroundColor:fdrawButton.OffBackgroundColor];
+    [fdrawButton setOnText: @"Free Draw"];
+    fdrawButton.onImage=[UIImage imageNamed:@"GreenBnOn100.png"];
+    fdrawButton.offImage=[UIImage imageNamed:@"GreenBnOff100.png"];
+    //[fdrawButton setFrame:CGRectMake(10,10, 100, 70)];
     fdrawButton.onOffBnDelegate=self;
     fdrawButton.tapEventHandler=@selector(switchToFreeDraw:);
     [_baseView addSubview:fdrawButton];
@@ -241,12 +346,21 @@
     [_baseView addSubview:drawButton];
 }
 -(void)addUndoButton{
-    //undoButton=[UIButton buttonWithType:(UIButtonTypeRoundedRect)];
+//    //undoButton=[UIButton buttonWithType:(UIButtonTypeRoundedRect)];
+//    undoButton=[[OnOffButton alloc] init];
+//    [undoButton setTitle:@"Undo" forState:UIControlStateNormal];
+//    undoButton.pushButton=true;
+//    undoButton.onOffBnDelegate=self;
+//    //[undoButton addTarget:self action:@selector(undoDrawing:) forControlEvents:UIControlEventTouchUpInside];
+//    undoButton.tapEventHandler=@selector(undoDrawing:);
     undoButton=[[OnOffButton alloc] init];
-    [undoButton setTitle:@"Undo" forState:UIControlStateNormal];
     undoButton.pushButton=true;
+    [undoButton setOffText:@"Undo"];
+    [undoButton setOnText: @"Undo"];
+    undoButton.onImage=[UIImage imageNamed:@"GreenBnOn100.png"];
+    undoButton.offImage=[UIImage imageNamed:@"GreenBnOff100.png"];
+    //[undoButton setFrame:CGRectMake(120,10, 100, 70)];
     undoButton.onOffBnDelegate=self;
-    //[undoButton addTarget:self action:@selector(undoDrawing:) forControlEvents:UIControlEventTouchUpInside];
     undoButton.tapEventHandler=@selector(undoDrawing:);
     [_baseView addSubview:undoButton];
 }
@@ -270,18 +384,19 @@
 #pragma mark ------------gps button methods----------------
 -(void) addGPSButton{
     gpsButton=[[OnOffButton alloc] init];
-    [gpsButton setTitle:@"Start GPS" forState:UIControlStateNormal];
-    [gpsButton setOffText:@"Start GPS"];
-    [gpsButton setOnText: @"Stop GPS"];
-    gpsButton.onOffBnDelegate=self;
-    gpsButton.tapEventHandler=@selector(startGPS:);
-    [_baseView addSubview:gpsButton];
+    //[gpsButton setTitle:@"Start GPS" forState:UIControlStateNormal];
+    //[gpsButton setOffText:@"Start GPS"];
+    //[gpsButton setOnText: @"Stop GPS"];
+    //gpsButton.onOffBnDelegate=self;
+    //gpsButton.tapEventHandler=@selector(startGPS:);
+    //[_baseView addSubview:gpsButton];
 }
 -(void)add_CenterBn{
     centerBn=[[OnOffButton alloc] init];
-    [centerBn setTitle:@"Center Cur" forState:UIControlStateNormal];
-    [centerBn setOffText:@"Center Cur"];
-    [centerBn setOnText: @"No Center"];
+    [centerBn setOffText:@"Center"];
+    [centerBn setOnText: @"Center"];
+    centerBn.onImage=[UIImage imageNamed:@"GreenBnOn100.png"];
+    centerBn.offImage=[UIImage imageNamed:@"GreenBnOff100.png"];
     centerBn.onOffBnDelegate=self;
     centerBn.tapEventHandler=@selector(centerCurrentPosition:);
     [_baseView addSubview:centerBn];
@@ -298,11 +413,16 @@ extern bool centerPos;
         //[centerBn setTitle:@"Center Cur" forState:UIControlStateNormal];
     }
 }
--(void) startGPS:(OnOffButton *)bn{
-    
+-(void) startGPS:(UIButton *)tbn{
+     OnOffButton * bn = gpsButton;
+     [bn buttonTapped];
+     if (bn.btnOn) {
+        [tbn setTitle:@"Stop GPS" forState:UIControlStateNormal];
+     }else{
+        [tbn setTitle:@"Start GPS" forState:UIControlStateNormal];
+     }
      if(bn.btnOn){
         [gpsReceiver start];
-        //if (!v)return;
         arrow.hidden=NO;
         bn.withGroup=false;
         centerBn.withGroup=false;
@@ -318,9 +438,9 @@ extern bool centerPos;
         
         bn.withGroup=YES;
         centerBn.withGroup=YES;
-        //[self hideGPSButtons];
+        [self hideGPSButtons];
         //bnStart.hidden=NO;
-        [self hideDrawingButtons];
+        //[self hideDrawingButtons];
     }
 }
 -(void)showGPSButtons{
@@ -329,9 +449,9 @@ extern bool centerPos;
                         options: UIViewAnimationOptionCurveEaseIn //UIViewAnimationOptionCurveLinear
                      animations:^{
                          [self setButtonsToPosition:NO];        //hide all buttons
-                         drawButton.hidden=NO;
-                         [gpsButton  setFrame:CGRectMake(0,   40, 120,  60)];
-                         [centerBn   setFrame:CGRectMake(122, 40, 120, 60)];
+                         //drawButton.hidden=NO;
+                         //[gpsButton  setFrame:CGRectMake(0,   40, 120,  60)];
+                         [centerBn   setFrame:CGRectMake(10, 40, 100, 69)];
                      }
                      completion:^(BOOL finished){
                          NSLOG8(@"Done!");
@@ -411,7 +531,8 @@ extern bool centerPos;
 		[menuPopover setPopoverContentSize:CGSizeMake(350,1024) animated:YES];
         //[menuPopover presentPopoverFromRect:menuButton.frame inView:_baseView permittedArrowDirections:UIPopoverArrowDirectionAny  animated:YES];
         //[menuPopover presentPopoverFromRect:CGRectMake(0, 0, 1, 1) inView:_baseView permittedArrowDirections:UIPopoverArrowDirectionAny  animated:YES];
-        [menuPopover presentPopoverFromRect:CGRectMake(-30, -30, 0, 0) inView:_baseView permittedArrowDirections:UIPopoverArrowDirectionAny  animated:YES];
+        //[menuPopover presentPopoverFromRect:CGRectMake(-30, -30, 0, 0) inView:_baseView permittedArrowDirections:UIPopoverArrowDirectionAny  animated:YES];
+        [menuPopover presentPopoverFromBarButtonItem:menuBn permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
 	}
 }
 -(void)cleanUpTrack{
@@ -436,7 +557,8 @@ extern bool centerPos;
 		[colorPickPopover dismissPopoverAnimated:YES];
 	}else{
 		[colorPickPopover setPopoverContentSize:CGSizeMake(350,400) animated:YES];
-        [colorPickPopover presentPopoverFromRect:colorButton.frame inView:_baseView permittedArrowDirections:UIPopoverArrowDirectionAny  animated:YES];
+        [colorPickPopover presentPopoverFromRect:CGRectMake(800, 700, 10, 10) inView:_baseView permittedArrowDirections:UIPopoverArrowDirectionAny  animated:YES];
+        //[colorPickPopover presentPopoverFromBarButtonItem:bn permittedArrowDirections:UIPopoverArrowDirectionAny  animated:YES];
 	}
 }
 

@@ -41,6 +41,9 @@
 		AA8608FF177C593E008EBC95 /* MenuItem.m in Sources */ = {isa = PBXBuildFile; fileRef = AA8608FD177C593E008EBC95 /* MenuItem.m */; };
 		AA860901177F22F9008EBC95 /* Arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = AA860900177F22F9008EBC95 /* Arrow.png */; };
 		AA860902177F22F9008EBC95 /* Arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = AA860900177F22F9008EBC95 /* Arrow.png */; };
+		AAAAEF2F17BB667800166090 /* button_00.png in Resources */ = {isa = PBXBuildFile; fileRef = AAAAEF2E17BB667800166090 /* button_00.png */; };
+		AAAAEF3217BDD81400166090 /* GreenBnOff100.png in Resources */ = {isa = PBXBuildFile; fileRef = AAAAEF3017BDD81200166090 /* GreenBnOff100.png */; };
+		AAAAEF3317BDD81400166090 /* GreenBnOn100.png in Resources */ = {isa = PBXBuildFile; fileRef = AAAAEF3117BDD81300166090 /* GreenBnOn100.png */; };
 		AAAD5A6F176E1F5900DCDAD2 /* PM2OnScreenButtons.m in Sources */ = {isa = PBXBuildFile; fileRef = AAAD5A6E176E1F5900DCDAD2 /* PM2OnScreenButtons.m */; };
 		AAAD5A70176E1F5900DCDAD2 /* PM2OnScreenButtons.m in Sources */ = {isa = PBXBuildFile; fileRef = AAAD5A6E176E1F5900DCDAD2 /* PM2OnScreenButtons.m */; };
 		AAAD5A7517701B5800DCDAD2 /* ScaleRuler.m in Sources */ = {isa = PBXBuildFile; fileRef = AAAD5A7417701B5800DCDAD2 /* ScaleRuler.m */; };
@@ -3583,6 +3586,9 @@
 		AA8608FC177C593E008EBC95 /* MenuItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuItem.h; sourceTree = "<group>"; };
 		AA8608FD177C593E008EBC95 /* MenuItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuItem.m; sourceTree = "<group>"; };
 		AA860900177F22F9008EBC95 /* Arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Arrow.png; sourceTree = "<group>"; };
+		AAAAEF2E17BB667800166090 /* button_00.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = button_00.png; sourceTree = "<group>"; };
+		AAAAEF3017BDD81200166090 /* GreenBnOff100.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = GreenBnOff100.png; sourceTree = "<group>"; };
+		AAAAEF3117BDD81300166090 /* GreenBnOn100.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = GreenBnOn100.png; sourceTree = "<group>"; };
 		AAAD5A6D176E1F5900DCDAD2 /* PM2OnScreenButtons.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PM2OnScreenButtons.h; sourceTree = "<group>"; };
 		AAAD5A6E176E1F5900DCDAD2 /* PM2OnScreenButtons.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PM2OnScreenButtons.m; sourceTree = "<group>"; };
 		AAAD5A7317701B5800DCDAD2 /* ScaleRuler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScaleRuler.h; sourceTree = "<group>"; };
@@ -5467,6 +5473,8 @@
 				AA05FAA61798DEBF00B78243 /* DrawingViewController.h */,
 				AA05FAA71798DEBF00B78243 /* DrawingViewController.m */,
 				AA05FAA81798DEBF00B78243 /* DrawingViewController.xib */,
+				AAAAEF3017BDD81200166090 /* GreenBnOff100.png */,
+				AAAAEF3117BDD81300166090 /* GreenBnOn100.png */,
 			);
 			name = "Buttons and Labels";
 			sourceTree = "<group>";
@@ -5546,6 +5554,7 @@
 			isa = PBXGroup;
 			children = (
 				AABDD4E51745D9CF00A0D6E9 /* icon72x72.png */,
+				AAAAEF2E17BB667800166090 /* button_00.png */,
 				AABDD48817437B3600A0D6E9 /* PaperMapII-Info.plist */,
 				AABDD48917437B3600A0D6E9 /* InfoPlist.strings */,
 				AABDD48C17437B3600A0D6E9 /* main.m */,
@@ -9145,6 +9154,9 @@
 				AA59B95117B48CCA00092996 /* POIEditViewController.xib in Resources */,
 				AA59B95717B48F7A00092996 /* checked.png in Resources */,
 				AA59B95817B48F7A00092996 /* unchecked.png in Resources */,
+				AAAAEF2F17BB667800166090 /* button_00.png in Resources */,
+				AAAAEF3217BDD81400166090 /* GreenBnOff100.png in Resources */,
+				AAAAEF3317BDD81400166090 /* GreenBnOn100.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

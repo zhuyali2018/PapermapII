@@ -33,7 +33,8 @@
 
 -(void)addOnScreeButtons{
     PM2OnScreenButtons * bns=[PM2OnScreenButtons sharedBnManager];
-    [bns addButtons:(UIView *)[self view]];
+    //[bns addButtons:(UIView *)[self view]];
+    [bns addToolBar:[self view]];
 }
 -(void)add_MapScrollView{
     float bazel=20;     //set to 0 to maxmize map area
@@ -82,7 +83,7 @@
 	int screenH=[[self view] bounds].size.height;
     [self.mapScrollView setFrame:CGRectMake(0, 0, screenW,screenH)];
     PM2OnScreenButtons * bns=[PM2OnScreenButtons sharedBnManager];
-    [bns repositionButtonsFromX:screenW-110+200 Y:150];
+    [bns repositionButtonsFromX:screenW-110 Y:screenH];
     [bns positionStartBnWidth:screenW Height:screenH];
     NSLOG9(@"did Rotate !!!");
     [((PM2OnScreenButtons *)[PM2OnScreenButtons sharedBnManager]).speedLabel  setFrame:CGRectMake(0,  screenH-180, 400, 140)];
@@ -90,6 +91,9 @@
     [((PM2OnScreenButtons *)[PM2OnScreenButtons sharedBnManager]).tripLabel setFrame:CGRectMake(402,screenH-122,  300,  40)];
     [MapCenterIndicator sharedMapCenter:CGRectMake(screenW/2-10-1, (screenH-20)/2-10+9, 20, 20)];
     [((PM2OnScreenButtons *)[PM2OnScreenButtons sharedBnManager]).messageLabel setFrame:CGRectMake(0, screenH-40, screenW, 40)];
+    //reposition tool bar
+    CGFloat toolbarHeight = 40;
+    [((PM2OnScreenButtons *)[PM2OnScreenButtons sharedBnManager]).toolbar setFrame:CGRectMake(0,screenH-toolbarHeight,screenW,toolbarHeight)];
 }
 - (void)didReceiveMemoryWarning
 {

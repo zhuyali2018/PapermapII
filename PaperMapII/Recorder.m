@@ -464,6 +464,9 @@ float mapLeftThereDirection=0;       //TODO: assign and keep it an appropriate v
 	}
     MainQ * mQ=[MainQ sharedManager];
     UIImageView * arrow =(UIImageView *)[mQ getTargetRef:GPSARROW];
+    if ([arrow isEqual:@"0"]) {
+        return;
+    }
     GPSTrackPOIBoard * trackBoard=[DrawableMapScrollView sharedMap].gpsTrackPOIBoard; //(GPSTrackPOIBoard *)[mQ getTargetRef:GPSTRACKPOIBOARD];
     arrow.transform=transform;
     
@@ -488,7 +491,9 @@ float mapLeftThereDirection=0;       //TODO: assign and keep it an appropriate v
     if(!_gpsRecording)return;
     MainQ * mQ=[MainQ sharedManager];
     UILabel * lb=(UILabel *)[mQ getTargetRef:TRIPMETER];
-    if(!lb) return;
+    if ([lb isEqual:@"0"]) {
+        return;
+    }
     NSString *tripString;
     if (totalTrip<1000) {
         tripString=[[NSString alloc] initWithFormat:@"%4.1fm (%.0f ft)", totalTrip,totalTrip*3.28084];
@@ -502,7 +507,9 @@ float mapLeftThereDirection=0;       //TODO: assign and keep it an appropriate v
 -(void)showAltitude:(CLLocationDistance)altitude{
     MainQ * mQ=[MainQ sharedManager];
     UILabel * lb=(UILabel *)[mQ getTargetRef:ALTITUDELABEL];
-    if(!lb) return;
+    if ([lb isEqual:@"0"]) {
+        return;
+    }
     NSString *altString;
     altString=[[NSString alloc] initWithFormat:@"%4.1fm (%.0f ft) ", altitude, altitude*3.28084];
     [lb setText:altString];
@@ -512,7 +519,9 @@ float mapLeftThereDirection=0;       //TODO: assign and keep it an appropriate v
     UILabel * lb=(UILabel *)[mQ getTargetRef:SPEEDLABEL];
     //UILabel * altlb=(UILabel *)[mQ getTargetRef:ALTITUDELABEL];
     //UILabel * trplb=(UILabel *)[mQ getTargetRef:TRIPMETER];
-    if(!lb) return;
+    if ([lb isEqual:@"0"]) {
+        return;
+    }
     bool bMetric=false;
     if(speed>0.6){    //> 1.34 mph
         if(bMetric){
@@ -634,7 +643,9 @@ int n=0;  //gps node counter
 -(void)displayAccuracy:(CLLocation *)newLocation{
     MainQ * mQ=[MainQ sharedManager];
     UILabel * lb=(UILabel *)[mQ getTargetRef:MESSAGELABEL];
-    if(!lb) return;
+    if ([lb isEqual:@"0"]) {
+        return;
+    }
     n++;
     float accuracy=newLocation.horizontalAccuracy;
     NSString * msg=[[NSString alloc]initWithFormat:@"Starting GPS, Accuracy=%3.1f meters (%d)",accuracy,n];

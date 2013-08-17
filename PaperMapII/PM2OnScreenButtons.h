@@ -17,8 +17,14 @@
 @class MainMenuViewController;
 
 @interface PM2OnScreenButtons : NSObject <OnOffBnDelegate>
+@property (nonatomic, strong) UIToolbar	* toolbar;
+@property (nonatomic, strong) UIBarButtonItem * menuBn;
+
+
+
 @property (nonatomic, strong) UIButton * bnStart;       //all onscreen control buttons and menus starts from here
 @property (nonatomic, strong) OnOffButton *drawButton;
+//@property (nonatomic, strong) UIButton * drawBn;
 @property (nonatomic, strong) OnOffButton *fdrawButton;
 @property (nonatomic, strong) OnOffButton *undoButton;
 
@@ -49,7 +55,24 @@
 @property (strong, nonatomic) MainMenuViewController * menuController;
 @property (nonatomic, strong) UIImageView * arrow;
 + (id)sharedBnManager;
+-(void)addToolBar:(UIView *)vc;
 -(void)addButtons:(UIView *)vc;
+-(void)add_bnStart;
+-(void)addDrawButton;
+-(void)addFreeDrawButton;
+-(void)addUndoButton;
+-(void) addGPSButton;
+-(void) add_CenterBn;
+-(void) addMapTypeButton;
+-(void) addColorButton;
+-(void) add_MainMenu;
+
+-(void)addMapLevelLabel;
+-(void)addScaleRuler;
+-(void)addMapCenterIndicator:(UIView*)vc;
+-(void)add_GPSArrow;
+-(void)add_buttonsToToolbar:(bool)noGotoBn;
+
 -(void)repositionButtonsFromX:(int)x Y:(int)y;
 -(void)positionStartBnWidth:(int)w Height:(int)h;
 @end
