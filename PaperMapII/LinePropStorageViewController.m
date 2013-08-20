@@ -9,6 +9,8 @@
 #import "LinePropStorageViewController.h"
 #import "PM2OnScreenButtons.h"
 #import "PropertyButton.h"
+#import "PM2ViewController.h"
+#import "PM2AppDelegate.h"
 
 @interface LinePropStorageViewController ()
 
@@ -18,7 +20,9 @@
 
 @synthesize  propBns,propChgBns;
 @synthesize linePPVCtrl;
-const static int NUM=5;     //number of stored property
+@synthesize parentView,parentViewCtrlr;
+
+const static int NUM=7;     //number of stored property
 - (id) init{
     self=[super init];
     if(self){
@@ -26,7 +30,7 @@ const static int NUM=5;     //number of stored property
         propBns     =[[NSMutableArray alloc]initWithCapacity:NUM];
         propChgBns  =[[NSMutableArray alloc]initWithCapacity:NUM];
         for (int i=0; i<NUM; i++) {   //TODO:do not hardcode the size
-            PropertyButton *bn=[[PropertyButton alloc] initWithFrame:CGRectMake(15, 10+70*i,  240, 60)];
+            PropertyButton *bn=[[PropertyButton alloc] initWithFrame:CGRectMake(5, 10+70*i,  230, 60)];
             bn.ID=i+1;
             NSString *t=[[NSString alloc]initWithFormat:@"Stored Property %d:",i+1];
             [bn.titleLabel setText:t];
@@ -39,7 +43,7 @@ const static int NUM=5;     //number of stored property
             //change button that follows it
             UIButton * cbn =[UIButton buttonWithType:UIButtonTypeRoundedRect];
             [cbn setTitle:@"Change" forState:UIControlStateNormal];
-            [cbn setFrame:CGRectMake(265, 10+70*i, 70, 60)];
+            [cbn setFrame:CGRectMake(240, 10+70*i, 75, 60)];
             [cbn addTarget:self action:@selector(changeStorageColor:) forControlEvents:UIControlEventTouchUpInside];
             [cbn setTag:i+1];
             [self.view addSubview:cbn];
@@ -55,12 +59,14 @@ const static int NUM=5;     //number of stored property
 }
 
 - (void) gotSelectedColor:(id)sender{
-    NSLOG8(@"You just selected %@",((PropertyButton *)sender).titleLabel.text);
+    NSLOG10(@"You just selected %@",((PropertyButton *)sender).titleLabel.text);
     PM2OnScreenButtons * OSB=[PM2OnScreenButtons sharedBnManager];
     if([OSB.colorPickPopover isPopoverVisible]){
          [OSB.colorPickPopover dismissPopoverAnimated:YES];
     }
-    
+    if([OSB.menuPopover isPopoverVisible]){
+         [OSB.menuPopover dismissPopoverAnimated:YES];
+    }
     if(OSB.linePropertyViewCtrlr.trackProperty==DrawingLineProperty){
         LineProperty *lp=[LineProperty sharedDrawingLineProperty];
         lp.red    = ((PropertyButton *)sender).lineProperty.red;
@@ -78,6 +84,11 @@ const static int NUM=5;     //number of stored property
         tp.lineWidth= ((PropertyButton *)sender).lineProperty.lineWidth;
         [tp saveGPSTrackSettings];
     }
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone){
+//        [self.parentView removeFromSuperview];
+//        [self.view removeFromSuperview];
+        [parentViewCtrlr dismissViewControllerAnimated:YES completion:NULL];
+    }
 }
 - (void) changeStorageColor:(id)sender{
     int tagNum=((UIButton *)sender).tag;
@@ -85,7 +96,7 @@ const static int NUM=5;     //number of stored property
 
     if(linePPVCtrl==nil){
 		linePPVCtrl=[[LinePropPickerViewController alloc] init];
-        [linePPVCtrl.view setFrame:CGRectMake(0, 0, 350, 400)];
+        [linePPVCtrl.view setFrame:CGRectMake(0, 0, 320, 550)];
 	}
     linePPVCtrl.view.tag=((UIButton *)sender).tag;
     [linePPVCtrl setProperty:((PropertyButton *)propBns[tagNum-1]).lineProperty];  //Pass lineProperty to the Property Picker view controller

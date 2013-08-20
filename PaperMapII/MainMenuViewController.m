@@ -15,6 +15,7 @@
 #import "GPSNode.h"
 #import "PM2OnScreenButtons.h"
 #import "POIEditViewController.h"
+#import "LinePropertyViewController.h"
 
 @implementation MainMenuViewController
 
@@ -52,6 +53,7 @@
                     [[MenuItem alloc]initWithTitle:@"Send POI File"], nil];
 
         NSArray * helpMenu=[[NSArray alloc]initWithObjects:
+                    [[MenuItem alloc]initWithTitle:@"Pick Color"],
                     [[MenuItem alloc]initWithTitle:@"Help"],
                     [[MenuItem alloc]initWithTitle:@"Send Email to Developer"],
                     [[MenuItem alloc]initWithTitle:@"Receive File"],
@@ -74,6 +76,7 @@
 #define MODIFYPOI   1
 #define MOVEAPOI    2
 #define GOTOAPOI    3
+#define PICKCOLOR   0
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -85,8 +88,37 @@
     ((MenuItem *)menuMatrix[POI_SECTION][MODIFYPOI]).menuItemHandler=@selector(ModifyPoi:);
     ((MenuItem *)menuMatrix[POI_SECTION][MOVEAPOI]).menuItemHandler=@selector(MoveAPoi:);
     ((MenuItem *)menuMatrix[POI_SECTION][GOTOAPOI]).menuItemHandler=@selector(GotoAPoi:);
+    ((MenuItem *)menuMatrix[HELP_SECTION][PICKCOLOR]).menuItemHandler=@selector(PickColor);
 }
 #pragma mark - -------------menu item handlers-------------------
+//-(void)PickColor{
+//    NSLog(@"Tap on the PickColor");
+//    PM2OnScreenButtons * OSB=[PM2OnScreenButtons sharedBnManager];
+////    if([OSB.menuPopover isPopoverVisible]){
+////        [OSB.menuPopover dismissPopoverAnimated:YES];
+////    }
+//    if (!OSB.linePropertyViewCtrlr) {
+//        OSB.linePropertyViewCtrlr=[[LinePropertyViewController alloc] init];
+//        [OSB.linePropertyViewCtrlr setTitle:@"Line Property setting"];
+//    }
+//    
+//    //UINavigationController * ctrl=[[UINavigationController alloc]initWithRootViewController:linePropertyViewCtrlr];
+//    [self.navigationController pushViewController:OSB.linePropertyViewCtrlr animated:YES];
+//}
+-(void)PickColor{
+    NSLog(@"Tap on the PickColor");
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone){
+        [self dismissViewControllerAnimated:NO completion:NULL];
+        PM2OnScreenButtons * OSB=[PM2OnScreenButtons sharedBnManager];
+        [OSB colorPicker];
+    }else{
+        PM2OnScreenButtons * OSB=[PM2OnScreenButtons sharedBnManager];
+        if([OSB.menuPopover isPopoverVisible]){
+            [OSB.menuPopover dismissPopoverAnimated:YES];
+        }
+        [OSB colorPicker];
+    }
+}
 -(void)CreatePoi{
     NSLog(@"Tap on the map to Create a POI");
     PM2OnScreenButtons * OSB=[PM2OnScreenButtons sharedBnManager];

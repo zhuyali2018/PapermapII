@@ -10,9 +10,12 @@
 #import "PropertyButton.h"
 #import "LinePropPickerViewController.h"
 
+@class LinePropertyViewController;
+
 @interface LinePropStorageViewController : UIViewController
 @property (nonatomic, strong) NSMutableArray * propBns;
 @property (nonatomic, strong) NSMutableArray * propChgBns;
 @property (nonatomic,strong) LinePropPickerViewController * linePPVCtrl;
-
+@property (nonatomic, weak) UIView * parentView;
+@property (nonatomic, weak) LinePropertyViewController * parentViewCtrlr;
 @end

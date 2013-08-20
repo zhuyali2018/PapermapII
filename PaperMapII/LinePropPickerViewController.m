@@ -52,12 +52,7 @@
     [self.view addSubview:sampleLine];
 
 	// Do any additional setup after loading the view.
-    okBn=[UIButton buttonWithType:UIButtonTypeRoundedRect];
-    [okBn setTitle:@"OK" forState:UIControlStateNormal];
-    [okBn setFrame:CGRectMake(130, 315, 100, 30)];
-    [okBn addTarget:self action:@selector(propertiesPicked:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:okBn];
-    
+        
     sampleLineLabel=[[UILabel alloc] initWithFrame:CGRectMake(20, 0, 150, 25)];
     [sampleLineLabel setBackgroundColor:[UIColor clearColor]];
     [sampleLineLabel setText:@"Sample Line:"];
@@ -71,10 +66,17 @@
     
     //sliders initialization
     int x=20;   //horizontal starting position
-    int y=70;   //vertical starting point
-    int r=50;   //row distance
-    int w=300;  //width
+    int y=90;   //vertical starting point
+    int r=60;   //row distance
+    int w=280;  //width
     int h=40;   // height
+    
+    okBn=[UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [okBn setTitle:@"OK" forState:UIControlStateNormal];
+    [okBn setFrame:CGRectMake(110, y+325, 100, 30)];
+    [okBn addTarget:self action:@selector(propertiesPicked:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:okBn];
+
     redSlider=[[UISlider alloc]initWithFrame:CGRectMake(x, y, w, h)];         [redSlider setBackgroundColor:[UIColor redColor]];
     greSlider=[[UISlider alloc]initWithFrame:CGRectMake(x, y+r, w, h)];       [greSlider setBackgroundColor:[UIColor greenColor]];
     bluSlider=[[UISlider alloc]initWithFrame:CGRectMake(x, y+r*2, w, h)];     [bluSlider setBackgroundColor:[UIColor blueColor]];

@@ -41,7 +41,11 @@
 		AA8608FF177C593E008EBC95 /* MenuItem.m in Sources */ = {isa = PBXBuildFile; fileRef = AA8608FD177C593E008EBC95 /* MenuItem.m */; };
 		AA860901177F22F9008EBC95 /* Arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = AA860900177F22F9008EBC95 /* Arrow.png */; };
 		AA860902177F22F9008EBC95 /* Arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = AA860900177F22F9008EBC95 /* Arrow.png */; };
-		AAAAEF2F17BB667800166090 /* button_00.png in Resources */ = {isa = PBXBuildFile; fileRef = AAAAEF2E17BB667800166090 /* button_00.png */; };
+		AA8BC56217C21C9E00D433ED /* button_00.png in Resources */ = {isa = PBXBuildFile; fileRef = AA8BC56017C21C9E00D433ED /* button_00.png */; };
+		AA8BC56317C21C9E00D433ED /* redButton.png in Resources */ = {isa = PBXBuildFile; fileRef = AA8BC56117C21C9E00D433ED /* redButton.png */; };
+		AA8BC56717C2FEF600D433ED /* RoundGrayBn.png in Resources */ = {isa = PBXBuildFile; fileRef = AA8BC56417C2FEF500D433ED /* RoundGrayBn.png */; };
+		AA8BC56817C2FEF600D433ED /* RoundGreenBn.png in Resources */ = {isa = PBXBuildFile; fileRef = AA8BC56517C2FEF500D433ED /* RoundGreenBn.png */; };
+		AA8BC56917C2FEF600D433ED /* RoundRedBn.png in Resources */ = {isa = PBXBuildFile; fileRef = AA8BC56617C2FEF600D433ED /* RoundRedBn.png */; };
 		AAAAEF3217BDD81400166090 /* GreenBnOff100.png in Resources */ = {isa = PBXBuildFile; fileRef = AAAAEF3017BDD81200166090 /* GreenBnOff100.png */; };
 		AAAAEF3317BDD81400166090 /* GreenBnOn100.png in Resources */ = {isa = PBXBuildFile; fileRef = AAAAEF3117BDD81300166090 /* GreenBnOn100.png */; };
 		AAAD5A6F176E1F5900DCDAD2 /* PM2OnScreenButtons.m in Sources */ = {isa = PBXBuildFile; fileRef = AAAD5A6E176E1F5900DCDAD2 /* PM2OnScreenButtons.m */; };
@@ -3586,7 +3590,11 @@
 		AA8608FC177C593E008EBC95 /* MenuItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuItem.h; sourceTree = "<group>"; };
 		AA8608FD177C593E008EBC95 /* MenuItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuItem.m; sourceTree = "<group>"; };
 		AA860900177F22F9008EBC95 /* Arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Arrow.png; sourceTree = "<group>"; };
-		AAAAEF2E17BB667800166090 /* button_00.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = button_00.png; sourceTree = "<group>"; };
+		AA8BC56017C21C9E00D433ED /* button_00.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = button_00.png; sourceTree = "<group>"; };
+		AA8BC56117C21C9E00D433ED /* redButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = redButton.png; sourceTree = "<group>"; };
+		AA8BC56417C2FEF500D433ED /* RoundGrayBn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = RoundGrayBn.png; sourceTree = "<group>"; };
+		AA8BC56517C2FEF500D433ED /* RoundGreenBn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = RoundGreenBn.png; sourceTree = "<group>"; };
+		AA8BC56617C2FEF600D433ED /* RoundRedBn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = RoundRedBn.png; sourceTree = "<group>"; };
 		AAAAEF3017BDD81200166090 /* GreenBnOff100.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = GreenBnOff100.png; sourceTree = "<group>"; };
 		AAAAEF3117BDD81300166090 /* GreenBnOn100.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = GreenBnOn100.png; sourceTree = "<group>"; };
 		AAAD5A6D176E1F5900DCDAD2 /* PM2OnScreenButtons.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PM2OnScreenButtons.h; sourceTree = "<group>"; };
@@ -5473,6 +5481,11 @@
 				AA05FAA61798DEBF00B78243 /* DrawingViewController.h */,
 				AA05FAA71798DEBF00B78243 /* DrawingViewController.m */,
 				AA05FAA81798DEBF00B78243 /* DrawingViewController.xib */,
+				AA8BC56017C21C9E00D433ED /* button_00.png */,
+				AA8BC56417C2FEF500D433ED /* RoundGrayBn.png */,
+				AA8BC56517C2FEF500D433ED /* RoundGreenBn.png */,
+				AA8BC56617C2FEF600D433ED /* RoundRedBn.png */,
+				AA8BC56117C21C9E00D433ED /* redButton.png */,
 				AAAAEF3017BDD81200166090 /* GreenBnOff100.png */,
 				AAAAEF3117BDD81300166090 /* GreenBnOn100.png */,
 			);
@@ -5554,7 +5567,6 @@
 			isa = PBXGroup;
 			children = (
 				AABDD4E51745D9CF00A0D6E9 /* icon72x72.png */,
-				AAAAEF2E17BB667800166090 /* button_00.png */,
 				AABDD48817437B3600A0D6E9 /* PaperMapII-Info.plist */,
 				AABDD48917437B3600A0D6E9 /* InfoPlist.strings */,
 				AABDD48C17437B3600A0D6E9 /* main.m */,
@@ -9154,9 +9166,13 @@
 				AA59B95117B48CCA00092996 /* POIEditViewController.xib in Resources */,
 				AA59B95717B48F7A00092996 /* checked.png in Resources */,
 				AA59B95817B48F7A00092996 /* unchecked.png in Resources */,
-				AAAAEF2F17BB667800166090 /* button_00.png in Resources */,
 				AAAAEF3217BDD81400166090 /* GreenBnOff100.png in Resources */,
 				AAAAEF3317BDD81400166090 /* GreenBnOn100.png in Resources */,
+				AA8BC56217C21C9E00D433ED /* button_00.png in Resources */,
+				AA8BC56317C21C9E00D433ED /* redButton.png in Resources */,
+				AA8BC56717C2FEF600D433ED /* RoundGrayBn.png in Resources */,
+				AA8BC56817C2FEF600D433ED /* RoundGreenBn.png in Resources */,
+				AA8BC56917C2FEF600D433ED /* RoundRedBn.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -11083,7 +11099,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PaperMapII/PaperMapII-Prefix.pch";
 				INFOPLIST_FILE = "PaperMapII/PaperMapII-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -11095,7 +11111,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PaperMapII/PaperMapII-Prefix.pch";
 				INFOPLIST_FILE = "PaperMapII/PaperMapII-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};

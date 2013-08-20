@@ -24,11 +24,13 @@
 
 @property (nonatomic, strong) UIButton * bnStart;       //all onscreen control buttons and menus starts from here
 @property (nonatomic, strong) OnOffButton *drawButton;
+@property (nonatomic, strong) UIButton *drawBn1;
 //@property (nonatomic, strong) UIButton * drawBn;
 @property (nonatomic, strong) OnOffButton *fdrawButton;
 @property (nonatomic, strong) OnOffButton *undoButton;
 
 @property (nonatomic, strong) OnOffButton *gpsButton;
+@property (nonatomic, strong) UIButton * gpsBn1;    //for toolbar
 @property (nonatomic, strong) OnOffButton * centerBn;
 
 @property (nonatomic, strong) UIButton *colorButton;
@@ -75,4 +77,5 @@
 
 -(void)repositionButtonsFromX:(int)x Y:(int)y;
 -(void)positionStartBnWidth:(int)w Height:(int)h;
+-(void) colorPicker;
 @end
