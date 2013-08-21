@@ -22,6 +22,11 @@
 @property int len;
 @property CGFloat mid,end;
 @property BOOL bMetric;
+@property(nonatomic,strong)UILabel * startPoint;
+@property(nonatomic,strong)UILabel * middlePoint;
+@property(nonatomic,strong)UILabel * endPoint;
+@property(nonatomic,strong)UILabel * unitLabel;
+
 -(void)drawLineFrom:(CGPoint) p0 to:(CGPoint)p1 withColor:(UIColor *)color andWidth:(CGFloat)width;
 -(void)updateRuler:(UIScrollView *)scrollView;
 +(id)shareScaleRuler:(CGRect)frame;

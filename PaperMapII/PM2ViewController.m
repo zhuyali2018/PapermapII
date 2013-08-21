@@ -20,6 +20,7 @@
 
 #import "PM2OnScreenButtons.h"
 #import "MapCenterIndicator.h"
+#import "OnScreenMeter.h"
 
 @interface PM2ViewController ()
 
@@ -87,8 +88,8 @@
     [bns positionStartBnWidth:screenW Height:screenH];
     NSLOG9(@"did Rotate !!!");
     [((PM2OnScreenButtons *)[PM2OnScreenButtons sharedBnManager]).speedLabel  setFrame:CGRectMake(0,  screenH-180, 400, 140)];
-    [((PM2OnScreenButtons *)[PM2OnScreenButtons sharedBnManager]).heightLabel setFrame:CGRectMake(402,screenH-80,  300,  40)];
-    [((PM2OnScreenButtons *)[PM2OnScreenButtons sharedBnManager]).tripLabel setFrame:CGRectMake(402,screenH-122,  300,  40)];
+    [((PM2OnScreenButtons *)[PM2OnScreenButtons sharedBnManager]).heightLabel setFrame:CGRectMake(402,screenH-80,  200,  40)];
+    [((PM2OnScreenButtons *)[PM2OnScreenButtons sharedBnManager]).tripLabel setFrame:CGRectMake(402,screenH-122,  200,  40)];
     [MapCenterIndicator sharedMapCenter:CGRectMake(screenW/2-10-1, (screenH-20)/2-10+9, 20, 20)];
     [((PM2OnScreenButtons *)[PM2OnScreenButtons sharedBnManager]).messageLabel setFrame:CGRectMake(0, screenH-40, screenW, 40)];
     //reposition tool bar

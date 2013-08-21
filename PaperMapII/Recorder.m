@@ -489,37 +489,54 @@ float mapLeftThereDirection=0;       //TODO: assign and keep it an appropriate v
 }
 -(void)showTripMeter{
     if(!_gpsRecording)return;
-    MainQ * mQ=[MainQ sharedManager];
-    UILabel * lb=(UILabel *)[mQ getTargetRef:TRIPMETER];
+    //MainQ * mQ=[MainQ sharedManager];
+    //UILabel * lb=(UILabel *)[mQ getTargetRef:TRIPMETER];
+    UILabel *lb=((PM2OnScreenButtons *)[PM2OnScreenButtons sharedBnManager]).tripLabel;
     if ([lb isEqual:@"0"]) {
         return;
     }
     NSString *tripString;
-    if (totalTrip<1000) {
-        tripString=[[NSString alloc] initWithFormat:@"%4.1fm (%.0f ft)", totalTrip,totalTrip*3.28084];
-    }else if (totalTrip<1600) {
-        tripString=[[NSString alloc] initWithFormat:@"%4.1fkm ", totalTrip/1000];
+    
+    bool bMetric=false;
+    if (bMetric) {
+        if (totalTrip<1000)
+            tripString=[[NSString alloc] initWithFormat:@"%4.3f", totalTrip/1000];
+        else
+            tripString=[[NSString alloc] initWithFormat:@"%4.1f", totalTrip/1000];
     }else{
-        tripString=[[NSString alloc] initWithFormat:@"%4.1fmiles", totalTrip/1609.344];
+        if (totalTrip<1000)
+            tripString=[[NSString alloc] initWithFormat:@"%.3f", totalTrip/1609.344];
+        else
+            tripString=[[NSString alloc] initWithFormat:@"%.1f", totalTrip/1609.344];
     }
     [lb setText:tripString];
 }
 -(void)showAltitude:(CLLocationDistance)altitude{
-    MainQ * mQ=[MainQ sharedManager];
-    UILabel * lb=(UILabel *)[mQ getTargetRef:ALTITUDELABEL];
+    //MainQ * mQ=[MainQ sharedManager];
+    //UILabel * lb=(UILabel *)[mQ getTargetRef:ALTITUDELABEL];
+    UILabel *lb=((PM2OnScreenButtons *)[PM2OnScreenButtons sharedBnManager]).heightLabel;
     if ([lb isEqual:@"0"]) {
         return;
     }
     NSString *altString;
-    altString=[[NSString alloc] initWithFormat:@"%4.1fm (%.0f ft) ", altitude, altitude*3.28084];
+    bool bMetric=false;
+    if (bMetric) {
+        altString=[[NSString alloc] initWithFormat:@"%4.1f", altitude];
+    }else
+        altString=[[NSString alloc] initWithFormat:@"%.0f", altitude*3.28084];
     [lb setText:altString];
 }
 -(void)showSpeed:(CLLocationSpeed)speed{
-    MainQ * mQ=[MainQ sharedManager];
-    UILabel * lb=(UILabel *)[mQ getTargetRef:SPEEDLABEL];
+    //MainQ * mQ=[MainQ sharedManager];
+    //UILabel * lb=(UILabel *)[mQ getTargetRef:SPEEDLABEL];
     //UILabel * altlb=(UILabel *)[mQ getTargetRef:ALTITUDELABEL];
     //UILabel * trplb=(UILabel *)[mQ getTargetRef:TRIPMETER];
+    UILabel *lb=((PM2OnScreenButtons *)[PM2OnScreenButtons sharedBnManager]).speedLabel;
+    UILabel *lb1=((PM2OnScreenButtons *)[PM2OnScreenButtons sharedBnManager]).heightLabel;
+    UILabel *lb2=((PM2OnScreenButtons *)[PM2OnScreenButtons sharedBnManager]).tripLabel;
     if ([lb isEqual:@"0"]) {
+        lb1.hidden=YES;
+        lb2.hidden=YES;
         return;
     }
     bool bMetric=false;
@@ -545,6 +562,8 @@ float mapLeftThereDirection=0;       //TODO: assign and keep it an appropriate v
 	}else{
 		lb.hidden=YES;  //<==YES;
 	}
+    lb1.hidden=lb.hidden;
+    lb2.hidden=lb.hidden;
     //altlb.hidden=trplb.hidden=lb.hidden;
 	//---------------
 }

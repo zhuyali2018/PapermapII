@@ -11,6 +11,7 @@
 		AA04240517526D91004970B4 /* TapDetectView.m in Sources */ = {isa = PBXBuildFile; fileRef = AA04240317526D91004970B4 /* TapDetectView.m */; };
 		AA05FAA91798DEBF00B78243 /* DrawingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA05FAA71798DEBF00B78243 /* DrawingViewController.m */; };
 		AA05FAAA1798DEBF00B78243 /* DrawingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AA05FAA81798DEBF00B78243 /* DrawingViewController.xib */; };
+		AA0E12CB17C4824B00311C61 /* OnScreenMeter.m in Sources */ = {isa = PBXBuildFile; fileRef = AA0E12CA17C4824B00311C61 /* OnScreenMeter.m */; };
 		AA511CD6174F1F0F00F46B1A /* MapSources.m in Sources */ = {isa = PBXBuildFile; fileRef = AA511CD5174F1F0F00F46B1A /* MapSources.m */; };
 		AA59B92817ADBF6400092996 /* checkbox0.png in Resources */ = {isa = PBXBuildFile; fileRef = AA59B92617ADBF6400092996 /* checkbox0.png */; };
 		AA59B92917ADBF6400092996 /* checkbox1.png in Resources */ = {isa = PBXBuildFile; fileRef = AA59B92717ADBF6400092996 /* checkbox1.png */; };
@@ -3551,6 +3552,8 @@
 		AA05FAA61798DEBF00B78243 /* DrawingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DrawingViewController.h; sourceTree = "<group>"; };
 		AA05FAA71798DEBF00B78243 /* DrawingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DrawingViewController.m; sourceTree = "<group>"; };
 		AA05FAA81798DEBF00B78243 /* DrawingViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DrawingViewController.xib; sourceTree = "<group>"; };
+		AA0E12C917C4824B00311C61 /* OnScreenMeter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnScreenMeter.h; sourceTree = "<group>"; };
+		AA0E12CA17C4824B00311C61 /* OnScreenMeter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OnScreenMeter.m; sourceTree = "<group>"; };
 		AA1B5345175EE308005355C3 /* AllImports.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AllImports.h; path = ../AllImports.h; sourceTree = "<group>"; };
 		AA37A63217A8C8CC0056F836 /* MenuDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuDataSource.h; sourceTree = "<group>"; };
 		AA511CD2174F152100F46B1A /* PM2Protocols.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PM2Protocols.h; sourceTree = "<group>"; };
@@ -5488,6 +5491,8 @@
 				AA8BC56117C21C9E00D433ED /* redButton.png */,
 				AAAAEF3017BDD81200166090 /* GreenBnOff100.png */,
 				AAAAEF3117BDD81300166090 /* GreenBnOn100.png */,
+				AA0E12C917C4824B00311C61 /* OnScreenMeter.h */,
+				AA0E12CA17C4824B00311C61 /* OnScreenMeter.m */,
 			);
 			name = "Buttons and Labels";
 			sourceTree = "<group>";
@@ -10956,6 +10961,7 @@
 				AA59B94017B210CC00092996 /* TextInput.m in Sources */,
 				AA59B95017B48CCA00092996 /* POIEditViewController.m in Sources */,
 				AA59B95417B48F2E00092996 /* UIChkButton.m in Sources */,
+				AA0E12CB17C4824B00311C61 /* OnScreenMeter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

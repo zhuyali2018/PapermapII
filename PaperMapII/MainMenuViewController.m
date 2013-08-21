@@ -127,6 +127,7 @@
     }
     Recorder * recorder=[Recorder sharedRecorder];
     recorder.POICreating=true;
+    [self dismissViewControllerAnimated:YES completion:NULL];  //for iphone
 }
 -(void)ModifyPoi:(NSString *) menuTitle{
     NSLog(@"Tap on the map to Modify a POI");

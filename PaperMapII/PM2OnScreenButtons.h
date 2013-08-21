@@ -13,6 +13,7 @@
 #import "MainMenuViewController.h"
 #import "OnOffButton.h"
 
+@class OnScreenMeter;
 @class GPSReceiver;
 @class MainMenuViewController;
 
@@ -41,9 +42,9 @@
 @property (nonatomic, strong) UIButton *unloadGPSTrackButton;
 @property (nonatomic, strong) UIButton *menuButton;
 
-@property (nonatomic, strong) UILabel * speedLabel;
-@property (nonatomic, strong) UILabel *heightLabel;
-@property (nonatomic, strong) UILabel *tripLabel;
+@property (nonatomic, strong) OnScreenMeter * speedLabel;
+@property (nonatomic, strong) OnScreenMeter *heightLabel;
+@property (nonatomic, strong) OnScreenMeter *tripLabel;
 @property (nonatomic, strong) UIView *baseView;
 
 @property (nonatomic, strong) Recorder * routRecorder;
@@ -78,4 +79,6 @@
 -(void)repositionButtonsFromX:(int)x Y:(int)y;
 -(void)positionStartBnWidth:(int)w Height:(int)h;
 -(void) colorPicker;
+
+-(void) setButtonsToPosition:(bool)bVisible;
 @end

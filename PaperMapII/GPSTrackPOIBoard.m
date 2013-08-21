@@ -292,4 +292,9 @@
 	[textField removeFromSuperview];
 	[self setNeedsDisplay];
 }
+//hide keyboard when return is pressed
+- (BOOL)textFieldShouldReturn:(UITextField *)theTextField {
+	[theTextField resignFirstResponder];
+	return YES;
+}
 @end

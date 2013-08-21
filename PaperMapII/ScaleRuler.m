@@ -11,6 +11,7 @@
 @implementation ScaleRuler
 
 @synthesize len,mid,end,bMetric;
+@synthesize startPoint,middlePoint,endPoint,unitLabel;
 
 +(id)shareScaleRuler:(CGRect)frame{
     static ScaleRuler *sharedMyManager = nil;
@@ -39,6 +40,13 @@
 		unitLabel.text=@"miles";
 		if(bMetric)
 			unitLabel.text=@"kms";
+        
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+            [startPoint setFont:[UIFont systemFontOfSize:12]];
+            [middlePoint setFont:[UIFont systemFontOfSize:12]];
+            [endPoint setFont:[UIFont systemFontOfSize:12]];
+            [unitLabel setFont:[UIFont systemFontOfSize:12]];
+        }
 		startPoint.backgroundColor=[UIColor clearColor];
 		middlePoint.backgroundColor=[UIColor clearColor];
 		endPoint.backgroundColor=[UIColor clearColor];
@@ -172,6 +180,23 @@
 	//CGFloat lat=(CGFloat)180*radLat/PI;				//degree on MAP
 	CGFloat widthInRadians=(CGFloat)2/earthDiameter/cos(radLat);
 	CGFloat widthInDegreePix=(CGFloat)180*widthInRadians*pixNum/PI/360;
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+        float a[21]={4000,2000,1000,800,400,200,100,80,40,20,10,8,4,2,1,0.5,0.25,0.125,0.0625,0.03125,.015625};
+        for (int i=0; i<20; i++) {
+            if((widthInDegreePix<200.0/a[i])&&(widthInDegreePix>100.0/a[i])){
+                len=widthInDegreePix*a[i];
+                mid=0.5*a[i];
+                end=1*a[i];
+                break;
+            }
+            mid=0;
+        }
+
+        [self setNeedsLayout];
+        [self setNeedsDisplay];
+        return;        
+    }
 	if((widthInDegreePix<600.0/4000)&&(widthInDegreePix>300.0/4000)){
 		len=widthInDegreePix*4000;
 		 mid=0.5*4000;

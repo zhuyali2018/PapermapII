@@ -16,6 +16,8 @@
 #import "MainQ.h"
 #import "PM2Protocols.h"
 #import "MenuItem.h"
+#import "OnScreenMeter.h"
+
 @implementation PM2OnScreenButtons
 
 @synthesize bnStart;
@@ -239,7 +241,7 @@
     if (centerBn.withGroup)   [centerBn    setFrame:CGRectMake(x+200, y=y+s+1, w, h)];
     if (gpsButton.withGroup)  [gpsButton   setFrame:CGRectMake(x,     y,     w, h)];
     [colorButton            setFrame:CGRectMake(x, y=y+s+1, w, h)];
-    [mapTypeButton          setFrame:CGRectMake(x+w/2, 20, w/2, h/2)]; y=y+s+1-300;   //right upper corner sat button
+    [mapTypeButton          setFrame:CGRectMake(x+w/2, 30, w/2, h/2)]; y=y+s+1-300;   //right upper corner sat button
     [menuButton             setFrame:CGRectMake(x, y=y+s+1, w, h)];
 }
 #pragma mark ------------drawing button methods----------------
@@ -631,7 +633,7 @@ extern bool centerPos;
     [_routRecorder unloadDrawings];
     [mapScrollView refresh];
 }
--(void)add_SpeedPanel{
+-(void)add_SpeedPanel1{
     //Speed panel
     //int screenW=[[UIScreen mainScreen] applicationFrame].size.width;
 	//int screenH=[[UIScreen mainScreen] applicationFrame].size.height;
@@ -670,34 +672,82 @@ extern bool centerPos;
     [_baseView addSubview:speedLabel];
     [[MainQ sharedManager] register:speedLabel withID:SPEEDLABEL];
 }
+-(void)add_SpeedPanel{
+    int screenH=[_baseView frame].size.height;
+	speedLabel=[[OnScreenMeter alloc] initWithFrame:CGRectMake(0,screenH-180, 400, 140)];
+    [speedLabel setFont:[UIFont boldSystemFontOfSize:130]];
+    [speedLabel.unitLabel setFrame:CGRectMake(330, 90, 60, 40)];
+	[_baseView addSubview:speedLabel];
+	speedLabel.hidden=YES;  //TODO: change to YES;
+
+    [speedLabel.unitLabel setFont:[UIFont italicSystemFontOfSize:18]];
+    bool bMetric=false;     //TODO: do sth with this line
+    if(bMetric){
+		//bMetric=TRUE;
+		[speedLabel.unitLabel setText:@"KM/Hr"];
+	}else {
+		//bMetric=FALSE;
+		[speedLabel.unitLabel setText:@"MPH"];
+	}
+}
 -(void)add_HeightPanel{
     int screenH=[_baseView frame].size.height;
-	heightLabel=[[UILabel alloc] initWithFrame:CGRectMake(402,screenH-80, 300, 40)];
-	[heightLabel setBackgroundColor:[UIColor colorWithRed:0.2 green:0.4 blue:0.4 alpha:0.5]];
-	[heightLabel setTextColor:[UIColor yellowColor]];
-	[heightLabel setShadowColor:[UIColor blackColor]];
-	[heightLabel setShadowOffset:CGSizeMake(2.0, 2.0)];
-	[heightLabel setFont:[UIFont boldSystemFontOfSize:30]];
-    //heightLabel.hidden=YES;
-	//[heightLabel setText:[NSString stringWithFormat:@" %4.1fm ",128.2]];
-	[heightLabel setTextAlignment:UITextAlignmentRight];
+	heightLabel=[[OnScreenMeter alloc] initWithFrame:CGRectMake(402,screenH-80, 200, 40)];
+    [heightLabel setFont:[UIFont boldSystemFontOfSize:30]];
+    [heightLabel.unitLabel setFrame:CGRectMake(140, 10, 60, 40)];
+    [heightLabel.unitLabel setFont:[UIFont italicSystemFontOfSize:18]];
     [_baseView addSubview:heightLabel];
-    [[MainQ sharedManager] register:heightLabel withID:ALTITUDELABEL];  //register to receive text for displaying and other settings
+    heightLabel.hidden=YES;
+    bool bMetric=false;  //TODO:replace this with settings
+	if(bMetric){
+		[self.heightLabel.unitLabel setText:@"m"];
+	}else {
+		[self.heightLabel.unitLabel setText:@"feet"];
+	}
 }
 -(void)add_TripMeter{
     int screenH=[_baseView frame].size.height;
-	tripLabel=[[UILabel alloc] initWithFrame:CGRectMake(402,screenH-122, 300, 40)];
-	[tripLabel setBackgroundColor:[UIColor colorWithRed:0.2 green:0.7 blue:0.2 alpha:0.5]];
-	[tripLabel setTextColor:[UIColor yellowColor]];
-	[tripLabel setShadowColor:[UIColor blackColor]];
-	[tripLabel setShadowOffset:CGSizeMake(2.0, 2.0)];
+	tripLabel=[[OnScreenMeter alloc] initWithFrame:CGRectMake(402,screenH-122, 200, 40)];
 	[tripLabel setFont:[UIFont boldSystemFontOfSize:30]];
-    //tripLabel.hidden=YES;
-	//[tripLabel setText:[NSString stringWithFormat:@" %4.1fm ",128.2]];
-	[tripLabel setTextAlignment:UITextAlignmentRight];
+    [tripLabel.unitLabel setFrame:CGRectMake(140, 10, 60, 40)];
+    [tripLabel.unitLabel setFont:[UIFont italicSystemFontOfSize:18]];
     [_baseView addSubview:tripLabel];
-    [[MainQ sharedManager] register:tripLabel withID:TRIPMETER];
+    tripLabel.hidden=YES;
+    bool bMetric=false;  //TODO:replace this with settings
+	if(bMetric){
+		[self.tripLabel.unitLabel setText:@"kms"];
+	}else {
+		[self.tripLabel.unitLabel setText:@"miles"];
+	}
 }
+//-(void)add_HeightPanel{
+//    int screenH=[_baseView frame].size.height;
+//	heightLabel=[[UILabel alloc] initWithFrame:CGRectMake(402,screenH-80, 300, 40)];
+//	[heightLabel setBackgroundColor:[UIColor colorWithRed:0.2 green:0.4 blue:0.4 alpha:0.5]];
+//	[heightLabel setTextColor:[UIColor yellowColor]];
+//	[heightLabel setShadowColor:[UIColor blackColor]];
+//	[heightLabel setShadowOffset:CGSizeMake(2.0, 2.0)];
+//	[heightLabel setFont:[UIFont boldSystemFontOfSize:30]];
+//    //heightLabel.hidden=YES;
+//	//[heightLabel setText:[NSString stringWithFormat:@" %4.1fm ",128.2]];
+//	[heightLabel setTextAlignment:UITextAlignmentRight];
+//    [_baseView addSubview:heightLabel];
+//    [[MainQ sharedManager] register:heightLabel withID:ALTITUDELABEL];  //register to receive text for displaying and other settings
+//}
+//-(void)add_TripMeter{
+//    int screenH=[_baseView frame].size.height;
+//	tripLabel=[[UILabel alloc] initWithFrame:CGRectMake(402,screenH-122, 300, 40)];
+//	[tripLabel setBackgroundColor:[UIColor colorWithRed:0.2 green:0.7 blue:0.2 alpha:0.5]];
+//	[tripLabel setTextColor:[UIColor yellowColor]];
+//	[tripLabel setShadowColor:[UIColor blackColor]];
+//	[tripLabel setShadowOffset:CGSizeMake(2.0, 2.0)];
+//	[tripLabel setFont:[UIFont boldSystemFontOfSize:30]];
+//    //tripLabel.hidden=YES;
+//	//[tripLabel setText:[NSString stringWithFormat:@" %4.1fm ",128.2]];
+//	[tripLabel setTextAlignment:UITextAlignmentRight];
+//    [_baseView addSubview:tripLabel];
+//    [[MainQ sharedManager] register:tripLabel withID:TRIPMETER];
+//}
 -(void)add_GPSArrow{
     arrow=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"Arrow.png"]];
     [_baseView addSubview:arrow];
