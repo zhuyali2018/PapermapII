@@ -117,7 +117,7 @@
     }
     if ([Recorder sharedRecorder].POIMoving) {  //when touch up, end the poi moving state
         [Recorder sharedRecorder].POIMoving=false;
-        [[DrawableMapScrollView sharedMap] setScrollEnabled:NO]; 
+        [[DrawableMapScrollView sharedMap] setScrollEnabled:YES];
         return;
     }
     NSLOG10(@"singleTapAtPoint - need to call external handler here 2");

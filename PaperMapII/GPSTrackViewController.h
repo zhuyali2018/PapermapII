@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "GPSTrack.h"
 #import "PropertyButton.h"
-@interface GPSTrackViewController : UIViewController
+@interface GPSTrackViewController : UIViewController<UITextFieldDelegate>
 @property (nonatomic,strong) GPSTrack * gpsTrack;
 @property ListType listType;
 @property (nonatomic,strong) IBOutlet UILabel * gpsTrackName;

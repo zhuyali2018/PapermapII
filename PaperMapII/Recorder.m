@@ -96,6 +96,7 @@ bool centerPos;
     lastLoc=0;
     currentLocation=0;
     totalTrip=0;
+    totalTripRealTime=0;
     n=0;
     [self saveAllGpsTracks];  //to provent from crashing and losing data during GPS Recording
 }
@@ -410,31 +411,22 @@ bool centerPos;
     if(!_gpsRecording){   //if not recording, do not create the node
         return;
     }
-    //if(self.gpsTrack.timestamp < newLocation.timestamp)
-    //    return; //do not record those before the track was created
-    
-     //========Accuracy is enough, go ahead and record it=================
     double Lat=newLocation.coordinate.latitude;
 	double Long=newLocation.coordinate.longitude;
 	
-	//int res=((MapScrollView *)[DrawableMapScrollView sharedMap]).maplevel;
 	int resM=18;   //use max resolution for best accuracy  //v163
 	
 	int xM=pow(2,resM)*0.711111111*(Long+180);						 //256/360=0.7111111111
 	int yM=pow(2,resM)*1.422222222*(90-[self GetScreenY:Lat]);		 //256/180=1.4222222222
 	
-    //x,y used to center the map below
-	//int x=pow(2,res)*0.711111111*(Long+180);						 //256/360=0.7111111111
-	//int y=pow(2,res)*1.422222222*(90-[self GetScreenY:Lat]);		 //256/180=1.4222222222
-	
-     //show speed panel
-    [self showSpeed:newLocation.speed];
-    [self showAltitude:newLocation.altitude];
+    //show speed panel
+    [self showSpeed:newLocation.speed];         //speed update every second
+    [self showAltitude:newLocation.altitude];   //alt update every second
     
     if(newLocation.horizontalAccuracy>10){ //if acuracy is not accurate enough, do nothing further
         return;
 	}
-    
+    //========Accuracy is enough, go ahead and record it=================
 	CGPoint GPSPoint;
 	GPSPoint.x=xM;
 	GPSPoint.y=yM;
@@ -442,11 +434,10 @@ bool centerPos;
     
     //center the current position
     if(centerPos)
-        //[self centerPositionAtX:x Y:y];
         [[DrawableMapScrollView sharedMap] centerMapTo:node];
 
     //add a gps node to our node array for gps track
-    [self addGpsNode:node with:newLocation];   
+    [self addGpsNode:node with:newLocation];
     [self.gpsTrack saveNodes];        //TODO: may need to change to saving every 5 nodes or more for performance
     [self showTripMeter];
     [self updateArrowDirection:newLocation.course*PI/180];
@@ -499,15 +490,19 @@ float mapLeftThereDirection=0;       //TODO: assign and keep it an appropriate v
     
     bool bMetric=false;
     if (bMetric) {
-        if (totalTrip<1000)
-            tripString=[[NSString alloc] initWithFormat:@"%4.3f", totalTrip/1000];
+        if (totalTripRealTime<10000)  //less than 10km
+            tripString=[[NSString alloc] initWithFormat:@"%4.3f ", totalTripRealTime/1000];
+        else if (totalTripRealTime<20000)  //less than 20km
+            tripString=[[NSString alloc] initWithFormat:@"%4.2f", totalTripRealTime/1000];
         else
-            tripString=[[NSString alloc] initWithFormat:@"%4.1f", totalTrip/1000];
+            tripString=[[NSString alloc] initWithFormat:@"%4.1f", totalTripRealTime/1000];
     }else{
-        if (totalTrip<1000)
-            tripString=[[NSString alloc] initWithFormat:@"%.3f", totalTrip/1609.344];
+        if (totalTripRealTime<10000)  //less than 10km
+            tripString=[[NSString alloc] initWithFormat:@"%.3f", totalTripRealTime/1609.344];
+        else if (totalTripRealTime<20000)  //less than 20km
+            tripString=[[NSString alloc] initWithFormat:@"%.2f", totalTripRealTime/1609.344];
         else
-            tripString=[[NSString alloc] initWithFormat:@"%.1f", totalTrip/1609.344];
+            tripString=[[NSString alloc] initWithFormat:@"%.1f", totalTripRealTime/1609.344];
     }
     [lb setText:tripString];
 }
@@ -571,37 +566,40 @@ bool bStartGPSNode;
 CLLocation *lastLoc;
 CLLocation *currentLocation;
 CLLocationDistance totalTrip;
+CLLocationDistance totalTripRealTime;
 int n=0;  //gps node counter
 -(void) addGpsNode:(GPSNode *)node with:(CLLocation *)newLocation{
     bool bFarEnough=false;
     
     CLLocationSpeed speed=newLocation.speed;
-    int minDistance=20;
+    int minDistance=25;
 	if(speed>0.6){                 //>1.34 mph
 		//speed sensitive point distance on gps track, added on 10/24/2010
-		if (speed<2) {			 //about 4 mph
-			minDistance=4;       //max accuracy is 5 meters
-		}else if (speed<5) {	 //about 11 mph
-			minDistance=5;
-		}else if (speed > 20) {  //about 45 mph
-			minDistance=20;
-        }else if (speed > 30) {  //about 63 mph
+//		if (speed<2) {			 //about 4 mph
+//			minDistance=4;       //max accuracy is 5 meters
+//		}else if (speed<5) {	 //about 11 mph
+//			minDistance=5;
+//		}else if (speed > 20) {  //about 45 mph
+//			minDistance=20;
+//      }else
+        if (speed > 30) {  //about 63 mph
 			minDistance=30;
 		}else if (speed > 100) {  //about 225 mph, for airplane
             minDistance=500;
         }
     }
-    
+    CLLocationDistance distance=0;
     if(bStartGPSNode){
         bFarEnough=true;        //log the first location
         lastLoc=newLocation;
         bStartGPSNode=false;    //missed this, so that distance never got added up
     }else{			// if not first node, check the minimu distance traveled before add a node:
-		CLLocationDistance distance=[newLocation distanceFromLocation:lastLoc];
+		distance=[newLocation distanceFromLocation:lastLoc];
 		if(distance>minDistance){
 			lastLoc=newLocation;
 			bFarEnough=true;
             totalTrip+=distance;        //calculate the trip distance
+            totalTripRealTime=totalTrip;
             node.distanceFromLastNode=distance;  //distanceFromLastNode is set here
 		}
     }
@@ -616,6 +614,9 @@ int n=0;  //gps node counter
     if(bFarEnough){
         self.gpsTrack.nodes=[self addGPSNode:node to:self.gpsTrack.nodes];
         self.gpsTrack.tripmeter=totalTrip;
+    }else{ //not far enough enough
+        self.gpsTrack.tripmeter=totalTrip+distance;   //not far enough, but still need to update every seconds the trip meter!
+        totalTripRealTime=totalTrip+distance;
     }
     if (_gpsRecording==true) {
         lastGpsNode=[node copy];  //TODO: handle the lastGPSNode properly, if no need, just delete it!
@@ -627,26 +628,6 @@ int n=0;  //gps node counter
     //[[DrawableMapScrollView sharedMap].gpsTrackPOIBoard setNeedsDisplay];
     [[DrawableMapScrollView sharedMap] refresh];
 }
-//-(void)centerPositionAtX:(int) x Y:(int) y{
-//    DrawableMapScrollView * mapWindow=[DrawableMapScrollView sharedMap];
-//    int adjX=[mapWindow.gpsTrackPOIBoard ModeAdjust:x res:mapWindow.maplevel];
-//    CGRect  visibleBounds = [mapWindow bounds];     //Check this should return a size of 1280x1280 instead of 1024x768 for rotating purpose
-//	CGFloat zm=[mapWindow zoomScale];
-//	CGPoint offset=CGPointMake(adjX*zm-visibleBounds.size.width/2, y*zm-visibleBounds.size.height/2);
-//	[mapWindow setContentOffset:offset animated:YES];   //this is where it makes map move smoothly
-//}
-/*
--(void) addGPSNode:(GPSNode *)node{
-    if(!_gpsRecording){   //if not recording, do not create the node for the node
-        return;
-    }
-    if (!self.gpsTrack.gpsNodes) {
-        self.gpsTrack.gpsNodes=[[NSArray alloc]initWithObjects:node,nil];
-    }else{
-        self.gpsTrack.gpsNodes=[self.gpsTrack.gpsNodes arrayByAddingObject:node];
-    }
-}
- */
 -(NSArray *) addGPSNode:(GPSNode *)node to:(NSArray *)arrGpsNodes{
     if(!_gpsRecording){   //if not recording, do not create the node for the node
         return arrGpsNodes;

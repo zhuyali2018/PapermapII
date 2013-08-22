@@ -53,6 +53,8 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     txtEdit.hidden=YES;
+    txtEdit.clearButtonMode=UITextFieldViewModeWhileEditing;
+    txtEdit.delegate=self;
     if (gpsTrack.folder) {
         lbGpsTrackLength.hidden=YES;
         propBn.hidden=YES;
@@ -185,5 +187,9 @@
     
     self.lbNumberOfNodes.text=[[NSString alloc]initWithFormat:@"%3d",[gpsTrack.nodes count]];
 }
-
+#pragma mark------UITextFieldDelegate Methods------------------------
+- (BOOL)textFieldShouldReturn:(UITextField *)theTextField {
+	[theTextField resignFirstResponder];
+	return YES;
+}
 @end

@@ -32,7 +32,8 @@
      //self.clearsSelectionOnViewWillAppear = NO;
     //self.tableView.allowsSelection=NO;
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    plusButton=[[UIBarButtonItem alloc] initWithTitle:@"+" style:UIBarButtonItemStyleDone target:self action:@selector(addAFolder:)];
+    
+    plusButton=[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addAFolder:)];
     self.navigationItem.rightBarButtonItem = self.editButtonItem;
     self.tableView.allowsSelectionDuringEditing=TRUE; // this line enables the selection during editing mode
     

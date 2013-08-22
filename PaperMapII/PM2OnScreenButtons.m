@@ -241,7 +241,7 @@
     if (centerBn.withGroup)   [centerBn    setFrame:CGRectMake(x+200, y=y+s+1, w, h)];
     if (gpsButton.withGroup)  [gpsButton   setFrame:CGRectMake(x,     y,     w, h)];
     [colorButton            setFrame:CGRectMake(x, y=y+s+1, w, h)];
-    [mapTypeButton          setFrame:CGRectMake(x+w/2, 30, w/2, h/2)]; y=y+s+1-300;   //right upper corner sat button
+    [mapTypeButton          setFrame:CGRectMake(x+w/2, 10, w/2, h/2)]; y=y+s+1-300;   //right upper corner sat button
     [menuButton             setFrame:CGRectMake(x, y=y+s+1, w, h)];
 }
 #pragma mark ------------drawing button methods----------------

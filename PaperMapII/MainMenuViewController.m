@@ -149,6 +149,7 @@
     Recorder * recorder=[Recorder sharedRecorder];
     recorder.POIMoving=true;
     [[DrawableMapScrollView sharedMap] setScrollEnabled:NO];
+    [self dismissViewControllerAnimated:YES completion:NULL];
 }
 -(void)GotoAPoi:(NSString *) menuTitle{
     NSLog(@"Tap on the map to GOTO a POI");
@@ -196,6 +197,7 @@
             if([OSB.menuPopover isPopoverVisible]){
                 [OSB.menuPopover dismissPopoverAnimated:YES];
             }
+            [self dismissViewControllerAnimated:YES completion:NULL];
             return;
         }
         //if folder on POI list

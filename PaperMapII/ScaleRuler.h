@@ -18,6 +18,15 @@
 	UILabel * endPoint;
 	UILabel * unitLabel;
     BOOL    bMetric;
+    int lineWidth;
+    int height;
+    int unitPos;
+    int vPos;
+    int mkvPos;
+    int unitvPos;
+    int vOffset;
+    int h;
+    int lbExt;
 }
 @property int len;
 @property CGFloat mid,end;

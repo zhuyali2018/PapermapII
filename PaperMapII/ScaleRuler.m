@@ -26,10 +26,17 @@
         // Initialization code
 		[self setFrame:frame];
 		len=500;
-		startPoint=[[UILabel alloc]initWithFrame:CGRectMake(5,0,20,20)];
-		middlePoint=[[UILabel alloc]initWithFrame:CGRectMake(0,0,20,20)];
-		endPoint=[[UILabel alloc]initWithFrame:CGRectMake(0,0,20,20)];
-		unitLabel=[[UILabel alloc]initWithFrame:CGRectMake(0,0,20,20)];
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+            startPoint=[[UILabel alloc]initWithFrame:CGRectMake(5,-3,20,20)];
+            middlePoint=[[UILabel alloc]initWithFrame:CGRectMake(0,-3,20,20)];
+            endPoint=[[UILabel alloc]initWithFrame:CGRectMake(0,-3,20,20)];
+            unitLabel=[[UILabel alloc]initWithFrame:CGRectMake(0,3,20,20)];
+        }else{
+            startPoint=[[UILabel alloc]initWithFrame:CGRectMake(5,0,20,20)];
+            middlePoint=[[UILabel alloc]initWithFrame:CGRectMake(0,0,20,20)];
+            endPoint=[[UILabel alloc]initWithFrame:CGRectMake(0,0,20,20)];
+            unitLabel=[[UILabel alloc]initWithFrame:CGRectMake(0,0,20,20)];
+        }
 		[self addSubview:startPoint];
 		[self addSubview:middlePoint];
 		[self addSubview:endPoint];
@@ -40,12 +47,29 @@
 		unitLabel.text=@"miles";
 		if(bMetric)
 			unitLabel.text=@"kms";
-        
+        lineWidth=3;
+        height=30;
+        unitPos=35;
+        vPos=0;
+        mkvPos=0;
+        unitvPos=10;
+        vOffset=5;
+        h=25;
+        lbExt=90;
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
             [startPoint setFont:[UIFont systemFontOfSize:12]];
             [middlePoint setFont:[UIFont systemFontOfSize:12]];
             [endPoint setFont:[UIFont systemFontOfSize:12]];
             [unitLabel setFont:[UIFont systemFontOfSize:12]];
+            lineWidth=2;
+            height=21;
+            unitPos=20;
+            vPos=4;
+            mkvPos=-3;
+            unitvPos=3;
+            vOffset=3;
+            h=17;
+            lbExt=50;
         }
 		startPoint.backgroundColor=[UIColor clearColor];
 		middlePoint.backgroundColor=[UIColor clearColor];
@@ -128,20 +152,20 @@
 		self.hidden=NO;
 	}
 	
-	[self setFrame:CGRectMake(30, 0,len+90,30)];
+	[self setFrame:CGRectMake(30, vPos,len+lbExt,height)];
 	
-	int h=25;		//ruler y position
+	//int h=25;		//ruler y position
     // Drawing code
-	[self drawLineFrom:CGPointMake(10,h) to:CGPointMake(len+10, h) withColor:[UIColor yellowColor] andWidth:3];   //ruler
-	[self drawLineFrom:CGPointMake(10+1,h) to:CGPointMake(10+1, h-5) withColor:[UIColor yellowColor] andWidth:3];    //ruler starting end
-	[self drawLineFrom:CGPointMake(len+10-1,h-5) to:CGPointMake(len+10-1, h) withColor:[UIColor yellowColor] andWidth:3];    //ruler right end
-	[self drawLineFrom:CGPointMake(10+len/2,h-5) to:CGPointMake(10+len/2, h) withColor:[UIColor yellowColor] andWidth:3]; //ruler middle point
-	[self drawLineFrom:CGPointMake(10+len/4,h-5) to:CGPointMake(10+len/4, h) withColor:[UIColor yellowColor] andWidth:1]; //ruler 1/4 point
-	[self drawLineFrom:CGPointMake(10+len*.75,h-5) to:CGPointMake(10+len*.75, h) withColor:[UIColor yellowColor] andWidth:1]; //ruler 3/4 point
+	[self drawLineFrom:CGPointMake(10,h) to:CGPointMake(len+10, h) withColor:[UIColor yellowColor] andWidth:lineWidth];   //ruler
+	[self drawLineFrom:CGPointMake(10+1,h) to:CGPointMake(10+1, h-5) withColor:[UIColor yellowColor] andWidth:lineWidth];    //ruler starting end
+	[self drawLineFrom:CGPointMake(len+10-1,h-vOffset) to:CGPointMake(len+10-1, h) withColor:[UIColor yellowColor] andWidth:lineWidth];    //ruler right end
+	[self drawLineFrom:CGPointMake(10+len/2,h-vOffset) to:CGPointMake(10+len/2, h) withColor:[UIColor yellowColor] andWidth:lineWidth]; //ruler middle point
+	[self drawLineFrom:CGPointMake(10+len/4,h-vOffset) to:CGPointMake(10+len/4, h) withColor:[UIColor yellowColor] andWidth:1]; //ruler 1/4 point
+	[self drawLineFrom:CGPointMake(10+len*.75,h-vOffset) to:CGPointMake(10+len*.75, h) withColor:[UIColor yellowColor] andWidth:1]; //ruler 3/4 point
 	
-	[middlePoint setFrame:CGRectMake(len/2, 0, 50, 20)];
-    [endPoint setFrame:CGRectMake(len, 0, 50, 20)];
-	[unitLabel setFrame:CGRectMake(len+35, 10, 50, 20)];
+	[middlePoint setFrame:CGRectMake(len/2,        mkvPos, 50, 20)];
+    [endPoint    setFrame:CGRectMake(len,          mkvPos, 50, 20)];
+	[unitLabel   setFrame:CGRectMake(len+unitPos,  unitvPos, 50, 20)];
 }
 
 -(void)drawLineFrom:(CGPoint) p0 to:(CGPoint)p1 withColor:(UIColor *)color andWidth:(CGFloat)width{
