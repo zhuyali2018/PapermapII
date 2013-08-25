@@ -54,6 +54,7 @@
 @property (nonatomic, strong) GPSReceiver * gpsReceiver;
 @property (strong, nonatomic) UIPopoverController* colorPickPopover;
 @property (strong, nonatomic) UIPopoverController* menuPopover;
+@property (strong, nonatomic) UIPopoverController* gotoPopover;
 @property (strong, nonatomic) LinePropertyViewController * linePropertyViewCtrlr;
 @property (strong, nonatomic) MainMenuViewController * menuController;
 @property (nonatomic, strong) UIImageView * arrow;

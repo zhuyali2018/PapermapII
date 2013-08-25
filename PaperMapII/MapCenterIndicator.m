@@ -54,6 +54,14 @@
 - (void)drawRect:(CGRect)rect {
     // Drawing code
 	if(bShowCenter){
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+            [self drawLineFrom:CGPointMake(04,10) to:CGPointMake(16, 10) withColor:[UIColor yellowColor] andWidth:3];
+            [self drawLineFrom:CGPointMake(10,04) to:CGPointMake(10, 16) withColor:[UIColor yellowColor] andWidth:3];
+            
+            [self drawLineFrom:CGPointMake(5,10) to:CGPointMake(15, 10) withColor:[UIColor blueColor] andWidth:1];
+            [self drawLineFrom:CGPointMake(10, 5) to:CGPointMake(10, 15) withColor:[UIColor blueColor] andWidth:1];
+            return;
+        }
         [self drawLineFrom:CGPointMake(0,10) to:CGPointMake(20, 10) withColor:[UIColor yellowColor] andWidth:5];
 		[self drawLineFrom:CGPointMake(10, 0) to:CGPointMake(10, 20) withColor:[UIColor yellowColor] andWidth:5];
         

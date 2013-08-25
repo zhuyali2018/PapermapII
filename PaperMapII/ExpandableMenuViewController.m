@@ -8,6 +8,7 @@
 
 #import "ExpandableMenuViewController.h"
 #import "MenuNode.h"
+#import "AllImports.h"
 
 @implementation ExpandableMenuViewController
 @synthesize  trackList;
@@ -382,7 +383,8 @@
     MenuNode * mn=[menuList objectAtIndex:indexPath.row];
     if (mn.folder) {
         return UITableViewCellAccessoryDetailDisclosureButton;
-    }
+    }else if(self.id==SETTING)
+        return UITableViewCellAccessoryNone;
 	return UITableViewCellAccessoryDisclosureIndicator;
 }
 -(void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath{

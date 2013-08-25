@@ -16,6 +16,7 @@
 #import "PM2OnScreenButtons.h"
 #import "POIEditViewController.h"
 #import "LinePropertyViewController.h"
+#import "SettingItem.h"
 
 @implementation MainMenuViewController
 
@@ -54,6 +55,7 @@
 
         NSArray * helpMenu=[[NSArray alloc]initWithObjects:
                     [[MenuItem alloc]initWithTitle:@"Pick Color"],
+                    [[MenuItem alloc]initWithTitle:@"Settings"],
                     [[MenuItem alloc]initWithTitle:@"Help"],
                     [[MenuItem alloc]initWithTitle:@"Send Email to Developer"],
                     [[MenuItem alloc]initWithTitle:@"Receive File"],
@@ -72,11 +74,14 @@
 
 #define GPSTRACKS   0
 #define DRAWINGS    0
+
 #define CREATEPOI   0
 #define MODIFYPOI   1
 #define MOVEAPOI    2
 #define GOTOAPOI    3
+
 #define PICKCOLOR   0
+#define SETTINGS    1
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -89,22 +94,39 @@
     ((MenuItem *)menuMatrix[POI_SECTION][MOVEAPOI]).menuItemHandler=@selector(MoveAPoi:);
     ((MenuItem *)menuMatrix[POI_SECTION][GOTOAPOI]).menuItemHandler=@selector(GotoAPoi:);
     ((MenuItem *)menuMatrix[HELP_SECTION][PICKCOLOR]).menuItemHandler=@selector(PickColor);
+    ((MenuItem *)menuMatrix[HELP_SECTION][SETTINGS]).menuItemHandler=@selector(Settings:);
 }
 #pragma mark - -------------menu item handlers-------------------
-//-(void)PickColor{
-//    NSLog(@"Tap on the PickColor");
+-(void)Settings:(NSString *)menuTitle{
+    NSLog(@"Tap on Settings");
 //    PM2OnScreenButtons * OSB=[PM2OnScreenButtons sharedBnManager];
-////    if([OSB.menuPopover isPopoverVisible]){
-////        [OSB.menuPopover dismissPopoverAnimated:YES];
-////    }
-//    if (!OSB.linePropertyViewCtrlr) {
-//        OSB.linePropertyViewCtrlr=[[LinePropertyViewController alloc] init];
-//        [OSB.linePropertyViewCtrlr setTitle:@"Line Property setting"];
+//    if([OSB.menuPopover isPopoverVisible]){
+//        [OSB.menuPopover dismissPopoverAnimated:YES];
 //    }
-//    
-//    //UINavigationController * ctrl=[[UINavigationController alloc]initWithRootViewController:linePropertyViewCtrlr];
-//    [self.navigationController pushViewController:OSB.linePropertyViewCtrlr animated:YES];
-//}
+    
+    NSArray * settingArray=[[NSArray alloc]initWithObjects:
+                        [[SettingItem alloc]initWithTitle:@"Show Scale Ruler"],
+                        [[SettingItem alloc]initWithTitle:@"Show Map Center"],
+                        [[SettingItem alloc]initWithTitle:@"Hide Status Bar"],
+                        [[SettingItem alloc]initWithTitle:@"Auto Rotate"],
+                        [[SettingItem alloc]initWithTitle:@"Direction Up On GPS"],
+                        [[SettingItem alloc]initWithTitle:@"Use Cached Map Only"],
+                        [[SettingItem alloc]initWithTitle:@"Use Internet Map Only"],
+                        [[SettingItem alloc]initWithTitle:@"Show Map Level"],
+                        [[SettingItem alloc]initWithTitle:@"Hide Speed Meter"],
+                        [[SettingItem alloc]initWithTitle:@"Hide Altitude Meter"],
+                        [[SettingItem alloc]initWithTitle:@"Hide Trip Meter"],
+                        nil];
+                     
+    ExpandableMenuViewController *xmvc = [[ExpandableMenuViewController alloc] initWithStyle:UITableViewStylePlain];
+    xmvc.trackList=[NSMutableArray arrayWithCapacity:11];
+    [xmvc.trackList addObjectsFromArray:settingArray];
+    //xmvc.trackHandlerDelegate=self;  //this line is not needed becaus settings should not lead to a new tableview
+    xmvc.id=SETTING;
+    NSLOG10(@"executing settings from %@",menuTitle);
+    [xmvc setTitle:menuTitle];
+    [self.navigationController pushViewController:xmvc animated:YES];
+}
 -(void)PickColor{
     NSLog(@"Tap on the PickColor");
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone){
@@ -202,6 +224,8 @@
         }
         //if folder on POI list
         tk=poi;
+    }else if (myid==SETTINGS) {
+        return; //do nothing for settings here
     }else
         tk=[Recorder sharedRecorder].gpsTrackArray[row];
     
@@ -297,7 +321,6 @@
 	}
     
     label.text=((MenuItem *)menuMatrix[section][indexPath.row]).text;
-    
     //backgroud color settings for different sections
 	if (section==DRAW_SECTION) {
 		label.backgroundColor=[UIColor colorWithRed:0.2 green:0.8 blue:0.0 alpha:0.4];
@@ -309,8 +332,7 @@
 		label.backgroundColor=[UIColor colorWithRed:0.6 green:0.3 blue:0.0 alpha:0.4];
 	}else  //HELP_SECTION
 		label.backgroundColor=[UIColor colorWithRed:0.4 green:0.4 blue:0.0 alpha:0.4];
-    labe1.backgroundColor=label.backgroundColor;
-    
+    labe1.backgroundColor=label.backgroundColor;    
     return cell;
 }
 

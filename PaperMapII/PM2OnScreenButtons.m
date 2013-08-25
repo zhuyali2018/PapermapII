@@ -17,6 +17,7 @@
 #import "PM2Protocols.h"
 #import "MenuItem.h"
 #import "OnScreenMeter.h"
+#import "POI.h"
 
 @implementation PM2OnScreenButtons
 
@@ -35,7 +36,7 @@
 @synthesize messageLabel;
 @synthesize gpsReceiver;
 @synthesize colorPickPopover;
-@synthesize menuPopover;
+@synthesize menuPopover,gotoPopover;
 @synthesize linePropertyViewCtrlr;
 @synthesize menuController;
 
@@ -157,6 +158,44 @@
 	//[self displaySettingsOrUndoDrawing:nil];   //load the settings without showing so that the line property for drawing and GPS track could be available
 }
 #pragma mark -----------------------------
+-(void)GotoMenu{
+    NSLog(@"goto button tapped");
+    if (gotoPopover == nil) {
+        Class cls = NSClassFromString(@"UIPopoverController");
+        if (cls != nil) {
+            NSLog(@"Tap on the map to GOTO a POI");
+            //Showing POI list
+            ExpandableMenuViewController *xmvc = [[ExpandableMenuViewController alloc] initWithStyle:UITableViewStylePlain];
+            xmvc.trackList=[Recorder sharedRecorder].poiArray;
+            xmvc.trackHandlerDelegate=self;
+            xmvc.id=GOTOPOI;
+            [xmvc setTitle:@"Goto a POI"];            
+			UINavigationController * ctrl=[[UINavigationController alloc]initWithRootViewController:xmvc];
+			UIPopoverController *aPopoverController =[[cls alloc] initWithContentViewController:ctrl];
+		    self.gotoPopover = aPopoverController;
+        }
+    }
+    if([gotoPopover isPopoverVisible]){
+		[gotoPopover dismissPopoverAnimated:YES];
+	}else{
+		[gotoPopover setPopoverContentSize:CGSizeMake(350,1024) animated:YES];
+        [gotoPopover presentPopoverFromBarButtonItem:menuBn permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+	}
+}
+//trackHandlerDelegate method
+- (void)tappedOnIndexPath:(int)row ID:(int)myid{
+    if (myid==GOTOPOI) {
+        POI * poi=[Recorder sharedRecorder].poiArray[row];
+        if (!poi.folder) {
+            [[DrawableMapScrollView sharedMap] centerMapToPOI:poi];
+            PM2OnScreenButtons * OSB=[PM2OnScreenButtons sharedBnManager];
+            if([OSB.gotoPopover isPopoverVisible]){
+                [OSB.gotoPopover dismissPopoverAnimated:YES];
+            }
+            return;
+        }
+    }
+}
 -(void)addButtons:(UIView *)vc{
     _baseView=vc;
     //[self add_bnStart];  //TODO: Comment this line out

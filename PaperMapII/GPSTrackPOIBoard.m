@@ -265,7 +265,7 @@
         }
 		NSString * flagName=[[NSString alloc]initWithString:(NSString *)[flagNameArray objectAtIndex:(int)poi.nType]];
 		UIImageView * imgv=[[UIImageView alloc] initWithImage:[UIImage imageNamed:flagName]];
-		
+		[imgv setFrame:CGRectMake(0, 0, 26, 26)];   //reset flag size smaller from 40x40
 		CGPoint ctr=[self ConvertPoint1:poi];
 		CGPoint rt=CGPointMake(ctr.x+imgv.frame.size.width/2-5, ctr.y-imgv.frame.size.height/2);
 		imgv.center=rt;

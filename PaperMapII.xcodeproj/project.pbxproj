@@ -3509,6 +3509,7 @@
 		AABDE8F6174755C000A0D6E9 /* Sat4_9_9.jpg in Resources */ = {isa = PBXBuildFile; fileRef = AABDDBA6174755BE00A0D6E9 /* Sat4_9_9.jpg */; };
 		AAC84848175718EC002D7AA9 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AABDD48417437B3600A0D6E9 /* CoreGraphics.framework */; };
 		AAC8484C175854C0002D7AA9 /* Node.m in Sources */ = {isa = PBXBuildFile; fileRef = AAC8484B175854C0002D7AA9 /* Node.m */; };
+		AADE0F6717C9DFEA0016AB8B /* SettingItem.m in Sources */ = {isa = PBXBuildFile; fileRef = AADE0F6617C9DFEA0016AB8B /* SettingItem.m */; };
 		AAE6DF5317808AE9003F230F /* GPSTrackListTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AAE6DF5217808AE9003F230F /* GPSTrackListTableViewController.m */; };
 		AAE6DF5417808AE9003F230F /* GPSTrackListTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AAE6DF5217808AE9003F230F /* GPSTrackListTableViewController.m */; };
 		AAE6DF5F1780C3BC003F230F /* GPSTrackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AAE6DF5D1780C3BB003F230F /* GPSTrackViewController.m */; };
@@ -5362,6 +5363,8 @@
 		AABDDBA6174755BE00A0D6E9 /* Sat4_9_9.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Sat4_9_9.jpg; sourceTree = "<group>"; };
 		AAC8484A175854C0002D7AA9 /* Node.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Node.h; sourceTree = "<group>"; };
 		AAC8484B175854C0002D7AA9 /* Node.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Node.m; sourceTree = "<group>"; };
+		AADE0F6517C9DFEA0016AB8B /* SettingItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingItem.h; sourceTree = "<group>"; };
+		AADE0F6617C9DFEA0016AB8B /* SettingItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingItem.m; sourceTree = "<group>"; };
 		AAE6DF5117808AE9003F230F /* GPSTrackListTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPSTrackListTableViewController.h; sourceTree = "<group>"; };
 		AAE6DF5217808AE9003F230F /* GPSTrackListTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPSTrackListTableViewController.m; sourceTree = "<group>"; };
 		AAE6DF5C1780C3BB003F230F /* GPSTrackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPSTrackViewController.h; sourceTree = "<group>"; };
@@ -5547,6 +5550,7 @@
 		AABDD48617437B3600A0D6E9 /* PaperMapII */ = {
 			isa = PBXGroup;
 			children = (
+				AADE0F6417C9DF7D0016AB8B /* Settings */,
 				AA59B93A17B0D6C800092996 /* POI */,
 				AAF57C3917A37F4900C87DEA /* CollapsableMenu Files */,
 				AABDD48F17437B3600A0D6E9 /* PM2AppDelegate.h */,
@@ -7352,6 +7356,15 @@
 				AABD95DF175A248600B2BC33 /* Recorder.m */,
 			);
 			name = "Drawing Classes";
+			sourceTree = "<group>";
+		};
+		AADE0F6417C9DF7D0016AB8B /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				AADE0F6517C9DFEA0016AB8B /* SettingItem.h */,
+				AADE0F6617C9DFEA0016AB8B /* SettingItem.m */,
+			);
+			name = Settings;
 			sourceTree = "<group>";
 		};
 		AAF57C3917A37F4900C87DEA /* CollapsableMenu Files */ = {
@@ -10962,6 +10975,7 @@
 				AA59B95017B48CCA00092996 /* POIEditViewController.m in Sources */,
 				AA59B95417B48F2E00092996 /* UIChkButton.m in Sources */,
 				AA0E12CB17C4824B00311C61 /* OnScreenMeter.m in Sources */,
+				AADE0F6717C9DFEA0016AB8B /* SettingItem.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
