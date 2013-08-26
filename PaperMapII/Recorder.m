@@ -20,7 +20,7 @@
 #import "PM2AppDelegate.h"
 #import "PM2ViewController.h"
 #import "POI.h"
-
+#import "Settings.h"
 
 #define PI 3.1415926f
 #define MAPMODE [[DrawableMapScrollView sharedMap] getMode]
@@ -553,14 +553,14 @@ float mapLeftThereDirection=0;       //TODO: assign and keep it an appropriate v
 				speedString=[[NSString alloc] initWithFormat:@"%4.1f  ", howfast];
 			[lb setText:speedString];
 		}
-		lb.hidden=NO;
+        if (![[Settings sharedSettings] getSetting:HIDE_SPEED_METER])lb.hidden=NO;   //speed
+        if (![[Settings sharedSettings] getSetting:HIDE_ALT_METER])  lb1.hidden=NO;  //height
+        if (![[Settings sharedSettings] getSetting:HIDE_TRIP_METER]) lb2.hidden=NO;  //trip
 	}else{
 		lb.hidden=YES;  //<==YES;
+        lb1.hidden=YES;  //<==YES;
+        lb2.hidden=YES;  //<==YES;
 	}
-    lb1.hidden=lb.hidden;
-    lb2.hidden=lb.hidden;
-    //altlb.hidden=trplb.hidden=lb.hidden;
-	//---------------
 }
 bool bStartGPSNode;
 CLLocation *lastLoc;
@@ -572,17 +572,18 @@ int n=0;  //gps node counter
     bool bFarEnough=false;
     
     CLLocationSpeed speed=newLocation.speed;
-    int minDistance=25;
+    int minDistance=15;
 	if(speed>0.6){                 //>1.34 mph
 		//speed sensitive point distance on gps track, added on 10/24/2010
-//		if (speed<2) {			 //about 4 mph
-//			minDistance=4;       //max accuracy is 5 meters
-//		}else if (speed<5) {	 //about 11 mph
-//			minDistance=5;
-//		}else if (speed > 20) {  //about 45 mph
-//			minDistance=20;
-//      }else
-        if (speed > 30) {  //about 63 mph
+        if (speed<5) {	 //about 11 mph
+			minDistance=10;
+        }else if (speed > 10) {  //about 33.37 mph
+            minDistance=15;
+        }else if (speed > 15) {  //about 33.56 mph
+            minDistance=25;
+        }else if (speed > 20) {  //about 45 mph
+			minDistance=25;
+        }else if (speed > 30) {  //about 63 mph
 			minDistance=30;
 		}else if (speed > 100) {  //about 225 mph, for airplane
             minDistance=500;

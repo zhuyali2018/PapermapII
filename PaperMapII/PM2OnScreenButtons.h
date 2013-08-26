@@ -20,7 +20,7 @@
 @interface PM2OnScreenButtons : NSObject <OnOffBnDelegate>
 @property (nonatomic, strong) UIToolbar	* toolbar;
 @property (nonatomic, strong) UIBarButtonItem * menuBn;
-
+@property (nonatomic, strong) UIBarButtonItem * gotoBn;
 
 
 @property (nonatomic, strong) UIButton * bnStart;       //all onscreen control buttons and menus starts from here

@@ -17,7 +17,7 @@
 #import "POIEditViewController.h"
 #import "LinePropertyViewController.h"
 #import "SettingItem.h"
-
+#import "Settings.h"
 @implementation MainMenuViewController
 
 @synthesize menuMatrix;
@@ -104,23 +104,22 @@
 //        [OSB.menuPopover dismissPopoverAnimated:YES];
 //    }
     
-    NSArray * settingArray=[[NSArray alloc]initWithObjects:
-                        [[SettingItem alloc]initWithTitle:@"Show Scale Ruler"],
-                        [[SettingItem alloc]initWithTitle:@"Show Map Center"],
-                        [[SettingItem alloc]initWithTitle:@"Hide Status Bar"],
-                        [[SettingItem alloc]initWithTitle:@"Auto Rotate"],
-                        [[SettingItem alloc]initWithTitle:@"Direction Up On GPS"],
-                        [[SettingItem alloc]initWithTitle:@"Use Cached Map Only"],
-                        [[SettingItem alloc]initWithTitle:@"Use Internet Map Only"],
-                        [[SettingItem alloc]initWithTitle:@"Show Map Level"],
-                        [[SettingItem alloc]initWithTitle:@"Hide Speed Meter"],
-                        [[SettingItem alloc]initWithTitle:@"Hide Altitude Meter"],
-                        [[SettingItem alloc]initWithTitle:@"Hide Trip Meter"],
-                        nil];
-                     
+//    NSArray * settingArray=[[NSArray alloc]initWithObjects:
+//                        [[SettingItem alloc]initWithTitle:@"Show Scale Ruler"],
+//                        [[SettingItem alloc]initWithTitle:@"Show Map Center"],
+//                        [[SettingItem alloc]initWithTitle:@"Hide Status Bar"],
+//                        [[SettingItem alloc]initWithTitle:@"Auto Rotate"],
+//                        [[SettingItem alloc]initWithTitle:@"Direction Up On GPS"],
+//                        [[SettingItem alloc]initWithTitle:@"Use Cached Map Only"],
+//                        [[SettingItem alloc]initWithTitle:@"Use Internet Map Only"],
+//                        [[SettingItem alloc]initWithTitle:@"Show Map Level"],
+//                        [[SettingItem alloc]initWithTitle:@"Hide Speed Meter"],
+//                        [[SettingItem alloc]initWithTitle:@"Hide Altitude Meter"],
+//                        [[SettingItem alloc]initWithTitle:@"Hide Trip Meter"],
+//                        nil];
+//                     
     ExpandableMenuViewController *xmvc = [[ExpandableMenuViewController alloc] initWithStyle:UITableViewStylePlain];
-    xmvc.trackList=[NSMutableArray arrayWithCapacity:11];
-    [xmvc.trackList addObjectsFromArray:settingArray];
+    xmvc.trackList=[Settings sharedSettings].settingArray;
     //xmvc.trackHandlerDelegate=self;  //this line is not needed becaus settings should not lead to a new tableview
     xmvc.id=SETTING;
     NSLOG10(@"executing settings from %@",menuTitle);

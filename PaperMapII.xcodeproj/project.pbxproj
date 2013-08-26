@@ -3510,6 +3510,7 @@
 		AAC84848175718EC002D7AA9 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AABDD48417437B3600A0D6E9 /* CoreGraphics.framework */; };
 		AAC8484C175854C0002D7AA9 /* Node.m in Sources */ = {isa = PBXBuildFile; fileRef = AAC8484B175854C0002D7AA9 /* Node.m */; };
 		AADE0F6717C9DFEA0016AB8B /* SettingItem.m in Sources */ = {isa = PBXBuildFile; fileRef = AADE0F6617C9DFEA0016AB8B /* SettingItem.m */; };
+		AADE0F6A17CB0E1B0016AB8B /* Settings.m in Sources */ = {isa = PBXBuildFile; fileRef = AADE0F6917CB0E1B0016AB8B /* Settings.m */; };
 		AAE6DF5317808AE9003F230F /* GPSTrackListTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AAE6DF5217808AE9003F230F /* GPSTrackListTableViewController.m */; };
 		AAE6DF5417808AE9003F230F /* GPSTrackListTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AAE6DF5217808AE9003F230F /* GPSTrackListTableViewController.m */; };
 		AAE6DF5F1780C3BC003F230F /* GPSTrackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AAE6DF5D1780C3BB003F230F /* GPSTrackViewController.m */; };
@@ -5365,6 +5366,8 @@
 		AAC8484B175854C0002D7AA9 /* Node.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Node.m; sourceTree = "<group>"; };
 		AADE0F6517C9DFEA0016AB8B /* SettingItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingItem.h; sourceTree = "<group>"; };
 		AADE0F6617C9DFEA0016AB8B /* SettingItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingItem.m; sourceTree = "<group>"; };
+		AADE0F6817CB0E1B0016AB8B /* Settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Settings.h; sourceTree = "<group>"; };
+		AADE0F6917CB0E1B0016AB8B /* Settings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Settings.m; sourceTree = "<group>"; };
 		AAE6DF5117808AE9003F230F /* GPSTrackListTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPSTrackListTableViewController.h; sourceTree = "<group>"; };
 		AAE6DF5217808AE9003F230F /* GPSTrackListTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPSTrackListTableViewController.m; sourceTree = "<group>"; };
 		AAE6DF5C1780C3BB003F230F /* GPSTrackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPSTrackViewController.h; sourceTree = "<group>"; };
@@ -7363,6 +7366,8 @@
 			children = (
 				AADE0F6517C9DFEA0016AB8B /* SettingItem.h */,
 				AADE0F6617C9DFEA0016AB8B /* SettingItem.m */,
+				AADE0F6817CB0E1B0016AB8B /* Settings.h */,
+				AADE0F6917CB0E1B0016AB8B /* Settings.m */,
 			);
 			name = Settings;
 			sourceTree = "<group>";
@@ -10976,6 +10981,7 @@
 				AA59B95417B48F2E00092996 /* UIChkButton.m in Sources */,
 				AA0E12CB17C4824B00311C61 /* OnScreenMeter.m in Sources */,
 				AADE0F6717C9DFEA0016AB8B /* SettingItem.m in Sources */,
+				AADE0F6A17CB0E1B0016AB8B /* Settings.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

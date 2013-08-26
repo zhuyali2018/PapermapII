@@ -51,7 +51,7 @@
 @synthesize menuButton;
 @synthesize arrow;
 @synthesize toolbar;
-@synthesize menuBn;
+@synthesize menuBn,gotoBn;
 @synthesize gpsBn1,drawBn1;
 //@synthesize drawBn;
 
@@ -134,7 +134,7 @@
 	[xButton addTarget:self action:@selector(lockUpScreen) forControlEvents:UIControlEventTouchUpInside];
     
 	menuBn = [[UIBarButtonItem alloc] initWithTitle:@"Menu" style:UIBarButtonItemStyleBordered target:self action:@selector(showMenu)];
-	UIBarButtonItem * gotoBn = [[UIBarButtonItem alloc] initWithTitle:(@"goto") style:UIBarButtonItemStyleBordered target:self action:@selector(GotoMenu)];
+	gotoBn = [[UIBarButtonItem alloc] initWithTitle:(@"goto") style:UIBarButtonItemStyleBordered target:self action:@selector(GotoMenu)];
 	UIBarButtonItem *flexItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace	 target:nil action:nil];
 	
 	UIBarButtonItem *drawBn = [[UIBarButtonItem alloc] initWithCustomView:drawBn1];
@@ -179,7 +179,7 @@
 		[gotoPopover dismissPopoverAnimated:YES];
 	}else{
 		[gotoPopover setPopoverContentSize:CGSizeMake(350,1024) animated:YES];
-        [gotoPopover presentPopoverFromBarButtonItem:menuBn permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+        [gotoPopover presentPopoverFromBarButtonItem:gotoBn permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
 	}
 }
 //trackHandlerDelegate method
@@ -638,7 +638,8 @@ extern bool centerPos;
 -(void)addScaleRuler{
     ScaleRuler * scaleRuler=[ScaleRuler shareScaleRuler:CGRectMake(30, 0,700,30)];
     [scaleRuler setBackgroundColor:[UIColor colorWithRed:0.3 green:0.4 blue:0.5 alpha:0.7]];
-    [_baseView addSubview:scaleRuler];
+    scaleRuler.hidden=YES;  //not work, why ?
+    [_baseView addSubview:scaleRuler];   
 }
 -(void)addMapLevelLabel{
     resLabel=[[UILabel alloc] initWithFrame:CGRectMake(0, 0, 50, 30)];

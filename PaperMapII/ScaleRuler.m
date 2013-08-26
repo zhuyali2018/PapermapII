@@ -7,6 +7,7 @@
 //
 
 #import "ScaleRuler.h"
+#import "Settings.h"
 
 @implementation ScaleRuler
 
@@ -19,6 +20,7 @@
     dispatch_once(&onceToken, ^{
         sharedMyManager = [[self alloc] initWithFrame:frame];
     });
+    sharedMyManager.hidden=(![[Settings sharedSettings] getSetting:SHOW_SCALE_RULLER]);
     return sharedMyManager;
 }
 - (id)initWithFrame:(CGRect)frame {

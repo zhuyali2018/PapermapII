@@ -7,6 +7,7 @@
 //
 
 #import "MapCenterIndicator.h"
+#import "Settings.h"
 
 @implementation MapCenterIndicator
 
@@ -52,6 +53,7 @@
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.
 - (void)drawRect:(CGRect)rect {
+    bShowCenter=[[Settings sharedSettings] getSetting:SHOW_MAP_CENTER];
     // Drawing code
 	if(bShowCenter){
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
