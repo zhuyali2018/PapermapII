@@ -12,7 +12,7 @@ typedef enum  {SHOW_SCALE_RULLER,
     SHOW_MAP_CENTER,
     HIDE_STATUSBAR,
     DIRECTION_UP,
-    CACHED_MAP_ONL,
+    CACHED_MAP_ONLY,
     INTERNET_MAP_ONLY,
     SHOW_MAP_LEVEL,
     HIDE_SPEED_METER,
@@ -24,4 +24,5 @@ typedef enum  {SHOW_SCALE_RULLER,
 @property(nonatomic,strong)NSMutableArray * settingArray;
 + (Settings *)sharedSettings;
 -(bool)getSetting:(int)index;
+-(void)setSetting:(int)index to:(bool)show;
 @end

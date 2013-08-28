@@ -12,13 +12,20 @@
 @implementation MapCenterIndicator
 
 @synthesize bShowCenter;
+static MapCenterIndicator *sharedMyManager = nil;
 + (id)sharedMapCenter:(CGRect)frame{
-    static MapCenterIndicator *sharedMyManager = nil;
+    
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         sharedMyManager = [[self alloc] initWithFrame:frame];
     });
     [sharedMyManager setFrame:frame];
+    sharedMyManager.hidden=(![[Settings sharedSettings] getSetting:SHOW_MAP_CENTER]);
+    return sharedMyManager;
+}
++ (id)sharedMapCenter{
+    //static MapCenterIndicator *sharedMyManager = nil;
+    sharedMyManager.hidden=(![[Settings sharedSettings] getSetting:SHOW_MAP_CENTER]);
     return sharedMyManager;
 }
 - (id)initWithFrame:(CGRect)frame
@@ -53,7 +60,6 @@
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.
 - (void)drawRect:(CGRect)rect {
-    bShowCenter=[[Settings sharedSettings] getSetting:SHOW_MAP_CENTER];
     // Drawing code
 	if(bShowCenter){
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {

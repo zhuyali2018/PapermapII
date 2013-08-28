@@ -306,7 +306,7 @@
 	}else {
 		 mid=0;		//means do not show scale ruler
 	}
-	[self setNeedsLayout];
-	[self setNeedsDisplay];
+    if([[Settings sharedSettings] getSetting:SHOW_SCALE_RULLER])
+        [self setNeedsDisplay];     //this line makes the UIView hide set to false !!!
 }
 @end

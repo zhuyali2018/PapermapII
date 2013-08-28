@@ -44,4 +44,7 @@
 -(bool)getSetting:(int)index{
     return ((SettingItem *)settingArray[index]).selected;
 }
+-(void)setSetting:(int)index to:(bool)show{
+    ((SettingItem *)settingArray[index]).selected=show;
+}
 @end

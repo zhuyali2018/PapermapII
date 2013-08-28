@@ -16,6 +16,8 @@
 #import "MainQ.h"
 #import "PM2AppDelegate.h"
 #import "PM2ViewController.h"
+#import "Settings.h"
+#import "MapCenterIndicator.h"
 
 @implementation MapScrollView
 
@@ -394,6 +396,13 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
 }
 - (void)layoutSubviews{
     [[ScaleRuler shareScaleRuler:CGRectMake(30, 0,700,30)] updateRuler:self];
+    //update maplevel
+    UILabel * lb=((PM2OnScreenButtons *)[PM2OnScreenButtons sharedBnManager]).resLabel;
+    lb.hidden=(![[Settings sharedSettings] getSetting:SHOW_MAP_LEVEL]);
+    [lb setText:[NSString stringWithFormat:@" %d", maplevel]];
+    //update map center
+    [MapCenterIndicator sharedMapCenter];
+    
     if (self.zooming){
         NSLOG(@"self.zooming, exit layoutSubviews:W:%.f, H:%.f",self.contentSize.width,self.contentSize.height);
         return;
@@ -554,18 +563,18 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
 	}
     
     lastLevel=maplevel;    
-    //maplevel+=deltaRes;		//set new maplevel;
+    //maplevel+=deltaRes;		//set new maplevel;//
     int newMapLevel=maplevel+deltaRes;
     if(newMapLevel<2)          //minimum maplevel set to 2
         newMapLevel=2;
 	[self setMaplevel:newMapLevel];
     
     //update the maplevel display
-    MainQ * mQ=[MainQ sharedManager];
-    UILabel * lb=(UILabel *)[mQ getTargetRef:MAPRES];
-    if (![lb isEqual:@"0"]) {   //added for update maplevel label
-        [lb setText:[NSString stringWithFormat:@" %d", maplevel]];
-    }
+    //MainQ * mQ=[MainQ sharedManager];
+    //UILabel * lb=(UILabel *)[mQ getTargetRef:MAPRES];
+    UILabel * lb=((PM2OnScreenButtons *)[PM2OnScreenButtons sharedBnManager]).resLabel;
+    lb.hidden=(![[Settings sharedSettings] getSetting:SHOW_MAP_LEVEL]);
+    [lb setText:[NSString stringWithFormat:@" %d", maplevel]];
     
     [self setMaxandMinZoomScale];   //important, immediately change the zooming range here instead of after setting the new zoomscale
     

@@ -9,6 +9,7 @@
 #import "AllImports.h"
 #import "PM2AppDelegate.h"
 #import "PM2ViewController.h"
+#import "Recorder.h"
 
 @implementation PM2AppDelegate
 @synthesize viewController;
@@ -50,6 +51,7 @@
 {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     NSLOG6("applicationDidBecomeActive");
+    [[Recorder sharedRecorder] saveAllGpsTracks];       //need to save what was recorded during the inactive period
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application

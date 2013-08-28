@@ -13,4 +13,5 @@
 }
 @property(nonatomic,assign)bool bShowCenter;
 + (id)sharedMapCenter:(CGRect)frame;
++ (id)sharedMapCenter;
 @end

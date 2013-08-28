@@ -8,6 +8,8 @@
 #import "AllImports.h"
 #import "MapSources.h"
 #import "MapTile.h"
+#import "Settings.h"
+
 @implementation MapSources
 
 + (id)sharedManager {
@@ -181,8 +183,10 @@
     
     UIImage * img;
     //TODO: Move following vars to as a property of the map source.
-    BOOL bInternetOnly=FALSE;
-    BOOL bCachedMapOnly=FALSE;
+    //BOOL bInternetOnly=FALSE;
+    //BOOL bCachedMapOnly=FALSE;
+    BOOL bInternetOnly=[[Settings sharedSettings] getSetting:INTERNET_MAP_ONLY];
+    BOOL bCachedMapOnly=[[Settings sharedSettings] getSetting:CACHED_MAP_ONLY];
     
     if (bInternetOnly) {
         img=nil;

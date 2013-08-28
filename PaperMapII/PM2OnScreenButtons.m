@@ -477,16 +477,12 @@ extern bool centerPos;
     }else{
         [gpsReceiver stop];
         [speedLabel setHidden:YES];
-        //if (!v)return;
-        //v.hidden=NO;  //TODO:need to be Yes
-        
         arrow.hidden=YES;
         
         bn.withGroup=YES;
         centerBn.withGroup=YES;
         [self hideGPSButtons];
-        //bnStart.hidden=NO;
-        //[self hideDrawingButtons];
+        [[Recorder sharedRecorder] saveAllGpsTracks];   //because it may crash after stopped GPS and lose the track
     }
 }
 -(void)showGPSButtons{
@@ -638,7 +634,6 @@ extern bool centerPos;
 -(void)addScaleRuler{
     ScaleRuler * scaleRuler=[ScaleRuler shareScaleRuler:CGRectMake(30, 0,700,30)];
     [scaleRuler setBackgroundColor:[UIColor colorWithRed:0.3 green:0.4 blue:0.5 alpha:0.7]];
-    scaleRuler.hidden=YES;  //not work, why ?
     [_baseView addSubview:scaleRuler];   
 }
 -(void)addMapLevelLabel{

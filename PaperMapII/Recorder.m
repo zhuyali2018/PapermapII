@@ -431,17 +431,84 @@ bool centerPos;
 	GPSPoint.x=xM;
 	GPSPoint.y=yM;
     GPSNode *node=[[GPSNode alloc]initWithPoint:GPSPoint mapLevel:resM];
-    
-    //center the current position
-    if(centerPos)
+        
+    if(centerPos||[[Settings sharedSettings] getSetting:DIRECTION_UP]){
         [[DrawableMapScrollView sharedMap] centerMapTo:node];
+    }
 
     //add a gps node to our node array for gps track
     [self addGpsNode:node with:newLocation];
     [self.gpsTrack saveNodes];        //TODO: may need to change to saving every 5 nodes or more for performance
     [self showTripMeter];
-    [self updateArrowDirection:newLocation.course*PI/180];
+    [self changeSizeAccordingToNewMode];
+    [self adjustMapRotateDegree:newLocation.course];
 }
+extern float zmc;
+-(void)changeSizeAccordingToNewMode{
+    static bool lastMode=false;     //directionUp is false
+    if ([[Settings sharedSettings] getSetting:DIRECTION_UP]!=lastMode) {
+        //new change comming in this block
+        lastMode=[[Settings sharedSettings] getSetting:DIRECTION_UP];
+        CGRect windowfr = [[UIScreen mainScreen] bounds];
+        if(lastMode){   //if directionUp just changed to true
+            directionUp=true;
+            centerPos=true;     //direction up must be with center current position !
+            int W=windowfr.size.width;
+            int H=windowfr.size.height;
+            [[DrawableMapScrollView sharedMap] setFrame:CGRectMake((W-1280)/2,(H-1280)/2,1280,1280)];
+            zmc=1.3;
+        }else { //just resume the North Up Mode
+            //change map to NorthUp Position
+            CGAffineTransform transform = CGAffineTransformMakeRotation(0);
+            [UIView beginAnimations:nil context:NULL];
+            [DrawableMapScrollView sharedMap].transform = transform;    //rotate map
+            [UIView commitAnimations];
+            
+            directionUp=false;
+            int W=windowfr.size.width;
+            int H=windowfr.size.height;
+            [[DrawableMapScrollView sharedMap] setFrame:CGRectMake(0,0,W,H)];
+            zmc=1.0;
+        }
+    }
+}
+//update the map rotating degree every second
+-(void)adjustMapRotateDegree:(CLLocationDirection )course{
+    if ([[Settings sharedSettings] getSetting:DIRECTION_UP]) {
+        CGAffineTransform transform = CGAffineTransformMakeRotation(-1*course*3.1415926f/180);
+        [UIView beginAnimations:nil context:NULL];
+        [DrawableMapScrollView sharedMap].transform = transform;    //rotate map
+        [UIView commitAnimations];
+        [self updateArrowDirection:0];              //both lines work
+        //[self updateArrowDirection:course*PI/180];
+    }else{
+        [self updateArrowDirection:course*PI/180];
+    }
+}
+//
+//-(void)updateMapRotateDegree{
+//    CGRect windowfr = [[UIScreen mainScreen] bounds];
+//    if ([[Settings sharedSettings] getSetting:DIRECTION_UP]) {
+//        directionUp=true;
+//        int W=windowfr.size.width;
+//        int H=windowfr.size.height;
+//        //int M=W>H?W:H;
+//        [[DrawableMapScrollView sharedMap] setFrame:CGRectMake((W-1280)/2,(H-1280)/2,1280,1280)];
+//        zmc=1.3;
+//    }else {
+//        directionUp=false;
+//        int W=windowfr.size.width;
+//        int H=windowfr.size.height;
+//        [[DrawableMapScrollView sharedMap] setFrame:CGRectMake(0,0,W,H)];
+//        zmc=1.0;
+//    }
+//}
+//-(void)updateMapRotateDegree2:(CLLocationDirection )course{
+//    CGAffineTransform transform = CGAffineTransformMakeRotation(-1*course*3.1415926f/180);
+//    [UIView beginAnimations:nil context:NULL];
+//    [DrawableMapScrollView sharedMap].transform = transform;    //rotate map
+//    [UIView commitAnimations];
+//}
 bool centerCurrentLocation = TRUE;   //TODO: move this to property settings
 bool directionUp=FALSE;              //TODO: move this to property settings
 float mapLeftThereDirection=0;       //TODO: assign and keep it an appropriate value
@@ -526,9 +593,9 @@ float mapLeftThereDirection=0;       //TODO: assign and keep it an appropriate v
     //UILabel * lb=(UILabel *)[mQ getTargetRef:SPEEDLABEL];
     //UILabel * altlb=(UILabel *)[mQ getTargetRef:ALTITUDELABEL];
     //UILabel * trplb=(UILabel *)[mQ getTargetRef:TRIPMETER];
-    UILabel *lb=((PM2OnScreenButtons *)[PM2OnScreenButtons sharedBnManager]).speedLabel;
-    UILabel *lb1=((PM2OnScreenButtons *)[PM2OnScreenButtons sharedBnManager]).heightLabel;
-    UILabel *lb2=((PM2OnScreenButtons *)[PM2OnScreenButtons sharedBnManager]).tripLabel;
+    UILabel *lb=(UILabel *)((PM2OnScreenButtons *)[PM2OnScreenButtons sharedBnManager]).speedLabel;
+    UILabel *lb1=(UILabel *)((PM2OnScreenButtons *)[PM2OnScreenButtons sharedBnManager]).heightLabel;
+    UILabel *lb2=(UILabel *)((PM2OnScreenButtons *)[PM2OnScreenButtons sharedBnManager]).tripLabel;
     if ([lb isEqual:@"0"]) {
         lb1.hidden=YES;
         lb2.hidden=YES;
@@ -553,9 +620,9 @@ float mapLeftThereDirection=0;       //TODO: assign and keep it an appropriate v
 				speedString=[[NSString alloc] initWithFormat:@"%4.1f  ", howfast];
 			[lb setText:speedString];
 		}
-        if (![[Settings sharedSettings] getSetting:HIDE_SPEED_METER])lb.hidden=NO;   //speed
-        if (![[Settings sharedSettings] getSetting:HIDE_ALT_METER])  lb1.hidden=NO;  //height
-        if (![[Settings sharedSettings] getSetting:HIDE_TRIP_METER]) lb2.hidden=NO;  //trip
+        lb.hidden=(![[Settings sharedSettings] getSetting:HIDE_SPEED_METER]);  //speed
+        lb1.hidden=(![[Settings sharedSettings] getSetting:HIDE_ALT_METER]);   //height
+        lb2.hidden= (![[Settings sharedSettings] getSetting:HIDE_TRIP_METER]);  //trip meter
 	}else{
 		lb.hidden=YES;  //<==YES;
         lb1.hidden=YES;  //<==YES;
