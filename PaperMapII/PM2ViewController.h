@@ -17,6 +17,7 @@
 
 @property (nonatomic, strong) DrawableMapScrollView * mapScrollView;
 @property (nonatomic, strong) MapSources * mapSources;
+@property BOOL orientationChanging;
 
 -(void)applicationWillTerminate:(NSNotification *)notification;
 

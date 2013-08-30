@@ -8,8 +8,19 @@
 
 #import "MenuNode.h"
 
-@interface SettingItem : MenuNode<NSCoding,NSCopying,MenuDataSource>
+@class settings;
 
+@protocol CheckBoxHandler <NSObject>
+@optional
+- (void)onCheckBox:(int)index changedTo:(bool)gotSelected;
+@end
+
+@interface SettingItem : MenuNode<NSCoding,NSCopying,MenuDataSource,CheckBoxHandler>
+
+@property int idx;
+@property (weak) id<CheckBoxHandler> checkBoxHandler;
+
+- (id) initWithTitle:(NSString *)title with:(int)id andCheckBoxHandler:(id)handler;
 -(bool)save;
 -(bool)load;
 @end

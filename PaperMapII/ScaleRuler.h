@@ -39,4 +39,5 @@
 -(void)drawLineFrom:(CGPoint) p0 to:(CGPoint)p1 withColor:(UIColor *)color andWidth:(CGFloat)width;
 -(void)updateRuler:(UIScrollView *)scrollView;
 +(id)shareScaleRuler:(CGRect)frame;
++(void)update;
 @end

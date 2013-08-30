@@ -457,6 +457,7 @@ extern bool centerPos;
         //[centerBn setTitle:@"Center Cur" forState:UIControlStateNormal];
     }
 }
+extern float zmc;
 -(void) startGPS:(UIButton *)tbn{
      OnOffButton * bn = gpsButton;
      [bn buttonTapped]; //bn.btnOn=!bn.btnOn;
@@ -474,6 +475,12 @@ extern bool centerPos;
         centerBn.withGroup=false;
         [self showGPSButtons];
         //bnStart.hidden=YES;
+         
+         int W=_baseView.bounds.size.width;
+         int H=_baseView.bounds.size.height;
+         [[DrawableMapScrollView sharedMap] setFrame:CGRectMake((W-1280)/2,(H-1280)/2,1280,1280)];
+         zmc=1.3;
+
     }else{
         [gpsReceiver stop];
         [speedLabel setHidden:YES];
@@ -483,6 +490,17 @@ extern bool centerPos;
         centerBn.withGroup=YES;
         [self hideGPSButtons];
         [[Recorder sharedRecorder] saveAllGpsTracks];   //because it may crash after stopped GPS and lose the track
+        
+        CGAffineTransform transform = CGAffineTransformMakeRotation(0);
+        [UIView beginAnimations:nil context:NULL];
+        [DrawableMapScrollView sharedMap].transform = transform;    //rotate map
+        [UIView commitAnimations];
+        //[self updateArrowDirection:course*PI/180];
+        
+        int W=_baseView.bounds.size.width;
+        int H=_baseView.bounds.size.height;
+        [[DrawableMapScrollView sharedMap] setFrame:CGRectMake(0,0,W,H)];
+        zmc=1.0;
     }
 }
 -(void)showGPSButtons{
@@ -673,7 +691,7 @@ extern bool centerPos;
     //int screenW=[[UIScreen mainScreen] applicationFrame].size.width;
 	//int screenH=[[UIScreen mainScreen] applicationFrame].size.height;
     int screenH=[_baseView frame].size.height;
-	speedLabel=[[UILabel alloc] initWithFrame:CGRectMake(0,screenH-180, 400, 140)];
+	speedLabel=[[OnScreenMeter alloc] initWithFrame:CGRectMake(0,screenH-180, 400, 140)];
     //speedLabel=[[UILabel alloc] initWithFrame:CGRectMake(0,0, 400, 140)];
 	[speedLabel setBackgroundColor:[UIColor colorWithRed:0.2 green:0.2 blue:0.2 alpha:0.6]];
 	[speedLabel setTextColor:[UIColor yellowColor]];

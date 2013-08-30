@@ -9,8 +9,13 @@
 #import "SettingItem.h"
 
 @implementation SettingItem
-- (id) initWithTitle:(NSString *)title{
+@synthesize idx;
+@synthesize checkBoxHandler;
+
+- (id) initWithTitle:(NSString *)title with:(int)id andCheckBoxHandler:(id)handler{
      self=[super initWithTitle:title];
+    idx=id;
+    checkBoxHandler=handler;
      if(self){
          self.dataSource=self;      //so it can response to checkbox clicking by itself
          [self load];
@@ -53,6 +58,8 @@
 -(void)onCheckBox{      //execute when checkbox of the menu item is tapped
     NSLog(@"check box tapped, save new setting");
     [self save];
+    if ([self.checkBoxHandler respondsToSelector:@selector(onCheckBox:changedTo:)])
+        [self.checkBoxHandler onCheckBox:idx changedTo:self.selected];
 }
 -(NSDate *)getTimeStamp{
     return NULL;

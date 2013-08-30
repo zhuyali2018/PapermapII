@@ -7,7 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-
+//@class CheckBoxHandler;
+#import "SettingItem.h"
 typedef enum  {SHOW_SCALE_RULLER,
     SHOW_MAP_CENTER,
     HIDE_STATUSBAR,
@@ -20,7 +21,7 @@ typedef enum  {SHOW_SCALE_RULLER,
     HIDE_TRIP_METER,
     HIDE_TRIP_TIMER} Setting;
 
-@interface Settings : NSObject
+@interface Settings : NSObject<CheckBoxHandler>
 @property(nonatomic,strong)NSMutableArray * settingArray;
 + (Settings *)sharedSettings;
 -(bool)getSetting:(int)index;

@@ -21,6 +21,7 @@
 #import "PM2OnScreenButtons.h"
 #import "MapCenterIndicator.h"
 #import "OnScreenMeter.h"
+#import "Settings.h"
 
 @interface PM2ViewController ()
 
@@ -30,6 +31,7 @@
 
 @synthesize mapScrollView;
 @synthesize mapSources;
+@synthesize orientationChanging;
 //@synthesize arrAllTracks,arrAllGpsTracks;
 
 -(void)addOnScreeButtons{
@@ -78,11 +80,19 @@
 -(void)viewDidAppear:(BOOL)animated{
     [self didRotateFromInterfaceOrientation:UIInterfaceOrientationLandscapeRight];
 }
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration{
+    if ([Recorder sharedRecorder].gpsRecording) {
+        orientationChanging=TRUE;
+        [DrawableMapScrollView sharedMap].transform=CGAffineTransformIdentity;  //set to no rotation before device orientation changes, key to correctly calculate the frame of mapview
+    }
+}
+extern float zmc;
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
+    orientationChanging=FALSE;
 	int screenW=[[self view] bounds].size.width;
 	int screenH=[[self view] bounds].size.height;
-    [self.mapScrollView setFrame:CGRectMake(0, 0, screenW,screenH)];
+    //[self.mapScrollView setFrame:CGRectMake(0, 0, screenW,screenH)];
     PM2OnScreenButtons * bns=[PM2OnScreenButtons sharedBnManager];
     [bns repositionButtonsFromX:screenW-110 Y:screenH];
     [bns positionStartBnWidth:screenW Height:screenH];
@@ -95,6 +105,24 @@
     //reposition tool bar
     CGFloat toolbarHeight = 40;
     [((PM2OnScreenButtons *)[PM2OnScreenButtons sharedBnManager]).toolbar setFrame:CGRectMake(0,screenH-toolbarHeight,screenW,toolbarHeight)];
+    
+    //mapview setup
+    //CGRect windowfr = [[UIScreen mainScreen] bounds];
+    if([[Settings sharedSettings] getSetting:DIRECTION_UP]&&[Recorder sharedRecorder].gpsRecording){
+        int W=screenW;
+        int H=screenH;
+        [[DrawableMapScrollView sharedMap] setFrame:CGRectMake((W-1280)/2,(H-1280)/2,1280,1280)];
+        zmc=1.3;
+    }else {
+        int W=screenW;
+        int H=screenH;
+        [[DrawableMapScrollView sharedMap] setFrame:CGRectMake(0,0,W,H)];
+        zmc=1.0;
+    }
+}
+// Override to allow orientations other than the default portrait orientation.
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+ 	return YES;
 }
 - (void)didReceiveMemoryWarning
 {

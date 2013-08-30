@@ -13,15 +13,20 @@
 
 @synthesize len,mid,end,bMetric;
 @synthesize startPoint,middlePoint,endPoint,unitLabel;
-
+static ScaleRuler *sharedMyManager = nil;
 +(id)shareScaleRuler:(CGRect)frame{
-    static ScaleRuler *sharedMyManager = nil;
+    
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         sharedMyManager = [[self alloc] initWithFrame:frame];
     });
     sharedMyManager.hidden=(![[Settings sharedSettings] getSetting:SHOW_SCALE_RULLER]);
     return sharedMyManager;
+}
++(void)update{
+    if (sharedMyManager) {
+        sharedMyManager.hidden=(![[Settings sharedSettings] getSetting:SHOW_SCALE_RULLER]);
+    }
 }
 - (id)initWithFrame:(CGRect)frame {
     if ((self = [super initWithFrame:frame])) {

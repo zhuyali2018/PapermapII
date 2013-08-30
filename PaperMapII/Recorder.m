@@ -21,6 +21,7 @@
 #import "PM2ViewController.h"
 #import "POI.h"
 #import "Settings.h"
+#import "OnScreenMeter.h"
 
 #define PI 3.1415926f
 #define MAPMODE [[DrawableMapScrollView sharedMap] getMode]
@@ -407,6 +408,9 @@ bool centerPos;
 }
 #pragma mark ------------------ CLLocationManagerDelegate method -------------
 - (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation{
+    if (((PM2AppDelegate *)[UIApplication sharedApplication].delegate).viewController.orientationChanging) {
+        return;
+    }
     [self displayAccuracy:newLocation];
     if(!_gpsRecording){   //if not recording, do not create the node
         return;
@@ -440,36 +444,8 @@ bool centerPos;
     [self addGpsNode:node with:newLocation];
     [self.gpsTrack saveNodes];        //TODO: may need to change to saving every 5 nodes or more for performance
     [self showTripMeter];
-    [self changeSizeAccordingToNewMode];
-    [self adjustMapRotateDegree:newLocation.course];
-}
-extern float zmc;
--(void)changeSizeAccordingToNewMode{
-    static bool lastMode=false;     //directionUp is false
-    if ([[Settings sharedSettings] getSetting:DIRECTION_UP]!=lastMode) {
-        //new change comming in this block
-        lastMode=[[Settings sharedSettings] getSetting:DIRECTION_UP];
-        CGRect windowfr = [[UIScreen mainScreen] bounds];
-        if(lastMode){   //if directionUp just changed to true
-            directionUp=true;
-            centerPos=true;     //direction up must be with center current position !
-            int W=windowfr.size.width;
-            int H=windowfr.size.height;
-            [[DrawableMapScrollView sharedMap] setFrame:CGRectMake((W-1280)/2,(H-1280)/2,1280,1280)];
-            zmc=1.3;
-        }else { //just resume the North Up Mode
-            //change map to NorthUp Position
-            CGAffineTransform transform = CGAffineTransformMakeRotation(0);
-            [UIView beginAnimations:nil context:NULL];
-            [DrawableMapScrollView sharedMap].transform = transform;    //rotate map
-            [UIView commitAnimations];
-            
-            directionUp=false;
-            int W=windowfr.size.width;
-            int H=windowfr.size.height;
-            [[DrawableMapScrollView sharedMap] setFrame:CGRectMake(0,0,W,H)];
-            zmc=1.0;
-        }
+    if (!((PM2AppDelegate *)[UIApplication sharedApplication].delegate).viewController.orientationChanging) {
+        [self adjustMapRotateDegree:newLocation.course];
     }
 }
 //update the map rotating degree every second
@@ -482,6 +458,10 @@ extern float zmc;
         [self updateArrowDirection:0];              //both lines work
         //[self updateArrowDirection:course*PI/180];
     }else{
+        CGAffineTransform transform = CGAffineTransformMakeRotation(0);
+        [UIView beginAnimations:nil context:NULL];
+        [DrawableMapScrollView sharedMap].transform = transform;    //rotate map
+        [UIView commitAnimations];
         [self updateArrowDirection:course*PI/180];
     }
 }
@@ -549,10 +529,8 @@ float mapLeftThereDirection=0;       //TODO: assign and keep it an appropriate v
     if(!_gpsRecording)return;
     //MainQ * mQ=[MainQ sharedManager];
     //UILabel * lb=(UILabel *)[mQ getTargetRef:TRIPMETER];
-    UILabel *lb=((PM2OnScreenButtons *)[PM2OnScreenButtons sharedBnManager]).tripLabel;
-    if ([lb isEqual:@"0"]) {
-        return;
-    }
+    OnScreenMeter *lb=((PM2OnScreenButtons *)[PM2OnScreenButtons sharedBnManager]).tripLabel;
+    
     NSString *tripString;
     
     bool bMetric=false;

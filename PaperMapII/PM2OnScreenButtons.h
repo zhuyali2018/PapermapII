@@ -17,7 +17,7 @@
 @class GPSReceiver;
 @class MainMenuViewController;
 
-@interface PM2OnScreenButtons : NSObject <OnOffBnDelegate>
+@interface PM2OnScreenButtons : NSObject <OnOffBnDelegate,TrackHandleDelegate>
 @property (nonatomic, strong) UIToolbar	* toolbar;
 @property (nonatomic, strong) UIBarButtonItem * menuBn;
 @property (nonatomic, strong) UIBarButtonItem * gotoBn;
