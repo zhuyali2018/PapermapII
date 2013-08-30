@@ -12,6 +12,7 @@
 #import "LinePropertyViewController.h"
 #import "MainMenuViewController.h"
 #import "OnOffButton.h"
+#import "CompassButton.h"
 
 @class OnScreenMeter;
 @class GPSReceiver;
@@ -58,6 +59,9 @@
 @property (strong, nonatomic) LinePropertyViewController * linePropertyViewCtrlr;
 @property (strong, nonatomic) MainMenuViewController * menuController;
 @property (nonatomic, strong) UIImageView * arrow;
+
+@property (nonatomic) CompassButton * compassBn;
+
 + (id)sharedBnManager;
 -(void)addToolBar:(UIView *)vc;
 -(void)addButtons:(UIView *)vc;

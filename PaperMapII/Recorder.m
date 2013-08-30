@@ -457,13 +457,16 @@ bool centerPos;
         [UIView commitAnimations];
         [self updateArrowDirection:0];              //both lines work
         //[self updateArrowDirection:course*PI/180];
+        ((PM2OnScreenButtons *)[PM2OnScreenButtons sharedBnManager]).compassBn.direction=-1*course*3.1415926f/180;
     }else{
         CGAffineTransform transform = CGAffineTransformMakeRotation(0);
         [UIView beginAnimations:nil context:NULL];
         [DrawableMapScrollView sharedMap].transform = transform;    //rotate map
         [UIView commitAnimations];
         [self updateArrowDirection:course*PI/180];
+        ((PM2OnScreenButtons *)[PM2OnScreenButtons sharedBnManager]).compassBn.direction=0;
     }
+    [((PM2OnScreenButtons *)[PM2OnScreenButtons sharedBnManager]).compassBn setNeedsDisplay];
 }
 //
 //-(void)updateMapRotateDegree{

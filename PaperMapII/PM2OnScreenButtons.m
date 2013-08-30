@@ -53,6 +53,7 @@
 @synthesize toolbar;
 @synthesize menuBn,gotoBn;
 @synthesize gpsBn1,drawBn1;
+@synthesize compassBn;
 //@synthesize drawBn;
 
 + (id)sharedBnManager {
@@ -220,6 +221,7 @@
     [self add_GPSArrow];
     [self add_CenterBn];
     [self add_MainMenu];
+    [self add_compassBn];
 }
 #pragma mark ------------start button methods----------------
 -(void)add_bnStart{
@@ -494,8 +496,10 @@ extern float zmc;
         CGAffineTransform transform = CGAffineTransformMakeRotation(0);
         [UIView beginAnimations:nil context:NULL];
         [DrawableMapScrollView sharedMap].transform = transform;    //rotate map
+        compassBn.direction=0;
         [UIView commitAnimations];
-        //[self updateArrowDirection:course*PI/180];
+        
+        [compassBn setNeedsDisplay];        //added to fix compass-not-reset bug
         
         int W=_baseView.bounds.size.width;
         int H=_baseView.bounds.size.height;
@@ -529,6 +533,11 @@ extern float zmc;
                      }];
 }
 #pragma mark ------------other methods----------------
+-(void)add_compassBn{
+	compassBn=[[CompassButton alloc] initWithFrame:CGRectMake([_baseView bounds].size.width-60, 50, 60, 60)];
+	//[compassBn setBackgroundColor:[UIColor clearColor]];
+	[_baseView addSubview:compassBn];
+}
 -(void)addUnloadDrawingButton{
     unloadDrawingButton=[UIButton buttonWithType:(UIButtonTypeRoundedRect)];
     [unloadDrawingButton setTitle:@"Del Drawings" forState:UIControlStateNormal];

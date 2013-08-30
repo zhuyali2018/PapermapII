@@ -97,6 +97,7 @@ extern float zmc;
     [bns repositionButtonsFromX:screenW-110 Y:screenH];
     [bns positionStartBnWidth:screenW Height:screenH];
     NSLOG9(@"did Rotate !!!");
+    [((PM2OnScreenButtons *)[PM2OnScreenButtons sharedBnManager]).compassBn setFrame:CGRectMake(screenW-60, 50, 60, 60)];
     [((PM2OnScreenButtons *)[PM2OnScreenButtons sharedBnManager]).speedLabel  setFrame:CGRectMake(0,  screenH-180, 400, 140)];
     [((PM2OnScreenButtons *)[PM2OnScreenButtons sharedBnManager]).heightLabel setFrame:CGRectMake(402,screenH-80,  200,  40)];
     [((PM2OnScreenButtons *)[PM2OnScreenButtons sharedBnManager]).tripLabel setFrame:CGRectMake(402,screenH-122,  200,  40)];
