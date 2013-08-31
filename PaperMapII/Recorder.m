@@ -31,6 +31,7 @@
 @synthesize lastGpsNode;
 @synthesize POICreating,POIMoving;
 @synthesize poiArray;
+@synthesize userBusy;
 
 bool centerPos;
 
@@ -75,6 +76,7 @@ bool centerPos;
     }
 }
 - (void)gpsStart{
+    userBusy = FALSE;
     if (_gpsRecording) {
         return;
     }
@@ -408,9 +410,12 @@ bool centerPos;
 }
 #pragma mark ------------------ CLLocationManagerDelegate method -------------
 - (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation{
-    if (((PM2AppDelegate *)[UIApplication sharedApplication].delegate).viewController.orientationChanging) {
-        return;
-    }
+    @synchronized(self) {
+		if(userBusy)return;
+        if (((PM2AppDelegate *)[UIApplication sharedApplication].delegate).viewController.orientationChanging) return;
+        if([DrawableMapScrollView sharedMap].zooming) return;   //if zooming, do nothing to improve performance
+        if([DrawableMapScrollView sharedMap].dragging||[DrawableMapScrollView sharedMap].tracking)return; //do nothing if it has started dragging.
+	}
     [self displayAccuracy:newLocation];
     if(!_gpsRecording){   //if not recording, do not create the node
         return;
@@ -625,7 +630,7 @@ int n=0;  //gps node counter
 		//speed sensitive point distance on gps track, added on 10/24/2010
         if (speed<5) {	 //about 11 mph
 			minDistance=10;
-        }else if (speed > 10) {  //about 33.37 mph
+        }else if (speed > 10) {  //about 22.37 mph
             minDistance=15;
         }else if (speed > 15) {  //about 33.56 mph
             minDistance=25;
@@ -633,8 +638,10 @@ int n=0;  //gps node counter
 			minDistance=25;
         }else if (speed > 30) {  //about 63 mph
 			minDistance=30;
-		}else if (speed > 100) {  //about 225 mph, for airplane
+		}else if (speed > 100) {  //about 225 mph, for airplane about to land or just taking off
             minDistance=500;
+        }else if (speed > 200) {  //about 447 mph, for airplane normal long distance crusing
+            minDistance=2000;
         }
     }
     CLLocationDistance distance=0;

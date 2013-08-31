@@ -395,6 +395,9 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
     arrow.center=arrowCenter0;
 }
 - (void)layoutSubviews{
+    if ([Recorder sharedRecorder].gpsRecording) {
+        [Recorder sharedRecorder].userBusy=true;
+    }
     [[ScaleRuler shareScaleRuler:CGRectMake(30, 0,700,30)] updateRuler:self];
     //update maplevel
     UILabel * lb=((PM2OnScreenButtons *)[PM2OnScreenButtons sharedBnManager]).resLabel;
@@ -455,6 +458,8 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
 		}
 	}
     [self fillWindowWithBasicMap:0];   //version 5.03 added
+    if([Recorder sharedRecorder].gpsRecording)
+        [Recorder sharedRecorder].userBusy=false;
 }
 /*
 // Only override drawRect: if you perform custom drawing.

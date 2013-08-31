@@ -11,7 +11,7 @@
 #import "AllImports.h"
 #import "TapDetectView.h"
 #import "PM2Protocols.h"
-
+#import "Recorder.h"
 @implementation TapDetectView
 
 @synthesize mapTapHandler,drawDelegate;
@@ -52,6 +52,9 @@ CGPoint midpointBetweenPoints(CGPoint a, CGPoint b) {
 	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(handleSingleTap) object:nil];
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(handleTwoFingerTap) object:nil];
     NSLOG2(@"<======================================[touchesBegan]======================================>");
+    if ([Recorder sharedRecorder].gpsRecording) {
+        [Recorder sharedRecorder].userBusy=true;
+    }
     // update our touch state
     if ([[event touchesForView:self] count] > 1)
         multipleTouches = YES;
@@ -135,6 +138,10 @@ CGPoint midpointBetweenPoints(CGPoint a, CGPoint b) {
         twoFingerTapIsPossible = YES;
         multipleTouches = NO;
     }
+    if ([Recorder sharedRecorder].gpsRecording) {
+		[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(userDone) object:nil];
+		[self performSelector:@selector(userDone) withObject:nil afterDelay:2.0];
+	}
 	NSLOG2(@"[touchesEnded] exits ...");
 }
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -174,6 +181,9 @@ CGPoint midpointBetweenPoints(CGPoint a, CGPoint b) {
 	if ([mapTapHandler respondsToSelector:@selector(tapDetectView:gotTwoFingerTapAtPoint:)])
         [mapTapHandler tapDetectView:self gotTwoFingerTapAtPoint:tapLocation];
     
+}
+-(void)userDone{
+	[Recorder sharedRecorder].userBusy=FALSE;
 }
 
 @end

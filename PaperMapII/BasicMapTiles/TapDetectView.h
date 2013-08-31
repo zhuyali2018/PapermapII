@@ -20,4 +20,6 @@
 - (void)handleSingleTap;
 - (void)handleDoubleTap;
 - (void)handleTwoFingerTap;
+
+-(void)userDone;
 @end
