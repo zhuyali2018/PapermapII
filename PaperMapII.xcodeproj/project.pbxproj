@@ -12,6 +12,8 @@
 		AA05FAA91798DEBF00B78243 /* DrawingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA05FAA71798DEBF00B78243 /* DrawingViewController.m */; };
 		AA05FAAA1798DEBF00B78243 /* DrawingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AA05FAA81798DEBF00B78243 /* DrawingViewController.xib */; };
 		AA0E12CB17C4824B00311C61 /* OnScreenMeter.m in Sources */ = {isa = PBXBuildFile; fileRef = AA0E12CA17C4824B00311C61 /* OnScreenMeter.m */; };
+		AA1E38A217D9A4B000DBFF4B /* xButton.png in Resources */ = {isa = PBXBuildFile; fileRef = AA1E38A117D9A4B000DBFF4B /* xButton.png */; };
+		AA1E38A517D9A61900DBFF4B /* LockupScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = AA1E38A417D9A61900DBFF4B /* LockupScreen.m */; };
 		AA23676D17D07FF9000BC873 /* CompassButton.m in Sources */ = {isa = PBXBuildFile; fileRef = AA23676C17D07FF9000BC873 /* CompassButton.m */; };
 		AA23676F17D0809D000BC873 /* Compass.png in Resources */ = {isa = PBXBuildFile; fileRef = AA23676E17D0809D000BC873 /* Compass.png */; };
 		AA511CD6174F1F0F00F46B1A /* MapSources.m in Sources */ = {isa = PBXBuildFile; fileRef = AA511CD5174F1F0F00F46B1A /* MapSources.m */; };
@@ -3559,6 +3561,9 @@
 		AA0E12C917C4824B00311C61 /* OnScreenMeter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnScreenMeter.h; sourceTree = "<group>"; };
 		AA0E12CA17C4824B00311C61 /* OnScreenMeter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OnScreenMeter.m; sourceTree = "<group>"; };
 		AA1B5345175EE308005355C3 /* AllImports.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AllImports.h; path = ../AllImports.h; sourceTree = "<group>"; };
+		AA1E38A117D9A4B000DBFF4B /* xButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = xButton.png; sourceTree = "<group>"; };
+		AA1E38A317D9A61900DBFF4B /* LockupScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LockupScreen.h; sourceTree = "<group>"; };
+		AA1E38A417D9A61900DBFF4B /* LockupScreen.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LockupScreen.m; sourceTree = "<group>"; };
 		AA23676B17D07FF9000BC873 /* CompassButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompassButton.h; sourceTree = "<group>"; };
 		AA23676C17D07FF9000BC873 /* CompassButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CompassButton.m; sourceTree = "<group>"; };
 		AA23676E17D0809D000BC873 /* Compass.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Compass.png; sourceTree = "<group>"; };
@@ -5466,6 +5471,8 @@
 				AAAD5A6E176E1F5900DCDAD2 /* PM2OnScreenButtons.m */,
 				AAF8D163178D1B5B00611A86 /* OnOffButton.h */,
 				AAF8D164178D1B5B00611A86 /* OnOffButton.m */,
+				AA1E38A317D9A61900DBFF4B /* LockupScreen.h */,
+				AA1E38A417D9A61900DBFF4B /* LockupScreen.m */,
 				AAAD5A7317701B5800DCDAD2 /* ScaleRuler.h */,
 				AAAD5A7417701B5800DCDAD2 /* ScaleRuler.m */,
 				AA23676B17D07FF9000BC873 /* CompassButton.h */,
@@ -5586,6 +5593,7 @@
 		AABDD48717437B3600A0D6E9 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				AA1E38A117D9A4B000DBFF4B /* xButton.png */,
 				AABDD4E51745D9CF00A0D6E9 /* icon72x72.png */,
 				AABDD48817437B3600A0D6E9 /* PaperMapII-Info.plist */,
 				AABDD48917437B3600A0D6E9 /* InfoPlist.strings */,
@@ -9205,6 +9213,7 @@
 				AA8BC56817C2FEF600D433ED /* RoundGreenBn.png in Resources */,
 				AA8BC56917C2FEF600D433ED /* RoundRedBn.png in Resources */,
 				AA23676F17D0809D000BC873 /* Compass.png in Resources */,
+				AA1E38A217D9A4B000DBFF4B /* xButton.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -10992,6 +11001,7 @@
 				AADE0F6717C9DFEA0016AB8B /* SettingItem.m in Sources */,
 				AADE0F6A17CB0E1B0016AB8B /* Settings.m in Sources */,
 				AA23676D17D07FF9000BC873 /* CompassButton.m in Sources */,
+				AA1E38A517D9A61900DBFF4B /* LockupScreen.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

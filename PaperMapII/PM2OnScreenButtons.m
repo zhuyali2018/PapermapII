@@ -112,22 +112,7 @@
     [colorBn1 setTitleColor:[UIColor blackColor] forState:UIControlStateHighlighted];
     [colorBn1 addTarget:self action:@selector(colorPicker) forControlEvents:UIControlEventTouchUpInside];
     [colorBn1 setTitle:@"Line Color" forState:UIControlStateNormal];
-    
-//	//creating color setting button
-//	settingsBn=[UIButton buttonWithType:UIButtonTypeRoundedRect];
-//	[settingsBn setFrame:CGRectMake(0,0, 80, 30)];
-//	[settingsBn setBackgroundImage:[UIImage imageNamed:@"button_00.png"] forState:UIControlStateNormal];
-//	[settingsBn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-//	[settingsBn addTarget:self action:@selector(displaySettingsOrUndoDrawing:) forControlEvents:UIControlEventTouchUpInside];
-//	[settingsBn setTitle:LA(@"Settings") forState:UIControlStateNormal];
-//	//create hide/show line button
-//	hideLineBn=[UIButton buttonWithType:UIButtonTypeRoundedRect];
-//	[hideLineBn setFrame:CGRectMake(0, 0, 80, 30)];
-//	[hideLineBn setBackgroundImage:[UIImage imageNamed:@"button_00.png"] forState:UIControlStateNormal];
-//	[hideLineBn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-//	[hideLineBn addTarget:self action:@selector(hideDrawing) forControlEvents:UIControlEventTouchUpInside];
-//	[hideLineBn setTitle:LA(@"Hide line") forState:UIControlStateNormal];
-	
+    	
 	//Add an x button for locking up the screen
 	UIButton * xButton=[UIButton buttonWithType:UIButtonTypeCustom];
 	[xButton setBackgroundImage:[UIImage imageNamed:@"xButton.png"] forState:UIControlStateNormal];
@@ -159,6 +144,60 @@
 	//[self displaySettingsOrUndoDrawing:nil];   //load the settings without showing so that the line property for drawing and GPS track could be available
 }
 #pragma mark -----------------------------
+-(void)lockUpScreen{
+    NSLog(@"Tap on the Lock screen bn");
+    if(!_lockupScreen){
+		int screenW=[_baseView bounds].size.width;
+		int screenH=[_baseView bounds].size.height;
+		_lockupScreen=[[LockupScreen alloc] initWithFrame:CGRectMake(0,0,screenW, screenH)];
+		[_lockupScreen setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.7]];
+		[_baseView addSubview:_lockupScreen];
+		[_baseView bringSubviewToFront:_lockupScreen];
+		_lockupScreen.rootView=_baseView;
+		[self slideScreenUpandDown];
+		[self slideScreenUpandDown];
+	}else {
+		[_baseView bringSubviewToFront:_lockupScreen];
+		[self slideScreenUpandDown];
+	}
+
+}
+-(void)slideScreenUpandDown{
+	bool hide=false;
+	CGRect frame = [_lockupScreen frame];
+    if (frame.origin.y>=[_baseView bounds].size.height) {
+        //frame.origin.y -= [[self view] bounds].size.height+50;				//slid up to show
+		if(frame.origin.y!=0)
+			frame.origin.y=0;
+		if([_baseView bounds].size.height<[_baseView bounds].size.width)
+			frame.size.height=768;
+		//TODO: Check: hideToolbar=YES;
+		//TODO: [menuObj.toolbar setHidden:YES];
+    } else {
+        frame.origin.y += [_baseView bounds].size.height+50;				//slide down to hide
+		hide=TRUE;
+		
+		//TODO: hideToolbar=NO;
+		//TODO:[menuObj.toolbar setHidden:NO];
+    }
+    [UIView beginAnimations:nil context:nil];
+    [UIView setAnimationDuration:0.2];
+    
+	[_lockupScreen setFrame:frame];							//Set frame position here, animated
+    
+	[UIView commitAnimations];
+	
+	_lockupScreen.hidden=hide;
+	//GSEventSetBacklightLevel(0.1);
+	[_baseView bringSubviewToFront:_lockupScreen];
+	//make the lock take effect immediately instead of having to touch slider for new alpha before taking effect
+//	if(_lockupScreen.alpha>0.95)
+//		_lockupScreen.locked=TRUE;
+//	else {
+//		_lockupScreen.locked=FALSE;
+//	}
+}
+
 -(void)GotoMenu{
     NSLog(@"goto button tapped");
     if (gotoPopover == nil) {

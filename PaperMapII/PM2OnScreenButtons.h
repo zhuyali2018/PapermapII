@@ -13,6 +13,7 @@
 #import "MainMenuViewController.h"
 #import "OnOffButton.h"
 #import "CompassButton.h"
+#import "LockupScreen.h"
 
 @class OnScreenMeter;
 @class GPSReceiver;
@@ -59,7 +60,7 @@
 @property (strong, nonatomic) LinePropertyViewController * linePropertyViewCtrlr;
 @property (strong, nonatomic) MainMenuViewController * menuController;
 @property (nonatomic, strong) UIImageView * arrow;
-
+@property (nonatomic, strong) LockupScreen *  lockupScreen;
 @property (nonatomic) CompassButton * compassBn;
 
 + (id)sharedBnManager;
@@ -80,6 +81,7 @@
 -(void)addMapCenterIndicator:(UIView*)vc;
 -(void)add_GPSArrow;
 -(void)add_buttonsToToolbar:(bool)noGotoBn;
+-(void)add_compassBn;
 
 -(void)repositionButtonsFromX:(int)x Y:(int)y;
 -(void)positionStartBnWidth:(int)w Height:(int)h;
