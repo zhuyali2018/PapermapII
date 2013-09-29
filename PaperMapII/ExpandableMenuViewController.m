@@ -17,6 +17,7 @@
 @synthesize  trackHandlerDelegate;
 @synthesize  plusButton;
 @synthesize id;         //for identifying menu instance
+@synthesize readOnly;
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
@@ -35,7 +36,8 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     
     plusButton=[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addAFolder:)];
-    self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    if(!readOnly)
+        self.navigationItem.rightBarButtonItem = self.editButtonItem;
     self.tableView.allowsSelectionDuringEditing=TRUE; // this line enables the selection during editing mode
     
     //initialize the menuList with Tracklist passed in
@@ -81,16 +83,16 @@
 {
     static NSString *CellIdentifier = @"Cell";
     
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
+    UITableViewCell *cell;// = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    //if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-    }else{
-        //remove all subviews:
-        NSArray * subviews=[cell subviews];
-        for (int i=0; i<[subviews count];i++) {    
-            [subviews[i] removeFromSuperview];
-        }
-    }
+//    }else{
+//        //remove all subviews:
+//        NSArray * subviews=[cell subviews];
+//        for (int i=0; i<[subviews count];i++) {    
+//            [subviews[i] removeFromSuperview];
+//        }
+//    }
     // Configure the cell...
     MenuNode * node=(MenuNode *)menuList[indexPath.row];
     if (node.folder)

@@ -47,6 +47,7 @@
 @property (nonatomic, strong) OnScreenMeter * speedLabel;
 @property (nonatomic, strong) OnScreenMeter *heightLabel;
 @property (nonatomic, strong) OnScreenMeter *tripLabel;
+@property (nonatomic, strong) OnScreenMeter *timerLabel;
 @property (nonatomic, strong) UIView *baseView;
 
 @property (nonatomic, strong) Recorder * routRecorder;

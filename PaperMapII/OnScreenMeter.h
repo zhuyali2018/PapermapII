@@ -10,4 +10,5 @@
 
 @interface OnScreenMeter : UILabel
 @property(nonatomic,strong)UILabel * unitLabel;
+@property(nonatomic,strong)UILabel * titleLabel;
 @end

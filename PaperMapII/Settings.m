@@ -112,8 +112,8 @@ extern bool directionUp;
             lb.hidden=!gotSelected;
             break;
         case HIDE_TRIP_TIMER:
-//            lb=(UILabel *)((PM2OnScreenButtons *)[PM2OnScreenButtons sharedBnManager]).timerLabel;
-//            lb.hidden=!gotSelected;
+            lb=(UILabel *)((PM2OnScreenButtons *)[PM2OnScreenButtons sharedBnManager]).timerLabel;
+            lb.hidden=!gotSelected;
             break;
         default:
             break;

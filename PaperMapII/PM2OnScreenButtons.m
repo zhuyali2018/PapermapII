@@ -48,6 +48,7 @@
 @synthesize speedLabel;
 @synthesize heightLabel;
 @synthesize tripLabel;
+@synthesize timerLabel;
 @synthesize menuButton;
 @synthesize arrow;
 @synthesize toolbar;
@@ -257,6 +258,7 @@
     [self add_SpeedPanel];
     [self add_HeightPanel];
     [self add_TripMeter];
+    [self add_TimerMeter];
     [self add_GPSArrow];
     [self add_CenterBn];
     [self add_MainMenu];
@@ -540,6 +542,7 @@ extern float zmc;
         
         [compassBn setNeedsDisplay];        //added to fix compass-not-reset bug
         
+        //put following code behind rotate back to avoid map strip on map view !!!
         int W=_baseView.bounds.size.width;
         int H=_baseView.bounds.size.height;
         [[DrawableMapScrollView sharedMap] setFrame:CGRectMake(0,0,W,H)];
@@ -805,6 +808,7 @@ extern float zmc;
 	}else {
 		[self.heightLabel.unitLabel setText:@"feet"];
 	}
+    [self.heightLabel.titleLabel setText:@"Altitude"];
 }
 -(void)add_TripMeter{
     int screenH=[_baseView frame].size.height;
@@ -820,35 +824,22 @@ extern float zmc;
 	}else {
 		[self.tripLabel.unitLabel setText:@"miles"];
 	}
+    [self.tripLabel.titleLabel setText:@"Trip Meter"];
 }
-//-(void)add_HeightPanel{
-//    int screenH=[_baseView frame].size.height;
-//	heightLabel=[[UILabel alloc] initWithFrame:CGRectMake(402,screenH-80, 300, 40)];
-//	[heightLabel setBackgroundColor:[UIColor colorWithRed:0.2 green:0.4 blue:0.4 alpha:0.5]];
-//	[heightLabel setTextColor:[UIColor yellowColor]];
-//	[heightLabel setShadowColor:[UIColor blackColor]];
-//	[heightLabel setShadowOffset:CGSizeMake(2.0, 2.0)];
-//	[heightLabel setFont:[UIFont boldSystemFontOfSize:30]];
-//    //heightLabel.hidden=YES;
-//	//[heightLabel setText:[NSString stringWithFormat:@" %4.1fm ",128.2]];
-//	[heightLabel setTextAlignment:UITextAlignmentRight];
-//    [_baseView addSubview:heightLabel];
-//    [[MainQ sharedManager] register:heightLabel withID:ALTITUDELABEL];  //register to receive text for displaying and other settings
-//}
-//-(void)add_TripMeter{
-//    int screenH=[_baseView frame].size.height;
-//	tripLabel=[[UILabel alloc] initWithFrame:CGRectMake(402,screenH-122, 300, 40)];
-//	[tripLabel setBackgroundColor:[UIColor colorWithRed:0.2 green:0.7 blue:0.2 alpha:0.5]];
-//	[tripLabel setTextColor:[UIColor yellowColor]];
-//	[tripLabel setShadowColor:[UIColor blackColor]];
-//	[tripLabel setShadowOffset:CGSizeMake(2.0, 2.0)];
-//	[tripLabel setFont:[UIFont boldSystemFontOfSize:30]];
-//    //tripLabel.hidden=YES;
-//	//[tripLabel setText:[NSString stringWithFormat:@" %4.1fm ",128.2]];
-//	[tripLabel setTextAlignment:UITextAlignmentRight];
-//    [_baseView addSubview:tripLabel];
-//    [[MainQ sharedManager] register:tripLabel withID:TRIPMETER];
-//}
+-(void)add_TimerMeter{
+    int screenH=[_baseView frame].size.height;
+	timerLabel=[[OnScreenMeter alloc] initWithFrame:CGRectMake(402,screenH-164, 200, 40)];
+	[timerLabel setFont:[UIFont boldSystemFontOfSize:30]];
+    [timerLabel setTextAlignment:NSTextAlignmentRight];
+    
+    [timerLabel.unitLabel setFrame:CGRectMake(0, 0, 80, 20)];
+    [timerLabel.unitLabel setFont:[UIFont italicSystemFontOfSize:14]];
+    [timerLabel.unitLabel setTextAlignment:NSTextAlignmentLeft];
+    
+    [_baseView addSubview:timerLabel];
+    timerLabel.hidden=YES;
+    [self.timerLabel.unitLabel setText:@"Trip Timer"];
+}
 -(void)add_GPSArrow{
     arrow=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"Arrow.png"]];
     [_baseView addSubview:arrow];

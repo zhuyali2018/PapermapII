@@ -77,6 +77,13 @@ bool centerPos;
 }
 - (void)gpsStart{
     userBusy = FALSE;
+    //need to show timer ?
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	bool showTimer=[defaults boolForKey:@"Show Trip Timer"];
+    UILabel *lb=((PM2OnScreenButtons *)[PM2OnScreenButtons sharedBnManager]).timerLabel;
+    lb.hidden=!showTimer;
+    
+    _gpsStartTime=[NSDate date];
     if (_gpsRecording) {
         return;
     }
@@ -101,7 +108,7 @@ bool centerPos;
     totalTrip=0;
     totalTripRealTime=0;
     n=0;
-    [self saveAllGpsTracks];  //to provent from crashing and losing data during GPS Recording
+    //[self saveAllGpsTracks];  //to provent from crashing and losing data during GPS Recording
 }
 -(void) startNewTrack{
     //initialize a track
@@ -180,12 +187,15 @@ bool centerPos;
 	return [documentsDirectory stringByAppendingPathComponent:@"PoiList.plist"];
 }
 -(void) saveAllTracks{
-     NSMutableData * data=[[NSMutableData alloc] init];
-     NSKeyedArchiver * archiver=[[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
-     [archiver encodeObject:trackArray forKey:@"trackArray"];
-     [archiver finishEncoding];
-     
-     [data writeToFile:[self dataFilePath] atomically:YES];
+    [self saveAllTracksTo:[self dataFilePath]];
+}
+- (void)saveAllTracksTo:(NSString *)filePath{
+    NSMutableData * data=[[NSMutableData alloc] init];
+    NSKeyedArchiver * archiver=[[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
+    [archiver encodeObject:trackArray forKey:@"trackArray"];
+    [archiver finishEncoding];
+    
+    [data writeToFile:filePath atomically:YES];
 }
 -(void) saveAllGpsTracks{
     NSMutableData * data=[[NSMutableData alloc] init];
@@ -204,15 +214,26 @@ bool centerPos;
     [data writeToFile:[self poiFilePath] atomically:YES];
 }
 -(void)initializeAllTracks{
+    if (trackArray) {
+        NSLog(@"something is wrong, drawing track array is not nil !!!!");
+        return;
+    }
     //initialize arrAllTracks
     NSString * filePath=[self dataFilePath];
-    //NSLog(@"data file path=%@",filePath);
+    [self loadAllTracksFrom:filePath];
+}
+-(void)loadAllTracksFrom:(NSString *)filePath{
     if([[NSFileManager defaultManager] fileExistsAtPath:filePath]){
         NSData * data=[[NSData alloc] initWithContentsOfFile:filePath];
         NSKeyedUnarchiver *unarchiver=[[NSKeyedUnarchiver alloc] initForReadingWithData:data];
-
-        trackArray=[unarchiver decodeObjectForKey:@"trackArray"];
+        
+        NSMutableArray * trackArray1=[unarchiver decodeObjectForKey:@"trackArray"];
         [unarchiver finishDecoding];
+        if (trackArray) {
+            [trackArray addObjectsFromArray:(NSArray *)trackArray1];
+        }else{
+            trackArray=trackArray1;
+        }
     }
     if(!trackArray)
         trackArray=[[NSMutableArray alloc]initWithCapacity:2];
@@ -431,7 +452,7 @@ bool centerPos;
     //show speed panel
     [self showSpeed:newLocation.speed];         //speed update every second
     [self showAltitude:newLocation.altitude];   //alt update every second
-    
+    [self showTripTimer];
     if(newLocation.horizontalAccuracy>10){ //if acuracy is not accurate enough, do nothing further
         return;
 	}
@@ -544,18 +565,18 @@ float mapLeftThereDirection=0;       //TODO: assign and keep it an appropriate v
     bool bMetric=false;
     if (bMetric) {
         if (totalTripRealTime<10000)  //less than 10km
-            tripString=[[NSString alloc] initWithFormat:@"%4.3f ", totalTripRealTime/1000];
+            tripString=[[NSString alloc] initWithFormat:@" %4.3f ", totalTripRealTime/1000];
         else if (totalTripRealTime<20000)  //less than 20km
-            tripString=[[NSString alloc] initWithFormat:@"%4.2f", totalTripRealTime/1000];
+            tripString=[[NSString alloc] initWithFormat:@" %4.2f", totalTripRealTime/1000];
         else
-            tripString=[[NSString alloc] initWithFormat:@"%4.1f", totalTripRealTime/1000];
+            tripString=[[NSString alloc] initWithFormat:@" %4.1f", totalTripRealTime/1000];
     }else{
         if (totalTripRealTime<10000)  //less than 10km
-            tripString=[[NSString alloc] initWithFormat:@"%.3f", totalTripRealTime/1609.344];
+            tripString=[[NSString alloc] initWithFormat:@" %.3f", totalTripRealTime/1609.344];
         else if (totalTripRealTime<20000)  //less than 20km
-            tripString=[[NSString alloc] initWithFormat:@"%.2f", totalTripRealTime/1609.344];
+            tripString=[[NSString alloc] initWithFormat:@" %.2f", totalTripRealTime/1609.344];
         else
-            tripString=[[NSString alloc] initWithFormat:@"%.1f", totalTripRealTime/1609.344];
+            tripString=[[NSString alloc] initWithFormat:@" %.1f", totalTripRealTime/1609.344];
     }
     [lb setText:tripString];
 }
@@ -572,6 +593,13 @@ float mapLeftThereDirection=0;       //TODO: assign and keep it an appropriate v
         altString=[[NSString alloc] initWithFormat:@"%4.1f", altitude];
     }else
         altString=[[NSString alloc] initWithFormat:@"%.0f", altitude*3.28084];
+    [lb setText:altString];
+}
+-(void)showTripTimer{
+    NSDate * now = [NSDate date];
+    NSTimeInterval tm=[now timeIntervalSinceDate:_gpsStartTime];
+    UILabel *lb=((PM2OnScreenButtons *)[PM2OnScreenButtons sharedBnManager]).timerLabel;
+    NSString * altString=[[NSString alloc]initWithFormat:@"%02.0f:%02.0f:%02.0f",floor(tm/3600),fmod(floor(tm/60),60),fmod(tm,60)];
     [lb setText:altString];
 }
 -(void)showSpeed:(CLLocationSpeed)speed{

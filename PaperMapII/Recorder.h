@@ -30,6 +30,8 @@
 @property bool POICreating;
 @property bool POIMoving;
 @property bool userBusy;
+@property NSDate * gpsStartTime;       //creating gps starting date and time
+
 - (void) start;
 - (void) stop;
 - (void) mapLevel:(int)maplevel singleTapAtPoint:(CGPoint)tapPoint;
@@ -42,9 +44,11 @@
 - (void)unloadGPSTracks;
 - (void)unloadDrawings;
 - (void)saveAllTracks;
+- (void)saveAllTracksTo:(NSString *)filePath;
 - (void)saveAllGpsTracks;
 - (void)saveAllPOIs;
 - (void)initializeAllTracks;
+- (void)loadAllTracksFrom:(NSString *)filePath;
 - (void)initializeAllGpsTracks;
 - (void)initializeAllPOIs;
 - (double)GetScreenY:(double)lat;

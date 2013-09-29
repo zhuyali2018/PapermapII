@@ -36,6 +36,8 @@
 		AA59B95417B48F2E00092996 /* UIChkButton.m in Sources */ = {isa = PBXBuildFile; fileRef = AA59B95317B48F2E00092996 /* UIChkButton.m */; };
 		AA59B95717B48F7A00092996 /* checked.png in Resources */ = {isa = PBXBuildFile; fileRef = AA59B95517B48F7900092996 /* checked.png */; };
 		AA59B95817B48F7A00092996 /* unchecked.png in Resources */ = {isa = PBXBuildFile; fileRef = AA59B95617B48F7900092996 /* unchecked.png */; };
+		AA649E7C17F1605C001BEBF8 /* SaveItem.m in Sources */ = {isa = PBXBuildFile; fileRef = AA649E7B17F1605C001BEBF8 /* SaveItem.m */; };
+		AA649E7F17F2A2AF001BEBF8 /* ListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA649E7E17F2A2AF001BEBF8 /* ListViewController.m */; };
 		AA729A53175870D800F6AF78 /* LineProperty.m in Sources */ = {isa = PBXBuildFile; fileRef = AA729A52175870D800F6AF78 /* LineProperty.m */; };
 		AA729A54175870D800F6AF78 /* LineProperty.m in Sources */ = {isa = PBXBuildFile; fileRef = AA729A52175870D800F6AF78 /* LineProperty.m */; };
 		AA8608F6177AA703008EBC95 /* MainQ.m in Sources */ = {isa = PBXBuildFile; fileRef = AA8608F5177AA703008EBC95 /* MainQ.m */; };
@@ -3596,6 +3598,10 @@
 		AA59B95317B48F2E00092996 /* UIChkButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIChkButton.m; sourceTree = "<group>"; };
 		AA59B95517B48F7900092996 /* checked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checked.png; sourceTree = "<group>"; };
 		AA59B95617B48F7900092996 /* unchecked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = unchecked.png; sourceTree = "<group>"; };
+		AA649E7A17F1605C001BEBF8 /* SaveItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SaveItem.h; sourceTree = "<group>"; };
+		AA649E7B17F1605C001BEBF8 /* SaveItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SaveItem.m; sourceTree = "<group>"; };
+		AA649E7D17F2A2AF001BEBF8 /* ListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ListViewController.h; sourceTree = "<group>"; };
+		AA649E7E17F2A2AF001BEBF8 /* ListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ListViewController.m; sourceTree = "<group>"; };
 		AA729A51175870D800F6AF78 /* LineProperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LineProperty.h; sourceTree = "<group>"; };
 		AA729A52175870D800F6AF78 /* LineProperty.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LineProperty.m; sourceTree = "<group>"; };
 		AA8608F4177AA702008EBC95 /* MainQ.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainQ.h; sourceTree = "<group>"; };
@@ -5492,6 +5498,8 @@
 				AA8608F9177BEF6B008EBC95 /* MainMenuViewController.m */,
 				AA8608FC177C593E008EBC95 /* MenuItem.h */,
 				AA8608FD177C593E008EBC95 /* MenuItem.m */,
+				AA649E7D17F2A2AF001BEBF8 /* ListViewController.h */,
+				AA649E7E17F2A2AF001BEBF8 /* ListViewController.m */,
 				AAE6DF5117808AE9003F230F /* GPSTrackListTableViewController.h */,
 				AAE6DF5217808AE9003F230F /* GPSTrackListTableViewController.m */,
 				AAE6DF5C1780C3BB003F230F /* GPSTrackViewController.h */,
@@ -5514,6 +5522,8 @@
 				AAAAEF3117BDD81300166090 /* GreenBnOn100.png */,
 				AA0E12C917C4824B00311C61 /* OnScreenMeter.h */,
 				AA0E12CA17C4824B00311C61 /* OnScreenMeter.m */,
+				AA649E7A17F1605C001BEBF8 /* SaveItem.h */,
+				AA649E7B17F1605C001BEBF8 /* SaveItem.m */,
 			);
 			name = "Buttons and Labels";
 			sourceTree = "<group>";
@@ -10957,7 +10967,9 @@
 			files = (
 				AABDD48D17437B3600A0D6E9 /* main.m in Sources */,
 				AABDD49117437B3600A0D6E9 /* PM2AppDelegate.m in Sources */,
+				AA649E7F17F2A2AF001BEBF8 /* ListViewController.m in Sources */,
 				AABDD49A17437B3600A0D6E9 /* PM2ViewController.m in Sources */,
+				AA649E7C17F1605C001BEBF8 /* SaveItem.m in Sources */,
 				AABDD4EA1745F02B00A0D6E9 /* MapScrollView.m in Sources */,
 				AABDD4EE1747402D00A0D6E9 /* ZoomView.m in Sources */,
 				AABDD4F6174744B600A0D6E9 /* TileContainer.m in Sources */,
@@ -11147,6 +11159,7 @@
 				INFOPLIST_FILE = "PaperMapII/PaperMapII-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos7.0;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -11159,6 +11172,7 @@
 				INFOPLIST_FILE = "PaperMapII/PaperMapII-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos7.0;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

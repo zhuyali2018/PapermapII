@@ -22,5 +22,5 @@
 @property (nonatomic) id<TrackHandleDelegate> trackHandlerDelegate;
 @property int id;
 @property (nonatomic, strong) IBOutlet UIBarButtonItem * plusButton;
-
+@property bool readOnly;        //true to disable the table edit button
 @end
