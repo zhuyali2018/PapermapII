@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
+//typedef enum { DRAWTRACKLIST,GPSTRACKLIST,POIFILELIST} ListType;
+
 @interface ListViewController : UITableViewController
+@property bool dirty;
 @property (nonatomic) NSArray * list;   //node list table (drawing)
 @end

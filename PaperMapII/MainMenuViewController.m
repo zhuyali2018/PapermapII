@@ -21,16 +21,12 @@
 #import "SaveItem.h"
 
 @interface MainMenuViewController ()
-@property (nonatomic, retain) UIAlertView * saveDrawingDlg;
-@property (nonatomic, retain) UITextField * filenameField;
 @end
 
 @implementation MainMenuViewController
 
 @synthesize menuMatrix;
-@synthesize filenameField;
-@synthesize saveDrawingDlg;
-@synthesize drawingListView;    //list of drawing files saved
+@synthesize fileListView;    //list of drawing files saved
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -44,11 +40,10 @@
                     [[MenuItem alloc]initWithTitle:@"Unload All Drawings"], nil];
         NSArray * gpsMenu=[[NSArray alloc]initWithObjects:
                     [[MenuItem alloc]initWithTitle:@"GPS Tracks"],
-                    [[MenuItem alloc]initWithTitle:@"Config GPS"],
+                    [[MenuItem alloc]initWithTitle:@"Save GPS Tracks To File"],
                     [[MenuItem alloc]initWithTitle:@"Start GPS"],
                     [[MenuItem alloc]initWithTitle:@"Load GPS Track From"],
-                    [[MenuItem alloc]initWithTitle:@"Unload GPS Track"],
-                    [[MenuItem alloc]initWithTitle:@"Load GPS Track As Drawing"],
+                    [[MenuItem alloc]initWithTitle:@"Unload All GPS Tracks"],
                     [[MenuItem alloc]initWithTitle:@"Send GPS Track File"], nil];
 
         NSArray * poiMenu=[[NSArray alloc]initWithObjects:
@@ -58,9 +53,9 @@
                     [[MenuItem alloc]initWithTitle:@"Goto a POI"],
                     [[MenuItem alloc]initWithTitle:@"Goto an Address"],
                     [[MenuItem alloc]initWithTitle:@"Hide POIs"],
-                    [[MenuItem alloc]initWithTitle:@"Unload all POIs"],
                     [[MenuItem alloc]initWithTitle:@"Save POIs to File"],
                     [[MenuItem alloc]initWithTitle:@"Load POIs from File"],
+                    [[MenuItem alloc]initWithTitle:@"Unload all POIs"],
                     [[MenuItem alloc]initWithTitle:@"Send POI File"], nil];
 
         NSArray * helpMenu=[[NSArray alloc]initWithObjects:
@@ -72,10 +67,12 @@
                     [[MenuItem alloc]initWithTitle:@"About Paper Map II"], nil];
         
         menuMatrix=[[NSArray alloc]initWithObjects:drawingMenu,gpsMenu,poiMenu,helpMenu,nil];
-        drawingListView=[[ListViewController alloc]initWithStyle:UITableViewStylePlain];
+        fileListView=[[ListViewController alloc]initWithStyle:UITableViewStylePlain];
     }
     return self;
 }
+typedef enum{SAVEDRAWINGDLG=1000,SAVEGPSTRACKSDLG,SAVEPOISDLG, UNLOADDRAWCONFIRMDLG,UNLOADGPSCONFIRMDLG,UNLOADPOICONFIRMDLG} DLGID;
+
 // section definitions
 #define DRAW_SECTION 0
 #define  GPS_SECTION 1
@@ -90,14 +87,18 @@
 #define UNLOADDRAWING   3
 
 // GPS Section
-#define GPSTRACKS   0
-
+#define GPSTRACKS       0
+#define SAVEGPSTRACKS   1
+#define LOADGPSTRACKS   3
+#define UNLOADGPSTRACKS 4
 // POI Section
 #define CREATEPOI   0
 #define MODIFYPOI   1
 #define MOVEAPOI    2
 #define GOTOAPOI    3
-
+#define SAVEPOIS    6
+#define LOADPOIS    7
+#define UNLOADPOIS  8
 // Help Section
 #define PICKCOLOR   0
 #define SETTINGS    1
@@ -113,18 +114,23 @@
     ((MenuItem *)menuMatrix[DRAW_SECTION][UNLOADDRAWING]).menuItemHandler=@selector(unloadDrawings:);
     //GPS Section
     ((MenuItem *)menuMatrix[GPS_SECTION][GPSTRACKS]).menuItemHandler=@selector(showGPSTrackList:);
-    
+    ((MenuItem *)menuMatrix[GPS_SECTION][SAVEGPSTRACKS]).menuItemHandler=@selector(saveGPSTracksToFile:);
+    ((MenuItem *)menuMatrix[GPS_SECTION][LOADGPSTRACKS]).menuItemHandler=@selector(loadGpsTracksFromFile:);
+    ((MenuItem *)menuMatrix[GPS_SECTION][UNLOADGPSTRACKS]).menuItemHandler=@selector(unloadGpsTracks:);
     //POI Section
     ((MenuItem *)menuMatrix[POI_SECTION][CREATEPOI]).menuItemHandler=@selector(CreatePoi);
     ((MenuItem *)menuMatrix[POI_SECTION][MODIFYPOI]).menuItemHandler=@selector(ModifyPoi:);
     ((MenuItem *)menuMatrix[POI_SECTION][MOVEAPOI]).menuItemHandler=@selector(MoveAPoi:);
     ((MenuItem *)menuMatrix[POI_SECTION][GOTOAPOI]).menuItemHandler=@selector(GotoAPoi:);
     
+    ((MenuItem *)menuMatrix[POI_SECTION][SAVEPOIS]).menuItemHandler=@selector(savePOIsToFile:);
+    ((MenuItem *)menuMatrix[POI_SECTION][LOADPOIS]).menuItemHandler=@selector(loadPOIsFromFile:);
+    ((MenuItem *)menuMatrix[POI_SECTION][UNLOADPOIS]).menuItemHandler=@selector(unloadAllPOIs:);
+    
     //Help Section
     ((MenuItem *)menuMatrix[HELP_SECTION][PICKCOLOR]).menuItemHandler=@selector(PickColor);
     ((MenuItem *)menuMatrix[HELP_SECTION][SETTINGS]).menuItemHandler=@selector(Settings:);
-    
-    [self loadDrawingFileList];
+
 }
 #pragma mark - -------------menu item handlers-------------------
 
@@ -134,16 +140,57 @@
     if([OSB.menuPopover isPopoverVisible]){
         [OSB.menuPopover dismissPopoverAnimated:YES];
     }
-    [Recorder sharedRecorder].trackArray=nil;
-    UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"Unload All Drawings"
-       message:@"All Drawings have been cleared from map" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];[alert show];
-    [[DrawableMapScrollView sharedMap] refresh];
+    //ask user to confirm the deletion (unloading) of all drawings on map
+    UIAlertView * removeConfirmDlg = [[UIAlertView alloc] initWithTitle:@"Removal Confirmation" message:@"Are you sure to remove all the drawings from the map ?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Yes",nil];
+    
+    //saveDrawingDlg.alertViewStyle = UIAlertViewStylePlainTextInput;
+    removeConfirmDlg.tag=UNLOADDRAWCONFIRMDLG;
+    [removeConfirmDlg show];
 }
-
+-(void)unloadGpsTracks:(NSString *) menuTitle{
+    NSLOG10(@"unloadGpsTracks %@",menuTitle);
+    PM2OnScreenButtons * OSB=[PM2OnScreenButtons sharedBnManager];
+    if([OSB.menuPopover isPopoverVisible]){
+        [OSB.menuPopover dismissPopoverAnimated:YES];
+    }
+    
+    //ask user to confirm the deletion (unloading) of all GPS Tracks on map
+    UIAlertView * removeConfirmDlg = [[UIAlertView alloc] initWithTitle:@"Removal Confirmation" message:@"Are you sure to remove all the GPS Tracks from the map ?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Yes",nil];
+    
+    //saveDrawingDlg.alertViewStyle = UIAlertViewStylePlainTextInput;
+    removeConfirmDlg.tag=UNLOADGPSCONFIRMDLG;
+    [removeConfirmDlg show];
+}
+-(void) unloadAllPOIs:(NSString *) menuTitle{
+    NSLOG10(@"unloadAllPOIs %@",menuTitle);
+    PM2OnScreenButtons * OSB=[PM2OnScreenButtons sharedBnManager];
+    if([OSB.menuPopover isPopoverVisible]){
+        [OSB.menuPopover dismissPopoverAnimated:YES];
+    }
+    
+    //ask user to confirm the deletion (unloading) of all POIs on map
+    UIAlertView * removeConfirmDlg = [[UIAlertView alloc] initWithTitle:@"Removal Confirmation" message:@"Are you sure to remove all the POIs from the map ?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Yes",nil];
+    
+    removeConfirmDlg.tag=UNLOADPOICONFIRMDLG;
+    [removeConfirmDlg show];
+}
 -(void)loadDrawingsFromFile:(NSString *) menuTitle{
     NSLOG10(@"loadDrawingsFromFile %@",menuTitle);
-    [drawingListView setTitle:menuTitle];
-    [self.navigationController pushViewController:drawingListView animated:YES];
+    [self loadDrawingFileList];
+    [fileListView setTitle:menuTitle];
+    [self.navigationController pushViewController:fileListView animated:YES];
+}
+-(void)loadGpsTracksFromFile:(NSString *) menuTitle{
+    NSLOG10(@"loadGpsTracksFromFile %@",menuTitle);
+    [self loadGpsFileList];
+    [fileListView setTitle:menuTitle];
+    [self.navigationController pushViewController:fileListView animated:YES];
+}
+-(void)loadPOIsFromFile:(NSString *) menuTitle{
+    NSLOG10(@"loadPOIsFromFile %@",menuTitle);
+    [self loadPoiFileList];
+    [fileListView setTitle:menuTitle];
+    [self.navigationController pushViewController:fileListView animated:YES];
 }
 -(void)saveDrawingsToFile:(NSString *) menuTitle{
     NSLog(@"saveDrawingsToFile");
@@ -151,17 +198,35 @@
     if([OSB.menuPopover isPopoverVisible]){
         [OSB.menuPopover dismissPopoverAnimated:YES];
     }
+    UIAlertView * saveDrawingDlg = [[UIAlertView alloc] initWithTitle:@"Save Drawing As" message:nil delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Save",nil];
+
+    saveDrawingDlg.alertViewStyle = UIAlertViewStylePlainTextInput;
+    saveDrawingDlg.tag=SAVEDRAWINGDLG;
+    [saveDrawingDlg show];
+}
+-(void)saveGPSTracksToFile:(NSString *) menuTitle{
+    NSLog(@"saveGPSTracksToFile");
+    PM2OnScreenButtons * OSB=[PM2OnScreenButtons sharedBnManager];
+    if([OSB.menuPopover isPopoverVisible]){
+        [OSB.menuPopover dismissPopoverAnimated:YES];
+    }
+    UIAlertView * saveGPSDlg = [[UIAlertView alloc] initWithTitle:@"Save GPS Tracks As" message:nil delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Save",nil];
     
-    saveDrawingDlg = [[UIAlertView alloc] initWithTitle:@"Save Drawing As"
-            message:@"\n" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Save", nil];
-	filenameField = [[UITextField alloc] initWithFrame:CGRectMake(20,50,252,25)];
-	filenameField.placeholder=@"Drawing Name";
-	filenameField.backgroundColor = [UIColor whiteColor];
-	filenameField.delegate = self;              //UITextFieldDelegate
-	[filenameField becomeFirstResponder];       //get focus
-	[saveDrawingDlg addSubview:filenameField];
-	
-	[saveDrawingDlg show];
+    saveGPSDlg.alertViewStyle = UIAlertViewStylePlainTextInput;
+    saveGPSDlg.tag=SAVEGPSTRACKSDLG;
+    [saveGPSDlg show];
+}
+-(void)savePOIsToFile:(NSString *) menuTitle{
+    NSLog(@"savePOIsToFile");
+    PM2OnScreenButtons * OSB=[PM2OnScreenButtons sharedBnManager];
+    if([OSB.menuPopover isPopoverVisible]){
+        [OSB.menuPopover dismissPopoverAnimated:YES];
+    }
+    UIAlertView * savePOIDlg = [[UIAlertView alloc] initWithTitle:@"Save POIs As" message:nil delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Save",nil];
+    
+    savePOIDlg.alertViewStyle = UIAlertViewStylePlainTextInput;
+    savePOIDlg.tag=SAVEPOISDLG;
+    [savePOIDlg show];
 }
 -(void)Settings:(NSString *)menuTitle{
     NSLog(@"Tap on Settings");
@@ -395,43 +460,115 @@
 #pragma mark --------- UITextField Delegate methods--------------
 - (void)alertView:(UIAlertView *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
     //Save DrawingDlg
-	if (saveDrawingDlg==actionSheet) {
+	if (SAVEDRAWINGDLG==actionSheet.tag) {
 		if (buttonIndex == 0){
 			NSLog(@"Saving drawing cancelled");
 		}else{
+            UITextField * filenameField=[actionSheet textFieldAtIndex:0];
 			[self saveDrawings:filenameField.text];
 			UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"Saving successful"
                 message:@"Drawing saved" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];[alert show];
 		}		
 		return;
-	}
-}
--(void) loadDrawingFileList{
-    NSArray * drawingListTable=nil;
-    NSString * filePath=[SaveItem absolutePath:@"drawinglistTable.tbl"];    //current version use drawinglistTable.tbl
-	//if file exists
-	if([[NSFileManager defaultManager] fileExistsAtPath:filePath]){
-		NSData * data=[[NSData alloc] initWithContentsOfFile:filePath];
-		NSKeyedUnarchiver *unarchiver=[[NSKeyedUnarchiver alloc] initForReadingWithData:data];
-		//NSMutableArray *array=[unarchiver decodeObjectForKey:@"nodelistTable"];       //previous version use nodelistTable
-        NSMutableArray *array=[unarchiver decodeObjectForKey:@"drawinglistTable"];      //current version use drawinglistTable
-		drawingListTable=[[NSArray alloc]initWithArray:array];    //  albums=array;  //=>this will crash the app.
-		[unarchiver finishDecoding];
-        drawingListView.list=drawingListTable;
+	}else if (SAVEGPSTRACKSDLG==actionSheet.tag) {
+		if (buttonIndex == 0){
+			NSLog(@"Saving GPS Tracks cancelled");
+		}else{
+            UITextField * filenameField=[actionSheet textFieldAtIndex:0];
+			[self saveGPSTracks:filenameField.text];
+			UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"Saving successful"
+                                                          message:@"GPS Tracks saved" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];[alert show];
+		}		
+		return;
+	}else if (UNLOADDRAWCONFIRMDLG==actionSheet.tag) {
+		if (buttonIndex == 0){
+			NSLog(@"Removing Drawing cancelled");
+		}else{  //unload drawings
+            [Recorder sharedRecorder].trackArray=nil;
+            UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"Unload All Drawings"
+                                                          message:@"All Drawings have been cleared from map" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];[alert show];
+            [[DrawableMapScrollView sharedMap] refresh];
+            [[Recorder sharedRecorder] saveAllTracks];      //commit the changes
+        }
+    }else if (UNLOADGPSCONFIRMDLG==actionSheet.tag) {
+		if (buttonIndex == 0){
+			NSLog(@"Removing GPS Tracks cancelled");
+		}else{  //unload gps tracks
+            [Recorder sharedRecorder].gpsTrackArray=nil;
+            UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"Unload All GPS Tracks"
+                                                          message:@"All GPS Tracks have been cleared from map" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];[alert show];
+            [[DrawableMapScrollView sharedMap] refresh];
+            [[Recorder sharedRecorder] saveAllGpsTracks];      //commit the changes
+        }
+    }else if(SAVEPOISDLG==actionSheet.tag){
+        if (buttonIndex == 0){
+			NSLog(@"Saving POIs To File cancelled");
+		}else{  //save POIs to file
+            UITextField * filenameField=[actionSheet textFieldAtIndex:0];
+			[self savePOIs:filenameField.text];
+			UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"Saving successful"
+                                                          message:@"POIs saved to file" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];[alert show];        }
+    }else if (UNLOADPOICONFIRMDLG==actionSheet.tag){
+        if (buttonIndex == 0){
+			NSLog(@"Unloading POIs from map cancelled");
+		}else{
+            [Recorder sharedRecorder].poiArray=nil;
+            UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"Unload All POIs"
+                                                          message:@"All POIs have been cleared from map" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];[alert show];
+            [[DrawableMapScrollView sharedMap] refresh];
+            [[Recorder sharedRecorder] saveAllPOIs];      //commit the changes
+        }
     }
 }
-//save the drawing displayname to drawing list for later retrieval
--(void)saveToList:(SaveItem *) saveItem{
-	NSArray * drawingListTable=nil;
-	//Loading the nodeList table
-	//NSString * filePath=[self absolutePath:@"nodelistTable.tbl"];         //previous version use nodelistTable.tbl
+-(void) loadDrawingFileList{
     NSString * filePath=[SaveItem absolutePath:@"drawinglistTable.tbl"];    //current version use drawinglistTable.tbl
+	fileListView.list=[Recorder loadMutableArrayFrom:filePath withKey:@"drawinglistTable"];
+    fileListView.view.tag=DRAWLIST;
+}
+-(void) loadGpsFileList{
+    NSString * filePath=[SaveItem absolutePath:@"GPSTrackTable.tbl"];
+	fileListView.list=[Recorder loadMutableArrayFrom:filePath withKey:@"GPSTrackTable"];
+    fileListView.view.tag=GPSLIST;
+}
+-(void) loadPoiFileList{
+    NSString * filePath=[SaveItem absolutePath:@"poiArrayTable.tbl"];
+	fileListView.list=[Recorder loadMutableArrayFrom:filePath withKey:@"poiArrayTable"];
+    fileListView.view.tag=POILIST;
+}
+
+//save the drawing displayname to drawing list for later retrieval
+//-(void)saveToList_ORG:(SaveItem *) saveItem{
+//	NSArray * drawingListTable=nil;
+//    NSString * filePath=[SaveItem absolutePath:@"drawinglistTable.tbl"];    //current version use drawinglistTable.tbl
+//	//if file exists
+//	if([[NSFileManager defaultManager] fileExistsAtPath:filePath]){
+//		NSData * data=[[NSData alloc] initWithContentsOfFile:filePath];
+//		NSKeyedUnarchiver *unarchiver=[[NSKeyedUnarchiver alloc] initForReadingWithData:data];
+//        NSMutableArray *array=[unarchiver decodeObjectForKey:@"drawinglistTable"];      //current version use drawinglistTable
+//		drawingListTable=[[NSArray alloc]initWithArray:array];    //  albums=array;  //=>this will crash the app.
+//		[unarchiver finishDecoding];
+//		// add the drawing
+//		drawingListTable=[drawingListTable arrayByAddingObject:saveItem];   //if there was one, merger new entries with old one
+//	}else{
+//		drawingListTable=[[NSArray alloc] initWithObjects:saveItem,nil];    //if this is the first time saving, create a new table with the entry
+//	}
+//	//by now, the drawingListTable is loaded. Now save it:
+//	NSMutableData * data=[[NSMutableData alloc] init];
+//	NSKeyedArchiver * archiver=[[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
+//	
+//	[archiver encodeObject:drawingListTable forKey:@"drawinglistTable"];
+//	[archiver finishEncoding];
+//	
+//	[data writeToFile:filePath atomically:YES];
+//}
+-(void)saveToList:(SaveItem *) saveItem andFile:(NSString *)tblFn withKey:(NSString *)key listType:(int)listType{
+	NSArray * drawingListTable=nil;
+    NSString * filePath=[SaveItem absolutePath:tblFn];    //current version use drawinglistTable.tbl
 	//if file exists
 	if([[NSFileManager defaultManager] fileExistsAtPath:filePath]){
 		NSData * data=[[NSData alloc] initWithContentsOfFile:filePath];
 		NSKeyedUnarchiver *unarchiver=[[NSKeyedUnarchiver alloc] initForReadingWithData:data];
-		//NSMutableArray *array=[unarchiver decodeObjectForKey:@"nodelistTable"];       //previous version use nodelistTable
-        NSMutableArray *array=[unarchiver decodeObjectForKey:@"drawinglistTable"];      //current version use drawinglistTable
+        NSMutableArray *array=[unarchiver decodeObjectForKey:key];      //current version use drawinglistTable
 		drawingListTable=[[NSArray alloc]initWithArray:array];    //  albums=array;  //=>this will crash the app.
 		[unarchiver finishDecoding];
 		// add the drawing
@@ -443,18 +580,28 @@
 	NSMutableData * data=[[NSMutableData alloc] init];
 	NSKeyedArchiver * archiver=[[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
 	
-	[archiver encodeObject:drawingListTable forKey:@"drawinglistTable"];
+	[archiver encodeObject:drawingListTable forKey:key];
 	[archiver finishEncoding];
 	
 	[data writeToFile:filePath atomically:YES];
-    
-    drawingListView.list=drawingListTable;
-    [drawingListView.tableView reloadData];
 }
+
 -(void)saveDrawings:(NSString *)filename{
     NSLog(@"in SaveDrawings:filename = %@",filename);
 	SaveItem * drawing=[[SaveItem alloc] initWithFilename:filename extension:@"draw"];
 	[[Recorder sharedRecorder] saveAllTracksTo:[drawing getAbsolutePathFilename]];            //save the drawing file
-    [self saveToList:drawing];
+    [self saveToList:drawing andFile:@"drawinglistTable.tbl" withKey:@"drawinglistTable" listType:DRAWLIST];
+}
+-(void)saveGPSTracks:(NSString *)filename{
+    NSLog(@"in saveGPSTracks:filename = %@",filename);
+	SaveItem * gpstrack=[[SaveItem alloc] initWithFilename:filename extension:@"gps"];
+	[[Recorder sharedRecorder] saveAllGpsTracksTo:[gpstrack getAbsolutePathFilename]];            //save the drawing file
+    [self saveToList:gpstrack andFile:@"GPSTrackTable.tbl" withKey:@"GPSTrackTable" listType:GPSLIST];
+}
+-(void)savePOIs:(NSString *)filename{
+    NSLog(@"in savePOIs:filename = %@",filename);
+	SaveItem * poi=[[SaveItem alloc] initWithFilename:filename extension:@"poi"];
+	[[Recorder sharedRecorder] saveAllPOIsTo:[poi getAbsolutePathFilename]];            //save the POIs to file
+    [self saveToList:poi andFile:@"poiArrayTable.tbl" withKey:@"poiArrayTable" listType:POILIST];
 }
 @end

@@ -198,20 +198,26 @@ bool centerPos;
     [data writeToFile:filePath atomically:YES];
 }
 -(void) saveAllGpsTracks{
+    [self saveAllGpsTracksTo:[self gpsDataFilePath]];
+}
+-(void) saveAllGpsTracksTo:(NSString *)filePath{
     NSMutableData * data=[[NSMutableData alloc] init];
     NSKeyedArchiver * archiver=[[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
     [archiver encodeObject:gpsTrackArray forKey:@"gpsTrackArray"];
     [archiver finishEncoding];
 
-    [data writeToFile:[self gpsDataFilePath] atomically:YES];
+    [data writeToFile:filePath atomically:YES];
 }
 -(void) saveAllPOIs{
+    [self saveAllPOIsTo:[self poiFilePath]];
+}
+-(void) saveAllPOIsTo:(NSString *)filePath{
     NSMutableData * data=[[NSMutableData alloc] init];
     NSKeyedArchiver * archiver=[[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
     [archiver encodeObject:poiArray forKey:@"poiArray"];
     [archiver finishEncoding];
     
-    [data writeToFile:[self poiFilePath] atomically:YES];
+    [data writeToFile:filePath atomically:YES];
 }
 -(void)initializeAllTracks{
     if (trackArray) {
@@ -223,51 +229,118 @@ bool centerPos;
     [self loadAllTracksFrom:filePath];
 }
 -(void)loadAllTracksFrom:(NSString *)filePath{
-    if([[NSFileManager defaultManager] fileExistsAtPath:filePath]){
-        NSData * data=[[NSData alloc] initWithContentsOfFile:filePath];
-        NSKeyedUnarchiver *unarchiver=[[NSKeyedUnarchiver alloc] initForReadingWithData:data];
-        
-        NSMutableArray * trackArray1=[unarchiver decodeObjectForKey:@"trackArray"];
-        [unarchiver finishDecoding];
+    NSMutableArray * trackArray2=[Recorder loadMutableArrayFrom:filePath withKey:@"trackArray"];
+    if (trackArray2) {
         if (trackArray) {
-            [trackArray addObjectsFromArray:(NSArray *)trackArray1];
+            [trackArray addObjectsFromArray:(NSArray *)trackArray2];
         }else{
-            trackArray=trackArray1;
+            trackArray=trackArray2;
         }
     }
     if(!trackArray)
         trackArray=[[NSMutableArray alloc]initWithCapacity:2];
 }
--(void)initializeAllGpsTracks{
-    //initialize arrAllTracks
-    NSString * filePath=[self gpsDataFilePath];
-    //NSLog(@"data file path=%@",filePath);
-    if([[NSFileManager defaultManager] fileExistsAtPath:filePath]){
-        NSData * data=[[NSData alloc] initWithContentsOfFile:filePath];
-        NSKeyedUnarchiver *unarchiver=[[NSKeyedUnarchiver alloc] initForReadingWithData:data];
-
-        gpsTrackArray=[unarchiver decodeObjectForKey:@"gpsTrackArray"];
-        [unarchiver finishDecoding];
-    }
-
-    if(!gpsTrackArray)
-        gpsTrackArray=[[NSMutableArray alloc]initWithCapacity:2];
-}
--(void)initializeAllPOIs{
-    //initialize arrAllTracks
-    NSString * filePath=[self poiFilePath];
-    //NSLog(@"data file path=%@",filePath);
++(NSMutableArray *)loadMutableArrayFrom:(NSString *)filePath withKey:(NSString *)key{
     if([[NSFileManager defaultManager] fileExistsAtPath:filePath]){
         NSData * data=[[NSData alloc] initWithContentsOfFile:filePath];
         NSKeyedUnarchiver *unarchiver=[[NSKeyedUnarchiver alloc] initForReadingWithData:data];
         
-        poiArray=[unarchiver decodeObjectForKey:@"poiArray"];
-        [unarchiver finishDecoding];
+        NSMutableArray * trackArray1=[unarchiver decodeObjectForKey:key];
+        return trackArray1;
     }
-    
+    return nil;
+}
+
+-(void)initializeAllGpsTracks{
+    if (gpsTrackArray) {
+        NSLog(@"something is wrong, gps track array is not nil !!!!");
+        return;
+    }
+    //initialize arrAllTracks
+    NSString * filePath=[self gpsDataFilePath];
+    [self loadAllGPSTracksFrom:filePath];
+}
+-(void)loadAllGPSTracksFrom:(NSString *)filePath{
+    NSMutableArray * trackArray2=[Recorder loadMutableArrayFrom:filePath withKey:@"gpsTrackArray"];
+    if (trackArray2) {
+        if (gpsTrackArray) {
+            [gpsTrackArray addObjectsFromArray:(NSArray *)trackArray2];
+        }else{
+            gpsTrackArray=trackArray2;
+        }
+    }
+    if(!gpsTrackArray)
+        gpsTrackArray=[[NSMutableArray alloc]initWithCapacity:2];
+}
+
+-(void)initializeAllPOIs{
+    if (poiArray) {
+        NSLog(@"something is wrong, poi array is not nil !!!!");
+        return;
+    }
+    //initialize poiArray
+    NSString * filePath=[self poiFilePath];
+    [self loadAllPOIsFrom:filePath];
+}
+-(void)loadAllPOIsFrom:(NSString *)filePath{
+    NSMutableArray * poiArray2=[Recorder loadMutableArrayFrom:filePath withKey:@"poiArray"];
+    if (poiArray2) {
+        if (poiArray) {
+            [poiArray addObjectsFromArray:(NSArray *)poiArray2];
+        }else{
+            poiArray=poiArray2;
+        }
+    }
     if(!poiArray)
         poiArray=[[NSMutableArray alloc]initWithCapacity:2];
 }
+//-(void)loadAllTracksFrom_ORG:(NSString *)filePath{
+//    if([[NSFileManager defaultManager] fileExistsAtPath:filePath]){
+//        NSData * data=[[NSData alloc] initWithContentsOfFile:filePath];
+//        NSKeyedUnarchiver *unarchiver=[[NSKeyedUnarchiver alloc] initForReadingWithData:data];
+//
+//        NSMutableArray * trackArray1=[unarchiver decodeObjectForKey:@"trackArray"];
+//        [unarchiver finishDecoding];
+//        if (trackArray) {
+//            [trackArray addObjectsFromArray:(NSArray *)trackArray1];
+//        }else{
+//            trackArray=trackArray1;
+//        }
+//    }
+//    if(!trackArray)
+//        trackArray=[[NSMutableArray alloc]initWithCapacity:2];
+//}
+
+//-(void)initializeAllGpsTracks_ORG{
+//    //initialize arrAllTracks
+//    NSString * filePath=[self gpsDataFilePath];
+//    //NSLog(@"data file path=%@",filePath);
+//    if([[NSFileManager defaultManager] fileExistsAtPath:filePath]){
+//        NSData * data=[[NSData alloc] initWithContentsOfFile:filePath];
+//        NSKeyedUnarchiver *unarchiver=[[NSKeyedUnarchiver alloc] initForReadingWithData:data];
+//
+//        gpsTrackArray=[unarchiver decodeObjectForKey:@"gpsTrackArray"];
+//        [unarchiver finishDecoding];
+//    }
+//
+//    if(!gpsTrackArray)
+//        gpsTrackArray=[[NSMutableArray alloc]initWithCapacity:2];
+//}
+//-(void)initializeAllPOIs_ORG{
+//    //initialize arrAllTracks
+//    NSString * filePath=[self poiFilePath];
+//    //NSLog(@"data file path=%@",filePath);
+//    if([[NSFileManager defaultManager] fileExistsAtPath:filePath]){
+//        NSData * data=[[NSData alloc] initWithContentsOfFile:filePath];
+//        NSKeyedUnarchiver *unarchiver=[[NSKeyedUnarchiver alloc] initForReadingWithData:data];
+//        
+//        poiArray=[unarchiver decodeObjectForKey:@"poiArray"];
+//        [unarchiver finishDecoding];
+//    }
+//    
+//    if(!poiArray)
+//        poiArray=[[NSMutableArray alloc]initWithCapacity:2];
+//}
 -(void) createPOI:(CGPoint)poiPoint{
 	POI *poi=[[POI alloc] initWithPoint:poiPoint];
 	poi.res=[DrawableMapScrollView sharedMap].maplevel;
@@ -639,8 +712,8 @@ float mapLeftThereDirection=0;       //TODO: assign and keep it an appropriate v
         lb2.hidden= (![[Settings sharedSettings] getSetting:HIDE_TRIP_METER]);  //trip meter
 	}else{
 		lb.hidden=YES;  //<==YES;
-        lb1.hidden=YES;  //<==YES;
-        lb2.hidden=YES;  //<==YES;
+        //lb1.hidden=YES;  //<==YES;  Altitude panel should not hide with speed panel when speed gets to 0 at traffic lights
+        //lb2.hidden=YES;  //<==YES;  Tripmeter panel should not hide with speed panel when speed gets to 0 at traffic lights
 	}
 }
 bool bStartGPSNode;

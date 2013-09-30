@@ -13,5 +13,5 @@
 @interface MainMenuViewController : UITableViewController <TrackHandleDelegate,UITextFieldDelegate>
 
 @property (nonatomic,strong)NSArray * menuMatrix;
-@property (nonatomic,strong)ListViewController * drawingListView;
+@property (nonatomic,strong)ListViewController * fileListView;
 @end

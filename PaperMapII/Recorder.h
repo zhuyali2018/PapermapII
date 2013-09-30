@@ -43,17 +43,28 @@
 - (void)unloadTracks;
 - (void)unloadGPSTracks;
 - (void)unloadDrawings;
+
 - (void)saveAllTracks;
 - (void)saveAllTracksTo:(NSString *)filePath;
+
 - (void)saveAllGpsTracks;
+- (void)saveAllGpsTracksTo:(NSString *)filePath;
+
 - (void)saveAllPOIs;
-- (void)initializeAllTracks;
+- (void)saveAllPOIsTo:(NSString *)filePath;
+
 - (void)loadAllTracksFrom:(NSString *)filePath;
+- (void)loadAllGPSTracksFrom:(NSString *)filePath;
+- (void)loadAllPOIsFrom:(NSString *)filePath;
+
+- (void)initializeAllTracks;
 - (void)initializeAllGpsTracks;
 - (void)initializeAllPOIs;
+
 - (double)GetScreenY:(double)lat;
 //- (void)centerPositionAtX:(int) x Y:(int) y;
 
 + (Recorder *)sharedRecorder;
++(NSMutableArray *)loadMutableArrayFrom:(NSString *)filePath withKey:(NSString *)key;
 -(NSArray*) addAnyModeAdjustedNode:(NSArray*)arrNodes Node:(Node *)node Mode:(bool)mode;
 @end
