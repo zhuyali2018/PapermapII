@@ -185,6 +185,7 @@ typedef enum{SAVEDRAWINGDLG=1000,SAVEGPSTRACKSDLG,SAVEPOISDLG, UNLOADDRAWCONFIRM
     [self loadGpsFileList];
     [fileListView setTitle:menuTitle];
     [self.navigationController pushViewController:fileListView animated:YES];
+    [fileListView refreshControl];
 }
 -(void)loadPOIsFromFile:(NSString *) menuTitle{
     NSLOG10(@"loadPOIsFromFile %@",menuTitle);
