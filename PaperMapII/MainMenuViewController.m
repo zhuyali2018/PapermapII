@@ -6,6 +6,8 @@
 //  Copyright (c) 2013 Yali Zhu. All rights reserved.
 //
 #import "AllImports.h"
+//#import <MultipeerConnectivity/MultipeerConnectivity.h>
+#import <GameKit/GameKit.h>
 #import "MainMenuViewController.h"
 #import "GPSTrackListTableViewController.h"
 #import "Recorder.h"
@@ -27,6 +29,8 @@
 
 @synthesize menuMatrix;
 @synthesize fileListView;    //list of drawing files saved
+@synthesize session;
+@synthesize peerID;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -42,6 +46,7 @@
                     [[MenuItem alloc]initWithTitle:@"GPS Tracks"],
                     [[MenuItem alloc]initWithTitle:@"Save GPS Tracks To File"],
                     [[MenuItem alloc]initWithTitle:@"Start GPS"],
+                    [[MenuItem alloc]initWithTitle:@"Start GPS By Connect iPhone"],
                     [[MenuItem alloc]initWithTitle:@"Load GPS Track From"],
                     [[MenuItem alloc]initWithTitle:@"Unload All GPS Tracks"],
                     [[MenuItem alloc]initWithTitle:@"Send GPS Track File"], nil];
@@ -89,8 +94,10 @@ typedef enum{SAVEDRAWINGDLG=1000,SAVEGPSTRACKSDLG,SAVEPOISDLG, UNLOADDRAWCONFIRM
 // GPS Section
 #define GPSTRACKS       0
 #define SAVEGPSTRACKS   1
-#define LOADGPSTRACKS   3
-#define UNLOADGPSTRACKS 4
+#define STARTGPS        2
+#define CONNECTIPHONE   3
+#define LOADGPSTRACKS   4
+#define UNLOADGPSTRACKS 5
 // POI Section
 #define CREATEPOI   0
 #define MODIFYPOI   1
@@ -115,6 +122,7 @@ typedef enum{SAVEDRAWINGDLG=1000,SAVEGPSTRACKSDLG,SAVEPOISDLG, UNLOADDRAWCONFIRM
     //GPS Section
     ((MenuItem *)menuMatrix[GPS_SECTION][GPSTRACKS]).menuItemHandler=@selector(showGPSTrackList:);
     ((MenuItem *)menuMatrix[GPS_SECTION][SAVEGPSTRACKS]).menuItemHandler=@selector(saveGPSTracksToFile:);
+    ((MenuItem *)menuMatrix[GPS_SECTION][CONNECTIPHONE]).menuItemHandler=@selector(connectiPhoneGPS);
     ((MenuItem *)menuMatrix[GPS_SECTION][LOADGPSTRACKS]).menuItemHandler=@selector(loadGpsTracksFromFile:);
     ((MenuItem *)menuMatrix[GPS_SECTION][UNLOADGPSTRACKS]).menuItemHandler=@selector(unloadGpsTracks:);
     //POI Section
@@ -133,7 +141,103 @@ typedef enum{SAVEDRAWINGDLG=1000,SAVEGPSTRACKSDLG,SAVEPOISDLG, UNLOADDRAWCONFIRM
 
 }
 #pragma mark - -------------menu item handlers-------------------
+bool connectedToIphone;
+-(void)connectiPhoneGPS{
+    
+    PM2OnScreenButtons * OSB=[PM2OnScreenButtons sharedBnManager];
+    if([OSB.menuPopover isPopoverVisible]){
+        [OSB.menuPopover dismissPopoverAnimated:YES];
+    }
+    connectedToIphone=!connectedToIphone;
+    if(connectedToIphone){ //if connecting to iphone
+        [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
+        //MCBrowserViewController * picker=[[MCBrowserViewController alloc] init];
+        GKPeerPickerController * picker=[[GKPeerPickerController alloc] init];
+		picker.delegate=self;
+		picker.connectionTypesMask = GKPeerPickerConnectionTypeNearby;
+		[picker show];
+        NSLog(@"Connecting iPhone for GPS signals");
+        ((MenuItem *)menuMatrix[GPS_SECTION][CONNECTIPHONE]).text=@"Disconnect iPhone and stop GPS";
+        [self.tableView reloadData];
+    }else{  //if already connected, that means user has tapped for disconnection
+        [session disconnectFromAllPeers];
+        session = nil;
+        [[Recorder sharedRecorder] gpsStop];
+        NSLog(@"disconnecting iPhone for GPS signals");
+        MenuItem * mi=((MenuItem *)menuMatrix[GPS_SECTION][CONNECTIPHONE]);
+        mi.text=@"Start GPS By Connect iPhone";
+        [self.tableView reloadData];
+    }
+}
 
+//delegate methods set right above
+//==========================================
+#pragma mark -
+#pragma mark GameKit Peer Picker Delegate Methods
+-(GKSession*)peerPickerController:(GKPeerPickerController *)picker sessionForConnectionType:(GKPeerPickerConnectionType)type{
+    NSLog(@"create a session for it");
+	GKSession *theSession=[[GKSession alloc] initWithSessionID:@"YaliGPSReceiverSession" displayName:nil sessionMode:GKSessionModePeer];
+    //GKSession *theSession=[[GKSession alloc] initWithSessionID:@"YaliMapTileReceiverSession" displayName:nil sessionMode:GKSessionModePeer];
+	return theSession;
+}
+-(void)peerPickerController:(GKPeerPickerController *)picker didConnectPeer:(NSString *)thePeerID toSession:(GKSession *)theSession{
+    NSLog(@"Did connected peer to session");
+	self.peerID=thePeerID;
+	self.session=theSession;
+	self.session.delegate=self;
+	[self.session setDataReceiveHandler:self withContext:NULL];
+	[picker dismiss];
+    [[Recorder sharedRecorder] gpsStart];
+}
+-(void)peerPickerControllerDidCancel:(GKPeerPickerController *)picker{
+	picker.delegate = nil;
+    connectedToIphone=false;
+    MenuItem * mi=((MenuItem *)menuMatrix[GPS_SECTION][CONNECTIPHONE]);
+    mi.text=@"Start GPS By Connect iPhone";
+    [self.tableView reloadData];
+    NSLog(@"User canceled bluetooth connection atempt!");
+}
+- (void) receiveData:(NSData *)data fromPeer:(NSString *)peer inSession: (GKSession *)session context:(void *)context{
+    NSLog(@"data handler");
+    CLLocation *location = (CLLocation *)[NSKeyedUnarchiver unarchiveObjectWithData:data];  //convert received data into CLLocation instance
+    [[Recorder sharedRecorder] locationManager:nil didUpdateToLocation:location fromLocation:nil];
+}
+//==========================================
+#pragma mark -
+#pragma mark GKSession Delegate methods
+-(void)session:(GKSession *) theSession didFailWithError:(NSError *)error{
+    NSLog(@"session did fail with error");
+    UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Error Connecting!" message:@"Unable to establish the connection." delegate:nil cancelButtonTitle:@"Bummer" otherButtonTitles:nil];
+	[alert show];
+	theSession.available=NO;
+	[theSession disconnectFromAllPeers];
+	theSession.delegate=nil;
+	[theSession setDataReceiveHandler:nil withContext:nil];
+	self.session=nil;
+}
+-(void)session:(GKSession *) theSession peer:(NSString *)peerID didChangeState:(GKPeerConnectionState)inState{
+    if(inState==GKPeerStateConnected){
+        NSLog(@"session did change state: Connected");
+    }else if(inState==GKPeerStateDisconnected){
+        NSLog(@"session did change state: Disconnected");
+        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Peer Disconnected!" message:@"The otherside is disconnected,The Connection has been lost!" delegate:nil cancelButtonTitle:@"Bummer" otherButtonTitles:nil];
+		[alert show];
+		
+		theSession.available=NO;
+		[theSession disconnectFromAllPeers];
+		theSession.delegate=nil;
+		[theSession setDataReceiveHandler:nil withContext:nil];
+		self.session=nil;
+    }else if(inState==GKPeerStateAvailable){
+        NSLog(@"session did change state: GKPeerStateAvailable");
+    }else if(inState==GKPeerStateUnavailable){
+        NSLog(@"session did change state: GKPeerStateUnavailable");
+    }else if(inState==GKPeerStateConnecting){
+        NSLog(@"session did change state: connecting");
+
+    }
+}
+//==========================================
 -(void)unloadDrawings:(NSString *) menuTitle{
     NSLOG10(@"unloadDrawings %@",menuTitle);
     PM2OnScreenButtons * OSB=[PM2OnScreenButtons sharedBnManager];

@@ -3515,6 +3515,7 @@
 		AABDE8F6174755C000A0D6E9 /* Sat4_9_9.jpg in Resources */ = {isa = PBXBuildFile; fileRef = AABDDBA6174755BE00A0D6E9 /* Sat4_9_9.jpg */; };
 		AAC84848175718EC002D7AA9 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AABDD48417437B3600A0D6E9 /* CoreGraphics.framework */; };
 		AAC8484C175854C0002D7AA9 /* Node.m in Sources */ = {isa = PBXBuildFile; fileRef = AAC8484B175854C0002D7AA9 /* Node.m */; };
+		AADD6CB6181DCBCD006A0FFA /* MultipeerConnectivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AADD6CB5181DCBCD006A0FFA /* MultipeerConnectivity.framework */; };
 		AADE0F6717C9DFEA0016AB8B /* SettingItem.m in Sources */ = {isa = PBXBuildFile; fileRef = AADE0F6617C9DFEA0016AB8B /* SettingItem.m */; };
 		AADE0F6A17CB0E1B0016AB8B /* Settings.m in Sources */ = {isa = PBXBuildFile; fileRef = AADE0F6917CB0E1B0016AB8B /* Settings.m */; };
 		AAE6DF5317808AE9003F230F /* GPSTrackListTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AAE6DF5217808AE9003F230F /* GPSTrackListTableViewController.m */; };
@@ -5380,6 +5381,7 @@
 		AABDDBA6174755BE00A0D6E9 /* Sat4_9_9.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Sat4_9_9.jpg; sourceTree = "<group>"; };
 		AAC8484A175854C0002D7AA9 /* Node.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Node.h; sourceTree = "<group>"; };
 		AAC8484B175854C0002D7AA9 /* Node.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Node.m; sourceTree = "<group>"; };
+		AADD6CB5181DCBCD006A0FFA /* MultipeerConnectivity.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MultipeerConnectivity.framework; path = System/Library/Frameworks/MultipeerConnectivity.framework; sourceTree = SDKROOT; };
 		AADE0F6517C9DFEA0016AB8B /* SettingItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingItem.h; sourceTree = "<group>"; };
 		AADE0F6617C9DFEA0016AB8B /* SettingItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingItem.m; sourceTree = "<group>"; };
 		AADE0F6817CB0E1B0016AB8B /* Settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Settings.h; sourceTree = "<group>"; };
@@ -5414,6 +5416,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AADD6CB6181DCBCD006A0FFA /* MultipeerConnectivity.framework in Frameworks */,
 				AAAD5A801770364800DCDAD2 /* CoreLocation.framework in Frameworks */,
 				AABDD4FD1747547000A0D6E9 /* QuartzCore.framework in Frameworks */,
 				AABDD4D91744A15000A0D6E9 /* GameKit.framework in Frameworks */,
@@ -5564,6 +5567,7 @@
 		AABDD47F17437B3600A0D6E9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				AADD6CB5181DCBCD006A0FFA /* MultipeerConnectivity.framework */,
 				AAAD5A7F1770364800DCDAD2 /* CoreLocation.framework */,
 				AABDD4FC1747547000A0D6E9 /* QuartzCore.framework */,
 				AABDD4D81744A15000A0D6E9 /* GameKit.framework */,

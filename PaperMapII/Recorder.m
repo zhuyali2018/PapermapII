@@ -506,10 +506,11 @@ bool centerPos;
 - (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation{
     @synchronized(self) {
 		if(userBusy)return;
-        if (((PM2AppDelegate *)[UIApplication sharedApplication].delegate).viewController.orientationChanging) return;
-        if([DrawableMapScrollView sharedMap].zooming) return;   //if zooming, do nothing to improve performance
-        if([DrawableMapScrollView sharedMap].dragging||[DrawableMapScrollView sharedMap].tracking)return; //do nothing if it has started dragging.
-	}
+ 	}
+    if([DrawableMapScrollView sharedMap].zooming) return;   //if zooming, do nothing to improve performance
+    if([DrawableMapScrollView sharedMap].dragging||[DrawableMapScrollView sharedMap].tracking)return; //do nothing if it has started dragging.
+    if (((PM2AppDelegate *)[UIApplication sharedApplication].delegate).viewController.orientationChanging) return;
+    
     [self displayAccuracy:newLocation];
     if(!_gpsRecording){   //if not recording, do not create the node
         return;
