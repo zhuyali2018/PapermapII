@@ -141,8 +141,6 @@
     CGPoint pStart=[self ConvertPoint:startNode];
 	CGContextMoveToPoint(context, pStart.x, pStart.y);
 	for (int i=1; i<count; i++) {
-        if([Recorder sharedRecorder].userBusy)      //if user is operating on map,stop drawing to increase performance
-            return;
 		GPSNode * tmpN=[track.nodes objectAtIndex:i];
         CGPoint tmpP=[self ConvertPoint:tmpN];
 		CGContextAddLineToPoint(context, tmpP.x, tmpP.y);
@@ -194,10 +192,7 @@
     
     //Drawing lines
     for (int i=0; i<[ptrToGpsTrackArray count]; i++) {     //loop through each track arrays of track arrays
-        if([Recorder sharedRecorder].userBusy)      //if user is operating on map,stop drawing to increase performance
-            return;
-		
-        if (((MenuNode *)ptrToGpsTrackArray[i]).selected) {
+         if (((MenuNode *)ptrToGpsTrackArray[i]).selected) {
             [self gpsDrawTrack:ptrToGpsTrackArray[i] context:context lastTrack:((i+1)==[ptrToGpsTrackArray count])];
         }
     }
@@ -289,6 +284,7 @@
     CGContextRef context = UIGraphicsGetCurrentContext();
     [self drawLines:context];
     [self drawGpsTracks:context];
+    //CGContextStrokePath(context);   //added on Jan 12,2014
 }
 #pragma mark UITextField Delegate methods
 - (void)textFieldDidEndEditing:(UITextField *)textField{

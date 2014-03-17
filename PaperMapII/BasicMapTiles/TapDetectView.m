@@ -163,6 +163,7 @@ CGPoint midpointBetweenPoints(CGPoint a, CGPoint b) {
 	NSLOG10(@"handleSingleTapTouchUp - TapPoint:%.0f,%.0f",atPoint.x,atPoint.y);
 	if ([drawDelegate respondsToSelector:@selector(tappedView:singleTapAtPoint:)])
         [drawDelegate tappedView:self singleTapAtPoint:atPoint];
+    [Recorder sharedRecorder].userBusy=FALSE;   //no matter what, this has to be false here
 }
 #pragma mark Touch Handling methods of the class------
 - (void)handleSingleTap{
