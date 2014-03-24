@@ -750,7 +750,7 @@ extern float zmc;
 	[speedLabel setShadowOffset:CGSizeMake(2.0, 2.0)];
 	[speedLabel setFont:[UIFont boldSystemFontOfSize:130]];
 	[speedLabel setText:[NSString stringWithFormat:@" %4.1f  ",128.2]];
-	[speedLabel setTextAlignment:UITextAlignmentRight];
+	[speedLabel setTextAlignment:NSTextAlignmentRight];
     [_baseView addSubview:speedLabel];
 	speedLabel.hidden=YES;  //TODO: change to YES;
 	

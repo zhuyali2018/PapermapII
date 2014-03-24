@@ -203,7 +203,7 @@
 		CGRect cvtedRect=[self convertRect:inputRect toView:tapDetectView];
         
 		TextInput *label = [[TextInput alloc] initWithFrame:cvtedRect];
-		[label setTextAlignment:UITextAlignmentLeft];
+		[label setTextAlignment:NSTextAlignmentLeft];
 		[label setBackgroundColor:[UIColor redColor]];
 		[label setTextColor:[UIColor yellowColor]];
 		//[label setShadowColor:[UIColor blackColor]];
@@ -219,7 +219,7 @@
 	//UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(pt.x-15, pt.y, 128, 25)];
 	UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(pt.x-15, pt.y, 200, 25)]; //1029
     //UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(pt.x-15, pt.y-10, 200, 25)]; //version 5.05
-	[label setTextAlignment:UITextAlignmentLeft];
+	[label setTextAlignment:NSTextAlignmentLeft];
 	[label setBackgroundColor:[UIColor clearColor]];
 	[label setTextColor:[UIColor yellowColor]];
 	[label setShadowColor:[UIColor blackColor]];
