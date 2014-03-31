@@ -197,10 +197,15 @@ bool connectedToIphone;
     [self.tableView reloadData];
     NSLog(@"User canceled bluetooth connection atempt!");
 }
+//bluetooth GPS data receiving method?
 - (void) receiveData:(NSData *)data fromPeer:(NSString *)peer inSession: (GKSession *)session context:(void *)context{
     NSLog(@"data handler");
     CLLocation *location = (CLLocation *)[NSKeyedUnarchiver unarchiveObjectWithData:data];  //convert received data into CLLocation instance
-    [[Recorder sharedRecorder] locationManager:nil didUpdateToLocation:location fromLocation:nil];
+    
+    NSArray * locations=[NSArray arrayWithObject:location];
+    [[Recorder sharedRecorder] locationManager:nil didUpdateLocations:locations];
+    
+    //[[Recorder sharedRecorder] locationManager:nil didUpdateToLocation:location fromLocation:nil];
 }
 //==========================================
 #pragma mark -
@@ -414,6 +419,7 @@ bool connectedToIphone;
     GPSTrackViewController * gpsTrackViewCtrlr=[[GPSTrackViewController alloc]initWithNibName:@"GPSTrackViewController" bundle:nil];
     
     GPSTrack * tk;
+    
     if (myid==DRAWLIST) {
         tk=[Recorder sharedRecorder].trackArray[row];
         gpsTrackViewCtrlr.listType=DRAWLIST;
@@ -427,7 +433,7 @@ bool connectedToIphone;
             [self.navigationController pushViewController:poiEditViewController animated:YES];
             return;
         }
-        tk=(MenuNode *)[Recorder sharedRecorder].poiArray[row];
+        tk=[Recorder sharedRecorder].poiArray[row];
     }else if (myid==GOTOPOI) {
         POI * poi=[Recorder sharedRecorder].poiArray[row];
         if (!poi.folder) {
@@ -440,7 +446,7 @@ bool connectedToIphone;
             return;
         }
         //if folder on POI list
-        tk=poi;
+        tk=(GPSTrack *)poi;
     }else if (myid==SETTINGS) {
         return; //do nothing for settings here
     }else

@@ -76,6 +76,10 @@ bool centerPos;
     }
 }
 - (void)gpsStart{
+    if (_gpsRecording) {
+        return;
+    }
+    
     userBusy = FALSE;
     //need to show timer ?
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -84,9 +88,7 @@ bool centerPos;
     lb.hidden=!showTimer;
     
     _gpsStartTime=[NSDate date];
-    if (_gpsRecording) {
-        return;
-    }
+    
     //initialize track
     _gpsTrack=[[GPSTrack alloc] init];
     if (!_gpsTrack) {
@@ -108,13 +110,14 @@ bool centerPos;
     totalTrip=0;
     totalTripRealTime=0;
     n=0;
-    //[self saveAllGpsTracks];  //to provent from crashing and losing data during GPS Recording
+    //just started the trip, no need to save here !!!
 }
+//starting a new track for drawing
 -(void) startNewTrack{
     //initialize a track
     if (!_track) return;                    //if track not initialized, return;
-    LineProperty *lp=_track.lineProperty;   //save the line property 
-    _track=[[Track alloc] init];
+    LineProperty *lp=_track.lineProperty;   //save the line property from previous track for new track
+    _track=[[Track alloc] init];            //create a new track
     if (!_track) return;                    //return if failed
     _track.selected=true;                   //was using the default which is false, drawing not showing !!!
     _track.lineProperty=lp;                 //TODO: this may need to get from setings directly
@@ -126,20 +129,20 @@ bool centerPos;
     }    
 }
 //TODO: Delete following method if not used
--(void) startNewGpsTrack{
-    //initialize a track
-    if (!_gpsTrack) return;                     //if track not initialized, return;
-    LineProperty *lp=_gpsTrack.lineProperty;    //save the line property
-    _gpsTrack=[[GPSTrack alloc] init];
-    if (!_gpsTrack) return;                     //return if failed
-    _gpsTrack.lineProperty=lp;                  //TODO: this may need to get from setings directly
-    if(!self.gpsTrackArray){   //when first time starting recorder, ini track array
-        self.gpsTrackArray=[[NSMutableArray alloc]initWithCapacity:5];
-        [self.gpsTrackArray addObject:self.gpsTrack];
-    }else{
-        [self.gpsTrackArray addObject:self.gpsTrack];
-    }
-}
+//-(void) startNewGpsTrack{
+//    //initialize a track
+//    if (!_gpsTrack) return;                     //if track not initialized, return;
+//    LineProperty *lp=_gpsTrack.lineProperty;    //save the line property
+//    _gpsTrack=[[GPSTrack alloc] init];
+//    if (!_gpsTrack) return;                     //return if failed
+//    _gpsTrack.lineProperty=lp;                  //TODO: this may need to get from setings directly
+//    if(!self.gpsTrackArray){   //when first time starting recorder, ini track array
+//        self.gpsTrackArray=[[NSMutableArray alloc]initWithCapacity:5];
+//        [self.gpsTrackArray addObject:self.gpsTrack];
+//    }else{
+//        [self.gpsTrackArray addObject:self.gpsTrack];
+//    }
+//}
 - (void)stop{
     _recording=false;
 }
@@ -503,49 +506,62 @@ bool centerPos;
     return x-H;
 }
 #pragma mark ------------------ CLLocationManagerDelegate method -------------
-- (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation{
+//- (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation{
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations{
     @synchronized(self) {
 		if(userBusy)return;
  	}
     if([DrawableMapScrollView sharedMap].zooming) return;   //if zooming, do nothing to improve performance
     if([DrawableMapScrollView sharedMap].dragging||[DrawableMapScrollView sharedMap].tracking)return; //do nothing if it has started dragging.
     if (((PM2AppDelegate *)[UIApplication sharedApplication].delegate).viewController.orientationChanging) return;
-    
-    [self displayAccuracy:newLocation];
+
     if(!_gpsRecording){   //if not recording, do not create the node
         return;
     }
-    double Lat=newLocation.coordinate.latitude;
-	double Long=newLocation.coordinate.longitude;
-	
-	int resM=18;   //use max resolution for best accuracy  //v163
-	
-	int xM=pow(2,resM)*0.711111111*(Long+180);						 //256/360=0.7111111111
-	int yM=pow(2,resM)*1.422222222*(90-[self GetScreenY:Lat]);		 //256/180=1.4222222222
-	
-    //show speed panel
-    [self showSpeed:newLocation.speed];         //speed update every second
-    [self showAltitude:newLocation.altitude];   //alt update every second
-    [self showTripTimer];
-    if(newLocation.horizontalAccuracy>10){ //if acuracy is not accurate enough, do nothing further
+    
+    int size=locations.count;
+    if (size <=0 ) {
         return;
-	}
-    //========Accuracy is enough, go ahead and record it=================
-	CGPoint GPSPoint;
-	GPSPoint.x=xM;
-	GPSPoint.y=yM;
-    GPSNode *node=[[GPSNode alloc]initWithPoint:GPSPoint mapLevel:resM];
-        
-    if(centerPos||[[Settings sharedSettings] getSetting:DIRECTION_UP]){
-        [[DrawableMapScrollView sharedMap] centerMapTo:node];
     }
+    for (int i=0; i<size; i++) {
+        CLLocation * newLocation=[locations objectAtIndex:i];
+        
+        [self displayAccuracy:newLocation];
+        
+        double Lat=newLocation.coordinate.latitude;
+        double Long=newLocation.coordinate.longitude;
+        
+        int resM=18;   //use max resolution for best accuracy  //v163
+        
+        int xM=pow(2,resM)*0.711111111*(Long+180);						 //256/360=0.7111111111
+        int yM=pow(2,resM)*1.422222222*(90-[self GetScreenY:Lat]);		 //256/180=1.4222222222
+        
+        //show speed panel
+        [self showSpeed:newLocation.speed];         //speed update every second
+        [self showAltitude:newLocation.altitude];   //alt update every second
+        [self showTripTimer];
+        if(newLocation.horizontalAccuracy>10){ //if acuracy is not accurate enough, do nothing further
+            return;
+        }
+        //========Accuracy is enough, go ahead and record it=================
+        CGPoint GPSPoint;
+        GPSPoint.x=xM;
+        GPSPoint.y=yM;
+        GPSNode *node=[[GPSNode alloc]initWithPoint:GPSPoint mapLevel:resM];
+            
+        if(centerPos||[[Settings sharedSettings] getSetting:DIRECTION_UP]){
+            [[DrawableMapScrollView sharedMap] centerMapTo:node];
+        }
 
-    //add a gps node to our node array for gps track
-    [self addGpsNode:node with:newLocation];
-    [self.gpsTrack saveNodes];        //TODO: may need to change to saving every 5 nodes or more for performance
-    [self showTripMeter];
-    if (!((PM2AppDelegate *)[UIApplication sharedApplication].delegate).viewController.orientationChanging) {
-        [self adjustMapRotateDegree:newLocation.course];
+        //add a gps node to our node array for gps track
+        [self addGpsNode:node with:newLocation];
+        [self.gpsTrack saveNodes];        //TODO: may need to change to saving every 5 nodes or more for performance
+        if (i>=(size-1)) {              //only update trip meter and change orientation at the newest location
+            [self showTripMeter];
+            if (!((PM2AppDelegate *)[UIApplication sharedApplication].delegate).viewController.orientationChanging) {
+                [self adjustMapRotateDegree:newLocation.course];
+            }
+        }
     }
 }
 //update the map rotating degree every second

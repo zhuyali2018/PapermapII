@@ -67,4 +67,5 @@
 + (Recorder *)sharedRecorder;
 +(NSMutableArray *)loadMutableArrayFrom:(NSString *)filePath withKey:(NSString *)key;
 -(NSArray*) addAnyModeAdjustedNode:(NSArray*)arrNodes Node:(Node *)node Mode:(bool)mode;
+
 @end
