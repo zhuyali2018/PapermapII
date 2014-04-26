@@ -35,7 +35,7 @@
     return self.selected;
 }
 - (id)init {
-    self = [super initWithTitle:@"-"];  //this line is important, or not menu will show up
+    self = [super initWithTitle:@"-"];  //this line is important, or no menu will show up
     if (self) {
         // Initialize self.
         visible=true;

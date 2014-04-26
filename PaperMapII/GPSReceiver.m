@@ -28,6 +28,7 @@
         locationManager=[[CLLocationManager alloc]init];
         locationManager.delegate=[Recorder sharedRecorder];
         locationManager.desiredAccuracy=kCLLocationAccuracyBest;
+        locationManager.distanceFilter=kCLDistanceFilterNone;
         GPSRunning=FALSE;
     }
     return self;

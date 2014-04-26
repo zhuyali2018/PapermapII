@@ -104,7 +104,7 @@
         drawTrack.visible=TRUE;
         if (!drawTrack.nodes) {      //read in nodes only if nodes not read in yet
             [drawTrack readNodes];
-            self.lbNumberOfNodes.text=[[NSString alloc]initWithFormat:@"%3d",[drawTrack.nodes count]];
+            self.lbNumberOfNodes.text=[[NSString alloc]initWithFormat:@"%3lu",(unsigned long)[drawTrack.nodes count]];
         }
     }
     [[DrawableMapScrollView sharedMap] refresh]; //update the map with new track property

@@ -33,6 +33,9 @@
 @synthesize poiArray;
 @synthesize userBusy;
 
+// --- for safety saving------
+@synthesize currentTrackSegment,currentTrackSegmentNodeCount,trackSegmentCount;
+
 bool centerPos;
 
 + (Recorder *)sharedRecorder{
@@ -111,6 +114,9 @@ bool centerPos;
     totalTripRealTime=0;
     n=0;
     //just started the trip, no need to save here !!!
+    //initial vars for segment saving:
+    currentTrackSegmentNodeCount=0;
+    trackSegmentCount=0;
 }
 //starting a new track for drawing
 -(void) startNewTrack{
@@ -519,7 +525,7 @@ bool centerPos;
         return;
     }
     
-    int size=locations.count;
+    NSUInteger size=locations.count;
     if (size <=0 ) {
         return;
     }
@@ -540,8 +546,8 @@ bool centerPos;
         [self showSpeed:newLocation.speed];         //speed update every second
         [self showAltitude:newLocation.altitude];   //alt update every second
         [self showTripTimer];
-        if(newLocation.horizontalAccuracy>10){ //if acuracy is not accurate enough, do nothing further
-            return;
+        if(newLocation.horizontalAccuracy>10){ //if acuracy is not accurate enough, do nothing further for this location
+            continue;
         }
         //========Accuracy is enough, go ahead and record it=================
         CGPoint GPSPoint;
@@ -555,7 +561,8 @@ bool centerPos;
 
         //add a gps node to our node array for gps track
         [self addGpsNode:node with:newLocation];
-        [self.gpsTrack saveNodes];        //TODO: may need to change to saving every 5 nodes or more for performance
+        //hide this saveing task in addGpsNode
+        //[self.gpsTrack saveNodes];        //TODO: may need to change to saving every 5 nodes or more for performance
         if (i>=(size-1)) {              //only update trip meter and change orientation at the newest location
             [self showTripMeter];
             if (!((PM2AppDelegate *)[UIApplication sharedApplication].delegate).viewController.orientationChanging) {
@@ -743,7 +750,7 @@ int n=0;  //gps node counter
     bool bFarEnough=false;
     
     CLLocationSpeed speed=newLocation.speed;
-    int minDistance=15;
+    int minDistance=15; //in meters
 	if(speed>0.6){                 //>1.34 mph
 		//speed sensitive point distance on gps track, added on 10/24/2010
         if (speed<5) {	 //about 11 mph
@@ -788,7 +795,21 @@ int n=0;  //gps node counter
     if(bFarEnough){
         self.gpsTrack.nodes=[self addGPSNode:node to:self.gpsTrack.nodes];
         self.gpsTrack.tripmeter=totalTrip;
-    }else{ //not far enough enough
+        //////////////////////////////////////segments saving to file:
+        self.currentTrackSegment.nodes=[self addGPSNode:node to:self.currentTrackSegment.nodes];        //<===added to save to a small file
+        self.currentTrackSegment.tripmeter=totalTrip;
+        [self.currentTrackSegment saveNodesToFile:trackSegmentCount];    //save to current seg related file depending on the trackSegmentCount;
+        currentTrackSegmentNodeCount++;
+        if(currentTrackSegmentNodeCount>100){       //<===this number should be adjusted according to performace. if it was too slow, make the number smaller
+            trackSegmentCount++;  //increase index
+            //=========>[currentTrackSegment.nodes removeAllObjects];
+            NSMutableArray * temp=[[NSMutableArray alloc] initWithArray:currentTrackSegment.nodes];
+            [temp removeAllObjects];
+            currentTrackSegment.nodes=temp;
+            currentTrackSegmentNodeCount=0;
+        }
+        //////////////////////////////////////
+    }else{ //not far enough
         self.gpsTrack.tripmeter=totalTrip+distance;   //not far enough, but still need to update every seconds the trip meter!
         totalTripRealTime=totalTrip+distance;
     }

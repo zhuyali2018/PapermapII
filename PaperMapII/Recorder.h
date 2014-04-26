@@ -31,7 +31,11 @@
 @property bool POIMoving;
 @property bool userBusy;
 @property NSDate * gpsStartTime;       //creating gps starting date and time
-
+//----------added for saving safety---------------
+@property (nonatomic,strong) GPSTrack * currentTrackSegment;
+@property int currentTrackSegmentNodeCount;
+@property int trackSegmentCount;
+//=========================
 - (void) start;
 - (void) stop;
 - (void) mapLevel:(int)maplevel singleTapAtPoint:(CGPoint)tapPoint;
