@@ -98,6 +98,7 @@ bool centerPos;
         return;
     }
     _gpsTrack.selected=true;  //auto select new GPS Track !
+    _gpsTrack.closed=false;     // means still adding nodes
     _gpsRecording=true;
     self.gpsTrack.lineProperty=[[LineProperty sharedGPSTrackProperty] copy];   //TODO: change to GPS used line property
     if(!self.gpsTrackArray){   //when first time starting recorder, ini track array
@@ -117,6 +118,8 @@ bool centerPos;
     //initial vars for segment saving:
     currentTrackSegmentNodeCount=0;
     trackSegmentCount=0;
+    //newly added
+    [self saveAllGpsTracks];        //save the gps track info first, so that if it crashes, it can have gpsTrack info and recover from segmentedly saved 100-node files
 }
 //starting a new track for drawing
 -(void) startNewTrack{
@@ -158,6 +161,23 @@ bool centerPos;
     if(lastGpsNode){
         lastGpsNode.x=0;
         lastGpsNode.y=0;
+    }
+    if (!self.gpsTrack.nodes) { //if nothing recorded, no need to go further
+        return;
+    }
+    //when GPS Stops, needs to save to file:
+    if([self.gpsTrack saveNodes]){
+        [self deleteTempFiles];      //delete the crash recoverable gps track segment files
+    }
+    self.gpsTrack.closed=true;
+    [self saveAllGpsTracks];
+}
+- (void)deleteTempFiles{
+    NSFileManager * manager=[NSFileManager defaultManager];
+    NSError * error=nil;
+    for(int i=0;i<trackSegmentCount;i++){
+        NSString * tempFilenameWithPath=[self.gpsTrack dataFilePathWith:i];
+        [manager removeItemAtPath:tempFilenameWithPath error:&error];
     }
 }
 -( void)undo{
@@ -795,8 +815,10 @@ int n=0;  //gps node counter
     if(bFarEnough){
         self.gpsTrack.nodes=[self addGPSNode:node to:self.gpsTrack.nodes];
         self.gpsTrack.tripmeter=totalTrip;
-        //////////////////////////////////////segments saving to file:
+        self.gpsTrack.nodesDirtyFlag=true;
+        //////////////////////////////////////segments saving to file ////////////
         self.currentTrackSegment.nodes=[self addGPSNode:node to:self.currentTrackSegment.nodes];        //<===added to save to a small file
+        self.currentTrackSegment.nodesDirtyFlag=true;
         self.currentTrackSegment.tripmeter=totalTrip;
         [self.currentTrackSegment saveNodesToFile:trackSegmentCount];    //save to current seg related file depending on the trackSegmentCount;
         currentTrackSegmentNodeCount++;
@@ -808,7 +830,7 @@ int n=0;  //gps node counter
             currentTrackSegment.nodes=temp;
             currentTrackSegmentNodeCount=0;
         }
-        //////////////////////////////////////
+        //////////////////////////////////////end of saving block////////////////
     }else{ //not far enough
         self.gpsTrack.tripmeter=totalTrip+distance;   //not far enough, but still need to update every seconds the trip meter!
         totalTripRealTime=totalTrip+distance;

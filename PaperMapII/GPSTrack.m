@@ -11,21 +11,23 @@
 @implementation GPSTrack
 
 @synthesize tripmeter;
-
 #pragma mark ----------------
 -(id)initWithCoder:(NSCoder *)coder{
 	if(self=[super initWithCoder:coder]){
         self.tripmeter =[coder decodeIntForKey:@"TRIPMETER"];
+        self.closed =[coder decodeBoolForKey:@"CLOSED"];
     }
 	return self;
 }
 -(void)encodeWithCoder:(NSCoder *)coder{
     [super encodeWithCoder:coder];
 	[coder encodeInt:self.tripmeter forKey:@"TRIPMETER"];
+    [coder encodeBool:self.closed forKey:@"CLOSED"];
 }
 -(id)copyWithZone:(NSZone *)zone {
 	GPSTrack * tkCopy=[super copyWithZone:zone];
 	tkCopy.tripmeter  =self.tripmeter;
+    tkCopy.closed  =self.closed;
 	return tkCopy;
 }
 //================
@@ -40,10 +42,5 @@
     
     return [data writeToFile:[self dataFilePathWith:segCount] atomically:YES];
 }
--(NSString *)dataFilePathWith:(int)segCount{
-    NSArray * paths=NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask,YES);
-	NSString * documentsDirectory=[paths objectAtIndex:0];
-    NSString * segFilename=[[NSString alloc] initWithFormat:@"%@_%03d",self.filename,segCount];
-    return [documentsDirectory stringByAppendingPathComponent:segFilename];
-}
+
 @end

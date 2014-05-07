@@ -10,7 +10,5 @@
 
 @interface GPSTrack : Track
 @property int tripmeter;    //in meters
-
 -(bool)saveNodesToFile:(int)segCount;
--(NSString *)dataFilePathWith:(int)segCount;
 @end

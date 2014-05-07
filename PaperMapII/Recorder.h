@@ -44,6 +44,7 @@
 
 - (void)gpsStart;
 - (void)gpsStop;
+- (void)deleteTempFiles;
 - (void)unloadTracks;
 - (void)unloadGPSTracks;
 - (void)unloadDrawings;

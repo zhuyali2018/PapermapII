@@ -15,8 +15,9 @@
 @interface Track : MenuNode<NSCoding,NSCopying,MenuDataSource>{
     NSString * title;
     bool visible;
+    //bool nodesDirtyFlag;        //tracking the nodes change
 }
-
+@property bool closed;      //true means the gps track is properly closed and saved without being interrupted by app crash
 @property (nonatomic,strong) NSArray * nodes;
 @property (nonatomic,strong) LineProperty * lineProperty;
 //@property bool visible;
@@ -24,6 +25,8 @@
 @property (nonatomic,copy) NSString * filename;
 //@property (nonatomic,copy) NSString * title;
 @property NSDate * timestamp;
+@property bool nodesDirtyFlag;
+
 -(bool)saveNodes;
 -(bool)readNodes;
 //-(void)InitializeFilenameAndTitle;
@@ -33,4 +36,6 @@
 
 -(void)setVisible:(bool)v;
 -(bool)visible;
+-(bool)readNodesFromSegmentedFiles;
+-(NSString *)dataFilePathWith:(int)segCount;
 @end

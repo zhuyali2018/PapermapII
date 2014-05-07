@@ -20,6 +20,8 @@
 //@synthesize title;
 @synthesize timestamp;
 //@synthesize visible;
+@synthesize nodesDirtyFlag;
+@synthesize closed;
 
 -(void)setTitle:(NSString *)title1{
     self.mainText=title1;
@@ -34,6 +36,12 @@
 -(bool)visible{
     return self.selected;
 }
+//-(void)setNodesDirtyFlag:(bool)v{
+//    self.nodesDirtyFlag=v;
+//}
+//-(bool)nodesDirtyFlag{
+//    return self.nodesDirtyFlag;
+//}
 - (id)init {
     self = [super initWithTitle:@"-"];  //this line is important, or no menu will show up
     if (self) {
@@ -54,6 +62,7 @@
     self.title = [outputFormatter stringFromDate:now];
     [outputFormatter setDateFormat:@"yyyy-MM-dd_HH-mm-ss-SSS"];
     filename = [[outputFormatter stringFromDate:now] stringByAppendingString:@".trk"];
+    nodesDirtyFlag=false;
 }
 #pragma mark ----------------
 -(id)initWithCoder:(NSCoder *)coder{
@@ -74,8 +83,9 @@
             if(self.selected)       //on initialization, load those that are visible
                 [self readNodes];
         }
-        self.version    =CURRENTVERSION;      //version 2.0 for saving
+        self.version    =CURRENTVERSION;      //version 2.1 for saving which saves nodes separately
         [super initInternalItems];
+        self.nodesDirtyFlag=false;
     }
 	return self;
 }
@@ -84,7 +94,7 @@
 	//[coder encodeObject:self.nodes          forKey:@"NODES"];
     if(self.version==2.0)
         [self saveNodes];
-    if(self.version==CURRENTVERSION){
+    if(self.version==CURRENTVERSION){           //version 2.1 for saving which saves nodes separately
         //[coder encodeObject:self.nodes          forKey:@"NODES"];  //TODO: Remove this line after confirming no data loss
         [self saveNodes];
     }
@@ -107,9 +117,14 @@
     tkCopy.filename=self.filename;
     tkCopy.title=self.title;
     tkCopy.timestamp=self.timestamp;
+    tkCopy.nodesDirtyFlag=self.nodesDirtyFlag;   //correct ?
 	return tkCopy;
 }
 -(bool)saveNodes{
+    if (!nodesDirtyFlag) {
+        return true;
+    }
+    
     if (!nodes) {
         return true; //no saving of null to overwrite possible data
     }
@@ -118,11 +133,18 @@
     [archiver encodeObject:nodes forKey:@"TRACKNODES"];
     [archiver finishEncoding];
     
-    return [data writeToFile:[self dataFilePath] atomically:YES];
+    bool successful=[data writeToFile:[self dataFilePath] atomically:YES];
+    if (successful) {
+        nodesDirtyFlag=false;
+    }
+    return successful;
 }
 -(bool)readNodes{
     if (nodes) {
         return true;        //nodes already loaded
+    }
+    if (!closed) {  //if not closed yet
+        return [self readNodesFromSegmentedFiles];
     }
     NSString * filePath=[self dataFilePath];
     //NSLog(@"data file path=%@",filePath);
@@ -141,6 +163,43 @@
 	NSArray * paths=NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask,YES);
 	NSString * documentsDirectory=[paths objectAtIndex:0];
 	return [documentsDirectory stringByAppendingPathComponent:filename];
+}
+-(bool)readNodesFromSegmentedFiles{
+    //NSFileManager * manager=[NSFileManager defaultManager];
+    //NSError * error=nil;
+    int i=0;
+    do {
+        NSArray * thisSegNodes;
+        NSString * filePath=[self dataFilePathWith:i];
+        if([[NSFileManager defaultManager] fileExistsAtPath:filePath]){
+            NSData * data=[[NSData alloc] initWithContentsOfFile:filePath];
+            NSKeyedUnarchiver *unarchiver=[[NSKeyedUnarchiver alloc] initForReadingWithData:data];
+            thisSegNodes=[unarchiver decodeObjectForKey:@"TRACKSEGNODES"];
+            [unarchiver finishDecoding];
+        }else{
+            break;
+        }
+        //add segnodes to total nodes
+        if(!nodes)
+            nodes=[[NSMutableArray alloc]initWithCapacity:2];
+        
+        NSMutableArray * mutableNodes=(NSMutableArray *)nodes;
+        [mutableNodes addObjectsFromArray:thisSegNodes];
+        nodes=mutableNodes;
+        i++;
+    } while (true);
+    
+    self.closed=true;
+    [self saveNodes];
+    [[Recorder sharedRecorder] saveAllGpsTracks]; //so that closed status is also saved;
+
+    //remove all the segmented files after loaded them all
+    NSError *error = nil;
+    for(int j=0;j<i;j++){
+        NSString * tempFilenameWithPath=[self dataFilePathWith:j];
+        [[NSFileManager defaultManager] removeItemAtPath:tempFilenameWithPath error:&error];
+    }
+    return nodes;
 }
 //-(void)centerMapTo:(Node *)node1{
 //    MapScrollView * map=((MapScrollView *)[DrawableMapScrollView sharedMap]);
@@ -186,5 +245,12 @@
 //}
 -(NSDate *)getTimeStamp{
     return timestamp;
+}
+
+-(NSString *)dataFilePathWith:(int)segCount{
+    NSArray * paths=NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask,YES);
+	NSString * documentsDirectory=[paths objectAtIndex:0];
+    NSString * segFilename=[[NSString alloc] initWithFormat:@"%@_%03d",self.filename,segCount];
+    return [documentsDirectory stringByAppendingPathComponent:segFilename];
 }
 @end
