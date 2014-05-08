@@ -17,7 +17,6 @@
     bool visible;
     //bool nodesDirtyFlag;        //tracking the nodes change
 }
-@property bool closed;      //true means the gps track is properly closed and saved without being interrupted by app crash
 @property (nonatomic,strong) NSArray * nodes;
 @property (nonatomic,strong) LineProperty * lineProperty;
 //@property bool visible;
@@ -36,6 +35,5 @@
 
 -(void)setVisible:(bool)v;
 -(bool)visible;
--(bool)readNodesFromSegmentedFiles;
--(NSString *)dataFilePathWith:(int)segCount;
+-(NSString *)dataFilePath;
 @end

@@ -154,6 +154,13 @@ bool centerPos;
 //}
 - (void)stop{
     _recording=false;
+    //when drawing stops, needs to save to file
+    if (!self.track.nodes) { //if nothing drawn, no need to go further
+        return;
+    }
+    //when drawing Stops, needs to save to file:
+    [self.track saveNodes];
+    [self saveAllTracks];
 }
 //stop GPS Recording
 - (void)gpsStop{    
@@ -436,6 +443,7 @@ bool centerPos;
     }
     Node *node=[[Node alloc]initWithPoint:tapPoint mapLevel:maplevel];
     self.track.nodes=[self addAnyModeAdjustedNode:self.track.nodes Node:node Mode:MAPMODE];
+    self.track.nodesDirtyFlag=true;
     [self.track saveNodes];     //save it for every nodes
     [[DrawableMapScrollView sharedMap] refresh];
 }
