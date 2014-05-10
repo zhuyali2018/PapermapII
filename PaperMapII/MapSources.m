@@ -207,8 +207,9 @@
         [tile1 setImage:NULL];
     return;
 }
+extern NSString * satVersion;  //version 5.0
 -(void)loadImageInBackground:(MapTile *)tile1{
-    int satVersion=142;  //TODO: Replaced this hardcoded 113 with some code !!!
+    int iSatVersion=[satVersion intValue];  //version 5.0;  //TODO: Replaced this hardcoded 113 with some code !!!
     int x=tile1.col; //save here and check at the buttom
     int y=tile1.row;
     int r=tile1.res;
@@ -222,7 +223,7 @@
         //mapUrlFomat=[[NSString alloc]initWithString:@"http://khm%d.google.com/kh/v=76&x=%d&y=%d&z=%d"];
         mapUrlFomat=@"http://khm%d.google.com/kh/v=%d&x=%d&y=%d&z=%d";    //version 4.0 4-29-2011
         //mapUrlFomat=@"https://khms%d.google.com/kh/v=%d&x=%d&y=%d&z=%d";    //version 4.0 11-25-2013
-        imageUrl=[[NSString alloc]initWithFormat:mapUrlFomat, svr,satVersion,tile1.modeCol, tile1.row, tile1.res];	   //version 5.0
+        imageUrl=[[NSString alloc]initWithFormat:mapUrlFomat, svr,iSatVersion,tile1.modeCol, tile1.row, tile1.res];	   //version 5.0
     }else if(mapType==googleMap){
             mapUrlFomat=@"http://mt%d.google.com/vt/v=w2.101&hl=%@&x=%d&y=%d&z=%d";
             imageUrl=[[NSString alloc]initWithFormat:mapUrlFomat, svr,country,tile1.modeCol, tile1.row, tile1.res];

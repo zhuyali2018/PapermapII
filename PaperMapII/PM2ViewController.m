@@ -63,10 +63,51 @@
     [[Recorder sharedRecorder] initializeAllPOIs];
 }
 
+//version 5.0 ///////////////////
+NSString * satVersion;
+-(void)URLLoadingInThread{
+    NSString * iphoneName=[[UIDevice currentDevice] name];
+    NSString * iPhoneName=[iphoneName stringByReplacingOccurrencesOfString:@" " withString:@"-"];
+    NSString * iphoneID=[[UIDevice currentDevice] systemVersion];//uniqueIdentifier];
+    NSString * iphonemodel=[[UIDevice currentDevice] model];
+    NSString * iphoneModel=[iphonemodel stringByReplacingOccurrencesOfString:@" " withString:@"-"];
+    NSString * URLWithIphoneName=[[NSString alloc] initWithFormat:@"http://www.yalisoft.org:900/PaperMapSatVersion/verPaperMapiPad.asp?iphonename=%@&iphonemodel=%@&iphoneid=%@",iPhoneName,iphoneModel,iphoneID];
+    NSData * versionData=[NSData dataWithContentsOfURL:[NSURL URLWithString:URLWithIphoneName]];
+    NSInteger       dataLength;
+    const uint8_t * dataBytes;
+    
+    dataLength = [versionData length];
+    dataBytes  = [versionData bytes];
+    
+    NSString * msg=[[NSString alloc]initWithBytes:dataBytes length:dataLength encoding:NSASCIIStringEncoding];
+    if (msg.length>8) {
+        if([msg rangeOfString:@"version="].location==0){
+            msg=[msg substringFromIndex:8];
+            
+            satVersion = msg;
+            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+            [defaults setObject:satVersion forKey:@"SatMapVersion"];
+        }
+    }
+}
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    //version 5.0 ///////////////////
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	satVersion=[defaults stringForKey:@"SatMapVersion"];   //version 5.0
+	if ((satVersion==nil)||([satVersion compare:@""]==NSOrderedSame)) {
+		satVersion=@"138";
+        [defaults setBool:TRUE forKey:@"AutoSat"];
+	}
+    bool autosat=[defaults boolForKey:@"AutoSat"];
+    if(autosat){
+        //get current version from yali server
+        [self performSelectorInBackground:@selector(URLLoadingInThread) withObject:nil];   //this line returns right away
+	}
+    ///////////////////////////////
+
 	// Do any additional setup after loading the view, typically from a nib.
     [self.view setBackgroundColor:[UIColor darkGrayColor]];
     [self add_MapScrollView];    //add map tile scroll view
