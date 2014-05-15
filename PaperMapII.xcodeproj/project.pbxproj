@@ -53,6 +53,7 @@
 		AA8BC56717C2FEF600D433ED /* RoundGrayBn.png in Resources */ = {isa = PBXBuildFile; fileRef = AA8BC56417C2FEF500D433ED /* RoundGrayBn.png */; };
 		AA8BC56817C2FEF600D433ED /* RoundGreenBn.png in Resources */ = {isa = PBXBuildFile; fileRef = AA8BC56517C2FEF500D433ED /* RoundGreenBn.png */; };
 		AA8BC56917C2FEF600D433ED /* RoundRedBn.png in Resources */ = {isa = PBXBuildFile; fileRef = AA8BC56617C2FEF600D433ED /* RoundRedBn.png */; };
+		AA96E5041924A018001E78BA /* YellowCenter.png in Resources */ = {isa = PBXBuildFile; fileRef = AA96E5031924A018001E78BA /* YellowCenter.png */; };
 		AAAAEF3217BDD81400166090 /* GreenBnOff100.png in Resources */ = {isa = PBXBuildFile; fileRef = AAAAEF3017BDD81200166090 /* GreenBnOff100.png */; };
 		AAAAEF3317BDD81400166090 /* GreenBnOn100.png in Resources */ = {isa = PBXBuildFile; fileRef = AAAAEF3117BDD81300166090 /* GreenBnOn100.png */; };
 		AAAD5A6F176E1F5900DCDAD2 /* PM2OnScreenButtons.m in Sources */ = {isa = PBXBuildFile; fileRef = AAAD5A6E176E1F5900DCDAD2 /* PM2OnScreenButtons.m */; };
@@ -3617,6 +3618,7 @@
 		AA8BC56417C2FEF500D433ED /* RoundGrayBn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = RoundGrayBn.png; sourceTree = "<group>"; };
 		AA8BC56517C2FEF500D433ED /* RoundGreenBn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = RoundGreenBn.png; sourceTree = "<group>"; };
 		AA8BC56617C2FEF600D433ED /* RoundRedBn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = RoundRedBn.png; sourceTree = "<group>"; };
+		AA96E5031924A018001E78BA /* YellowCenter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = YellowCenter.png; sourceTree = "<group>"; };
 		AAAAEF3017BDD81200166090 /* GreenBnOff100.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = GreenBnOff100.png; sourceTree = "<group>"; };
 		AAAAEF3117BDD81300166090 /* GreenBnOn100.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = GreenBnOn100.png; sourceTree = "<group>"; };
 		AAAD5A6D176E1F5900DCDAD2 /* PM2OnScreenButtons.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PM2OnScreenButtons.h; sourceTree = "<group>"; };
@@ -5487,6 +5489,7 @@
 				AA23676B17D07FF9000BC873 /* CompassButton.h */,
 				AA23676C17D07FF9000BC873 /* CompassButton.m */,
 				AA23676E17D0809D000BC873 /* Compass.png */,
+				AA96E5031924A018001E78BA /* YellowCenter.png */,
 				AAAD5A7717702BE200DCDAD2 /* MapCenterIndicator.h */,
 				AAAD5A7817702BE200DCDAD2 /* MapCenterIndicator.m */,
 				AAEE0CA21776205700549A7D /* LinePropertyViewController.h */,
@@ -7978,6 +7981,7 @@
 				AABDDF61174755BE00A0D6E9 /* Map5_13_17.jpg in Resources */,
 				AABDDF63174755BE00A0D6E9 /* Map5_13_18.jpg in Resources */,
 				AABDDF65174755BE00A0D6E9 /* Map5_13_19.jpg in Resources */,
+				AA96E5041924A018001E78BA /* YellowCenter.png in Resources */,
 				AABDDF67174755BE00A0D6E9 /* Map5_13_2.jpg in Resources */,
 				AABDDF69174755BE00A0D6E9 /* Map5_13_20.jpg in Resources */,
 				AABDDF6B174755BE00A0D6E9 /* Map5_13_21.jpg in Resources */,

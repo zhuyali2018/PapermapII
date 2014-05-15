@@ -490,6 +490,13 @@
 }
 extern bool centerPos;
 -(void)centerCurrentPosition:(id)sender{
+    centerPos=!centerPos;
+    if (centerPos) {
+        compassBn.arrowCenter.hidden=NO;
+    }else
+        compassBn.arrowCenter.hidden=YES;
+}
+-(void)centerCurrentPosition_org:(id)sender{
     //if ([[centerBn.titleLabel text] compare:@"Center Cur"]==NSOrderedSame) {
     if(centerBn.btnOn){
         //center position;
@@ -550,30 +557,34 @@ extern float zmc;
     }
 }
 -(void)showGPSButtons{
-    [UIView animateWithDuration:0.5
-                          delay:0.0
-                        options: UIViewAnimationOptionCurveEaseIn //UIViewAnimationOptionCurveLinear
-                     animations:^{
-                         [self setButtonsToPosition:NO];        //hide all buttons
-                         //drawButton.hidden=NO;
-                         //[gpsButton  setFrame:CGRectMake(0,   40, 120,  60)];
-                         [centerBn   setFrame:CGRectMake(10, 40, 100, 69)];
-                     }
-                     completion:^(BOOL finished){
-                         NSLOG8(@"Done!");
-                     }];
 }
 -(void)hideGPSButtons{
-    [UIView animateWithDuration:0.5
-                          delay:0.0
-                        options: UIViewAnimationOptionCurveEaseIn //UIViewAnimationOptionCurveLinear
-                     animations:^{
-                         [self setButtonsToPosition:NO];
-                     }
-                     completion:^(BOOL finished){
-                         NSLOG8(@"Done!");
-                     }];
 }
+//-(void)showGPSButtons{
+//    [UIView animateWithDuration:0.5
+//                          delay:0.0
+//                        options: UIViewAnimationOptionCurveEaseIn //UIViewAnimationOptionCurveLinear
+//                     animations:^{
+//                         [self setButtonsToPosition:NO];        //hide all buttons
+//                         //drawButton.hidden=NO;
+//                         //[gpsButton  setFrame:CGRectMake(0,   40, 120,  60)];
+//                         [centerBn   setFrame:CGRectMake(10, 40, 100, 69)];
+//                     }
+//                     completion:^(BOOL finished){
+//                         NSLOG8(@"Done!");
+//                     }];
+//}
+//-(void)hideGPSButtons{
+//    [UIView animateWithDuration:0.5
+//                          delay:0.0
+//                        options: UIViewAnimationOptionCurveEaseIn //UIViewAnimationOptionCurveLinear
+//                     animations:^{
+//                         [self setButtonsToPosition:NO];
+//                     }
+//                     completion:^(BOOL finished){
+//                         NSLOG8(@"Done!");
+//                     }];
+//}
 #pragma mark ------------other methods----------------
 -(void)add_compassBn{
 	compassBn=[[CompassButton alloc] initWithFrame:CGRectMake([_baseView bounds].size.width-60, 50, 60, 60)];

@@ -205,11 +205,4 @@
 -(NSDate *)getTimeStamp{
     return timestamp;
 }
-
--(NSString *)dataFilePathWith:(int)segCount{
-    NSArray * paths=NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask,YES);
-	NSString * documentsDirectory=[paths objectAtIndex:0];
-    NSString * segFilename=[[NSString alloc] initWithFormat:@"%@_%03d",self.filename,segCount];
-    return [documentsDirectory stringByAppendingPathComponent:segFilename];
-}
 @end

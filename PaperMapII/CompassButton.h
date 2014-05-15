@@ -10,9 +10,11 @@
 @interface CompassButton : UIView {
 	float direction;
 	UIImageView *arrow1;
-	//UIButton * centerButton;
+    UIImageView *arrowCenter;
+	UIButton * centerButton;
 }
 @property(nonatomic,assign) float direction;
 @property(nonatomic) UIImageView *arrow1;
-//@property(nonatomic) UIButton * centerButton;
+@property(nonatomic) UIImageView *arrowCenter;
+@property(nonatomic) UIButton * centerButton;
 @end

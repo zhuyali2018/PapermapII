@@ -7,13 +7,15 @@
 //
 
 #import "CompassButton.h"
+#import "PM2OnScreenButtons.h"
 #import "AllImports.h"
 
 @implementation CompassButton
 
 @synthesize direction;
 @synthesize arrow1;
-//@synthesize centerButton;
+@synthesize arrowCenter;
+@synthesize centerButton;
 
  // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
 - (id)initWithFrame:(CGRect)frame {
@@ -21,14 +23,18 @@
         // Custom initialization
 		arrow1=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"Compass.png"]];
 		arrow1.center=CGPointMake(30, 30);
+        arrowCenter=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"YellowCenter.png"]];
+		arrowCenter.center=CGPointMake(30, 30);
 		[self addSubview:arrow1];
-		//centerButton=[UIButton buttonWithType:UIButtonTypeCustom];
-		//[centerButton setFrame:CGRectMake(0,0, 60, 60)];
+        [self addSubview:arrowCenter];
+        arrowCenter.hidden=YES;
+		centerButton=[UIButton buttonWithType:UIButtonTypeCustom];
+		[centerButton setFrame:CGRectMake(0,0, 60, 60)];
 		//[centerButton setBackgroundColor:[UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:0.5]];
 		//[self setBackgroundColor:[UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:0.5]];
 		[self setBackgroundColor:[UIColor clearColor]];
-		//[centerButton addTarget:rootView action:@selector(resetDirection) forControlEvents:UIControlEventTouchUpInside];
-		//[self addSubview:centerButton];
+		[centerButton addTarget:[PM2OnScreenButtons sharedBnManager] action:@selector(centerCurrentPosition:) forControlEvents:UIControlEventTouchUpInside];
+		[self addSubview:centerButton];
     }
     return self;
 }
