@@ -34,7 +34,7 @@
 
 @property (nonatomic, strong) OnOffButton *gpsButton;
 @property (nonatomic, strong) UIButton * gpsBn1;    //for toolbar
-@property (nonatomic, strong) OnOffButton * centerBn;
+//@property (nonatomic, strong) OnOffButton * centerBn;
 
 @property (nonatomic, strong) UIButton *colorButton;
 @property (nonatomic, strong) UIButton *cleanupButton;
@@ -72,7 +72,7 @@
 -(void)addFreeDrawButton;
 -(void)addUndoButton;
 -(void) addGPSButton;
--(void) add_CenterBn;
+//-(void) add_CenterBn;
 -(void) addMapTypeButton;
 -(void) addColorButton;
 -(void) add_MainMenu;

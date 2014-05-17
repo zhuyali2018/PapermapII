@@ -28,7 +28,7 @@
 @synthesize undoButton;
 
 @synthesize gpsButton;
-@synthesize centerBn;
+//@synthesize centerBn;
 
 @synthesize colorButton;
 @synthesize mapScrollView;
@@ -260,7 +260,7 @@
     [self add_TripMeter];
     [self add_TimerMeter];
     [self add_GPSArrow];
-    [self add_CenterBn];
+    //[self add_CenterBn];
     [self add_MainMenu];
     [self add_compassBn];
 }
@@ -301,7 +301,7 @@
     colorButton.hidden  =!bVisible;
     gpsButton.hidden    =!bVisible;
     mapTypeButton.hidden=!bVisible;
-    centerBn.hidden     =!bVisible;
+    //centerBn.hidden     =!bVisible;
     menuButton.hidden   =!bVisible;
 }
 -(void) setButtonsToPosition:(bool)bVisible{
@@ -320,7 +320,7 @@
     if (fdrawButton.withGroup)[fdrawButton setFrame:CGRectMake(x+200, y,     w, h)];
     if (drawButton.withGroup) [drawButton  setFrame:CGRectMake(x,     y,     w, h)];
     
-    if (centerBn.withGroup)   [centerBn    setFrame:CGRectMake(x+200, y=y+s+1, w, h)];
+    //if (centerBn.withGroup)   [centerBn    setFrame:CGRectMake(x+200, y=y+s+1, w, h)];
     if (gpsButton.withGroup)  [gpsButton   setFrame:CGRectMake(x,     y,     w, h)];
     [colorButton            setFrame:CGRectMake(x, y=y+s+1, w, h)];
     [mapTypeButton          setFrame:CGRectMake(x+w/2, 10, w/2, h/2)]; y=y+s+1-300;   //right upper corner sat button
@@ -478,16 +478,16 @@
 //    gpsButton.tapEventHandler=@selector(startGPS:);
 //    [_baseView addSubview:gpsButton];
 }
--(void)add_CenterBn{
-    centerBn=[[OnOffButton alloc] init];
-    [centerBn setOffText:@"Center"];
-    [centerBn setOnText: @"Center"];
-    centerBn.onImage=[UIImage imageNamed:@"RoundGreenBn.png"];
-    centerBn.offImage=[UIImage imageNamed:@"RoundGrayBn.png"];
-    centerBn.onOffBnDelegate=self;
-    centerBn.tapEventHandler=@selector(centerCurrentPosition:);
-    [_baseView addSubview:centerBn];
-}
+//-(void)add_CenterBn{
+//    centerBn=[[OnOffButton alloc] init];
+//    [centerBn setOffText:@"Center"];
+//    [centerBn setOnText: @"Center"];
+//    centerBn.onImage=[UIImage imageNamed:@"RoundGreenBn.png"];
+//    centerBn.offImage=[UIImage imageNamed:@"RoundGrayBn.png"];
+//    centerBn.onOffBnDelegate=self;
+//    centerBn.tapEventHandler=@selector(centerCurrentPosition:);
+//    [_baseView addSubview:centerBn];
+//}
 extern bool centerPos;
 -(void)centerCurrentPosition:(id)sender{
     centerPos=!centerPos;
@@ -496,17 +496,17 @@ extern bool centerPos;
     }else
         compassBn.arrowCenter.hidden=YES;
 }
--(void)centerCurrentPosition_org:(id)sender{
-    //if ([[centerBn.titleLabel text] compare:@"Center Cur"]==NSOrderedSame) {
-    if(centerBn.btnOn){
-        //center position;
-        centerPos=true;
-        //[centerBn setTitle:@"No center" forState:UIControlStateNormal];
-    }else{
-        centerPos=false;
-        //[centerBn setTitle:@"Center Cur" forState:UIControlStateNormal];
-    }
-}
+//-(void)centerCurrentPosition_org:(id)sender{
+//    //if ([[centerBn.titleLabel text] compare:@"Center Cur"]==NSOrderedSame) {
+//    if(centerBn.btnOn){
+//        //center position;
+//        centerPos=true;
+//        //[centerBn setTitle:@"No center" forState:UIControlStateNormal];
+//    }else{
+//        centerPos=false;
+//        //[centerBn setTitle:@"Center Cur" forState:UIControlStateNormal];
+//    }
+//}
 extern float zmc;
 -(void) startGPS:(UIButton *)tbn{
      OnOffButton * bn = gpsButton;
@@ -522,8 +522,8 @@ extern float zmc;
         [gpsReceiver start];
         arrow.hidden=NO;
         bn.withGroup=false;
-        centerBn.withGroup=false;
-        [self showGPSButtons];
+        //centerBn.withGroup=false;
+        //[self showGPSButtons];
         //bnStart.hidden=YES;
          
          int W=_baseView.bounds.size.width;
@@ -537,8 +537,8 @@ extern float zmc;
         arrow.hidden=YES;
         
         bn.withGroup=YES;
-        centerBn.withGroup=YES;
-        [self hideGPSButtons];
+        //centerBn.withGroup=YES;
+        //[self hideGPSButtons];
         [[Recorder sharedRecorder] saveAllGpsTracks];   //because it may crash after stopped GPS and lose the track
         
         CGAffineTransform transform = CGAffineTransformMakeRotation(0);
@@ -556,10 +556,10 @@ extern float zmc;
         zmc=1.0;
     }
 }
--(void)showGPSButtons{
-}
--(void)hideGPSButtons{
-}
+//-(void)showGPSButtons{
+//}
+//-(void)hideGPSButtons{
+//}
 //-(void)showGPSButtons{
 //    [UIView animateWithDuration:0.5
 //                          delay:0.0
