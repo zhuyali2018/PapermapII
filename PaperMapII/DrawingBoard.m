@@ -51,7 +51,7 @@
     if (ptList==nil) {
         return;
     }
-    int count=[ptList count];
+    int count=(int)[ptList count];
     if(count<2) return;
     //NSLog(@"entered free drawing board's drawRect...: %.0f,%.0f,%.0f,%.0f",rect.origin.x,rect.origin.y,rect.size.width,rect.size.height);
     // Drawing code.

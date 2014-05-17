@@ -22,7 +22,7 @@
         NSDate * theDate1=[NSDate date];
         NSCalendar * cal=[NSCalendar currentCalendar];
         NSDateComponents *date=[cal components:kCFCalendarUnitMonth|kCFCalendarUnitDay|kCFCalendarUnitYear|kCFCalendarUnitHour|kCFCalendarUnitMinute|kCFCalendarUnitSecond fromDate:theDate1];
-        filename=[[NSString alloc]initWithFormat:@"%@-%02d%02d%02d-%02d%02d%02d.%@",fn,[date year],[date month],[date day],[date hour],[date minute],[date second],ext];
+        filename=[[NSString alloc]initWithFormat:@"%@-%02ld%02ld%02ld-%02ld%02ld%02ld.%@",fn,(long)[date year],(long)[date month],(long)[date day],(long)[date hour],(long)[date minute],(long)[date second],ext];
     }
     return self;
 }

@@ -91,7 +91,7 @@ const static int NUM=7;     //number of stored property
     }
 }
 - (void) changeStorageColor:(id)sender{
-    int tagNum=((UIButton *)sender).tag;
+    int tagNum=(int)((UIButton *)sender).tag;
     NSLOG8(@"You pick to change storeage property %d",tagNum);
 
     if(linePPVCtrl==nil){

@@ -66,7 +66,7 @@
     if(!track) return;
     if(nil==track.nodes)
         return;
-    int count=[track.nodes count];
+    int count=(int)[track.nodes count];
     if(count<2) return;
     
     CGContextSetStrokeColorWithColor(context, [UIColor colorWithRed:COLOR.red green:COLOR.green blue:COLOR.blue alpha:COLOR.alpha].CGColor);
@@ -90,7 +90,7 @@
     if(!track) return;
     if(nil==track.nodes)
         return;
-    int count=[track.nodes count];
+    int count=(int)[track.nodes count];
     if(count<2) return;
     
     CGContextSetStrokeColorWithColor(context, [UIColor colorWithRed:COLOR.red green:COLOR.green blue:COLOR.blue alpha:COLOR.alpha].CGColor);
@@ -130,7 +130,7 @@
     }
     if(nil==track.nodes)
         return;
-    int count=[track.nodes count];
+    int count=(int)[track.nodes count];
     if(count<2) return;
     
     CGContextSetStrokeColorWithColor(context, [UIColor colorWithRed:COLOR.red green:COLOR.green blue:COLOR.blue alpha:COLOR.alpha].CGColor);

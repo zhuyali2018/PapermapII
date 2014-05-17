@@ -63,7 +63,7 @@ CGPoint midpointBetweenPoints(CGPoint a, CGPoint b) {
     if ([[event touchesForView:self] count] == 1)
         twoFingerTapIsPossible = YES;
     
-    NSLOG2(@"[touchesBegan] number of fingers used:%d ",[[event touchesForView:self] count]);
+    NSLOG2(@"[touchesBegan] number of fingers used:%lu ",(unsigned long)[[event touchesForView:self] count]);
 
 }
 
@@ -82,7 +82,7 @@ CGPoint midpointBetweenPoints(CGPoint a, CGPoint b) {
         } else if([touch tapCount] == 2) {
             [self handleDoubleTap];
         }
-		NSLOG4(@"[touchesEnded]Single touch, number of taps:%d",[touch tapCount]);
+		NSLOG4(@"[touchesEnded]Single touch, number of taps:%lu",(unsigned long)[touch tapCount]);
         //newly added for detection of touch up
         if((0==[touch tapCount])||(1==[touch tapCount])){
              [self handleSingleTapTouchUp:CGPointMake(0,[touch tapCount])];
@@ -97,7 +97,7 @@ CGPoint midpointBetweenPoints(CGPoint a, CGPoint b) {
             int i = 0;
             int tapCounts[2]; CGPoint tapLocations[2];
             for (UITouch *touch in touches) {
-                tapCounts[i]    = [touch tapCount];
+                tapCounts[i]    = (int)[touch tapCount];
                 tapLocations[i] = [touch locationInView:self];
                 i++;
             }

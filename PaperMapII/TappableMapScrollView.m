@@ -67,7 +67,7 @@
 }
 */
 
-- (void) scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(float)scale{
+- (void) scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(CGFloat)scale{
     [super scrollViewDidEndZooming:scrollView withView:view atScale:scale];
     //this overwrite and setting works !!!
     float calSide=SIZE*pow(2, maplevel);

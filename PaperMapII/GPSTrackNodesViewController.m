@@ -74,7 +74,7 @@
     // Configure the cell...
     GPSNode * node=gpsTrack.nodes[indexPath.row];
     NSString * tm=[NSDateFormatter localizedStringFromDate:node.timestamp dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterMediumStyle];
-    cell.textLabel.text=[[NSString alloc]initWithFormat:@"%3d - %@",indexPath.row,tm];
+    cell.textLabel.text=[[NSString alloc]initWithFormat:@"%3ld - %@",(long)indexPath.row,tm];
     return cell;
 
 }

@@ -126,7 +126,7 @@
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         // Delete the row from the data source
-        NSLog(@"Delete code goes here for row %d",indexPath.row);
+        NSLog(@"Delete code goes here for row %ld",(long)indexPath.row);
         SaveItem * sitem=[list objectAtIndex:indexPath.row];
         [self deleteFile:[sitem getAbsolutePathFilename]];
         NSMutableArray * mList=[[NSMutableArray alloc] initWithArray:list];
@@ -172,7 +172,7 @@
 */
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"You selected row %d, load file:%@",indexPath.row,((SaveItem *)[list objectAtIndex:indexPath.row]).displayname);
+    NSLog(@"You selected row %ld, load file:%@",(long)indexPath.row,((SaveItem *)[list objectAtIndex:indexPath.row]).displayname);
     PM2OnScreenButtons * OSB=[PM2OnScreenButtons sharedBnManager];
     if([OSB.menuPopover isPopoverVisible]){
         [OSB.menuPopover dismissPopoverAnimated:YES];

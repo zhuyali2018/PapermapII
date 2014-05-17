@@ -34,15 +34,15 @@
     node.r=3;
     Node *ACopyNode=node;
     Node *SecCopyNode=[node copy];
-    STAssertEquals(ACopyNode.r,node.r, @"Node Copy to ACopyNode Failed");
-    STAssertEquals(SecCopyNode.r,node.r, @"Node Copy Failed");
+    XCTAssertEqual(ACopyNode.r,node.r, @"Node Copy to ACopyNode Failed");
+    XCTAssertEqual(SecCopyNode.r,node.r, @"Node Copy Failed");
 }
 - (void)testCopyLineProperty{
     LineProperty *lp=[[LineProperty alloc]init];
     lp.red=0.68;
     lp.green=0.55;
     LineProperty *lp1=[lp copy];
-    STAssertEquals(lp1.red,lp.red, @"LineProperty Copying Failed");
+    XCTAssertEqual(lp1.red,lp.red, @"LineProperty Copying Failed");
 }
 //- (void)testCopyLine{
 //    Track * line=[[Track alloc]init];

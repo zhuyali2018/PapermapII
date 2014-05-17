@@ -26,7 +26,7 @@
     return self;
 }
 -(void) register:(NSObject *)itemView withID:(ITEMID)id{
-    int sz=[mainQ count];
+    int sz=(int)[mainQ count];
     if(sz>id)
         [mainQ replaceObjectAtIndex:id withObject:itemView];
 }

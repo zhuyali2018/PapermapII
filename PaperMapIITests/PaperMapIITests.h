@@ -6,8 +6,8 @@
 //  Copyright (c) 2013 Yali Zhu. All rights reserved.
 //
 
-#import <SenTestingKit/SenTestingKit.h>
+#import <XCTest/XCTest.h>
 
-@interface PaperMapIITests : SenTestCase
+@interface PaperMapIITests : XCTestCase
 
 @end

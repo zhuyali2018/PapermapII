@@ -95,7 +95,7 @@
         }else
             cell.textLabel.textColor=[UIColor lightGrayColor];
         //cell.textLabel.text=tk.title;
-        cell.textLabel.text=[[NSString alloc]initWithFormat:@"%3d - %@",indexPath.row,tk.title];
+        cell.textLabel.text=[[NSString alloc]initWithFormat:@"%3ld - %@",(long)indexPath.row,tk.title];
         return cell;
     }
     //configure the cell for GPS Track list
@@ -105,7 +105,7 @@
     }else
         cell.textLabel.textColor=[UIColor lightGrayColor];
     //cell.textLabel.text=tk.title;
-    cell.textLabel.text=[[NSString alloc]initWithFormat:@"%3d - %@",indexPath.row,tk.title];
+    cell.textLabel.text=[[NSString alloc]initWithFormat:@"%3ld - %@",(long)indexPath.row,tk.title];
     return cell;
 }
 

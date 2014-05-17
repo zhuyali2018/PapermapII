@@ -43,7 +43,7 @@ CGPoint savedOffset;
     NSLOG3(@"getMaplevel returns mapvel %d",maplevel);
     return maplevel;
 }
-int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleColumnx[4];
+long firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleColumnx[4];
 -(void)initVisibleVarArrays{
     // no rows or columns are visible at first; note this by making the firsts very high and the lasts very low
 	for(int i=0;i<4;i++){
@@ -141,7 +141,7 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
     int lastNeededCol  = MIN(maxCol,floorf((CGRectGetMaxX(visibleBounds)-posErr1.x) / scaledTileSide));    //<=======
 	
     if ((firstNeededRow==firstVisibleRowx[i])&&(firstNeededCol==firstVisibleColumnx[i])&&(lastNeededCol==lastVisibleColumnx[i])&&(lastNeededRow==lastVisibleRowx[i])) {
-        NSLOG(@"exit fillWindowWithBasicMap (2) i=%d, neededRow=%d, visiRow=%d",i,firstNeededRow,firstVisibleRowx[i]);
+        NSLOG(@"exit fillWindowWithBasicMap (2) i=%d, neededRow=%d, visiRow=%ld",i,firstNeededRow,firstVisibleRowx[i]);
 		return;
 	}
     int loadedImageCount=0;
@@ -497,7 +497,7 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	float zScale= [defaults floatForKey:ZOOMSCALE];
     Mode=[defaults boolForKey:MODE];
-	self.maplevel=[defaults integerForKey:MAPLEVEL];
+	self.maplevel=(int)[defaults integerForKey:MAPLEVEL];
     if (self.maplevel==0) {
         self.maplevel=2;
         return;     //it means the state has never beensaved
@@ -527,7 +527,7 @@ int firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleCo
 
 #pragma mark ----------------------------
 #pragma mark UIScrollViewDelegate methods
-- (void) scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(float)scale{
+- (void) scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(CGFloat)scale{
     //NSLog(@"scale:%f",scale);
     NSLOG(@"scrollviewContent:%.f,%.f :%.f x %.f",scrollView.contentOffset.x,scrollView.contentOffset.y,scrollView.contentSize.width,scrollView.contentSize.height);
     NSLOG(@"--------> Zoom fingers let go:maplevel:%d, atScale:%.2f, zoomScale:%.2f",maplevel,scale,[self zoomScale]);

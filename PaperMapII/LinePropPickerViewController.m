@@ -40,7 +40,7 @@
     if (!savedTitle) {
         savedTitle=[[NSString alloc] initWithString:OSB.linePropertyViewCtrlr.title];
     }
-    NSString * headline=[[NSString alloc]initWithFormat:@"Setting for Stored Property %d",self.view.tag];
+    NSString * headline=[[NSString alloc]initWithFormat:@"Setting for Stored Property %ld",(long)self.view.tag];
     [OSB.linePropertyViewCtrlr setTitle:headline];
 }
 - (void)viewDidLoad

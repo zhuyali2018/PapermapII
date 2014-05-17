@@ -90,7 +90,6 @@
 		AABDD49717437B3600A0D6E9 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AABDD49617437B3600A0D6E9 /* Default-568h@2x.png */; };
 		AABDD49A17437B3600A0D6E9 /* PM2ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AABDD49917437B3600A0D6E9 /* PM2ViewController.m */; };
 		AABDD49D17437B3600A0D6E9 /* PM2ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AABDD49B17437B3600A0D6E9 /* PM2ViewController.xib */; };
-		AABDD4A517437B3600A0D6E9 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AABDD4A417437B3600A0D6E9 /* SenTestingKit.framework */; };
 		AABDD4A617437B3600A0D6E9 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AABDD48017437B3600A0D6E9 /* UIKit.framework */; };
 		AABDD4A717437B3600A0D6E9 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AABDD48217437B3600A0D6E9 /* Foundation.framework */; };
 		AABDD4AF17437B3600A0D6E9 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = AABDD4AD17437B3600A0D6E9 /* InfoPlist.strings */; };
@@ -3660,8 +3659,7 @@
 		AABDD49817437B3600A0D6E9 /* PM2ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PM2ViewController.h; sourceTree = "<group>"; };
 		AABDD49917437B3600A0D6E9 /* PM2ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PM2ViewController.m; sourceTree = "<group>"; };
 		AABDD49C17437B3600A0D6E9 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/PM2ViewController.xib; sourceTree = "<group>"; };
-		AABDD4A317437B3600A0D6E9 /* PaperMapIITests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PaperMapIITests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
-		AABDD4A417437B3600A0D6E9 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		AABDD4A317437B3600A0D6E9 /* PaperMapIITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PaperMapIITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		AABDD4AC17437B3600A0D6E9 /* PaperMapIITests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "PaperMapIITests-Info.plist"; sourceTree = "<group>"; };
 		AABDD4AE17437B3600A0D6E9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		AABDD4B017437B3600A0D6E9 /* PaperMapIITests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PaperMapIITests.h; sourceTree = "<group>"; };
@@ -5433,7 +5431,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				AAC84848175718EC002D7AA9 /* CoreGraphics.framework in Frameworks */,
-				AABDD4A517437B3600A0D6E9 /* SenTestingKit.framework in Frameworks */,
 				AABDD4A617437B3600A0D6E9 /* UIKit.framework in Frameworks */,
 				AABDD4A717437B3600A0D6E9 /* Foundation.framework in Frameworks */,
 			);
@@ -5562,7 +5559,7 @@
 			isa = PBXGroup;
 			children = (
 				AABDD47D17437B3600A0D6E9 /* PaperMapII.app */,
-				AABDD4A317437B3600A0D6E9 /* PaperMapIITests.octest */,
+				AABDD4A317437B3600A0D6E9 /* PaperMapIITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -5577,7 +5574,6 @@
 				AABDD48017437B3600A0D6E9 /* UIKit.framework */,
 				AABDD48217437B3600A0D6E9 /* Foundation.framework */,
 				AABDD48417437B3600A0D6E9 /* CoreGraphics.framework */,
-				AABDD4A417437B3600A0D6E9 /* SenTestingKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -7458,8 +7454,8 @@
 			);
 			name = PaperMapIITests;
 			productName = PaperMapIITests;
-			productReference = AABDD4A317437B3600A0D6E9 /* PaperMapIITests.octest */;
-			productType = "com.apple.product-type.bundle";
+			productReference = AABDD4A317437B3600A0D6E9 /* PaperMapIITests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -7469,7 +7465,7 @@
 			attributes = {
 				CLASSPREFIX = PM2;
 				LastTestingUpgradeCheck = 0510;
-				LastUpgradeCheck = 0460;
+				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = "Yali Zhu";
 			};
 			buildConfigurationList = AABDD47817437B3600A0D6E9 /* Build configuration list for PBXProject "PaperMapII" */;
@@ -11193,13 +11189,13 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
 					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+					"$(inherited)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PaperMapII/PaperMapII-Prefix.pch";
 				INFOPLIST_FILE = "PaperMapIITests/PaperMapIITests-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = octest;
 			};
 			name = Debug;
 		};
@@ -11210,13 +11206,13 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
 					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+					"$(inherited)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PaperMapII/PaperMapII-Prefix.pch";
 				INFOPLIST_FILE = "PaperMapIITests/PaperMapIITests-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = octest;
 			};
 			name = Release;
 		};

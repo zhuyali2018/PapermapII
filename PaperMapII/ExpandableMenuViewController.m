@@ -140,7 +140,7 @@
     nd.emvc=self;           //very important, or children's checkbox wont work with parent
     nd.open=true;           //newly added folder is open
     [trackList addObject:nd];
-    nd.rootArrayIndex=[trackList count]-1;      //it is the last one that is added
+    nd.rootArrayIndex=(int)[trackList count]-1;      //it is the last one that is added
     [menuList addObject:nd];
     [self.tableView reloadData];
 }
@@ -158,7 +158,7 @@
         [menuList removeObjectAtIndex:row];
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
         if (isFolder) {     //if it is a folder, delete all its children
-            for (int i =trackListRow; i<[trackList count];) {
+            for (int i =(int)trackListRow; i<[trackList count];) {
                 if(((MenuNode *)[trackList objectAtIndex:i]).infolder)
                     [trackList removeObjectAtIndex:i];
                 else
@@ -200,7 +200,7 @@
         [menuList removeObjectAtIndex:fromRow];   //important, affect the following line
         int toIdx;
         if (toRow>=[menuList count]) {
-            toIdx=trackList.count;
+            toIdx=(int)trackList.count;
             [trackList insertObject:object atIndex:toIdx];
         }else{
             MenuNode * toObject = [menuList objectAtIndex:toRow];
@@ -239,7 +239,7 @@
 	MenuNode * object = [menuList objectAtIndex:fromRow];
     //insert this folder condition
     if(object.folder){
-        [self moveFolder:object From:fromRow To:toRow];
+        [self moveFolder:object From:(int)fromRow To:(int)toRow];
         return;
     }
     int fromIdx=object.rootArrayIndex;
@@ -330,7 +330,7 @@
     if(toRow > fromRow){
         n=-1;
     }
-    for (int i=toRow+1; i<=fromRow; i+=n) {  //should be <= to be correct
+    for (int i=(int)toRow+1; i<=fromRow; i+=n) {  //should be <= to be correct
         ((MenuNode *)[menuList objectAtIndex:i]).rootArrayIndex+=n;
     }
 }
@@ -368,9 +368,9 @@
         }
         [self updateSubmenuList:trackListRow];
         if (node.open) {
-            [self deleteArrayAtIndex:indexPath.row];
+            [self deleteArrayAtIndex:(int)indexPath.row];
         }else{
-            [self insertArrayAtIndex:indexPath.row];
+            [self insertArrayAtIndex:(int)indexPath.row];
         }
         node.open=!node.open;
         [node updateAppearance];
@@ -390,7 +390,7 @@
 	return UITableViewCellAccessoryDisclosureIndicator;
 }
 -(void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath{
-    NSLog(@"you taped on number %d (%@)",indexPath.row,((MenuNode *)[menuList objectAtIndex:indexPath.row]).mainText);
+    NSLog(@"you taped on number %ld (%@)",(long)indexPath.row,((MenuNode *)[menuList objectAtIndex:indexPath.row]).mainText);
     MenuNode * node=(MenuNode *)menuList[indexPath.row];
     int trackListRow = node.rootArrayIndex;
     if ([trackHandlerDelegate respondsToSelector:@selector(tappedOnIndexPath:ID:)])
@@ -410,7 +410,7 @@
 }
 -(void) insertArrayAtIndex:(int) row{
     [self.tableView beginUpdates];
-    int count=[subMenuList count];
+    int count=(int)[subMenuList count];
     NSMutableArray * idx=[NSMutableArray arrayWithCapacity:count];
     for(int i=0;i<count;i++) {
         [menuList insertObject:[subMenuList objectAtIndex:i] atIndex:row+i+1];
@@ -422,7 +422,7 @@
 }
 -(void) deleteArrayAtIndex:(int) row{
     [self.tableView beginUpdates];
-    int count=[subMenuList count];      //for testing, count needs to be passed in
+    int count=(int)[subMenuList count];      //for testing, count needs to be passed in
     NSMutableArray * idx=[NSMutableArray arrayWithCapacity:count];
     for(int i=0;i<count;i++) {
         [menuList removeObjectAtIndex:row+1];

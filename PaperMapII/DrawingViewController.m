@@ -55,7 +55,7 @@
     propBn.lineProperty=drawTrack.lineProperty;
     [propBn setBackgroundImage:[UIImage imageNamed:@"icon72x72.png"] forState:UIControlStateHighlighted];  //TODO: Choose a better image here
     
-    self.lbNumberOfNodes.text=[[NSString alloc]initWithFormat:@"%3d",[drawTrack.nodes count]];
+    self.lbNumberOfNodes.text=[[NSString alloc]initWithFormat:@"%3lu",(unsigned long)[drawTrack.nodes count]];
     
     if (drawTrack.visible) {
         [visibleSwitchBn setTitle:@"Visible" forState:UIControlStateNormal];
@@ -129,7 +129,7 @@
     [self updateWith:(Node *)node1];
 }
 -(void)updateWith:(Node *)node1{
-    lbNumberOfNodes.text=[[NSString alloc]initWithFormat:@"%d / %d",idx+1,[drawTrack.nodes count]];
+    lbNumberOfNodes.text=[[NSString alloc]initWithFormat:@"%ld / %lu",(unsigned long)idx+1,(unsigned long)[drawTrack.nodes count]];
     [[DrawableMapScrollView sharedMap] centerMapTo:node1];
     //[self centerMapToDrawNode:node1];
 }

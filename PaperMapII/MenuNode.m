@@ -106,7 +106,7 @@
             [self.dataSource onCheckBox];  //center and update track on map
         return;
     }
-    int myIndex=[emvc.trackList indexOfObject:self];
+    int myIndex=(int)[emvc.trackList indexOfObject:self];
     if (myIndex<0) {
         return;
     }
