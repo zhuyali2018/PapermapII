@@ -36,7 +36,7 @@ typedef enum{
 @property CGFloat lat;		//latitude
 @property CGFloat lon;		//longitude
 //@property (nonatomic, strong) NSString * title;
-@property (nonatomic, strong) NSString * description;
+@property (atomic, copy) NSString * description;
 //@property (nonatomic,retain) UIImageView * imageView;
 
 -(void)encodeWithCoder:(NSCoder *)coder;
