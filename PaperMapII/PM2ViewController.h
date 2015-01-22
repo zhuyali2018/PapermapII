@@ -10,8 +10,6 @@
 
 @class DrawableMapScrollView;
 @class MapSources;
-@class Recorder;
-@class LineProperty;
 
 @interface PM2ViewController : UIViewController
 

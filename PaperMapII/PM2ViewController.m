@@ -9,8 +9,6 @@
 
 #import "PM2ViewController.h"
 
-//#import "MapScrollView.h"
-//#import "TappableMapScrollView.h"
 #import "GPSTrackPOIBoard.h"
 #import "DrawingBoard.h"
 #import "DrawableMapScrollView.h"
@@ -32,11 +30,9 @@
 @synthesize mapScrollView;
 @synthesize mapSources;
 @synthesize orientationChanging;
-//@synthesize arrAllTracks,arrAllGpsTracks;
 
 -(void)addOnScreeButtons{
     PM2OnScreenButtons * bns=[PM2OnScreenButtons sharedBnManager];
-    //[bns addButtons:(UIView *)[self view]];
     [bns addToolBar:[self view]];
 }
 -(void)add_MapScrollView{
@@ -94,6 +90,7 @@ NSString * satVersion;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
     //version 5.0 ///////////////////
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	satVersion=[defaults stringForKey:@"SatMapVersion"];   //version 5.0
@@ -112,11 +109,6 @@ NSString * satVersion;
     [self.view setBackgroundColor:[UIColor darkGrayColor]];
     [self add_MapScrollView];    //add map tile scroll view
     [self addOnScreeButtons];
-    
-    //[self didRotateFromInterfaceOrientation:UIInterfaceOrientationLandscapeRight];  //this line does not work here, too early. do it in viewDidAppear !
-    //TODO: Fix the following 2 lines not working, why?
-    //UIApplication *app=[UIApplication sharedApplication];
-	//[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillTerminate:) name:UIApplicationWillTerminateNotification object:app];
 }
 -(void)viewDidAppear:(BOOL)animated{
     [self didRotateFromInterfaceOrientation:UIInterfaceOrientationLandscapeRight];
