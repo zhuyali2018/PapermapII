@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 typedef enum  {MESSAGELABEL,SPEEDLABEL,ALTITUDELABEL,TRIPMETER,
-    MAPRES,MAPSOURCE,GPSTRACKPOIBOARD,DRAWINGBOARD,PREDRAW,GPSARROW} ITEMID;  //no more than ten times here
+    MAPRES,MAPSOURCE,GPSTRACKPOIBOARD,DRAWINGBOARD,PREDRAW,GPSARROW} ITEMID;  //no more than ten items here
 
 @interface MainQ : NSObject
 @property (nonatomic,strong)NSMutableArray * mainQ;

@@ -21,7 +21,7 @@
 - (id)init {
     if (self = [super init]) {
         //mainQ = [[NSMutableArray alloc] initWithCapacity:10];
-        mainQ = [[NSMutableArray alloc] initWithObjects:@"0",@"0",@"0",@"0",@"0",@"0",@"0",@"0",@"0",@"0", nil];
+        mainQ = [[NSMutableArray alloc] initWithObjects:@"0",@"0",@"0",@"0",@"0",@"0",@"0",@"0",@"0",@"0", nil];              //<= init with 10 items
     }
     return self;
 }

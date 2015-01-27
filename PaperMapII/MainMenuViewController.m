@@ -409,6 +409,7 @@ bool connectedToIphone;
     ExpandableMenuViewController *xmvc = [[ExpandableMenuViewController alloc] initWithStyle:UITableViewStylePlain];
     xmvc.trackList=[Recorder sharedRecorder].gpsTrackArray;
     xmvc.trackHandlerDelegate=self;
+    //xmvc.id=DRAWLIST;   <== why not thisline ?
     NSLOG10(@"executing showGPSTrackList from %@",menuTitle);
     [xmvc setTitle:menuTitle];
     [self.navigationController pushViewController:xmvc animated:YES];
