@@ -21,4 +21,7 @@
 @property(nonatomic) GKSession *session;
 @property(nonatomic,copy) NSString * peerID;
 
+//expandableMenus
+@property (nonatomic,strong) ExpandableMenuViewController *menuSettings;
+
 @end

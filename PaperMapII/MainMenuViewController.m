@@ -31,6 +31,7 @@
 @synthesize fileListView;    //list of drawing files saved
 @synthesize session;
 @synthesize peerID;
+@synthesize menuSettings;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -340,14 +341,18 @@ bool connectedToIphone;
 }
 -(void)Settings:(NSString *)menuTitle{
     NSLog(@"Tap on Settings");
-    ExpandableMenuViewController *xmvc = [[ExpandableMenuViewController alloc] initWithStyle:UITableViewStylePlain];
-    xmvc.trackList=[Settings sharedSettings].settingArray;
-    xmvc.readOnly=YES;
-    //xmvc.trackHandlerDelegate=self;  //this line is not needed becaus settings should not lead to a new tableview
-    xmvc.id=SETTING;
-    NSLOG10(@"executing settings from %@",menuTitle);
-    [xmvc setTitle:menuTitle];
-    [self.navigationController pushViewController:xmvc animated:YES];
+    //ExpandableMenuViewController *xmvc = [[ExpandableMenuViewController alloc] initWithStyle:UITableViewStylePlain];
+    if (menuSettings == nil) {
+        menuSettings =[[ExpandableMenuViewController alloc] initWithStyle:UITableViewStylePlain];
+    
+        menuSettings.trackList=[Settings sharedSettings].settingArray;
+        menuSettings.readOnly=YES;
+        //xmvc.trackHandlerDelegate=self;  //this line is not needed because settings should not lead to a new tableview
+        menuSettings.id=SETTING;
+        NSLOG10(@"executing settings from %@",menuTitle);
+        [menuSettings setTitle:menuTitle];
+    }
+    [self.navigationController pushViewController:menuSettings animated:YES];
 }
 -(void)PickColor{
     NSLog(@"Tap on the PickColor");
