@@ -44,7 +44,10 @@
     menuList=[NSMutableArray arrayWithCapacity:11];
     for (int i=0; i<[trackList count]; i++) {
         MenuNode * nd=[trackList objectAtIndex:i];
-        nd.emvc=self;
+        nd.emvc=self;                    //very important, or children's checkbox wont work with parent
+        if(nd.folder){
+            nd.dataSource=self;          //important,or the display / hide of track wont work
+        }
         nd.rootArrayIndex=i;            //important, do not forget to update the rootArrayIndex
         if((nd.folder)&&(nd.open)){     
             nd.open=false;              //initialize with all folders closed
