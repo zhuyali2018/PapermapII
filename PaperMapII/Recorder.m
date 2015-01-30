@@ -78,6 +78,26 @@ bool centerPos;
         [self.trackArray addObject:self.track];
     }
 }
+-(void)addAMonthNamedFolder{
+    NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
+    [outputFormatter setDateFormat:@"yyyy-MM"];
+    NSDate * now = [NSDate date];
+    NSString * yearMonth=[outputFormatter stringFromDate:now];
+    MenuNode * nd=[[MenuNode alloc]initWithTitle:yearMonth asFolder:YES];
+    
+    //following 2 settings should be set from inside emvc
+    //nd.dataSource=self;     //important,or the display / hide of track wont work
+    //nd.emvc=self;           //very important, or children's checkbox wont work with parent
+    
+    nd.open=true;           //newly added folder is open (not important)
+    [gpsTrackArray addObject:nd];
+    nd.rootArrayIndex=(int)[gpsTrackArray count]-1;      //it is the last one that is added
+    //[menuList addObject:nd];
+    //[self.tableView reloadData];
+}
+-(bool)monthFolderExist{
+    return false;
+}
 - (void)gpsStart{
     if (_gpsRecording) {
         return;
@@ -98,9 +118,13 @@ bool centerPos;
         return;
     }
     _gpsTrack.selected=true;  //auto select new GPS Track !
-    _gpsTrack.closed=false;     // means still adding nodes
+    _gpsTrack.closed=false;   // means still adding nodes, open for adding nodes
     _gpsRecording=true;
     self.gpsTrack.lineProperty=[[LineProperty sharedGPSTrackProperty] copy];   //TODO: change to GPS used line property
+    if (![self monthFolderExist]) {
+        [self addAMonthNamedFolder];
+    }
+    self.gpsTrack.infolder=true;
     if(!self.gpsTrackArray){   //when first time starting recorder, ini track array
         self.gpsTrackArray=[[NSMutableArray alloc]initWithCapacity:5];
         [self.gpsTrackArray addObject:self.gpsTrack];

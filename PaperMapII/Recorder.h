@@ -42,6 +42,7 @@
 - (void) startNewTrack;
 - (void) undo;
 
+- (void)addAMonthNamedFolder;
 - (void)gpsStart;
 - (void)gpsStop;
 - (void)deleteTempFiles;
