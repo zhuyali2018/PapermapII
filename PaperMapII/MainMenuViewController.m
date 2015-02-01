@@ -73,7 +73,7 @@
                     [[MenuItem alloc]initWithTitle:@"Help"],
                     [[MenuItem alloc]initWithTitle:@"Send Email to Developer"],
                     [[MenuItem alloc]initWithTitle:@"Receive File"],
-                    [[MenuItem alloc]initWithTitle:@"About Paper Map II"], nil];
+                    [[MenuItem alloc]initWithTitle:@"About Paper Map II (2015.2.1)"], nil];
         
         menuMatrix=[[NSArray alloc]initWithObjects:drawingMenu,gpsMenu,poiMenu,helpMenu,nil];
         fileListView=[[ListViewController alloc]initWithStyle:UITableViewStylePlain];

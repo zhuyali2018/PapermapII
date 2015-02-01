@@ -7467,6 +7467,11 @@
 				LastTestingUpgradeCheck = 0510;
 				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = "Yali Zhu";
+				TargetAttributes = {
+					AABDD47C17437B3600A0D6E9 = {
+						DevelopmentTeam = 73S323QAR7;
+					};
+				};
 			};
 			buildConfigurationList = AABDD47817437B3600A0D6E9 /* Build configuration list for PBXProject "PaperMapII" */;
 			compatibilityVersion = "Xcode 3.2";

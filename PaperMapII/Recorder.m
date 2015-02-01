@@ -112,11 +112,12 @@ bool centerPos;
     for (int i=sz-1; i>=0; i--) {
         MenuNode * nd=[gpsTrackArray objectAtIndex:i];
         if (!nd.folder) {
-            continue;
+            continue;    //looking for lowest folder
         }
         if ([nd.mainText compare:yearMonth]==NSOrderedSame) {
             return true;
         }
+        break;      //return false if the lowerest folder name does not match
     }
     return false;
 }
