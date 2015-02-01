@@ -22,6 +22,9 @@
 @property(nonatomic,copy) NSString * peerID;
 
 //expandableMenus
+@property (nonatomic,strong) ExpandableMenuViewController *menuDrawings;
+@property (nonatomic,strong) ExpandableMenuViewController *menuGPSTracks;
+@property (nonatomic,strong) ExpandableMenuViewController *menuPOIs;
 @property (nonatomic,strong) ExpandableMenuViewController *menuSettings;
 
 @end

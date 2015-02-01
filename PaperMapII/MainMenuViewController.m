@@ -32,6 +32,9 @@
 @synthesize session;
 @synthesize peerID;
 @synthesize menuSettings;
+@synthesize menuPOIs;
+@synthesize menuDrawings;
+@synthesize menuGPSTracks;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -381,12 +384,16 @@ bool connectedToIphone;
 -(void)ModifyPoi:(NSString *) menuTitle{
     NSLog(@"Tap on the map to Modify a POI");
     //Showing POI list
-    ExpandableMenuViewController *xmvc = [[ExpandableMenuViewController alloc] initWithStyle:UITableViewStylePlain];
-    xmvc.trackList=[Recorder sharedRecorder].poiArray;
-    xmvc.trackHandlerDelegate=self;
-    xmvc.id=POILIST;
-    [xmvc setTitle:menuTitle];
-    [self.navigationController pushViewController:xmvc animated:YES];
+    //ExpandableMenuViewController *xmvc = [[ExpandableMenuViewController alloc] initWithStyle:UITableViewStylePlain];
+    if (menuPOIs == nil) {
+        menuPOIs =[[ExpandableMenuViewController alloc] initWithStyle:UITableViewStylePlain];
+        
+        menuPOIs.trackList=[Recorder sharedRecorder].poiArray;
+        menuPOIs.trackHandlerDelegate=self;
+        menuPOIs.id=POILIST;
+        [menuPOIs setTitle:menuTitle];
+    }
+    [self.navigationController pushViewController:menuPOIs animated:YES];
 }
 -(void)MoveAPoi:(NSString *) menuTitle{
     NSLog(@"Tap on and Hold a POI and Move to destination and then let your fingure go");
@@ -403,21 +410,27 @@ bool connectedToIphone;
 -(void)GotoAPoi:(NSString *) menuTitle{
     NSLog(@"Tap on the map to GOTO a POI");
     //Showing POI list
-    ExpandableMenuViewController *xmvc = [[ExpandableMenuViewController alloc] initWithStyle:UITableViewStylePlain];
-    xmvc.trackList=[Recorder sharedRecorder].poiArray;
-    xmvc.trackHandlerDelegate=self;
-    xmvc.id=GOTOPOI;
-    [xmvc setTitle:menuTitle];
-    [self.navigationController pushViewController:xmvc animated:YES];
+    if (menuPOIs == nil) {
+        menuPOIs =[[ExpandableMenuViewController alloc] initWithStyle:UITableViewStylePlain];
+        
+        menuPOIs.trackList=[Recorder sharedRecorder].poiArray;
+        menuPOIs.trackHandlerDelegate=self;
+        menuPOIs.id=GOTOPOI;
+        [menuPOIs setTitle:menuTitle];
+    }
+    [self.navigationController pushViewController:menuPOIs animated:YES];
 }
 -(void)showGPSTrackList:(NSString *) menuTitle{
-    ExpandableMenuViewController *xmvc = [[ExpandableMenuViewController alloc] initWithStyle:UITableViewStylePlain];
-    xmvc.trackList=[Recorder sharedRecorder].gpsTrackArray;
-    xmvc.trackHandlerDelegate=self;
-    //xmvc.id=DRAWLIST;   <== why not thisline ?
+    if (menuGPSTracks == nil) {
+        menuGPSTracks =[[ExpandableMenuViewController alloc] initWithStyle:UITableViewStylePlain];
+        
+        menuGPSTracks.trackList=[Recorder sharedRecorder].gpsTrackArray;
+        menuGPSTracks.trackHandlerDelegate=self;
+        //menuGPSTracks.id=DRAWLIST;  <== why not thisline ?
+        [menuGPSTracks setTitle:menuTitle];
+    }
     NSLOG10(@"executing showGPSTrackList from %@",menuTitle);
-    [xmvc setTitle:menuTitle];
-    [self.navigationController pushViewController:xmvc animated:YES];
+    [self.navigationController pushViewController:menuGPSTracks animated:YES];
 }
 - (void)tappedOnIndexPath:(int)row ID:(int)myid{
     NSLog(@"you clicked on row %d",row);
@@ -474,26 +487,17 @@ bool connectedToIphone;
     NSLog(@"onFolderCheckBox");
     [[DrawableMapScrollView sharedMap] refresh];
 }
-//-(void)showGPSTrackList:(NSString *) menuTitle{
-//    NSLOG10(@"executing showGPSTrackList from %@",menuTitle);
-//    GPSTrackListTableViewController * gpsV=[[GPSTrackListTableViewController alloc] init];
-//    [gpsV setTitle:menuTitle];
-//    [self.navigationController pushViewController:gpsV animated:YES];
-//}
-//-(void)showDrawingList:(NSString *) menuTitle{
-//    NSLOG10(@"executing showDrawingList from %@",menuTitle);
-//    GPSTrackListTableViewController * gpsV=[[GPSTrackListTableViewController alloc] initWithType:DRAWLIST];
-//    [gpsV setTitle:menuTitle];
-//    [self.navigationController pushViewController:gpsV animated:YES];
-//}
--(void)showDrawingList:(NSString *) menuTitle{    
-    ExpandableMenuViewController *xmvc = [[ExpandableMenuViewController alloc] initWithStyle:UITableViewStylePlain];
-    xmvc.trackList=[Recorder sharedRecorder].trackArray;
-    xmvc.trackHandlerDelegate=self;
-    xmvc.id=DRAWLIST;
+-(void)showDrawingList:(NSString *) menuTitle{
+    if (menuDrawings == nil) {
+        menuDrawings =[[ExpandableMenuViewController alloc] initWithStyle:UITableViewStylePlain];
+        
+        menuDrawings.trackList=[Recorder sharedRecorder].trackArray;
+        menuDrawings.trackHandlerDelegate=self;
+        menuDrawings.id=DRAWLIST;
+        [menuDrawings setTitle:menuTitle];
+    }
     NSLOG10(@"executing showDrawingList from %@",menuTitle);
-    [xmvc setTitle:menuTitle];
-    [self.navigationController pushViewController:xmvc animated:YES];
+    [self.navigationController pushViewController:menuDrawings animated:YES];
 }
 - (void)didReceiveMemoryWarning
 {
