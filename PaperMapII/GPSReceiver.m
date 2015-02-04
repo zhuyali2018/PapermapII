@@ -42,6 +42,7 @@
     [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
     //if(!locationManager)
     //    locationManager=[[CLLocationManager alloc]init];
+    [locationManager requestAlwaysAuthorization];      //NEW this must be called before the locationManager startUpdatingLocation
     [locationManager startUpdatingLocation];
     GPSRunning=TRUE;
 }

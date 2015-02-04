@@ -42,6 +42,8 @@
 	<array>
 		<string>location</string>
 	</array>
+    <key>NSLocationAlwaysUsageDescription</key>
+<string>This allows the app to run in background to record your travel track on the map</string>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>
