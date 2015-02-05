@@ -181,7 +181,7 @@
     if (object.open) {
         return;     //do not move open folder
     }
-    if (fromRow>toRow) {
+    if (fromRow>toRow) {    //move upward
         int fromIdx=object.rootArrayIndex;
         MenuNode * objAtTrackList=[trackList objectAtIndex:fromIdx];
         [menuList removeObjectAtIndex:fromRow];
@@ -198,7 +198,7 @@
             [trackList removeObjectAtIndex:i];
             [trackList insertObject:tmp atIndex:toIdx+i-fromIdx];
         }
-    }else{  //if toRow>=fromRow
+    }else{  //if toRow>=fromRow -> move downward
         int fromIdx=object.rootArrayIndex;
         [menuList removeObjectAtIndex:fromRow];   //important, affect the following line
         int toIdx;
@@ -213,7 +213,7 @@
         [trackList removeObjectAtIndex:fromIdx];
 
         //move its children if any
-        for(int i=fromIdx;i<[trackList count];i++){
+        for(int i=fromIdx;i<[trackList count];){  //i should remain the same as you remove and add at a lower place
             MenuNode * tmp=[trackList objectAtIndex:i];
             if (!tmp.infolder) {
                 break;

@@ -40,9 +40,10 @@
     }
     [[Recorder sharedRecorder] gpsStart];
     [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
-    //if(!locationManager)
-    //    locationManager=[[CLLocationManager alloc]init];
-    [locationManager requestAlwaysAuthorization];      //NEW this must be called before the locationManager startUpdatingLocation
+
+    if ([locationManager respondsToSelector:@selector(requestAlwaysAuthorization)])    //without this check, following line will crash on iOS 7 or earlier
+        [locationManager requestAlwaysAuthorization];      //NEW this must be called before the locationManager startUpdatingLocation for iOS 8 or later
+    
     [locationManager startUpdatingLocation];
     GPSRunning=TRUE;
 }
