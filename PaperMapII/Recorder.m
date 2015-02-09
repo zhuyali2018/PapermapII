@@ -870,18 +870,19 @@ int n=0;  //gps node counter
     node.direction=newLocation.course;
     node.distanceFromStart=totalTrip;
     if(bFarEnough){
-        self.gpsTrack.nodes=[self addGPSNode:node to:self.gpsTrack.nodes];
+        self.gpsTrack.nodes=[self addGPSNode:node to:self.gpsTrack.nodes];       //this add looks stupid, but it embeds the mode adjustment to each node!
         self.gpsTrack.tripmeter=totalTrip;
         self.gpsTrack.nodesDirtyFlag=true;
         //////////////////////////////////////segments saving to file ////////////
         self.currentTrackSegment.nodes=[self addGPSNode:node to:self.currentTrackSegment.nodes];        //<===added to save to a small file
         self.currentTrackSegment.nodesDirtyFlag=true;
         self.currentTrackSegment.tripmeter=totalTrip;
-        [self.currentTrackSegment saveNodesToFile:trackSegmentCount];    //save to current seg related file depending on the trackSegmentCount;
+        [self.currentTrackSegment saveNodesToFile:trackSegmentCount];    //save to current seg related file depending on the trackSegmentCount; save to a file on every new incomming node to the same file for 100 new nodes
         currentTrackSegmentNodeCount++;
         if(currentTrackSegmentNodeCount>100){       //<===this number should be adjusted according to performace. if it was too slow, make the number smaller
-            trackSegmentCount++;  //increase index
-            //=========>[currentTrackSegment.nodes removeAllObjects];
+            trackSegmentCount++;  //increase index      // increate count number so that the temp file name could be different for every 100 nodes!
+                                                        //(should clear temp file when all trip have been successfully saved,done yet ? TODO:)
+                                                        //=========>[currentTrackSegment.nodes removeAllObjects];
             NSMutableArray * temp=[[NSMutableArray alloc] initWithArray:currentTrackSegment.nodes];
             [temp removeAllObjects];
             currentTrackSegment.nodes=temp;
