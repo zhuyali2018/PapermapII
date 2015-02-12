@@ -24,6 +24,7 @@
 @property (nonatomic,strong) IBOutlet UILabel * lbNumberOfNodes;
 @property (nonatomic,strong) IBOutlet PropertyButton * propBn;
 
+@property (strong, nonatomic) IBOutlet UIButton *bnSend;
 
 @property (nonatomic,strong) IBOutlet UILabel * lbNameTrackLength;
 @property (nonatomic,strong) IBOutlet UILabel * lbNameTotalTile;

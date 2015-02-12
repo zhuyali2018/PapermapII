@@ -34,6 +34,7 @@
 @synthesize lbTotalTime;
 @synthesize visibleSwitchBn;
 @synthesize lbNumberOfNodes;
+@synthesize bnSend;
 
 @synthesize lbNameAvgSpeed,lbNameNodeNumber,lbNameTotalTile,lbNameTrackLength;
 @synthesize listType;
@@ -73,16 +74,21 @@
     }
     gpsTrackName.text=gpsTrack.title;
     lbTimeCreated.text = [NSDateFormatter localizedStringFromDate:gpsTrack.timestamp dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterMediumStyle];
-    if (listType!=DRAWLIST) {
-        lbGpsTrackLength.text=[[NSString alloc]initWithFormat:@"%3.1f miles (%d meters)",(float)gpsTrack.tripmeter/1609,gpsTrack.tripmeter];
-        [propBn.titleLabel setText:@"GPS Track Property:"];
-        propBn.lineProperty=gpsTrack.lineProperty;
-        
-    }else {
+    
+    if (listType==DRAWLIST) {
         lbNameTrackLength.hidden=YES;
         lbNameTotalTile.hidden=YES;
         lbNameAvgSpeed.hidden=YES;
         [propBn.titleLabel setText:@"Drawing Property:"];
+        propBn.lineProperty=gpsTrack.lineProperty;
+    } else {
+        if(listType==SENDGPSTRACK){
+            bnSend.hidden=false;
+        }else{
+            bnSend.hidden=true;
+        }
+        lbGpsTrackLength.text=[[NSString alloc]initWithFormat:@"%3.1f miles (%d meters)",(float)gpsTrack.tripmeter/1609,gpsTrack.tripmeter];
+        [propBn.titleLabel setText:@"GPS Track Property:"];
         propBn.lineProperty=gpsTrack.lineProperty;
     }
     [propBn setBackgroundImage:[UIImage imageNamed:@"icon72x72.png"] forState:UIControlStateHighlighted];  //TODO: Choose a better image here

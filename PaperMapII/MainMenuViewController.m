@@ -102,6 +102,7 @@ typedef enum{SAVEDRAWINGDLG=1000,SAVEGPSTRACKSDLG,SAVEPOISDLG, UNLOADDRAWCONFIRM
 #define CONNECTIPHONE   3
 #define LOADGPSTRACKS   4
 #define UNLOADGPSTRACKS 5
+#define SENDGPSTRACKS   6
 // POI Section
 #define CREATEPOI   0
 #define MODIFYPOI   1
@@ -129,6 +130,7 @@ typedef enum{SAVEDRAWINGDLG=1000,SAVEGPSTRACKSDLG,SAVEPOISDLG, UNLOADDRAWCONFIRM
     ((MenuItem *)menuMatrix[GPS_SECTION][CONNECTIPHONE]).menuItemHandler=@selector(connectiPhoneGPS);
     ((MenuItem *)menuMatrix[GPS_SECTION][LOADGPSTRACKS]).menuItemHandler=@selector(loadGpsTracksFromFile:);
     ((MenuItem *)menuMatrix[GPS_SECTION][UNLOADGPSTRACKS]).menuItemHandler=@selector(unloadGpsTracks:);
+    ((MenuItem *)menuMatrix[GPS_SECTION][SENDGPSTRACKS]).menuItemHandler=@selector(showGPSTrackListToSendFrom:);
     //POI Section
     ((MenuItem *)menuMatrix[POI_SECTION][CREATEPOI]).menuItemHandler=@selector(CreatePoi);
     ((MenuItem *)menuMatrix[POI_SECTION][MODIFYPOI]).menuItemHandler=@selector(ModifyPoi:);
@@ -426,12 +428,25 @@ bool connectedToIphone;
         
         menuGPSTracks.trackList=[Recorder sharedRecorder].gpsTrackArray;
         menuGPSTracks.trackHandlerDelegate=self;
-        //menuGPSTracks.id=DRAWLIST;  <== why not thisline ?
-        [menuGPSTracks setTitle:menuTitle];
     }
+    menuGPSTracks.id=GPSLIST;  //<== why not thisline ?
+    [menuGPSTracks setTitle:menuTitle];
     NSLOG10(@"executing showGPSTrackList from %@",menuTitle);
     [self.navigationController pushViewController:menuGPSTracks animated:YES];
 }
+-(void)showGPSTrackListToSendFrom:(NSString *) menuTitle{
+    if (menuGPSTracks == nil) {
+        menuGPSTracks =[[ExpandableMenuViewController alloc] initWithStyle:UITableViewStylePlain];
+        
+        menuGPSTracks.trackList=[Recorder sharedRecorder].gpsTrackArray;
+        menuGPSTracks.trackHandlerDelegate=self;
+    }
+    menuGPSTracks.id=SENDGPSTRACK;  //<== why not thisline ?
+    [menuGPSTracks setTitle:menuTitle];
+    NSLOG10(@"executing showGPSTrackListToSendFrom from %@",menuTitle);
+    [self.navigationController pushViewController:menuGPSTracks animated:YES];
+}
+
 - (void)tappedOnIndexPath:(int)row ID:(int)myid{
     NSLog(@"you clicked on row %d",row);
     
@@ -466,10 +481,15 @@ bool connectedToIphone;
         }
         //if folder on POI list
         tk=(GPSTrack *)poi;
-    }else if (myid==SETTINGS) {
+    }else if (myid==SETTING) {
         return; //do nothing for settings here
-    }else
+    }else if (myid==GPSLIST) {
+        gpsTrackViewCtrlr.listType=GPSLIST;
         tk=[Recorder sharedRecorder].gpsTrackArray[row];
+    }else if (myid==SENDGPSTRACK) {
+        gpsTrackViewCtrlr.listType=SENDGPSTRACK;
+        tk=[Recorder sharedRecorder].gpsTrackArray[row];
+    }
     
     gpsTrackViewCtrlr.gpsTrack=tk;
     if (tk.folder) {
