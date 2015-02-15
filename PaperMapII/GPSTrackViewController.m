@@ -103,7 +103,11 @@
         [visibleSwitchBn setTitle:@"Show" forState:UIControlStateNormal];
     }
 }
-
+- (void)viewDidAppear:(BOOL)animated{
+    bnSend.frame=CGRectMake(100,150, 100, 40);
+    [bnSend setBackgroundColor:[UIColor redColor]];
+    NSLog(@"viewDidAppear");
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
