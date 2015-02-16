@@ -159,6 +159,9 @@
     }
     [[DrawableMapScrollView sharedMap] refresh];
 }
+- (IBAction)SendGPSTrack:(id)sender {
+    NSLog(@"Sending GPS Track File through Email");
+}
 -(void)displayGPSTrackInfo{
     if (!gpsTrack.nodes) {
         return;
