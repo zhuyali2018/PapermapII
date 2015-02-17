@@ -12,13 +12,28 @@
 
 @implementation MapSources
 
+@synthesize lockCount;
+@synthesize myLock;
+
 + (id)sharedManager {
     static MapSources *sharedMyManager = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         sharedMyManager = [[self alloc] init];
+        sharedMyManager.lockCount=0;
+        sharedMyManager.myLock=[[NSLock alloc] init];
     });
     return sharedMyManager;
+}
+- (void)lock{
+    [myLock lock];
+    lockCount++;
+    [myLock unlock];
+}
+- (void)unlock{
+    [myLock lock];
+    lockCount--;
+    [myLock unlock];
 }
 
 -(NSString *)getPathName:(int)res row:(int)row col:(int)col{
@@ -209,6 +224,7 @@
 }
 extern NSString * satVersion;  //version 5.0
 -(void)loadImageInBackground:(MapTile *)tile1{
+    [[MapSources sharedManager] lock];
     int iSatVersion=[satVersion intValue];  //version 5.0;  //TODO: Replaced this hardcoded 113 with some code !!!
     int x=tile1.col; //save here and check at the buttom
     int y=tile1.row;
@@ -230,6 +246,7 @@ extern NSString * satVersion;  //version 5.0
     }
     NSData * imageData;
     if (tile1.row==-1) {  //no need to do it to save time
+        [[MapSources sharedManager] unlock];
         NSLOG10(@"No need to load image %d,%d at %d any more",tile1.row,tile1.modeCol,tile1.res);
         return;
     }
@@ -272,9 +289,17 @@ extern NSString * satVersion;  //version 5.0
         }
     }else
         [tile1 setImage:NULL];
-
+    
+    [[MapSources sharedManager] unlock];
 }
-- (void)setMapSourceType:(MapType)mapType1{
-    mapType=mapType1;
+- (bool)setMapSourceType:(MapType)mapType1{
+    bool ret=false;
+    [myLock lock];
+    if(lockCount==0){
+        mapType=mapType1;
+        ret=true;
+    }
+    [myLock unlock];
+    return ret;
 }
 @end

@@ -13,7 +13,13 @@
 @interface MapSources: NSObject <PM2MapSourceDelegate>{
     MapType mapType;
 }
+@property UInt32 lockCount;
+@property(nonatomic, strong)NSLock *myLock;
+
+
 + (id)sharedManager;
 - (void)mapTile:(MapTile *)tile1;
-- (void)setMapSourceType:(MapType)mapType;
+- (bool)setMapSourceType:(MapType)mapType;
+- (void)lock;
+- (void)unlock;
 @end

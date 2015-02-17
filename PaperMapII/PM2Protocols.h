@@ -13,7 +13,7 @@
 @protocol PM2MapSourceDelegate <NSObject>
 @optional
 - (void)mapTile:(MapTile *)tile;
-- (void)setMapSourceType:(int)mapType1;
+- (bool)setMapSourceType:(int)mapType1;
 @end
 
 @protocol PM2SingleTapHandleDelegate <NSObject>

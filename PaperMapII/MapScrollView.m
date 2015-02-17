@@ -18,6 +18,7 @@
 #import "PM2ViewController.h"
 #import "Settings.h"
 #import "MapCenterIndicator.h"
+#import "MapSources.h"
 
 @implementation MapScrollView
 
@@ -145,6 +146,7 @@ long firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleC
 		return;
 	}
     int loadedImageCount=0;
+    [[MapSources sharedManager] lock];
 	for (int row = firstNeededRow; row <= lastNeededRow; row++) {
         for (int col = firstNeededCol; col <= lastNeededCol; col++) {
 			BOOL tileIsMissing = (firstVisibleRowx[i] > row || firstVisibleColumnx[i] >= col ||lastVisibleRowx[i]  < row || lastVisibleColumnx[i]  < col);
@@ -169,12 +171,16 @@ long firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleC
                 }
 				//[zoomView.tileContainer annotateTile:tile res:tile.res row:row col:col];  //add label to tile
 				loadedImageCount++;
-				if(loadedImageCount>36) return;   // if it is more than 36, it must not be the layer that needs loading
+                if(loadedImageCount>36){
+                    [[MapSources sharedManager] unlock];
+                    return;   // if it is more than 36, it must not be the layer that needs loading
+                }
 			}else{
                 NSLOG(@"Tile NOT MISSING on image %d,%d on level %d",row,col,(maplevel-levelDiff));
             }
 		}
 	}
+    [[MapSources sharedManager] unlock];
 	firstVisibleRowx[i] = firstNeededRow; firstVisibleColumnx[i] = firstNeededCol;
     lastVisibleRowx[i]  = lastNeededRow;  lastVisibleColumnx[i]  = lastNeededCol;
     NSLOG(@"fillWindowWithBasicMap returns");

@@ -731,11 +731,13 @@ extern float zmc;
     MainQ * mQ=[MainQ sharedManager];
     id<PM2MapSourceDelegate> mapSrc=(id<PM2MapSourceDelegate>)[mQ getTargetRef:MAPSOURCE];
     if ([[bn.titleLabel text] compare:@"Map"]==NSOrderedSame) {
-        [bn setTitle:@"Sat" forState:UIControlStateNormal];
-        [mapSrc setMapSourceType:googleMap];
+        if([mapSrc setMapSourceType:googleMap]){
+            [bn setTitle:@"Sat" forState:UIControlStateNormal];
+        }
     }else{
-        [bn setTitle:@"Map" forState:UIControlStateNormal];
-        [mapSrc setMapSourceType:googleSat];
+        if([mapSrc setMapSourceType:googleSat]){
+            [bn setTitle:@"Map" forState:UIControlStateNormal];
+        }
     }
     [mapScrollView reloadData];
     [mapScrollView refresh];

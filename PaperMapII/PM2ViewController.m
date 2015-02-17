@@ -67,7 +67,7 @@ NSString * satVersion;
     NSString * iphoneID=[[UIDevice currentDevice] systemVersion];//uniqueIdentifier];
     NSString * iphonemodel=[[UIDevice currentDevice] model];
     NSString * iphoneModel=[iphonemodel stringByReplacingOccurrencesOfString:@" " withString:@"-"];
-    NSString * URLWithIphoneName=[[NSString alloc] initWithFormat:@"http://www.yalisoft.org:900/PaperMapSatVersion/verPaperMapiPad.asp?iphonename=%@&iphonemodel=%@&iphoneid=%@",iPhoneName,iphoneModel,iphoneID];
+    NSString * URLWithIphoneName=[[NSString alloc] initWithFormat:@"http://68.204.125.18:900/PaperMapSatVersion/verPaperMapiPad.asp?iphonename=%@&iphonemodel=%@&iphoneid=%@",iPhoneName,iphoneModel,iphoneID];
     NSData * versionData=[NSData dataWithContentsOfURL:[NSURL URLWithString:URLWithIphoneName]];
     NSInteger       dataLength;
     const uint8_t * dataBytes;
@@ -79,7 +79,7 @@ NSString * satVersion;
     if (msg.length>8) {
         if([msg rangeOfString:@"version="].location==0){
             msg=[msg substringFromIndex:8];
-            
+            NSLog(@"Sat Version = %@",msg);
             satVersion = msg;
             NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
             [defaults setObject:satVersion forKey:@"SatMapVersion"];
