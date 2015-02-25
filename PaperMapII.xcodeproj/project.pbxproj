@@ -3513,9 +3513,9 @@
 		AABDE8F4174755C000A0D6E9 /* Sat4_9_8.jpg in Resources */ = {isa = PBXBuildFile; fileRef = AABDDBA5174755BE00A0D6E9 /* Sat4_9_8.jpg */; };
 		AABDE8F5174755C000A0D6E9 /* Sat4_9_9.jpg in Resources */ = {isa = PBXBuildFile; fileRef = AABDDBA6174755BE00A0D6E9 /* Sat4_9_9.jpg */; };
 		AABDE8F6174755C000A0D6E9 /* Sat4_9_9.jpg in Resources */ = {isa = PBXBuildFile; fileRef = AABDDBA6174755BE00A0D6E9 /* Sat4_9_9.jpg */; };
-		AAC5DD331A9DED43006AA7CC /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = AAC5DD321A9DED43006AA7CC /* Reachability.m */; };
 		AAC5DD351A9DEDFC006AA7CC /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAC5DD341A9DEDFC006AA7CC /* MessageUI.framework */; };
 		AAC5DD371A9DEE48006AA7CC /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAC5DD361A9DEE48006AA7CC /* SystemConfiguration.framework */; };
+		AAC5DD3A1A9DF325006AA7CC /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = AAC5DD391A9DF325006AA7CC /* Reachability.m */; };
 		AAC84848175718EC002D7AA9 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AABDD48417437B3600A0D6E9 /* CoreGraphics.framework */; };
 		AAC8484C175854C0002D7AA9 /* Node.m in Sources */ = {isa = PBXBuildFile; fileRef = AAC8484B175854C0002D7AA9 /* Node.m */; };
 		AADD6CB6181DCBCD006A0FFA /* MultipeerConnectivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AADD6CB5181DCBCD006A0FFA /* MultipeerConnectivity.framework */; };
@@ -5382,10 +5382,10 @@
 		AABDDBA4174755BE00A0D6E9 /* Sat4_9_7.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Sat4_9_7.jpg; sourceTree = "<group>"; };
 		AABDDBA5174755BE00A0D6E9 /* Sat4_9_8.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Sat4_9_8.jpg; sourceTree = "<group>"; };
 		AABDDBA6174755BE00A0D6E9 /* Sat4_9_9.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Sat4_9_9.jpg; sourceTree = "<group>"; };
-		AAC5DD311A9DED43006AA7CC /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
-		AAC5DD321A9DED43006AA7CC /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		AAC5DD341A9DEDFC006AA7CC /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/MessageUI.framework; sourceTree = DEVELOPER_DIR; };
 		AAC5DD361A9DEE48006AA7CC /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/SystemConfiguration.framework; sourceTree = DEVELOPER_DIR; };
+		AAC5DD381A9DF325006AA7CC /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Reachability.h; path = PaperMapII/Reachability.h; sourceTree = "<group>"; };
+		AAC5DD391A9DF325006AA7CC /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Reachability.m; path = PaperMapII/Reachability.m; sourceTree = "<group>"; };
 		AAC8484A175854C0002D7AA9 /* Node.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Node.h; sourceTree = "<group>"; };
 		AAC8484B175854C0002D7AA9 /* Node.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Node.m; sourceTree = "<group>"; };
 		AADD6CB5181DCBCD006A0FFA /* MultipeerConnectivity.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MultipeerConnectivity.framework; path = System/Library/Frameworks/MultipeerConnectivity.framework; sourceTree = SDKROOT; };
@@ -5557,6 +5557,8 @@
 		AABDD47417437B3600A0D6E9 = {
 			isa = PBXGroup;
 			children = (
+				AAC5DD381A9DF325006AA7CC /* Reachability.h */,
+				AAC5DD391A9DF325006AA7CC /* Reachability.m */,
 				AABDD48617437B3600A0D6E9 /* PaperMapII */,
 				AABDD4AA17437B3600A0D6E9 /* PaperMapIITests */,
 				AABDD47F17437B3600A0D6E9 /* Frameworks */,
@@ -5600,8 +5602,6 @@
 				AABDD49817437B3600A0D6E9 /* PM2ViewController.h */,
 				AABDD49917437B3600A0D6E9 /* PM2ViewController.m */,
 				AABDD49B17437B3600A0D6E9 /* PM2ViewController.xib */,
-				AAC5DD311A9DED43006AA7CC /* Reachability.h */,
-				AAC5DD321A9DED43006AA7CC /* Reachability.m */,
 				AA8608F4177AA702008EBC95 /* MainQ.h */,
 				AA8608F5177AA703008EBC95 /* MainQ.m */,
 				AAAD5A71176E1F7800DCDAD2 /* Buttons and Labels */,
@@ -10992,7 +10992,7 @@
 				AABDD49117437B3600A0D6E9 /* PM2AppDelegate.m in Sources */,
 				AA649E7F17F2A2AF001BEBF8 /* ListViewController.m in Sources */,
 				AABDD49A17437B3600A0D6E9 /* PM2ViewController.m in Sources */,
-				AAC5DD2A1A9B0391006AA7CC /* Reachability.m in Sources */,
+				AAC5DD3A1A9DF325006AA7CC /* Reachability.m in Sources */,
 				AA649E7C17F1605C001BEBF8 /* SaveItem.m in Sources */,
 				AABDD4EA1745F02B00A0D6E9 /* MapScrollView.m in Sources */,
 				AABDD4EE1747402D00A0D6E9 /* ZoomView.m in Sources */,
