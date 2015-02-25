@@ -14,6 +14,33 @@
 @implementation PM2AppDelegate
 @synthesize viewController;
 
+bool bWANavailable=FALSE;
+bool bWiFiAvailable=FALSE;
+bool bHostAvailable=FALSE;
+
+// check for internet availablity
+- (void) updateGlobalVarsWithReachability: (Reachability*) curReach
+{
+    if(curReach == hostReach){
+        bHostAvailable=[curReach currentReachabilityStatus];
+    }
+    if(curReach == internetReach)
+    {
+        bWANavailable=[curReach currentReachabilityStatus];
+    }
+    if(curReach == wifiReach)
+    {
+        bWiFiAvailable=[curReach currentReachabilityStatus];
+    }
+}
+//Called by Reachability whenever status changes.
+- (void) reachabilityChanged: (NSNotification* )note
+{
+    Reachability* curReach = [note object];
+    NSParameterAssert([curReach isKindOfClass: [Reachability class]]);
+    [self updateGlobalVarsWithReachability: curReach];
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];

@@ -39,6 +39,10 @@
 @synthesize lbNameAvgSpeed,lbNameNodeNumber,lbNameTotalTile,lbNameTrackLength;
 @synthesize listType;
 
+extern bool bWANavailable;
+extern bool bWiFiAvailable;
+extern BOOL bDrawBigLabel;
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -159,8 +163,50 @@
     }
     [[DrawableMapScrollView sharedMap] refresh];
 }
+-(NSData *)getNSDataFromDrawingLineFile{
+    NSArray * paths=NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask,YES);
+    NSString * documentsDirectory=[paths objectAtIndex:0];
+    NSString * filePath=[documentsDirectory stringByAppendingPathComponent:gpsTrack.filename];
+    NSLog(@"getNSDataFromDrawingLineFile:%@",filePath);
+    if([[NSFileManager defaultManager] fileExistsAtPath:filePath]){
+        NSData * data=[[NSData alloc] initWithContentsOfFile:filePath];
+        return data;
+    }		
+    return nil;
+}
+-(void) sendEmail2{
+    if((!bWANavailable)&&(!bWiFiAvailable)){
+        UIAlertView * alert1=[[UIAlertView alloc]initWithTitle:@"Email service \nis not available now" message:@"Sending Email requires \ninternet access \nwhich is not available now\n\n Please try again later!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];[alert1 show];
+        return;
+    }
+    MFMailComposeViewController * email=[[MFMailComposeViewController alloc] init];
+    email.mailComposeDelegate=self;
+    // Email Subject
+    [email setSubject:gpsTrack.title];
+    // email message body
+    //[email setMessageBody:message isHTML:YES];
+    NSData * dataFile=[self getNSDataFromDrawingLineFile];
+    
+//    NSString *fn;
+//    if (dataType==DRAWING){
+//        fn=[draw.title stringByAppendingString:@".dra"];
+//    }else if (dataType==GPSNODES){
+//        fn=[draw.title stringByAppendingString:@".gps"];
+//    }else {
+//        fn=[draw.title stringByAppendingString:@".poi"];
+//    }
+
+    NSLog(@"file %@ has data lengh of %d",gpsTrack.filename,[dataFile length]);
+    // attachment
+    [email addAttachmentData:dataFile mimeType:@"application/octet-stream" fileName:gpsTrack.filename];
+    
+    //[self presentModalViewController:email animated:YES];  //deprecated in iOS6
+    [self.navigationController pushViewController:email animated:YES];
+}
+
 - (IBAction)SendGPSTrack:(id)sender {
     NSLog(@"Sending GPS Track File through Email");
+    [self sendEmail2];
 }
 -(void)displayGPSTrackInfo{
     if (!gpsTrack.nodes) {

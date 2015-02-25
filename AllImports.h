@@ -9,6 +9,9 @@
 #ifndef PaperMapII_AllImports_h
 #define PaperMapII_AllImports_h
 
+#import "Reachability.h"
+#import <MessageUI/MessageUI.h>
+
 const static int TSIZE=256;     // tile size
 
 typedef enum  {GPSLIST=1,DRAWLIST,POILIST,GOTOPOI,SETTING,SENDGPSTRACK} ListType;  //GPSTrack List or Drawing List table

@@ -9,8 +9,13 @@
 #import <UIKit/UIKit.h>
 
 @class PM2ViewController;
+@class Reachability;
 
-@interface PM2AppDelegate : UIResponder <UIApplicationDelegate>
+@interface PM2AppDelegate : UIResponder <UIApplicationDelegate>{
+    Reachability* hostReach;
+    Reachability* internetReach;
+    Reachability* wifiReach;
+}
 
 @property (strong, nonatomic) UIWindow *window;
 
