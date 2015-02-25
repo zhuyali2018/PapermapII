@@ -5,7 +5,7 @@
 //  Created by Yali Zhu on 6/30/13.
 //  Copyright (c) 2013 Yali Zhu. All rights reserved.
 //
-#import "AllImports.h"
+
 #import "GPSTrackViewController.h"
 #import "GPSTrackNodesViewController.h"
 #import "LinePropStorageViewController.h"
