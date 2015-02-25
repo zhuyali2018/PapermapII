@@ -5,7 +5,7 @@
 //  Created by Yali Zhu on 6/30/13.
 //  Copyright (c) 2013 Yali Zhu. All rights reserved.
 //
-
+#import "AllImports.h"
 #import "GPSTrackViewController.h"
 #import "GPSTrackNodesViewController.h"
 #import "LinePropStorageViewController.h"
@@ -203,10 +203,9 @@ extern BOOL bDrawBigLabel;
     //[self presentModalViewController:email animated:YES];  //deprecated in iOS6
     [self.navigationController pushViewController:email animated:YES];
 }
-
 - (IBAction)SendGPSTrack:(id)sender {
     NSLog(@"Sending GPS Track File through Email");
-    [self sendEmail2];
+    //[self sendEmail2];
 }
 -(void)displayGPSTrackInfo{
     if (!gpsTrack.nodes) {
