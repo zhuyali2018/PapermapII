@@ -163,10 +163,17 @@ extern BOOL bDrawBigLabel;
     }
     [[DrawableMapScrollView sharedMap] refresh];
 }
--(NSData *)getNSDataFromDrawingLineFile{
+-(NSString *) getGPSTrackFileNameWithPath{
     NSArray * paths=NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask,YES);
     NSString * documentsDirectory=[paths objectAtIndex:0];
     NSString * filePath=[documentsDirectory stringByAppendingPathComponent:gpsTrack.filename];
+    return filePath;
+}
+-(NSData *)getNSDataFromDrawingLineFile{
+//    NSArray * paths=NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask,YES);
+//    NSString * documentsDirectory=[paths objectAtIndex:0];
+//    NSString * filePath=[documentsDirectory stringByAppendingPathComponent:gpsTrack.filename];
+    NSString * filePath = [self getGPSTrackFileNameWithPath];
     NSLog(@"getNSDataFromDrawingLineFile:%@",filePath);
     if([[NSFileManager defaultManager] fileExistsAtPath:filePath]){
         NSData * data=[[NSData alloc] initWithContentsOfFile:filePath];
@@ -174,19 +181,30 @@ extern BOOL bDrawBigLabel;
     }		
     return nil;
 }
+-(void)saveCurrentGPSTrack{
+    NSString * trackFilename=[self getGPSTrackFileNameWithPath];
+    NSMutableData * data=[[NSMutableData alloc] init];
+    NSKeyedArchiver * archiver=[[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
+    [archiver encodeObject:gpsTrack forKey:@"gpsTrackOnly"];  //<== the key @"gpsTrackOnly" will be used in the email receiver for unarchiving
+    [archiver finishEncoding];
+    
+    [data writeToFile:trackFilename atomically:YES];
+}
 -(void) sendEmail2{
     if((!bWANavailable)&&(!bWiFiAvailable)){
         UIAlertView * alert1=[[UIAlertView alloc]initWithTitle:@"Email service \nis not available now" message:@"Sending Email requires \ninternet access \nwhich is not available now\n\n Please try again later!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];[alert1 show];
         return;
     }
+    gpsTrack.version = 0;         //make version = 0 to insure the nodes are saved with track file
+    [self saveCurrentGPSTrack];   //save to a file in order to be attached to an email
     MFMailComposeViewController * email=[[MFMailComposeViewController alloc] init];
     email.mailComposeDelegate=self;
     // Email Subject
     [email setSubject:gpsTrack.title];
     // email message body
     //[email setMessageBody:message isHTML:YES];
-    NSData * dataFile=[self getNSDataFromDrawingLineFile];
-    
+    NSData * dataFile=[self getNSDataFromDrawingLineFile];      //read GPS Track from saved file
+    NSString *fn=[gpsTrack.title stringByAppendingString:@".gps"];
 //    NSString *fn;
 //    if (dataType==DRAWING){
 //        fn=[draw.title stringByAppendingString:@".dra"];
@@ -198,14 +216,14 @@ extern BOOL bDrawBigLabel;
 
     NSLog(@"file %@ has data lengh of %d",gpsTrack.filename,[dataFile length]);
     // attachment
-    [email addAttachmentData:dataFile mimeType:@"application/octet-stream" fileName:gpsTrack.filename];
+    [email addAttachmentData:dataFile mimeType:@"application/octet-stream" fileName:fn];
     
     //[self presentModalViewController:email animated:YES];  //deprecated in iOS6
-    [self.navigationController pushViewController:email animated:YES];
+    [self presentViewController:email animated:YES completion:nil];
 }
 - (IBAction)SendGPSTrack:(id)sender {
     NSLog(@"Sending GPS Track File through Email");
-    //[self sendEmail2];
+    [self sendEmail2];
 }
 -(void)displayGPSTrackInfo{
     if (!gpsTrack.nodes) {
