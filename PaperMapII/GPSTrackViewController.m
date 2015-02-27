@@ -198,7 +198,7 @@ extern BOOL bDrawBigLabel;
     gpsTrack.version = 0;         //make version = 0 to insure the nodes are saved with track file
     [self saveCurrentGPSTrack];   //save to a file in order to be attached to an email
     MFMailComposeViewController * email=[[MFMailComposeViewController alloc] init];
-    email.mailComposeDelegate=self;
+    email.mailComposeDelegate=self;   //<== Need to implement the delegate protocol
     // Email Subject
     [email setSubject:gpsTrack.title];
     // email message body
@@ -267,5 +267,29 @@ extern BOOL bDrawBigLabel;
 - (BOOL)textFieldShouldReturn:(UITextField *)theTextField {
 	[theTextField resignFirstResponder];
 	return YES;
+}
+#pragma mark------MFMailComposeViewControllerDelegate Methods------------------------
+- (void) mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
+{
+    switch (result)
+    {
+        case MFMailComposeResultCancelled:
+            NSLog(@"Mail cancelled");
+            break;
+        case MFMailComposeResultSaved:
+            NSLog(@"Mail saved");
+            break;
+        case MFMailComposeResultSent:
+            NSLog(@"Mail sent");
+            break;
+        case MFMailComposeResultFailed:
+            NSLog(@"Mail sent failure: %@", [error localizedDescription]);
+            break;
+        default:
+            break;
+    }
+    
+    // Close the Mail Interface
+    [self dismissViewControllerAnimated:YES completion:NULL];
 }
 @end
