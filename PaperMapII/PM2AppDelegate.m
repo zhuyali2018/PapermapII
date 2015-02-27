@@ -44,6 +44,20 @@ bool bHostAvailable=FALSE;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    
+    internetReach = [Reachability reachabilityForInternetConnection];
+    [internetReach startNotifer];
+    [self updateGlobalVarsWithReachability: internetReach];
+    
+    wifiReach = [Reachability reachabilityForLocalWiFi];
+    [wifiReach startNotifer];
+    [self updateGlobalVarsWithReachability: wifiReach];
+    
+    //hostReach = [Reachability reachabilityWithHostName: @"www.yalisoft.org"];
+    hostReach = [Reachability reachabilityWithHostName: @"68.204.125.18"];
+    [hostReach startNotifer];
+    [self updateGlobalVarsWithReachability: hostReach];
+    //--------------------------------
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     CGRect winLocSize=self.window.bounds;
     NSLOG6(@"didFinishLaunchingWithOptions MainWindow: x=%.f, y=%.f, w=%.f, h=%.f",winLocSize.origin.x,winLocSize.origin.y,winLocSize.size.width,winLocSize.size.height);
@@ -52,6 +66,21 @@ bool bHostAvailable=FALSE;
     self.window.rootViewController = self.viewController;
     [self.window makeKeyAndVisible];
     return YES;
+}
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
+{
+    NSString * ext=[url pathExtension];
+    NSString * fn=[url lastPathComponent];
+    NSString * fnInbox=[@"Inbox/" stringByAppendingString:fn];
+    NSLog(@"fnInbox=%@",fnInbox);
+//    if([ext compare:@"dra"]==NSOrderedSame){
+//        [menuObj addDrawingFile:fnInbox];
+//    }else if ([ext compare:@"gps"]==NSOrderedSame) {
+//        [menuObj loadGPSTrackFromFileAsDrawing:fnInbox];   //version 4.0
+//    }else if ([ext compare:@"poi"]==NSOrderedSame) {
+//        [menuObj loadPOIFile:fnInbox];
+//    }
+    return TRUE;
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application
