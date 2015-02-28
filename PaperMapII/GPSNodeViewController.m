@@ -64,6 +64,8 @@
     [self updateWith:(GPSNode *)node1];
 }
 -(void)updateWith:(GPSNode *)node1{
+    NSString * tm=[NSDateFormatter localizedStringFromDate:node1.timestamp dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterMediumStyle];
+    self.title = tm;
     self.lblTim.text=[NSDateFormatter localizedStringFromDate:node1.timestamp dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterMediumStyle];
     self.lblLat.text=[[NSString alloc]initWithFormat:@"%8.4f degrees",node1.latitude];
     self.lblLon.text=[[NSString alloc]initWithFormat:@"%8.4f degrees",node1.longitude];
