@@ -182,6 +182,7 @@ extern BOOL bDrawBigLabel;
     return nil;
 }
 -(void)saveCurrentGPSTrack{
+    [gpsTrack readNodes];    //make sure the nodes are read in before saving to a temp file for emailing
     NSString * trackFilename=[self getGPSTrackFileNameWithPath];
     NSMutableData * data=[[NSMutableData alloc] init];
     NSKeyedArchiver * archiver=[[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
