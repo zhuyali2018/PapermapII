@@ -931,4 +931,30 @@ int n=0;  //gps node counter
         [lb setTextColor:[UIColor greenColor]];
     }
 }
+//---------Received emailed file loading----------------------------------
+-(void) addDrawingFile:(NSString *)fn{}
+-(void) loadGPSTrackFromFile:(NSString *)fn{
+    NSArray * paths=NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask,YES);
+    NSString * documentsDirectory=[paths objectAtIndex:0];
+    NSString * filePath=[documentsDirectory stringByAppendingPathComponent:fn];
+    
+    if([[NSFileManager defaultManager] fileExistsAtPath:filePath]){
+        NSData * data=[[NSData alloc] initWithContentsOfFile:filePath];
+        NSKeyedUnarchiver *unarchiver=[[NSKeyedUnarchiver alloc] initForReadingWithData:data];
+        //NSMutableArray * tmp=[[NSMutableArray alloc] initWithArray:gpsTrackArray];
+        GPSTrack * gpsTrack=[unarchiver decodeObjectForKey:@"gpsTrackOnly"];
+        //[tmp addObjectsFromArray:array];
+        //nodeList=tmp;    //  albums=array;  //=>this will crash the app.
+        [unarchiver finishDecoding];
+        if(!self.gpsTrackArray){  //when first time starting recorder, ini track array
+            self.gpsTrackArray=[[NSMutableArray alloc]initWithCapacity:5];
+            [self.gpsTrackArray addObject:gpsTrack];
+        }else{
+            [self.gpsTrackArray addObject:gpsTrack];
+        }
+    }
+    //[parent.imageScrollView.viewFlattener.drawLineView setNeedsDisplay];
+}
+-(void) loadPOIFile:(NSString *)fn{}
+
 @end

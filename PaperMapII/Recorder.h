@@ -74,4 +74,8 @@
 +(NSMutableArray *)loadMutableArrayFrom:(NSString *)filePath withKey:(NSString *)key;
 -(NSArray*) addAnyModeAdjustedNode:(NSArray*)arrNodes Node:(Node *)node Mode:(bool)mode;
 
+-(void) addDrawingFile:(NSString *)fn;
+-(void) loadGPSTrackFromFile:(NSString *)fn;
+-(void) loadPOIFile:(NSString *)fn;
+
 @end

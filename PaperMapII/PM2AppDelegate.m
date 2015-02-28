@@ -73,13 +73,13 @@ bool bHostAvailable=FALSE;
     NSString * fn=[url lastPathComponent];
     NSString * fnInbox=[@"Inbox/" stringByAppendingString:fn];
     NSLog(@"fnInbox=%@",fnInbox);
-//    if([ext compare:@"dra"]==NSOrderedSame){
-//        [menuObj addDrawingFile:fnInbox];
-//    }else if ([ext compare:@"gps"]==NSOrderedSame) {
-//        [menuObj loadGPSTrackFromFileAsDrawing:fnInbox];   //version 4.0
-//    }else if ([ext compare:@"poi"]==NSOrderedSame) {
-//        [menuObj loadPOIFile:fnInbox];
-//    }
+    if([ext compare:@"dra"]==NSOrderedSame){
+        [[Recorder sharedRecorder] addDrawingFile:fnInbox];
+    }else if ([ext compare:@"gps"]==NSOrderedSame) {
+        [[Recorder sharedRecorder] loadGPSTrackFromFile:fnInbox];   
+    }else if ([ext compare:@"poi"]==NSOrderedSame) {
+        [[Recorder sharedRecorder] loadPOIFile:fnInbox];
+    }
     return TRUE;
 }
 
