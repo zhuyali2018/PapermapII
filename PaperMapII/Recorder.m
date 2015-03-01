@@ -953,7 +953,7 @@ int n=0;  //gps node counter
             [self.gpsTrackArray addObject:gpsTrack];
         }
     }
-    //[parent.imageScrollView.viewFlattener.drawLineView setNeedsDisplay];
+    //[self saveAllGpsTracks];   //may not need it since it is handled in gpstrack decode method
 }
 -(void) loadPOIFile:(NSString *)fn{}
 

@@ -82,6 +82,11 @@
             if(self.selected)       //on initialization, load those that are visible
                 [self readNodes];
         }
+        if (self.version!=CURRENTVERSION) {    // important or email received track will lose nodes on restart
+            //NSLog(@"Save nodes to a separate file on loading because version = %f, setting version to %f",self.version,CURRENTVERSION);
+            self.nodesDirtyFlag = true;         //important, or saveNodes wont save
+            [self saveNodes];
+        }
         self.version    =CURRENTVERSION;      //version 2.1 for saving which saves nodes separately
         [super initInternalItems];
         self.nodesDirtyFlag=false;
@@ -91,14 +96,15 @@
 -(void)encodeWithCoder:(NSCoder *)coder{
     [super encodeWithCoder:coder];
 	//[coder encodeObject:self.nodes          forKey:@"NODES"];
-    if(self.version==2.0)
-        [self saveNodes];
+    if(self.version==2.0f)
+        [coder encodeObject:self.nodes        forKey:@"NODES"];
     if(self.version==CURRENTVERSION){           //version 2.1 for saving which saves nodes separately
-        //[coder encodeObject:self.nodes          forKey:@"NODES"];  //TODO: Remove this line after confirming no data loss
-        [self saveNodes];
+         [self saveNodes];
+        //NSLog(@"Nodes saved to a separate file");
     }
     if (self.version==0) {
         [coder encodeObject:self.nodes          forKey:@"NODES"];
+        //NSLog(@"Nodes saved to a single file");
     }
     [coder encodeFloat:self.version          forKey:@"VERSION"];
 	[coder encodeObject:self.lineProperty   forKey:@"LINEPROPERTY"];
