@@ -346,17 +346,16 @@ bool connectedToIphone;
 }
 -(void)Settings:(NSString *)menuTitle{
     NSLog(@"Tap on Settings");
-    //ExpandableMenuViewController *xmvc = [[ExpandableMenuViewController alloc] initWithStyle:UITableViewStylePlain];
     if (menuSettings == nil) {
         menuSettings =[[ExpandableMenuViewController alloc] initWithStyle:UITableViewStylePlain];
     
         menuSettings.trackList=[Settings sharedSettings].settingArray;
         menuSettings.readOnly=YES;
         //xmvc.trackHandlerDelegate=self;  //this line is not needed because settings should not lead to a new tableview
-        menuSettings.id=SETTING;
         NSLOG10(@"executing settings from %@",menuTitle);
         [menuSettings setTitle:menuTitle];
     }
+    menuSettings.id=SETTING;
     [self.navigationController pushViewController:menuSettings animated:YES];
 }
 -(void)PickColor{
@@ -386,15 +385,13 @@ bool connectedToIphone;
 -(void)ModifyPoi:(NSString *) menuTitle{
     NSLog(@"Tap on the map to Modify a POI");
     //Showing POI list
-    //ExpandableMenuViewController *xmvc = [[ExpandableMenuViewController alloc] initWithStyle:UITableViewStylePlain];
     if (menuPOIs == nil) {
         menuPOIs =[[ExpandableMenuViewController alloc] initWithStyle:UITableViewStylePlain];
-        
         menuPOIs.trackList=[Recorder sharedRecorder].poiArray;
         menuPOIs.trackHandlerDelegate=self;
-        menuPOIs.id=POILIST;
-        [menuPOIs setTitle:menuTitle];
     }
+    [menuPOIs setTitle:menuTitle];
+    menuPOIs.id=POILIST;
     [self.navigationController pushViewController:menuPOIs animated:YES];
 }
 -(void)MoveAPoi:(NSString *) menuTitle{
@@ -414,18 +411,16 @@ bool connectedToIphone;
     //Showing POI list
     if (menuPOIs == nil) {
         menuPOIs =[[ExpandableMenuViewController alloc] initWithStyle:UITableViewStylePlain];
-        
         menuPOIs.trackList=[Recorder sharedRecorder].poiArray;
         menuPOIs.trackHandlerDelegate=self;
-        menuPOIs.id=GOTOPOI;
-        [menuPOIs setTitle:menuTitle];
     }
+    [menuPOIs setTitle:menuTitle];
+    menuPOIs.id=GOTOPOI;
     [self.navigationController pushViewController:menuPOIs animated:YES];
 }
 -(void)showGPSTrackList:(NSString *) menuTitle{
     if (menuGPSTracks == nil) {
         menuGPSTracks =[[ExpandableMenuViewController alloc] initWithStyle:UITableViewStylePlain];
-        
         menuGPSTracks.trackList=[Recorder sharedRecorder].gpsTrackArray;
         menuGPSTracks.trackHandlerDelegate=self;
     }
@@ -437,7 +432,6 @@ bool connectedToIphone;
 -(void)showGPSTrackListToSendFrom:(NSString *) menuTitle{
     if (menuGPSTracks == nil) {
         menuGPSTracks =[[ExpandableMenuViewController alloc] initWithStyle:UITableViewStylePlain];
-        
         menuGPSTracks.trackList=[Recorder sharedRecorder].gpsTrackArray;
         menuGPSTracks.trackHandlerDelegate=self;
     }
@@ -451,7 +445,6 @@ bool connectedToIphone;
     NSLog(@"you clicked on row %d",row);
     
     GPSTrackViewController * gpsTrackViewCtrlr=[[GPSTrackViewController alloc]initWithNibName:@"GPSTrackViewController" bundle:nil];
-    
     GPSTrack * tk;
     
     if (myid==DRAWLIST) {
@@ -492,10 +485,8 @@ bool connectedToIphone;
     }
     
     gpsTrackViewCtrlr.gpsTrack=tk;
-    if (tk.folder) {
-        [gpsTrackViewCtrlr setTitle:tk.mainText];
-    }else{
-        [gpsTrackViewCtrlr setTitle:tk.mainText];
+    [gpsTrackViewCtrlr setTitle:tk.mainText];
+    if(!tk.folder) {
         if ([tk.nodes count]>0) {
             GPSNode * node=tk.nodes[0];
             [[DrawableMapScrollView sharedMap] centerMapTo:node];
@@ -510,12 +501,11 @@ bool connectedToIphone;
 -(void)showDrawingList:(NSString *) menuTitle{
     if (menuDrawings == nil) {
         menuDrawings =[[ExpandableMenuViewController alloc] initWithStyle:UITableViewStylePlain];
-        
         menuDrawings.trackList=[Recorder sharedRecorder].trackArray;
         menuDrawings.trackHandlerDelegate=self;
-        menuDrawings.id=DRAWLIST;
-        [menuDrawings setTitle:menuTitle];
     }
+    menuDrawings.id=DRAWLIST;
+    [menuDrawings setTitle:menuTitle];
     NSLOG10(@"executing showDrawingList from %@",menuTitle);
     [self.navigationController pushViewController:menuDrawings animated:YES];
 }
