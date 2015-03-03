@@ -369,7 +369,7 @@
      */
     MenuNode * node=(MenuNode *)menuList[indexPath.row];
     int trackListRow = node.rootArrayIndex;
-    if(node.folder){
+    if(node.folder){        //if you typed on a folder
         if (self.editing) {
             return;     //no operation when in editing
         }
@@ -396,12 +396,26 @@
         return UITableViewCellAccessoryNone;
 	return UITableViewCellAccessoryDisclosureIndicator;
 }
+-(void)createTempFileForFolder:(MenuNode *)node{
+    NSLog(@"Creating a file for folder %@",node.mainText);
+}
+-(void)SendEmailWithTempFile:(NSString *)filename{
+     NSLog(@"Sending email with a file for folder %@",filename);
+}
 -(void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath{
     NSLog(@"you taped on number %ld (%@)",(long)indexPath.row,((MenuNode *)[menuList objectAtIndex:indexPath.row]).mainText);
     MenuNode * node=(MenuNode *)menuList[indexPath.row];
-    int trackListRow = node.rootArrayIndex;
-    if ([trackHandlerDelegate respondsToSelector:@selector(tappedOnIndexPath:ID:)])
-        [trackHandlerDelegate tappedOnIndexPath:trackListRow ID:id] ;
+    
+    //if you are here, the node is a folder for sure
+    if (id == SENDGPSTRACK) {
+        [self createTempFileForFolder:node];
+        [self SendEmailWithTempFile:node.mainText];
+    }else{
+        NSLog(@"You tapped on a folder on non-sending menu selection !");
+    }
+    //int trackListRow = node.rootArrayIndex;
+    //if ([trackHandlerDelegate respondsToSelector:@selector(tappedOnIndexPath:ID:)])
+    //    [trackHandlerDelegate tappedOnIndexPath:trackListRow ID:id] ;
 }
 -(void)updateSubmenuList:(int)row{
     NSMutableArray * subMenuList1=[NSMutableArray arrayWithCapacity:10];
@@ -432,10 +446,10 @@
     int count=(int)[subMenuList count];      //for testing, count needs to be passed in
     NSMutableArray * idx=[NSMutableArray arrayWithCapacity:count];
     for(int i=0;i<count;i++) {
-        [menuList removeObjectAtIndex:row+1];
-        [idx addObject:[NSIndexPath indexPathForRow:row+i+1 inSection:0]];
+        [menuList removeObjectAtIndex:row+1];       //remove from menuList, 
+        [idx addObject:[NSIndexPath indexPathForRow:row+i+1 inSection:0]];  //remeber which ones are removed in an array
     }
-    [self.tableView deleteRowsAtIndexPaths:idx withRowAnimation:UITableViewRowAnimationBottom];
+    [self.tableView deleteRowsAtIndexPaths:idx withRowAnimation:UITableViewRowAnimationBottom];   //delete those removed from menulist from tableview
     [self.tableView endUpdates];
 }
 -(void) displayArrays{
