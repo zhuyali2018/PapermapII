@@ -17,6 +17,7 @@
 #import "GPSTrackPOIBoard.h"
 #import "MapScrollView.h"
 #import "GPSNode.h"
+#import "Recorder.h"
 
 @interface GPSTrackViewController ()
 
@@ -163,17 +164,17 @@ extern BOOL bDrawBigLabel;
     }
     [[DrawableMapScrollView sharedMap] refresh];
 }
--(NSString *) getGPSTrackFileNameWithPath{
+-(NSString *) getGPSTrackFileNameWithPath:(NSString *)fn{
     NSArray * paths=NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask,YES);
     NSString * documentsDirectory=[paths objectAtIndex:0];
-    NSString * filePath=[documentsDirectory stringByAppendingPathComponent:gpsTrack.filename];
+    NSString * filePath=[documentsDirectory stringByAppendingPathComponent:fn];
     return filePath;
 }
--(NSData *)getNSDataFromDrawingLineFile{
+-(NSData *)getNSDataFromDrawingLineFile:(NSString *)fn{
 //    NSArray * paths=NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask,YES);
 //    NSString * documentsDirectory=[paths objectAtIndex:0];
 //    NSString * filePath=[documentsDirectory stringByAppendingPathComponent:gpsTrack.filename];
-    NSString * filePath = [self getGPSTrackFileNameWithPath];
+    NSString * filePath = [self getGPSTrackFileNameWithPath:fn];
     NSLog(@"getNSDataFromDrawingLineFile:%@",filePath);
     if([[NSFileManager defaultManager] fileExistsAtPath:filePath]){
         NSData * data=[[NSData alloc] initWithContentsOfFile:filePath];
@@ -183,28 +184,64 @@ extern BOOL bDrawBigLabel;
 }
 -(void)saveCurrentGPSTrack{
     [gpsTrack readNodes];    //make sure the nodes are read in before saving to a temp file for emailing
-    NSString * trackFilename=[self getGPSTrackFileNameWithPath];
+    NSString * trackFilename=[self getGPSTrackFileNameWithPath:gpsTrack.mainText];
     NSMutableData * data=[[NSMutableData alloc] init];
     NSKeyedArchiver * archiver=[[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
-    [archiver encodeObject:gpsTrack forKey:@"gpsTrackOnly"];  //<== the key @"gpsTrackOnly" will be used in the email receiver for unarchiving
+    NSMutableArray * gpsTrackArray=[NSMutableArray arrayWithCapacity:1];
+    [gpsTrackArray addObject:gpsTrack];
+    [archiver encodeObject:gpsTrackArray forKey:@"gpsTrackOnly"];  //<== the key @"gpsTrackOnly" will be used in the email receiver for unarchiving
     [archiver finishEncoding];
     
     [data writeToFile:trackFilename atomically:YES];
 }
+
+-(void)createTempFileForFolder:(MenuNode *)node{
+    NSLog(@"Creating a file for folder %@",node.mainText);
+    NSString * trackFilename=[self getGPSTrackFileNameWithPath:node.mainText];
+    NSMutableData * data=[[NSMutableData alloc] init];
+    NSKeyedArchiver * archiver=[[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
+    
+    NSMutableArray * gpsTracksInFolder=[NSMutableArray arrayWithCapacity:2];
+    int row=node.rootArrayIndex;
+    NSMutableArray * gpsTrackArray=[Recorder sharedRecorder].gpsTrackArray;
+    
+    for (int i=row; i<[gpsTrackArray count];i++) {
+        MenuNode * nd=[gpsTrackArray objectAtIndex:i];
+        if ((i==row)||nd.infolder) {    //if the first folder entry or the gpstrack entries that follow
+            if (nd.infolder) {
+                ((Track *)nd).version = 0;
+            }
+            [gpsTracksInFolder addObject:nd];
+        }else{
+            break;          //if end of folder, break
+        }
+        //nd.rootArrayIndex=i;        //keep track of its position in original array
+    }
+    
+    [archiver encodeObject:gpsTracksInFolder forKey:@"gpsTrackOnly"];  //<== the key @"gpsTrackOnly" will be used in the email receiver for unarchiving
+    [archiver finishEncoding];
+    
+    [data writeToFile:trackFilename atomically:YES];
+}
+
 -(void) sendEmail2{
     if((!bWANavailable)&&(!bWiFiAvailable)){
         UIAlertView * alert1=[[UIAlertView alloc]initWithTitle:@"Email service \nis not available now" message:@"Sending Email requires \ninternet access \nwhich is not available now\n\n Please try again later!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];[alert1 show];
         return;
     }
-    gpsTrack.version = 0;         //make version = 0 to insure the nodes are saved with track file
-    [self saveCurrentGPSTrack];   //save to a file in order to be attached to an email
+    if (gpsTrack.folder) {
+        [self createTempFileForFolder:gpsTrack];
+    }else{
+        gpsTrack.version = 0;         //make version = 0 to insure the nodes are saved with track file
+        [self saveCurrentGPSTrack];   //save to a file in order to be attached to an email
+    }
     MFMailComposeViewController * email=[[MFMailComposeViewController alloc] init];
     email.mailComposeDelegate=self;   //<== Need to implement the delegate protocol
     // Email Subject
     [email setSubject:gpsTrack.title];
     // email message body
     //[email setMessageBody:message isHTML:YES];
-    NSData * dataFile=[self getNSDataFromDrawingLineFile];      //read GPS Track from saved file
+    NSData * dataFile=[self getNSDataFromDrawingLineFile:gpsTrack.mainText];      //read GPS Track from saved file
     NSString *fn=[gpsTrack.title stringByAppendingString:@".gps"];
 //    NSString *fn;
 //    if (dataType==DRAWING){

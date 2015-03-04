@@ -396,26 +396,12 @@
         return UITableViewCellAccessoryNone;
 	return UITableViewCellAccessoryDisclosureIndicator;
 }
--(void)createTempFileForFolder:(MenuNode *)node{
-    NSLog(@"Creating a file for folder %@",node.mainText);
-}
--(void)SendEmailWithTempFile:(NSString *)filename{
-     NSLog(@"Sending email with a file for folder %@",filename);
-}
 -(void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath{
     NSLog(@"you taped on number %ld (%@)",(long)indexPath.row,((MenuNode *)[menuList objectAtIndex:indexPath.row]).mainText);
     MenuNode * node=(MenuNode *)menuList[indexPath.row];
-    
-    //if you are here, the node is a folder for sure
-    if (id == SENDGPSTRACK) {
-        [self createTempFileForFolder:node];
-        [self SendEmailWithTempFile:node.mainText];
-    }else{
-        NSLog(@"You tapped on a folder on non-sending menu selection !");
-    }
-    //int trackListRow = node.rootArrayIndex;
-    //if ([trackHandlerDelegate respondsToSelector:@selector(tappedOnIndexPath:ID:)])
-    //    [trackHandlerDelegate tappedOnIndexPath:trackListRow ID:id] ;
+    int trackListRow = node.rootArrayIndex;
+    if ([trackHandlerDelegate respondsToSelector:@selector(tappedOnIndexPath:ID:)])
+        [trackHandlerDelegate tappedOnIndexPath:trackListRow ID:id] ;
 }
 -(void)updateSubmenuList:(int)row{
     NSMutableArray * subMenuList1=[NSMutableArray arrayWithCapacity:10];

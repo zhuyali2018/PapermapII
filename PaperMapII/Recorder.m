@@ -942,16 +942,15 @@ int n=0;  //gps node counter
         NSData * data=[[NSData alloc] initWithContentsOfFile:filePath];
         NSKeyedUnarchiver *unarchiver=[[NSKeyedUnarchiver alloc] initForReadingWithData:data];
         //NSMutableArray * tmp=[[NSMutableArray alloc] initWithArray:gpsTrackArray];
-        GPSTrack * gpsTrack=[unarchiver decodeObjectForKey:@"gpsTrackOnly"];
+        //GPSTrack * gpsTrack=[unarchiver decodeObjectForKey:@"gpsTrackOnly"];
+        NSMutableArray * receivedGpsTrackArray=[unarchiver decodeObjectForKey:@"gpsTrackOnly"];
         //[tmp addObjectsFromArray:array];
         //nodeList=tmp;    //  albums=array;  //=>this will crash the app.
         [unarchiver finishDecoding];
         if(!self.gpsTrackArray){  //when first time starting recorder, ini track array
             self.gpsTrackArray=[[NSMutableArray alloc]initWithCapacity:5];
-            [self.gpsTrackArray addObject:gpsTrack];
-        }else{
-            [self.gpsTrackArray addObject:gpsTrack];
         }
+        [self.gpsTrackArray addObjectsFromArray:receivedGpsTrackArray];
     }
     //[self saveAllGpsTracks];   //may not need it since it is handled in gpstrack decode method
 }
