@@ -103,6 +103,9 @@
         //NSLog(@"Nodes saved to a separate file");
     }
     if (self.version==0) {
+        if (!self.nodes) {
+            [self readNodes];
+        }
         [coder encodeObject:self.nodes          forKey:@"NODES"];
         //NSLog(@"Nodes saved to a single file");
     }

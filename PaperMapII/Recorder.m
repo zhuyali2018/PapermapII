@@ -952,7 +952,7 @@ int n=0;  //gps node counter
         }
         [self.gpsTrackArray addObjectsFromArray:receivedGpsTrackArray];
     }
-    //[self saveAllGpsTracks];   //may not need it since it is handled in gpstrack decode method
+    [self saveAllGpsTracks];   //may not need it since it is handled in gpstrack decode method
 }
 -(void) loadPOIFile:(NSString *)fn{}
 

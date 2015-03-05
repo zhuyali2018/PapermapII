@@ -238,11 +238,11 @@ extern BOOL bDrawBigLabel;
     MFMailComposeViewController * email=[[MFMailComposeViewController alloc] init];
     email.mailComposeDelegate=self;   //<== Need to implement the delegate protocol
     // Email Subject
-    [email setSubject:gpsTrack.title];
+    [email setSubject:gpsTrack.mainText];
     // email message body
     //[email setMessageBody:message isHTML:YES];
     NSData * dataFile=[self getNSDataFromDrawingLineFile:gpsTrack.mainText];      //read GPS Track from saved file
-    NSString *fn=[gpsTrack.title stringByAppendingString:@".gps"];
+    NSString *fn=[gpsTrack.mainText stringByAppendingString:@".gps"];
 //    NSString *fn;
 //    if (dataType==DRAWING){
 //        fn=[draw.title stringByAppendingString:@".dra"];
@@ -252,7 +252,7 @@ extern BOOL bDrawBigLabel;
 //        fn=[draw.title stringByAppendingString:@".poi"];
 //    }
 
-    NSLog(@"file %@ has data lengh of %d",gpsTrack.filename,[dataFile length]);
+    NSLog(@"file %@ has data lengh of %d",fn,[dataFile length]);
     // attachment
     [email addAttachmentData:dataFile mimeType:@"application/octet-stream" fileName:fn];
     
