@@ -95,20 +95,23 @@
     //Map Error Adjusting
     if (adjustingMap) {
         if (tapPoint.x == 0) {  //it means touch up, touch finished, drag finished
-            posErr = posErr1;
+            posErr.x += posErr1.x;
+            posErr.y += posErr1.y;
             posErr1.x=0;
             posErr1.y=0;
+            NSLOG10(@"Adjusting Map Error ...touch up");
             return;
         }
         if (isFirstTouchPoint) {
             firstTouchPoint=tapPoint;
             isFirstTouchPoint=false;
+            NSLOG10(@"Adjusting Map Error ... touch down");
         }else{
-            posErr1=CGPointMake(tapPoint.x-firstTouchPoint.x+posErr.x, tapPoint.y-firstTouchPoint.y+posErr.y);
+            posErr1=CGPointMake(tapPoint.x-firstTouchPoint.x, tapPoint.y-firstTouchPoint.y);
             [self refreshTilePositions];
-            [self.zoomView.tileContainer setNeedsLayout];
+            [self setNeedsLayout];
+            NSLOG10(@"Adjusting Map Error ...Dragging");
         }
-        NSLOG10(@"Adjusting Map Error ...");
         return;
     }
     ///////////////////
