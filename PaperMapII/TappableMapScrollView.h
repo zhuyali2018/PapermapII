@@ -14,6 +14,10 @@
 @property bool freeDraw;
 @property bool bDrawing;  //if the map is in drawing mode
 
+@property bool adjustingMap;      //flag for adjust Map error
+@property bool isFirstTouchPoint;   // for map error adjusting
+@property CGPoint firstTouchPoint;
+
 @property (nonatomic,strong)TapDetectView * tapDetectView;
 @property (nonatomic) id<PM2RecordingDelegate> recordingDelegate;
 

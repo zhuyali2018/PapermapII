@@ -35,6 +35,7 @@
 @synthesize menuPOIs;
 @synthesize menuDrawings;
 @synthesize menuGPSTracks;
+@synthesize adjustingMap;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -70,6 +71,7 @@
         NSArray * helpMenu=[[NSArray alloc]initWithObjects:
                     [[MenuItem alloc]initWithTitle:@"Pick Color"],
                     [[MenuItem alloc]initWithTitle:@"Settings"],
+                    [[MenuItem alloc]initWithTitle:@"Adjust Map Aligning Error"],
                     [[MenuItem alloc]initWithTitle:@"Help"],
                     [[MenuItem alloc]initWithTitle:@"Send Email to Developer"],
                     [[MenuItem alloc]initWithTitle:@"Receive File"],
@@ -114,6 +116,7 @@ typedef enum{SAVEDRAWINGDLG=1000,SAVEGPSTRACKSDLG,SAVEPOISDLG, UNLOADDRAWCONFIRM
 // Help Section
 #define PICKCOLOR   0
 #define SETTINGS    1
+#define ADJMAPERR   2
 
 - (void)viewDidLoad
 {
@@ -144,6 +147,7 @@ typedef enum{SAVEDRAWINGDLG=1000,SAVEGPSTRACKSDLG,SAVEPOISDLG, UNLOADDRAWCONFIRM
     //Help Section
     ((MenuItem *)menuMatrix[HELP_SECTION][PICKCOLOR]).menuItemHandler=@selector(PickColor);
     ((MenuItem *)menuMatrix[HELP_SECTION][SETTINGS]).menuItemHandler=@selector(Settings:);
+    ((MenuItem *)menuMatrix[HELP_SECTION][ADJMAPERR]).menuItemHandler=@selector(AdjustMapError:);
 
 }
 #pragma mark - -------------menu item handlers-------------------
@@ -343,6 +347,30 @@ bool connectedToIphone;
     savePOIDlg.alertViewStyle = UIAlertViewStylePlainTextInput;
     savePOIDlg.tag=SAVEPOISDLG;
     [savePOIDlg show];
+}
+-(void)AdjustMapError:(NSString *)menuTitle{
+    NSLog(@"Tap on Adjusting Map Error");
+    
+    //dismiss the menu
+    PM2OnScreenButtons * OSB=[PM2OnScreenButtons sharedBnManager];
+    if([OSB.menuPopover isPopoverVisible]){
+        [OSB.menuPopover dismissPopoverAnimated:YES];
+    }
+
+    [DrawableMapScrollView sharedMap].adjustingMap=true;
+    [DrawableMapScrollView sharedMap].isFirstTouchPoint=true;
+    [[DrawableMapScrollView sharedMap] setScrollEnabled:NO];
+    
+//    if ([DrawableMapScrollView sharedMap].adjustingMap) {
+//        [[DrawableMapScrollView sharedMap] setScrollEnabled:NO];
+//    }else{
+//        [[DrawableMapScrollView sharedMap] setScrollEnabled:YES];
+//        if ([MapSources sharedManager].mapType == googleSat) {
+//            [DrawableMapScrollView sharedMap].satMapErr=posErr1;
+//        }else{
+//            
+//        }
+//    }
 }
 -(void)Settings:(NSString *)menuTitle{
     NSLog(@"Tap on Settings");

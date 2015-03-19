@@ -13,6 +13,8 @@
 #import "ListViewController.h"
 @interface MainMenuViewController : UITableViewController <TrackHandleDelegate,UITextFieldDelegate,GKPeerPickerControllerDelegate,GKSessionDelegate>
 
+@property BOOL adjustingMap;      //flag for adjust Map error
+
 @property (nonatomic,strong)NSArray * menuMatrix;
 @property (nonatomic,strong)ListViewController * fileListView;
 

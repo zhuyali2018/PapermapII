@@ -12,6 +12,8 @@
 #import "TapDetectView.h"
 #import "PM2Protocols.h"
 #import "Recorder.h"
+#import "DrawableMapScrollView.h"
+
 @implementation TapDetectView
 
 @synthesize mapTapHandler,drawDelegate;
@@ -85,7 +87,7 @@ CGPoint midpointBetweenPoints(CGPoint a, CGPoint b) {
 		NSLOG4(@"[touchesEnded]Single touch, number of taps:%lu",(unsigned long)[touch tapCount]);
         //newly added for detection of touch up
         if((0==[touch tapCount])||(1==[touch tapCount])){
-             [self handleSingleTapTouchUp:CGPointMake(0,[touch tapCount])];
+             [self handleSingleTapTouchUp:CGPointMake(0,[touch tapCount])];         //<==== tap point x value is zero when touch up
         }
     }
     
@@ -155,14 +157,17 @@ CGPoint midpointBetweenPoints(CGPoint a, CGPoint b) {
 	//[self performSelector:@selector(handleSingleTap) withObject:nil afterDelay:DOUBLE_TAP_DELAY];
 	UITouch *touch = [touches anyObject];
 	tapLocation = [touch locationInView:self];
-	[self handleSingleTap];
+	[self handleSingleTap];    // touch moving is handled as a series of single tap in a row
 }
 
 
 - (void)handleSingleTapTouchUp:(CGPoint)atPoint{
 	NSLOG10(@"handleSingleTapTouchUp - TapPoint:%.0f,%.0f",atPoint.x,atPoint.y);
-	if ([drawDelegate respondsToSelector:@selector(tappedView:singleTapAtPoint:)])
-        [drawDelegate tappedView:self singleTapAtPoint:atPoint];
+    if ([drawDelegate respondsToSelector:@selector(tappedView:singleTapAtPoint:)]){
+        [drawDelegate tappedView:self singleTapAtPoint:atPoint];      //<==== tap point x value is zero when touch up
+        [DrawableMapScrollView sharedMap].adjustingMap=false;
+        [[DrawableMapScrollView sharedMap] setScrollEnabled:YES];
+    }
     [Recorder sharedRecorder].userBusy=FALSE;   //no matter what, this has to be false here
 }
 #pragma mark Touch Handling methods of the class------

@@ -16,7 +16,7 @@
     NSMutableSet    *reusableTiles;					//<======= recycled tiles holder
     BOOL            Mode;                           //<====TRUE: Western, FALSE:Eastern
     int             maplevel,minMapLevel,maxMapLevel,lastLevel;
-    CGPoint			posErr,posErr1;
+    CGPoint			posErr,posErr1;               //posErr for current map tile position error, posErr1 is for the current adjusting session error
 
 //@private int mapLevel;
 }
@@ -28,6 +28,8 @@
 @property (nonatomic, strong) ZoomView *zoomView;
 @property (nonatomic, strong) GPSTrackPOIBoard *gpsTrackPOIBoard;
 @property (nonatomic, strong) DrawingBoard * drawingBoard;          //freeDrawingBoard in PM1
+
+-(void)refreshTilePositions;
 
 @property (nonatomic) id<PM2MapSourceDelegate> mapsourceDelegate;
 - (UIView *)dequeueReusableTile;

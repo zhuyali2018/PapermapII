@@ -20,6 +20,7 @@
 @synthesize tapDetectView;
 @synthesize recordingDelegate;
 @synthesize lastMaplevel;
+@synthesize adjustingMap,isFirstTouchPoint,firstTouchPoint;
 //===================================
 - (CGRect)zoomRectForScale:(float)scale withCenter:(CGPoint)center {
     
@@ -90,7 +91,27 @@
 }
 #pragma mark -----------------HandleSingleTap Delegate method------
 
-- (void)tappedView:(UIView *)view singleTapAtPoint:(CGPoint)tapPoint{
+- (void)tappedView:(UIView *)view singleTapAtPoint:(CGPoint)tapPoint{    //<==== tap point x value is zero when touch up
+    //Map Error Adjusting
+    if (adjustingMap) {
+        if (tapPoint.x == 0) {  //it means touch up, touch finished, drag finished
+            posErr = posErr1;
+            posErr1.x=0;
+            posErr1.y=0;
+            return;
+        }
+        if (isFirstTouchPoint) {
+            firstTouchPoint=tapPoint;
+            isFirstTouchPoint=false;
+        }else{
+            posErr1=CGPointMake(tapPoint.x-firstTouchPoint.x+posErr.x, tapPoint.y-firstTouchPoint.y+posErr.y);
+            [self refreshTilePositions];
+            [self.zoomView.tileContainer setNeedsLayout];
+        }
+        NSLOG10(@"Adjusting Map Error ...");
+        return;
+    }
+    ///////////////////
     if (tapPoint.x!=0) {  //x==0 for drawing
         bool POICreating=FALSE;
         bool POIMoving=FALSE;
@@ -186,5 +207,6 @@
     }else {
         NSLOG3(@"[recordingDelegate respondsToSelector:@selector(mapLevel:singleTapAtPoint:)] returns false");
     }
+    
 }
 @end

@@ -475,8 +475,8 @@ bool centerPos;
             if (!poi.selected) {
                 continue;
             }
-			if ([self closeEnoughForCurrentRes:poi from:tapPoint]) {
-				[[DrawableMapScrollView sharedMap] refresh];
+			if ([self closeEnoughForCurrentRes:poi from:tapPoint]) {   //when close enough, set the poi to the tapPoint in addition to returning true
+				[[DrawableMapScrollView sharedMap] refresh];           //refresh to refect the moving
 				break;
 			}
 		}

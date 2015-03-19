@@ -136,10 +136,10 @@ long firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleC
     int maxCol = floorf(([zoomView frame].size.width ) / scaledTileSide);  // and the maximum possible column
 	
     CGRect visibleBounds = [self bounds];
-    int firstNeededRow = MAX(0, floorf((visibleBounds.origin.y-posErr1.y) / scaledTileSide));
-    int firstNeededCol = MAX(0, floorf((visibleBounds.origin.x-posErr1.x) / scaledTileSide));        //<=======
-	int lastNeededRow  = MIN(maxRow,floorf((CGRectGetMaxY(visibleBounds)-posErr1.y) / scaledTileSide));
-    int lastNeededCol  = MIN(maxCol,floorf((CGRectGetMaxX(visibleBounds)-posErr1.x) / scaledTileSide));    //<=======
+    int firstNeededRow = MAX(0, floorf((visibleBounds.origin.y-posErr.y-posErr1.y) / scaledTileSide));
+    int firstNeededCol = MAX(0, floorf((visibleBounds.origin.x-posErr.x-posErr1.x) / scaledTileSide));                //<======= This is just the ruffly row calculation,
+	int lastNeededRow  = MIN(maxRow,floorf((CGRectGetMaxY(visibleBounds)-posErr.y-posErr1.y) / scaledTileSide));
+    int lastNeededCol  = MIN(maxCol,floorf((CGRectGetMaxX(visibleBounds)-posErr.x-posErr1.x) / scaledTileSide));      //<=======
 	
     if ((firstNeededRow==firstVisibleRowx[i])&&(firstNeededCol==firstVisibleColumnx[i])&&(lastNeededCol==lastVisibleColumnx[i])&&(lastNeededRow==lastVisibleRowx[i])) {
         NSLOG(@"exit fillWindowWithBasicMap (2) i=%d, neededRow=%d, visiRow=%ld",i,firstNeededRow,firstVisibleRowx[i]);
@@ -162,7 +162,7 @@ long firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleC
                     NSLOG7(@"Returned nil when requesint tile at %d,%d on level %d",row,col,(maplevel-levelDiff));
                     continue;  //if tile is nil, return for the next one
                 }
-				[tile setFrame:CGRectMake(tileSize*col+posErr1.x, tileSize*row+posErr1.y, tileSize,tileSize)];
+				[tile setFrame:CGRectMake(tileSize*col+posErr.x+posErr1.x, tileSize*row+posErr.y+posErr1.y, tileSize,tileSize)];
 				if(i>0)
 					[zoomView.basicMapLayer addSubview:tile];
 				else{
@@ -631,5 +631,15 @@ long firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleC
 }
 - (bool)getMode{
     return Mode;
+}
+-(void)refreshTilePositions{
+    for (MapTile *tile in [zoomView.tileContainer subviews]) {
+        CGRect frame = CGRectMake(256 * tile.col+posErr.x+posErr1.x, 256 * tile.row+posErr.y+posErr1.y, 256, 256);
+        [tile setFrame:frame];
+    }
+    for (MapTile *tile in [zoomView.basicMapLayer subviews]) {
+        CGRect frame = CGRectMake(256 * tile.col+posErr.x+posErr1.x, 256 * tile.row+posErr.y+posErr1.y, 256, 256);
+        [tile setFrame:frame];
+    }
 }
 @end
