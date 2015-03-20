@@ -16,11 +16,15 @@
     NSMutableSet    *reusableTiles;					//<======= recycled tiles holder
     BOOL            Mode;                           //<====TRUE: Western, FALSE:Eastern
     int             maplevel,minMapLevel,maxMapLevel,lastLevel;
+@public
     CGPoint			posErr,posErr1;               //posErr for current map tile position error, posErr1 is for the current adjusting session error
-
-//@private int mapLevel;
+    int	            posErrResolution;             //for current map error resolution
+    
+    CGPoint	mapMapErr;                           //for storing the map map error
+    CGPoint	satMapErr;                           //for storing the sat map error
+    int mapErrResolution;                        //for storing the map Error Resolution
+    int satErrResolution;                        //for storing the sat Error Resolution
 }
-//@property int maplevel;
 -(int)maplevel;
 -(void)setMaplevel:(int)maplevel;
 
@@ -37,4 +41,5 @@
 - (void)restoreMapState;
 - (void)reloadData;
 - (bool)getMode;
+-(CGPoint) adJustErrForResolution:(CGPoint)e res:(int) res;
 @end

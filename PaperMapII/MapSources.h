@@ -11,13 +11,15 @@
 #import "MapTile.h"
 #import "MainQ.h"
 @interface MapSources: NSObject <PM2MapSourceDelegate>{
-    MapType mapType;
+@public MapType mapType;
 }
+@property MapType mapType;
 @property UInt32 lockCount;
 @property(nonatomic, strong)NSLock *myLock;
 
 
-+ (id)sharedManager;
+//+ (id)sharedManager;
++ (MapSources *)sharedManager;
 - (void)mapTile:(MapTile *)tile1;
 - (bool)setMapSourceType:(MapType)mapType;
 - (void)lock;

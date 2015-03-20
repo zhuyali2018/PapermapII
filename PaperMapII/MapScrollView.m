@@ -616,10 +616,10 @@ long firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleC
     [zoomView.basicMapLayer setFrame:fr1];
     [zoomView.tileContainer setFrame:fr1];
     
-    //TODO: May need to uncomment following 2 lines:
-    //[zoomView.tapDetectView setFrame:fr1];
-    //posErr1=[zoomView.drawLineView.dataObj.parent adJustErrForResolution:posErr res:zoomView.drawLineView.dataObj.parent.posErrResolution];
-    
+    //TODO: May need to uncomment following 2 lines: done
+    [gpsTrackPOIBoard.tapDetectView setFrame:fr1];
+    posErr=[self adJustErrForResolution:posErr res:posErrResolution];   //posErr needs to be adjusted with the zoom level changes
+    posErrResolution = maplevel;        //need to keep track of the new posErr and posErrorResolution pair updated at the same time
     [self reloadData:zoomFactor];
     //[NSTimer scheduledTimerWithTimeInterval:0.2 target:self selector:@selector(restoreOffset) userInfo:nil repeats: NO];//TODO: Restore this line
     //[self setNeedsDisplay];
@@ -641,5 +641,11 @@ long firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleC
         CGRect frame = CGRectMake(256 * tile.col+posErr.x+posErr1.x, 256 * tile.row+posErr.y+posErr1.y, 256, 256);
         [tile setFrame:frame];
     }
+}
+-(CGPoint) adJustErrForResolution:(CGPoint)e res:(int) res{
+    int diff=maplevel-res;
+    float factor=pow(2,diff);
+    CGPoint x=CGPointMake(e.x*factor, e.y*factor);
+    return x;
 }
 @end

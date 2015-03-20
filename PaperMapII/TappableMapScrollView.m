@@ -15,6 +15,8 @@
 #import "GPSTrackPOIBoard.h"
 #import "Recorder.h"
 #import "DrawableMapScrollView.h"
+#import "MapSources.h"
+#import "MapTile.h"
 
 @implementation TappableMapScrollView
 @synthesize tapDetectView;
@@ -99,6 +101,14 @@
             posErr.y += posErr1.y;
             posErr1.x=0;
             posErr1.y=0;
+            posErrResolution = maplevel;
+            if ([MapSources sharedManager].mapType == googleMap) {
+                mapMapErr=posErr;
+                mapErrResolution=maplevel;
+            }else if([MapSources sharedManager].mapType == googleSat){
+                satMapErr=posErr;
+                satErrResolution=maplevel;
+            }
             NSLOG10(@"Adjusting Map Error ...touch up");
             return;
         }

@@ -733,10 +733,14 @@ extern float zmc;
     if ([[bn.titleLabel text] compare:@"Map"]==NSOrderedSame) {
         if([mapSrc setMapSourceType:googleMap]){
             [bn setTitle:@"Sat" forState:UIControlStateNormal];
+            [DrawableMapScrollView sharedMap]->posErrResolution=[DrawableMapScrollView sharedMap]->mapErrResolution;
+            [DrawableMapScrollView sharedMap]->posErr=[[DrawableMapScrollView sharedMap] adJustErrForResolution:[DrawableMapScrollView sharedMap]->mapMapErr res:[DrawableMapScrollView sharedMap]->mapErrResolution];
         }
     }else{
         if([mapSrc setMapSourceType:googleSat]){
             [bn setTitle:@"Map" forState:UIControlStateNormal];
+            [DrawableMapScrollView sharedMap]->posErrResolution=[DrawableMapScrollView sharedMap]->satErrResolution;
+            [DrawableMapScrollView sharedMap]->posErr=[[DrawableMapScrollView sharedMap] adJustErrForResolution:[DrawableMapScrollView sharedMap]->satMapErr res:[DrawableMapScrollView sharedMap]->satErrResolution];
         }
     }
     [mapScrollView reloadData];

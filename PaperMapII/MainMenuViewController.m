@@ -72,10 +72,10 @@
                     [[MenuItem alloc]initWithTitle:@"Pick Color"],
                     [[MenuItem alloc]initWithTitle:@"Settings"],
                     [[MenuItem alloc]initWithTitle:@"Adjust Map Aligning Error"],
+                    [[MenuItem alloc]initWithTitle:@"Reset Map Error"],
                     [[MenuItem alloc]initWithTitle:@"Help"],
                     [[MenuItem alloc]initWithTitle:@"Send Email to Developer"],
-                    [[MenuItem alloc]initWithTitle:@"Receive File"],
-                    [[MenuItem alloc]initWithTitle:@"About Paper Map II (2015.3.5)"], nil];
+                    [[MenuItem alloc]initWithTitle:@"About Paper Map II (2015.3.19)"], nil];
         
         menuMatrix=[[NSArray alloc]initWithObjects:drawingMenu,gpsMenu,poiMenu,helpMenu,nil];
         fileListView=[[ListViewController alloc]initWithStyle:UITableViewStylePlain];
@@ -117,6 +117,7 @@ typedef enum{SAVEDRAWINGDLG=1000,SAVEGPSTRACKSDLG,SAVEPOISDLG, UNLOADDRAWCONFIRM
 #define PICKCOLOR   0
 #define SETTINGS    1
 #define ADJMAPERR   2
+#define RSTMAPERR   3
 
 - (void)viewDidLoad
 {
@@ -148,6 +149,7 @@ typedef enum{SAVEDRAWINGDLG=1000,SAVEGPSTRACKSDLG,SAVEPOISDLG, UNLOADDRAWCONFIRM
     ((MenuItem *)menuMatrix[HELP_SECTION][PICKCOLOR]).menuItemHandler=@selector(PickColor);
     ((MenuItem *)menuMatrix[HELP_SECTION][SETTINGS]).menuItemHandler=@selector(Settings:);
     ((MenuItem *)menuMatrix[HELP_SECTION][ADJMAPERR]).menuItemHandler=@selector(AdjustMapError:);
+    ((MenuItem *)menuMatrix[HELP_SECTION][RSTMAPERR]).menuItemHandler=@selector(ResetMapError:);
 
 }
 #pragma mark - -------------menu item handlers-------------------
@@ -360,17 +362,22 @@ bool connectedToIphone;
     [DrawableMapScrollView sharedMap].adjustingMap=true;
     [DrawableMapScrollView sharedMap].isFirstTouchPoint=true;
     [[DrawableMapScrollView sharedMap] setScrollEnabled:NO];
+
+}
+-(void)ResetMapError:(NSString *)menuTitle{
+    NSLog(@"Tap on Resetting Map Error");
+    //dismiss the menu
+    PM2OnScreenButtons * OSB=[PM2OnScreenButtons sharedBnManager];
+    if([OSB.menuPopover isPopoverVisible]){
+        [OSB.menuPopover dismissPopoverAnimated:YES];
+    }
     
-//    if ([DrawableMapScrollView sharedMap].adjustingMap) {
-//        [[DrawableMapScrollView sharedMap] setScrollEnabled:NO];
-//    }else{
-//        [[DrawableMapScrollView sharedMap] setScrollEnabled:YES];
-//        if ([MapSources sharedManager].mapType == googleSat) {
-//            [DrawableMapScrollView sharedMap].satMapErr=posErr1;
-//        }else{
-//            
-//        }
-//    }
+    [DrawableMapScrollView sharedMap]->posErr=CGPointZero;
+    [DrawableMapScrollView sharedMap]->posErr1=CGPointZero;
+    [DrawableMapScrollView sharedMap]->mapMapErr=CGPointZero;
+    [DrawableMapScrollView sharedMap]->satMapErr=CGPointZero;
+    //[[DrawableMapScrollView sharedMap] refreshTilePositions];
+    [[DrawableMapScrollView sharedMap] reloadData];
 }
 -(void)Settings:(NSString *)menuTitle{
     NSLog(@"Tap on Settings");

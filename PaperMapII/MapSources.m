@@ -14,8 +14,9 @@
 
 @synthesize lockCount;
 @synthesize myLock;
+@synthesize mapType;
 
-+ (id)sharedManager {
++ (MapSources *)sharedManager {
     static MapSources *sharedMyManager = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
