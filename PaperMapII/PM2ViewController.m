@@ -86,7 +86,22 @@ NSString * satVersion;
         }
     }
 }
-
+-(void)loadMapShiftInfo{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [DrawableMapScrollView sharedMap]->mapErrResolution=[defaults integerForKey:@"mapErrResolution"];
+    [DrawableMapScrollView sharedMap]->satErrResolution=[defaults integerForKey:@"satErrResolution"];
+    
+    [DrawableMapScrollView sharedMap]->mapMapErr.x=[defaults floatForKey:@"mapMapErr.x"];
+    [DrawableMapScrollView sharedMap]->mapMapErr.y=[defaults floatForKey:@"mapMapErr.y"];
+    
+    [DrawableMapScrollView sharedMap]->satMapErr.x=[defaults floatForKey:@"satMapErr.x"];
+    [DrawableMapScrollView sharedMap]->satMapErr.y=[defaults floatForKey:@"satMapErr.y"];
+    
+    //on start, always assume map mode, not sat mode
+    //following 2 lines should always set in pair, so that a new posErr can be calculated per current maplevel(mapErrorResolution)
+    [DrawableMapScrollView sharedMap]->posErrResolution = [DrawableMapScrollView sharedMap]->mapErrResolution;
+    [DrawableMapScrollView sharedMap]->posErr=[DrawableMapScrollView sharedMap]->mapMapErr;
+}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -108,6 +123,7 @@ NSString * satVersion;
 	// Do any additional setup after loading the view, typically from a nib.
     [self.view setBackgroundColor:[UIColor darkGrayColor]];
     [self add_MapScrollView];    //add map tile scroll view
+    [self loadMapShiftInfo];     //this must be done right after above which include retoremapState that recovers the maplevel saved which is closely related to the Map Position Error mapErr and mapErrResolution info
     [self addOnScreeButtons];
 }
 -(void)viewDidAppear:(BOOL)animated{
@@ -165,11 +181,24 @@ extern float zmc;
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+-(void)saveMapShiftInfo{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setInteger:[DrawableMapScrollView sharedMap]->mapErrResolution forKey:@"mapErrResolution"];
+    [defaults setInteger:[DrawableMapScrollView sharedMap]->satErrResolution forKey:@"satErrResolution"];
+    
+    [defaults setFloat:[DrawableMapScrollView sharedMap]->mapMapErr.x forKey:@"mapMapErr.x"];
+    [defaults setFloat:[DrawableMapScrollView sharedMap]->mapMapErr.y forKey:@"mapMapErr.y"];
+    
+    [defaults setFloat:[DrawableMapScrollView sharedMap]->satMapErr.x forKey:@"satMapErr.x"];
+    [defaults setFloat:[DrawableMapScrollView sharedMap]->satMapErr.y forKey:@"satMapErr.y"];
+}
 -(void)applicationWillTerminate:(NSNotification *)notification{
 	NSLOG5(@"=====>calling applicationWillTerminate:");
     [mapScrollView saveMapState];
+    [self saveMapShiftInfo];     //saveMapState includes saving maplevel, which is related to posErr and posErrResolution that must be saved together
     [[Recorder sharedRecorder] saveAllTracks];
     [[Recorder sharedRecorder] saveAllGpsTracks];
     [[Recorder sharedRecorder] saveAllPOIs];
+    
 }
 @end
