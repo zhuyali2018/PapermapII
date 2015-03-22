@@ -197,7 +197,10 @@ extern BOOL bDrawBigLabel;
     NSKeyedArchiver * archiver=[[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
     NSMutableArray * gpsTrackArray=[NSMutableArray arrayWithCapacity:1];
     [gpsTrackArray addObject:gpsTrack];
-    [archiver encodeObject:gpsTrackArray forKey:@"gpsTrackOnly"];  //<== the key @"gpsTrackOnly" will be used in the email receiver for unarchiving
+    if(_isGpsTrack)
+        [archiver encodeObject:gpsTrackArray forKey:@"gpsTrackOnly"];  //<== the key @"gpsTrackOnly" will be used in the email receiver for unarchiving
+    else
+        [archiver encodeObject:gpsTrackArray forKey:@"DrawTrackOnly"];  //<== the key @"DrawTrackOnly" will be used in the email receiver for unarchiving
     [archiver finishEncoding];
     
     [data writeToFile:trackFilename atomically:YES];
@@ -211,7 +214,12 @@ extern BOOL bDrawBigLabel;
     
     NSMutableArray * gpsTracksInFolder=[NSMutableArray arrayWithCapacity:2];
     int row=node.rootArrayIndex;
-    NSMutableArray * gpsTrackArray=[Recorder sharedRecorder].gpsTrackArray;
+    
+    NSMutableArray * gpsTrackArray;
+    if(_isGpsTrack)
+        gpsTrackArray=[Recorder sharedRecorder].gpsTrackArray;
+    else
+        gpsTrackArray=[Recorder sharedRecorder].trackArray;
     
     for (int i=row; i<[gpsTrackArray count];i++) {
         MenuNode * nd=[gpsTrackArray objectAtIndex:i];
@@ -226,7 +234,11 @@ extern BOOL bDrawBigLabel;
         //nd.rootArrayIndex=i;        //keep track of its position in original array
     }
     
-    [archiver encodeObject:gpsTracksInFolder forKey:@"gpsTrackOnly"];  //<== the key @"gpsTrackOnly" will be used in the email receiver for unarchiving
+    if(_isGpsTrack)
+        [archiver encodeObject:gpsTracksInFolder forKey:@"gpsTrackOnly"];  //<== the key @"gpsTrackOnly" will be used in the email receiver for unarchiving
+    else
+        [archiver encodeObject:gpsTracksInFolder forKey:@"DrawTrackOnly"];  //<== the key @"DrawTrackOnly" will be used in the email receiver for unarchiving
+    
     [archiver finishEncoding];
     
     [data writeToFile:trackFilename atomically:YES];

@@ -932,7 +932,27 @@ int n=0;  //gps node counter
     }
 }
 //---------Received emailed file loading----------------------------------
--(void) addDrawingFile:(NSString *)fn{}
+-(void) addDrawingFile:(NSString *)fn{
+    NSArray * paths=NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask,YES);
+    NSString * documentsDirectory=[paths objectAtIndex:0];
+    NSString * filePath=[documentsDirectory stringByAppendingPathComponent:fn];
+    
+    if([[NSFileManager defaultManager] fileExistsAtPath:filePath]){
+        NSData * data=[[NSData alloc] initWithContentsOfFile:filePath];
+        NSKeyedUnarchiver *unarchiver=[[NSKeyedUnarchiver alloc] initForReadingWithData:data];
+        //NSMutableArray * tmp=[[NSMutableArray alloc] initWithArray:gpsTrackArray];
+        //GPSTrack * gpsTrack=[unarchiver decodeObjectForKey:@"gpsTrackOnly"];
+        NSMutableArray * receivedDrawTrackArray=[unarchiver decodeObjectForKey:@"DrawTrackOnly"];
+        //[tmp addObjectsFromArray:array];
+        //nodeList=tmp;    //  albums=array;  //=>this will crash the app.
+        [unarchiver finishDecoding];
+        if(!self.trackArray){  //when first time starting recorder, ini track array
+            self.trackArray=[[NSMutableArray alloc]initWithCapacity:5];
+        }
+        [self.trackArray addObjectsFromArray:receivedDrawTrackArray];
+    }
+    [self saveAllGpsTracks];   //may not need it since it is handled in gpstrack decode method
+}
 -(void) loadGPSTrackFromFile:(NSString *)fn{
     NSArray * paths=NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask,YES);
     NSString * documentsDirectory=[paths objectAtIndex:0];

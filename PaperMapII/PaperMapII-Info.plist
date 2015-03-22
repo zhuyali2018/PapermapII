@@ -15,7 +15,7 @@
 			<string>Owner</string>
 			<key>LSItemContentTypes</key>
 			<array>
-				<string>com.yalisoftware.draw</string>
+				<string>com.yalisoftware.dra</string>
 				<string>com.yalisoftware.gps</string>
 				<string>com.yalisoftware.poi</string>
 			</array>
