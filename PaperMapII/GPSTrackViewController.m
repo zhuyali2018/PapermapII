@@ -1,4 +1,4 @@
-//
+
 //  GPSTrackViewController.m
 //  PaperMapII
 //
@@ -80,28 +80,32 @@ extern BOOL bDrawBigLabel;
     gpsTrackName.text=gpsTrack.title;
     lbTimeCreated.text = [NSDateFormatter localizedStringFromDate:gpsTrack.timestamp dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterMediumStyle];
     
+    bnSend.hidden=true;
     if (listType==DRAWLIST) {
         lbNameTrackLength.hidden=YES;
         lbNameTotalTile.hidden=YES;
         lbNameAvgSpeed.hidden=YES;
         [propBn.titleLabel setText:@"Drawing Property:"];
         propBn.lineProperty=gpsTrack.lineProperty;
-    } else {
-        if(listType==SENDGPSTRACK){
-            bnSend.hidden=false;
-        }else{
-            bnSend.hidden=true;
-        }
+    } else if(listType==SENDGPSTRACK){
+        bnSend.hidden=false;
         lbGpsTrackLength.text=[[NSString alloc]initWithFormat:@"%3.1f miles (%d meters)",(float)gpsTrack.tripmeter/1609,gpsTrack.tripmeter];
         [propBn.titleLabel setText:@"GPS Track Property:"];
         propBn.lineProperty=gpsTrack.lineProperty;
+    } else if(listType==SENDDRAWING){
+        bnSend.hidden=false;
+        //lbGpsTrackLength.text=[[NSString alloc]initWithFormat:@"%3.1f miles (%d meters)",(float)gpsTrack.tripmeter/1609,gpsTrack.tripmeter];
+        [propBn.titleLabel setText:@"Drawing Property:"];
+        propBn.lineProperty=gpsTrack.lineProperty;
     }
     [propBn setBackgroundImage:[UIImage imageNamed:@"icon72x72.png"] forState:UIControlStateHighlighted];  //TODO: Choose a better image here
-    if (listType!=DRAWLIST) {
-        [self displayGPSTrackInfo];
-    }else{
+    
+    if ((listType==DRAWLIST) ||(listType==SENDDRAWING)) {
         [self displayTrackInfo];
+    }else if ((listType==GPSLIST) || (listType==SENDGPSTRACK)){
+        [self displayGPSTrackInfo];
     }
+    
     if (gpsTrack.selected) {
         [visibleSwitchBn setTitle:@"Hide" forState:UIControlStateNormal];
     }else{
@@ -119,16 +123,20 @@ extern BOOL bDrawBigLabel;
     // Dispose of any resources that can be recreated.
 }
 - (IBAction) pickLineProperty:(id)sender{
-    gpsTrack.lineProperty=[[LineProperty sharedGPSTrackProperty] copy];
+    if (_isGpsTrack) {
+        gpsTrack.lineProperty=[[LineProperty sharedGPSTrackProperty] copy];
+    }else{
+        gpsTrack.lineProperty=[[LineProperty sharedDrawingLineProperty] copy];
+    }
     propBn.lineProperty=gpsTrack.lineProperty;
     [propBn setNeedsDisplay];   //update the property page with new track property
     [[DrawableMapScrollView sharedMap] refresh];
 }
 -(IBAction)viewDetailsBnClicked:(id)sender{
-    GPSTrackNodesViewController * gpsTrackNodesViewCtrlr=[[GPSTrackNodesViewController alloc]init];
-    gpsTrackNodesViewCtrlr.gpsTrack=self.gpsTrack;
-    [gpsTrackNodesViewCtrlr setTitle:@"Nodes in Track"];
-    [self.navigationController pushViewController:gpsTrackNodesViewCtrlr animated:YES];
+    GPSTrackNodesViewController * gpsTrackNodesListViewCtrlr=[[GPSTrackNodesViewController alloc]init];
+    gpsTrackNodesListViewCtrlr.gpsTrack=self.gpsTrack;
+    [gpsTrackNodesListViewCtrlr setTitle:@"Nodes in Track"];
+    [self.navigationController pushViewController:gpsTrackNodesListViewCtrlr animated:YES];
 }
 -(IBAction)editBnClicked:(id)sender{
     if ([[bnEdit.titleLabel text] compare:@"Save"]!=NSOrderedSame) {
@@ -242,7 +250,12 @@ extern BOOL bDrawBigLabel;
     // email message body
     //[email setMessageBody:message isHTML:YES];
     NSData * dataFile=[self getNSDataFromDrawingLineFile:gpsTrack.mainText];      //read GPS Track from saved file
-    NSString *fn=[gpsTrack.mainText stringByAppendingString:@".gps"];
+    NSString *fn;
+    if (_isGpsTrack) {
+        fn=[gpsTrack.mainText stringByAppendingString:@".gps"];
+    }else{
+        fn=[gpsTrack.mainText stringByAppendingString:@".dra"];
+    }
 //    NSString *fn;
 //    if (dataType==DRAWING){
 //        fn=[draw.title stringByAppendingString:@".dra"];

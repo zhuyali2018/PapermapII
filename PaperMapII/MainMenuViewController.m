@@ -46,7 +46,8 @@
                     [[MenuItem alloc]initWithTitle:@"Drawings"],
                     [[MenuItem alloc]initWithTitle:@"Save All Drawings To File"],
                     [[MenuItem alloc]initWithTitle:@"Load Drawings from File"],
-                    [[MenuItem alloc]initWithTitle:@"Unload All Drawings"], nil];
+                    [[MenuItem alloc]initWithTitle:@"Unload All Drawings"],
+                    [[MenuItem alloc]initWithTitle:@"Send Drawing File"], nil];
         NSArray * gpsMenu=[[NSArray alloc]initWithObjects:
                     [[MenuItem alloc]initWithTitle:@"GPS Tracks"],
                     [[MenuItem alloc]initWithTitle:@"Save GPS Tracks To File"],
@@ -75,7 +76,7 @@
                     [[MenuItem alloc]initWithTitle:@"Reset Map Error"],
                     [[MenuItem alloc]initWithTitle:@"Help"],
                     [[MenuItem alloc]initWithTitle:@"Send Email to Developer"],
-                    [[MenuItem alloc]initWithTitle:@"About Paper Map II (2015.3.19)"], nil];
+                    [[MenuItem alloc]initWithTitle:@"About Paper Map II (2015.3.22)"], nil];
         
         menuMatrix=[[NSArray alloc]initWithObjects:drawingMenu,gpsMenu,poiMenu,helpMenu,nil];
         fileListView=[[ListViewController alloc]initWithStyle:UITableViewStylePlain];
@@ -96,6 +97,7 @@ typedef enum{SAVEDRAWINGDLG=1000,SAVEGPSTRACKSDLG,SAVEPOISDLG, UNLOADDRAWCONFIRM
 #define SAVEDRAWING     1
 #define LOADDRAWING     2
 #define UNLOADDRAWING   3
+#define SENDDRAWINGS    4
 
 // GPS Section
 #define GPSTRACKS       0
@@ -128,6 +130,7 @@ typedef enum{SAVEDRAWINGDLG=1000,SAVEGPSTRACKSDLG,SAVEPOISDLG, UNLOADDRAWCONFIRM
     ((MenuItem *)menuMatrix[DRAW_SECTION][SAVEDRAWING]).menuItemHandler=@selector(saveDrawingsToFile:);
     ((MenuItem *)menuMatrix[DRAW_SECTION][LOADDRAWING]).menuItemHandler=@selector(loadDrawingsFromFile:);
     ((MenuItem *)menuMatrix[DRAW_SECTION][UNLOADDRAWING]).menuItemHandler=@selector(unloadDrawings:);
+    ((MenuItem *)menuMatrix[DRAW_SECTION][SENDDRAWINGS]).menuItemHandler=@selector(showDrawListToSendFrom:);
     //GPS Section
     ((MenuItem *)menuMatrix[GPS_SECTION][GPSTRACKS]).menuItemHandler=@selector(showGPSTrackList:);
     ((MenuItem *)menuMatrix[GPS_SECTION][SAVEGPSTRACKS]).menuItemHandler=@selector(saveGPSTracksToFile:);
@@ -475,6 +478,17 @@ bool connectedToIphone;
     NSLOG10(@"executing showGPSTrackListToSendFrom from %@",menuTitle);
     [self.navigationController pushViewController:menuGPSTracks animated:YES];
 }
+-(void)showDrawListToSendFrom:(NSString *) menuTitle{
+    if (menuDrawings == nil) {
+        menuDrawings =[[ExpandableMenuViewController alloc] initWithStyle:UITableViewStylePlain];
+        menuDrawings.trackList=[Recorder sharedRecorder].trackArray;
+        menuDrawings.trackHandlerDelegate=self;
+    }
+    menuDrawings.id=SENDDRAWING;
+    [menuDrawings setTitle:menuTitle];
+    NSLOG10(@"executing showDrawListToSendFrom from %@",menuTitle);
+    [self.navigationController pushViewController:menuDrawings animated:YES];
+}
 
 - (void)tappedOnIndexPath:(int)row ID:(int)myid{
     NSLog(@"you clicked on row %d",row);
@@ -517,6 +531,11 @@ bool connectedToIphone;
     }else if (myid==SENDGPSTRACK) {
         gpsTrackViewCtrlr.listType=SENDGPSTRACK;
         tk=[Recorder sharedRecorder].gpsTrackArray[row];
+        gpsTrackViewCtrlr.isGpsTrack=true;
+    }else if (myid==SENDDRAWING) {
+        gpsTrackViewCtrlr.listType=SENDDRAWING;
+        tk=[Recorder sharedRecorder].trackArray[row];
+        gpsTrackViewCtrlr.isGpsTrack=false;     //Let the GpsTrackViewController know it is holding a drawing track, not a GPS Track
     }
     
     gpsTrackViewCtrlr.gpsTrack=tk;

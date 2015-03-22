@@ -10,6 +10,7 @@
 #import "GPSTrack.h"
 #import "PropertyButton.h"
 @interface GPSTrackViewController : UIViewController<UITextFieldDelegate,MFMailComposeViewControllerDelegate>
+@property bool isGpsTrack;
 @property (nonatomic,strong) GPSTrack * gpsTrack;
 @property ListType listType;
 @property (nonatomic,strong) IBOutlet UILabel * gpsTrackName;
