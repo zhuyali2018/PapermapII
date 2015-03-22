@@ -61,6 +61,11 @@ extern BOOL bDrawBigLabel;
     txtEdit.hidden=YES;
     txtEdit.clearButtonMode=UITextFieldViewModeWhileEditing;
     txtEdit.delegate=self;
+    
+    if((listType==SENDGPSTRACK)||(listType==SENDDRAWING))
+        bnSend.hidden=false;
+    else
+        bnSend.hidden=true;
     if (gpsTrack.folder) {
         lbGpsTrackLength.hidden=YES;
         propBn.hidden=YES;
@@ -80,7 +85,6 @@ extern BOOL bDrawBigLabel;
     gpsTrackName.text=gpsTrack.title;
     lbTimeCreated.text = [NSDateFormatter localizedStringFromDate:gpsTrack.timestamp dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterMediumStyle];
     
-    bnSend.hidden=true;
     if (listType==DRAWLIST) {
         lbNameTrackLength.hidden=YES;
         lbNameTotalTile.hidden=YES;
