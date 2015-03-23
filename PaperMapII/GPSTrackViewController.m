@@ -24,7 +24,7 @@
 @end
 
 @implementation GPSTrackViewController
-@synthesize gpsTrack;
+@synthesize gpsTrackPOI;
 @synthesize gpsTrackName;
 @synthesize lbGpsTrackLength;
 @synthesize lbTimeCreated;
@@ -62,11 +62,12 @@ extern BOOL bDrawBigLabel;
     txtEdit.clearButtonMode=UITextFieldViewModeWhileEditing;
     txtEdit.delegate=self;
     
-    if((listType==SENDGPSTRACK)||(listType==SENDDRAWING))
+    if((listType==SENDGPSTRACK)||(listType==SENDDRAWING)||(listType==SENDPOI))
         bnSend.hidden=false;
     else
         bnSend.hidden=true;
-    if (gpsTrack.folder) {
+    
+    if (gpsTrackPOI.folder) {
         lbGpsTrackLength.hidden=YES;
         propBn.hidden=YES;
         visibleSwitchBn.hidden=YES;
@@ -78,29 +79,32 @@ extern BOOL bDrawBigLabel;
         lbNameTotalTile.hidden=YES;
         lbNameAvgSpeed.hidden=YES;
         lbNameNodeNumber.hidden=YES;
-        gpsTrackName.text=gpsTrack.mainText;
-        lbTimeCreated.text = [NSDateFormatter localizedStringFromDate:gpsTrack.cdate dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterMediumStyle];
+        gpsTrackName.text=gpsTrackPOI.mainText;
+        
+        lbTimeCreated.text = [NSDateFormatter localizedStringFromDate:gpsTrackPOI.cdate dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterMediumStyle];
+
         return;
     }
-    gpsTrackName.text=gpsTrack.title;
-    lbTimeCreated.text = [NSDateFormatter localizedStringFromDate:gpsTrack.timestamp dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterMediumStyle];
+    gpsTrackName.text=gpsTrackPOI.mainText;
+    //if (self.Mtype != MPOI)
+        lbTimeCreated.text = [NSDateFormatter localizedStringFromDate:((Track *)gpsTrackPOI).timestamp dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterMediumStyle];
     
     if (listType==DRAWLIST) {
         lbNameTrackLength.hidden=YES;
         lbNameTotalTile.hidden=YES;
         lbNameAvgSpeed.hidden=YES;
         [propBn.titleLabel setText:@"Drawing Property:"];
-        propBn.lineProperty=gpsTrack.lineProperty;
+        propBn.lineProperty=((Track *)gpsTrackPOI).lineProperty;
     } else if(listType==SENDGPSTRACK){
         bnSend.hidden=false;
-        lbGpsTrackLength.text=[[NSString alloc]initWithFormat:@"%3.1f miles (%d meters)",(float)gpsTrack.tripmeter/1609,gpsTrack.tripmeter];
+        lbGpsTrackLength.text=[[NSString alloc]initWithFormat:@"%3.1f miles (%d meters)",(float)((GPSTrack *)gpsTrackPOI).tripmeter/1609,((GPSTrack *)gpsTrackPOI).tripmeter];
         [propBn.titleLabel setText:@"GPS Track Property:"];
-        propBn.lineProperty=gpsTrack.lineProperty;
+        propBn.lineProperty=((Track *)gpsTrackPOI).lineProperty;
     } else if(listType==SENDDRAWING){
         bnSend.hidden=false;
         //lbGpsTrackLength.text=[[NSString alloc]initWithFormat:@"%3.1f miles (%d meters)",(float)gpsTrack.tripmeter/1609,gpsTrack.tripmeter];
         [propBn.titleLabel setText:@"Drawing Property:"];
-        propBn.lineProperty=gpsTrack.lineProperty;
+        propBn.lineProperty=((Track *)gpsTrackPOI).lineProperty;
     }
     [propBn setBackgroundImage:[UIImage imageNamed:@"icon72x72.png"] forState:UIControlStateHighlighted];  //TODO: Choose a better image here
     
@@ -110,7 +114,7 @@ extern BOOL bDrawBigLabel;
         [self displayGPSTrackInfo];
     }
     
-    if (gpsTrack.selected) {
+    if (gpsTrackPOI.selected) {
         [visibleSwitchBn setTitle:@"Hide" forState:UIControlStateNormal];
     }else{
         [visibleSwitchBn setTitle:@"Show" forState:UIControlStateNormal];
@@ -127,46 +131,51 @@ extern BOOL bDrawBigLabel;
     // Dispose of any resources that can be recreated.
 }
 - (IBAction) pickLineProperty:(id)sender{
-    if (_isGpsTrack) {
-        gpsTrack.lineProperty=[[LineProperty sharedGPSTrackProperty] copy];
-    }else{
-        gpsTrack.lineProperty=[[LineProperty sharedDrawingLineProperty] copy];
+    if (self.Mtype == MGPSTRACK) {
+        ((Track *)gpsTrackPOI).lineProperty=[[LineProperty sharedGPSTrackProperty] copy];
+    }else if (self.Mtype == MTRACK){
+        ((Track *)gpsTrackPOI).lineProperty=[[LineProperty sharedDrawingLineProperty] copy];
     }
-    propBn.lineProperty=gpsTrack.lineProperty;
+    propBn.lineProperty=((Track *)gpsTrackPOI).lineProperty;
     [propBn setNeedsDisplay];   //update the property page with new track property
     [[DrawableMapScrollView sharedMap] refresh];
 }
 -(IBAction)viewDetailsBnClicked:(id)sender{
-    GPSTrackNodesViewController * gpsTrackNodesListViewCtrlr=[[GPSTrackNodesViewController alloc]init];
-    gpsTrackNodesListViewCtrlr.gpsTrack=self.gpsTrack;
-    [gpsTrackNodesListViewCtrlr setTitle:@"Nodes in Track"];
-    [self.navigationController pushViewController:gpsTrackNodesListViewCtrlr animated:YES];
+    if (self.Mtype != MPOI) {
+        GPSTrackNodesViewController * gpsTrackNodesListViewCtrlr=[[GPSTrackNodesViewController alloc]init];
+        gpsTrackNodesListViewCtrlr.gpsTrack=(GPSTrack *)self.gpsTrackPOI;
+        [gpsTrackNodesListViewCtrlr setTitle:@"Nodes in Track"];
+        [self.navigationController pushViewController:gpsTrackNodesListViewCtrlr animated:YES];
+    }
 }
 -(IBAction)editBnClicked:(id)sender{
     if ([[bnEdit.titleLabel text] compare:@"Save"]!=NSOrderedSame) {
         NSLog(@"editBnClicked");
         txtEdit.hidden=NO;
-        txtEdit.text=gpsTrack.mainText;
+        txtEdit.text=gpsTrackPOI.mainText;
         [bnEdit setTitle:@"Save"forState:UIControlStateNormal];
     }else{ //save changes
         txtEdit.hidden=YES;
-        gpsTrack.mainText=txtEdit.text;//gpsTrack.title=txtEdit.text;
-        gpsTrackName.text=gpsTrack.mainText;//gpsTrack.title;
+        gpsTrackPOI.mainText=txtEdit.text;//gpsTrack.title=txtEdit.text;
+        gpsTrackName.text=gpsTrackPOI.mainText;//gpsTrack.title;
         [bnEdit setTitle:@"Edit"forState:UIControlStateNormal];
-        gpsTrack.mainLabel.text=gpsTrack.mainText;//gpsTrack.title;
+        gpsTrackPOI.mainLabel.text=gpsTrackPOI.mainText;//gpsTrack.title;
         //[gpsTrack.mainLabel setNeedsDisplay];
     }
 }
 - (IBAction) visibleBnClicked:(id)sender{
+    if (self.Mtype == MPOI) {
+        return;
+    }
     if ([[visibleSwitchBn.titleLabel text] compare:@"Hide"]==NSOrderedSame) {
         [visibleSwitchBn setTitle:@"Show" forState:UIControlStateNormal];
-        gpsTrack.visible=FALSE;
-        [gpsTrack saveNodes];
+        ((Track *)gpsTrackPOI).visible=FALSE;
+        [((Track *)gpsTrackPOI) saveNodes];
     }else{
         [visibleSwitchBn setTitle:@"Hide" forState:UIControlStateNormal];
-        gpsTrack.visible=TRUE;
-        if (!gpsTrack.nodes) {      //read in nodes only if nodes not read in yet
-            [gpsTrack readNodes];
+        ((Track *)gpsTrackPOI).visible=TRUE;
+        if (!((Track *)gpsTrackPOI).nodes) {      //read in nodes only if nodes not read in yet
+            [((Track *)gpsTrackPOI) readNodes];
         }
         if (listType!=DRAWLIST) {
             [self displayGPSTrackInfo];
@@ -195,16 +204,20 @@ extern BOOL bDrawBigLabel;
     return nil;
 }
 -(void)saveCurrentGPSTrack{
-    [gpsTrack readNodes];    //make sure the nodes are read in before saving to a temp file for emailing
-    NSString * trackFilename=[self getGPSTrackFileNameWithPath:gpsTrack.mainText];
+    if (self.Mtype != MPOI) {
+        [((Track *)gpsTrackPOI) readNodes];    //make sure the nodes are read in before saving to a temp file for emailing
+    }
+    NSString * trackFilename=[self getGPSTrackFileNameWithPath:((Track *)gpsTrackPOI).mainText];
     NSMutableData * data=[[NSMutableData alloc] init];
     NSKeyedArchiver * archiver=[[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
     NSMutableArray * gpsTrackArray=[NSMutableArray arrayWithCapacity:1];
-    [gpsTrackArray addObject:gpsTrack];
-    if(_isGpsTrack)
-        [archiver encodeObject:gpsTrackArray forKey:@"gpsTrackOnly"];  //<== the key @"gpsTrackOnly" will be used in the email receiver for unarchiving
-    else
+    [gpsTrackArray addObject:((Track *)gpsTrackPOI)];
+    if(self.Mtype == MGPSTRACK)
+        [archiver encodeObject:gpsTrackArray forKey:@"gpsTrackOnly"];   //<== the key @"gpsTrackOnly" will be used in the email receiver for unarchiving
+    else if(self.Mtype == MTRACK)
         [archiver encodeObject:gpsTrackArray forKey:@"DrawTrackOnly"];  //<== the key @"DrawTrackOnly" will be used in the email receiver for unarchiving
+    else
+        [archiver encodeObject:gpsTrackArray forKey:@"POIOnly"];        //<== the key @"POIOnly" will be used in the email receiver for unarchiving
     [archiver finishEncoding];
     
     [data writeToFile:trackFilename atomically:YES];
@@ -220,15 +233,17 @@ extern BOOL bDrawBigLabel;
     int row=node.rootArrayIndex;
     
     NSMutableArray * gpsTrackArray;
-    if(_isGpsTrack)
+    if(self.Mtype == MGPSTRACK)
         gpsTrackArray=[Recorder sharedRecorder].gpsTrackArray;
-    else
+    else if(self.Mtype == MTRACK)
         gpsTrackArray=[Recorder sharedRecorder].trackArray;
+    else
+        gpsTrackArray=[Recorder sharedRecorder].poiArray;
     
     for (int i=row; i<[gpsTrackArray count];i++) {
         MenuNode * nd=[gpsTrackArray objectAtIndex:i];
         if ((i==row)||nd.infolder) {    //if the first folder entry or the gpstrack entries that follow
-            if (nd.infolder) {
+            if ((self.Mtype != MPOI)&&(nd.infolder)) {
                 ((Track *)nd).version = 0;
             }
             [gpsTracksInFolder addObject:nd];
@@ -238,11 +253,12 @@ extern BOOL bDrawBigLabel;
         //nd.rootArrayIndex=i;        //keep track of its position in original array
     }
     
-    if(_isGpsTrack)
+    if(self.Mtype == MGPSTRACK)
         [archiver encodeObject:gpsTracksInFolder forKey:@"gpsTrackOnly"];  //<== the key @"gpsTrackOnly" will be used in the email receiver for unarchiving
-    else
+    else if(self.Mtype == MTRACK)
         [archiver encodeObject:gpsTracksInFolder forKey:@"DrawTrackOnly"];  //<== the key @"DrawTrackOnly" will be used in the email receiver for unarchiving
-    
+    else
+        [archiver encodeObject:gpsTracksInFolder forKey:@"POIOnly"];  //<== the key @"DrawTrackOnly" will be used in the email receiver for unarchiving
     [archiver finishEncoding];
     
     [data writeToFile:trackFilename atomically:YES];
@@ -253,35 +269,29 @@ extern BOOL bDrawBigLabel;
         UIAlertView * alert1=[[UIAlertView alloc]initWithTitle:@"Email service \nis not available now" message:@"Sending Email requires \ninternet access \nwhich is not available now\n\n Please try again later!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];[alert1 show];
         return;
     }
-    if (gpsTrack.folder) {
-        [self createTempFileForFolder:gpsTrack];
+    if (gpsTrackPOI.folder) {
+        [self createTempFileForFolder:gpsTrackPOI];
     }else{
-        gpsTrack.version = 0;         //make version = 0 to insure the nodes are saved with track file
+        if(self.Mtype != MPOI)
+            ((Track *)gpsTrackPOI).version = 0;         //make version = 0 to insure the nodes are saved with track file
         [self saveCurrentGPSTrack];   //save to a file in order to be attached to an email
     }
     MFMailComposeViewController * email=[[MFMailComposeViewController alloc] init];
     email.mailComposeDelegate=self;   //<== Need to implement the delegate protocol
     // Email Subject
-    [email setSubject:gpsTrack.mainText];
+    [email setSubject:gpsTrackPOI.mainText];
     // email message body
     //[email setMessageBody:message isHTML:YES];
-    NSData * dataFile=[self getNSDataFromDrawingLineFile:gpsTrack.mainText];      //read GPS Track from saved file
+    NSData * dataFile=[self getNSDataFromDrawingLineFile:gpsTrackPOI.mainText];      //read GPS Track from saved file
     NSString *fn;
-    if (_isGpsTrack) {
-        fn=[gpsTrack.mainText stringByAppendingString:@".gps"];
-    }else{
-        fn=[gpsTrack.mainText stringByAppendingString:@".dra"];
-    }
-//    NSString *fn;
-//    if (dataType==DRAWING){
-//        fn=[draw.title stringByAppendingString:@".dra"];
-//    }else if (dataType==GPSNODES){
-//        fn=[draw.title stringByAppendingString:@".gps"];
-//    }else {
-//        fn=[draw.title stringByAppendingString:@".poi"];
-//    }
+    if(self.Mtype == MGPSTRACK)
+        fn=[gpsTrackPOI.mainText stringByAppendingString:@".gps"];
+    else if(self.Mtype == MTRACK)
+        fn=[gpsTrackPOI.mainText stringByAppendingString:@".dra"];
+    else
+        fn=[gpsTrackPOI.mainText stringByAppendingString:@".poi"];
 
-    NSLog(@"file %@ has data lengh of %d",fn,[dataFile length]);
+    NSLog(@"file %@ has data lengh of %lu",fn,(unsigned long)[dataFile length]);
     // attachment
     [email addAttachmentData:dataFile mimeType:@"application/octet-stream" fileName:fn];
     
@@ -293,29 +303,35 @@ extern BOOL bDrawBigLabel;
     [self sendEmail2];
 }
 -(void)displayGPSTrackInfo{
-    if (!gpsTrack.nodes) {
+    if (self.Mtype == MPOI) {
         return;
     }
-    if ([gpsTrack.nodes count]==0) {
+    if (!((Track *)gpsTrackPOI).nodes) {
         return;
     }
-    NSDate * t1=((GPSNode *)gpsTrack.nodes[0]).timestamp;
-    NSDate * t2=((GPSNode *)[gpsTrack.nodes lastObject]).timestamp;
+    if ([((Track *)gpsTrackPOI).nodes count]==0) {
+        return;
+    }
+    NSDate * t1=((GPSNode *)((GPSTrack *)gpsTrackPOI).nodes[0]).timestamp;
+    NSDate * t2=((GPSNode *)[((Track *)gpsTrackPOI).nodes lastObject]).timestamp;
     NSTimeInterval tm=[t2 timeIntervalSinceDate:t1];
     
-    double miles=gpsTrack.tripmeter/1609;
+    double miles=((GPSTrack *)gpsTrackPOI).tripmeter/1609;
     double f2=miles*3600;
     float avgSpd=f2/tm;
     lbAvgSpeed.text=[[NSString alloc]initWithFormat:@"%5.1f MPH",avgSpd];
     lbTotalTime.text=[[NSString alloc]initWithFormat:@"%02.0f:%02.0f:%02.0f",floor(tm/3600),fmod(floor(tm/60),60),fmod(tm,60)];
     
-    self.lbNumberOfNodes.text=[[NSString alloc]initWithFormat:@"%3lu",(unsigned long)[gpsTrack.nodes count]];
+    self.lbNumberOfNodes.text=[[NSString alloc]initWithFormat:@"%3lu",(unsigned long)[((Track *)gpsTrackPOI).nodes count]];
 }
 -(void)displayTrackInfo{
-    if (!gpsTrack.nodes) {
+    if (self.Mtype == MPOI) {
         return;
     }
-    if ([gpsTrack.nodes count]==0) {
+    if (!((Track *)gpsTrackPOI).nodes) {
+        return;
+    }
+    if ([((Track *)gpsTrackPOI).nodes count]==0) {
         return;
     }
 //    NSDate * t1=((GPSNode *)gpsTrack.nodes[0]).timestamp;
@@ -328,7 +344,7 @@ extern BOOL bDrawBigLabel;
     //lbAvgSpeed.text=[[NSString alloc]initWithFormat:@"%5.1f MPH",avgSpd];
     //lbTotalTime.text=[[NSString alloc]initWithFormat:@"%02.0f:%02.0f:%02.0f",floor(tm/3600),fmod(floor(tm/60),60),fmod(tm,60)];
     
-    self.lbNumberOfNodes.text=[[NSString alloc]initWithFormat:@"%3lu",(unsigned long)[gpsTrack.nodes count]];
+    self.lbNumberOfNodes.text=[[NSString alloc]initWithFormat:@"%3lu",(unsigned long)[((Track *)gpsTrackPOI).nodes count]];
 }
 #pragma mark------UITextFieldDelegate Methods------------------------
 - (BOOL)textFieldShouldReturn:(UITextField *)theTextField {

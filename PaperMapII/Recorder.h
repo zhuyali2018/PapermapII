@@ -70,7 +70,7 @@
 - (double)GetScreenY:(double)lat;
 //- (void)centerPositionAtX:(int) x Y:(int) y;
 
-+ (Recorder *)sharedRecorder;
++(Recorder *)sharedRecorder;
 +(NSMutableArray *)loadMutableArrayFrom:(NSString *)filePath withKey:(NSString *)key;
 -(NSArray*) addAnyModeAdjustedNode:(NSArray*)arrNodes Node:(Node *)node Mode:(bool)mode;
 

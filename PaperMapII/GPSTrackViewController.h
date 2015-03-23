@@ -9,9 +9,13 @@
 #import <UIKit/UIKit.h>
 #import "GPSTrack.h"
 #import "PropertyButton.h"
+
+typedef enum{MTRACK,MGPSTRACK,MPOI} MTYPE;     //menu Node based type
+
 @interface GPSTrackViewController : UIViewController<UITextFieldDelegate,MFMailComposeViewControllerDelegate>
-@property bool isGpsTrack;
-@property (nonatomic,strong) GPSTrack * gpsTrack;
+@property MTYPE Mtype;
+//@property (nonatomic,strong) GPSTrack * gpsTrack;
+@property (nonatomic,strong) MenuNode * gpsTrackPOI;
 @property ListType listType;
 @property (nonatomic,strong) IBOutlet UILabel * gpsTrackName;
 @property (nonatomic,strong) IBOutlet UILabel * lbGpsTrackLength;

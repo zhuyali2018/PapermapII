@@ -88,8 +88,8 @@ NSString * satVersion;
 }
 -(void)loadMapShiftInfo{
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [DrawableMapScrollView sharedMap]->mapErrResolution=[defaults integerForKey:@"mapErrResolution"];
-    [DrawableMapScrollView sharedMap]->satErrResolution=[defaults integerForKey:@"satErrResolution"];
+    [DrawableMapScrollView sharedMap]->mapErrResolution=(int)[defaults integerForKey:@"mapErrResolution"];
+    [DrawableMapScrollView sharedMap]->satErrResolution=(int)[defaults integerForKey:@"satErrResolution"];
     
     [DrawableMapScrollView sharedMap]->mapMapErr.x=[defaults floatForKey:@"mapMapErr.x"];
     [DrawableMapScrollView sharedMap]->mapMapErr.y=[defaults floatForKey:@"mapMapErr.y"];

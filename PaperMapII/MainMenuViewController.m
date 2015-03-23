@@ -115,6 +115,7 @@ typedef enum{SAVEDRAWINGDLG=1000,SAVEGPSTRACKSDLG,SAVEPOISDLG, UNLOADDRAWCONFIRM
 #define SAVEPOIS    6
 #define LOADPOIS    7
 #define UNLOADPOIS  8
+#define SEDNPOIFILE 9
 // Help Section
 #define PICKCOLOR   0
 #define SETTINGS    1
@@ -147,6 +148,7 @@ typedef enum{SAVEDRAWINGDLG=1000,SAVEGPSTRACKSDLG,SAVEPOISDLG, UNLOADDRAWCONFIRM
     ((MenuItem *)menuMatrix[POI_SECTION][SAVEPOIS]).menuItemHandler=@selector(savePOIsToFile:);
     ((MenuItem *)menuMatrix[POI_SECTION][LOADPOIS]).menuItemHandler=@selector(loadPOIsFromFile:);
     ((MenuItem *)menuMatrix[POI_SECTION][UNLOADPOIS]).menuItemHandler=@selector(unloadAllPOIs:);
+    ((MenuItem *)menuMatrix[POI_SECTION][SEDNPOIFILE]).menuItemHandler=@selector(showPOIListToSendFrom:);
     
     //Help Section
     ((MenuItem *)menuMatrix[HELP_SECTION][PICKCOLOR]).menuItemHandler=@selector(PickColor);
@@ -489,12 +491,24 @@ bool connectedToIphone;
     NSLOG10(@"executing showDrawListToSendFrom from %@",menuTitle);
     [self.navigationController pushViewController:menuDrawings animated:YES];
 }
+-(void)showPOIListToSendFrom:(NSString *) menuTitle{
+    if (menuPOIs == nil) {
+        menuPOIs =[[ExpandableMenuViewController alloc] initWithStyle:UITableViewStylePlain];
+        menuPOIs.trackList=[Recorder sharedRecorder].poiArray;
+        menuPOIs.trackHandlerDelegate=self;
+    }
+    menuPOIs.id=SENDPOI;
+    [menuPOIs setTitle:menuTitle];
+    NSLOG10(@"executing showDrawListToSendFrom from %@",menuTitle);
+    [self.navigationController pushViewController:menuPOIs animated:YES];
+}
 
 - (void)tappedOnIndexPath:(int)row ID:(int)myid{
     NSLog(@"you clicked on row %d",row);
     
     GPSTrackViewController * gpsTrackViewCtrlr=[[GPSTrackViewController alloc]initWithNibName:@"GPSTrackViewController" bundle:nil];
-    GPSTrack * tk;
+    //GPSTrack * tk;
+    MenuNode * tk;
     
     if (myid==DRAWLIST) {
         tk=[Recorder sharedRecorder].trackArray[row];
@@ -531,18 +545,25 @@ bool connectedToIphone;
     }else if (myid==SENDGPSTRACK) {
         gpsTrackViewCtrlr.listType=SENDGPSTRACK;
         tk=[Recorder sharedRecorder].gpsTrackArray[row];
-        gpsTrackViewCtrlr.isGpsTrack=true;
+        gpsTrackViewCtrlr.Mtype=MGPSTRACK;
     }else if (myid==SENDDRAWING) {
         gpsTrackViewCtrlr.listType=SENDDRAWING;
         tk=[Recorder sharedRecorder].trackArray[row];
-        gpsTrackViewCtrlr.isGpsTrack=false;     //Let the GpsTrackViewController know it is holding a drawing track, not a GPS Track
+        gpsTrackViewCtrlr.Mtype=MTRACK;     //Let the GpsTrackViewController know it is holding a drawing track, not a GPS Track
+    }else if (myid==SENDPOI) {
+        gpsTrackViewCtrlr.listType=SENDPOI;
+        tk=[Recorder sharedRecorder].poiArray[row];
+        gpsTrackViewCtrlr.Mtype=MPOI;     //Let the GpsTrackViewController know it is holding a POI, not a GPS Track
     }
     
-    gpsTrackViewCtrlr.gpsTrack=tk;
+    gpsTrackViewCtrlr.gpsTrackPOI=tk;
     [gpsTrackViewCtrlr setTitle:tk.mainText];
     if(!tk.folder) {
-        if ([tk.nodes count]>0) {
-            GPSNode * node=tk.nodes[0];
+        if(SENDPOI) {
+            [[DrawableMapScrollView sharedMap] centerMapToPOI:(POI *)tk];
+        } else
+        if ([((Track *)tk).nodes count]>0) {
+            GPSNode * node=((Track *)tk).nodes[0];
             [[DrawableMapScrollView sharedMap] centerMapTo:node];
         }
     }

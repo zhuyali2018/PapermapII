@@ -183,7 +183,7 @@
         GPSTrack * tk=[Recorder sharedRecorder].gpsTrackArray[indexPath.row];
         
         GPSTrackViewController * gpsTrackViewCtrlr=[[GPSTrackViewController alloc]initWithNibName:@"GPSTrackViewController" bundle:nil];
-        gpsTrackViewCtrlr.gpsTrack=tk;
+        gpsTrackViewCtrlr.gpsTrackPOI=tk;
         [gpsTrackViewCtrlr setTitle:tk.title];
         if ([tk.nodes count]>0) {
             GPSNode * node=tk.nodes[0];
