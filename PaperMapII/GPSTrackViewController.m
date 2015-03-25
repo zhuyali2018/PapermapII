@@ -87,7 +87,7 @@ extern BOOL bDrawBigLabel;
     }
     gpsTrackName.text=gpsTrackPOI.mainText;
     //if (self.Mtype != MPOI)
-        lbTimeCreated.text = [NSDateFormatter localizedStringFromDate:((Track *)gpsTrackPOI).timestamp dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterMediumStyle];
+        lbTimeCreated.text = [NSDateFormatter localizedStringFromDate:gpsTrackPOI.cdate dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterMediumStyle];
     
     if (listType==DRAWLIST) {
         lbNameTrackLength.hidden=YES;

@@ -951,7 +951,7 @@ int n=0;  //gps node counter
         }
         [self.trackArray addObjectsFromArray:receivedDrawTrackArray];
     }
-    [self saveAllGpsTracks];   //may not need it since it is handled in gpstrack decode method
+    [self saveAllTracks];   //may not need it since it is handled in gpstrack decode method
 }
 -(void) loadGPSTrackFromFile:(NSString *)fn{
     NSArray * paths=NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask,YES);
@@ -974,6 +974,22 @@ int n=0;  //gps node counter
     }
     [self saveAllGpsTracks];   //may not need it since it is handled in gpstrack decode method
 }
--(void) loadPOIFile:(NSString *)fn{}
+-(void) loadPOIFile:(NSString *)fn{
+    NSArray * paths=NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask,YES);
+    NSString * documentsDirectory=[paths objectAtIndex:0];
+    NSString * filePath=[documentsDirectory stringByAppendingPathComponent:fn];
+    
+    if([[NSFileManager defaultManager] fileExistsAtPath:filePath]){
+        NSData * data=[[NSData alloc] initWithContentsOfFile:filePath];
+        NSKeyedUnarchiver *unarchiver=[[NSKeyedUnarchiver alloc] initForReadingWithData:data];
+        NSMutableArray * receivedPOIArray=[unarchiver decodeObjectForKey:@"POIOnly"];
+        [unarchiver finishDecoding];
+        if(!self.poiArray){  //when first time starting recorder, ini track array
+            self.poiArray=[[NSMutableArray alloc]initWithCapacity:5];
+        }
+        [self.poiArray addObjectsFromArray:receivedPOIArray];
+    }
+    [self saveAllPOIs];   //may not need it since it is handled in gpstrack decode method
+}
 
 @end
