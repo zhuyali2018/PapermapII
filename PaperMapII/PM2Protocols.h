@@ -39,3 +39,8 @@
 @optional
 - (void)launchThisFn:(NSString *)fn;
 @end
+
+@protocol IPhoneTapDelegate <NSObject>
+@optional
+- (void)singleTapAtPoint:(CGPoint)tapPoint;
+@end

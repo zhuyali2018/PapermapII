@@ -23,6 +23,7 @@
 @synthesize recordingDelegate;
 @synthesize lastMaplevel;
 @synthesize adjustingMap,isFirstTouchPoint,firstTouchPoint;
+@synthesize iPhoneTapDelegate;
 //===================================
 - (CGRect)zoomRectForScale:(float)scale withCenter:(CGPoint)center {
     
@@ -155,6 +156,10 @@
         return;
     }
     NSLOG10(@"singleTapAtPoint - need to call external handler here 2");
+    // here, need to send single tap to iPhone version to hide menu
+    if ([iPhoneTapDelegate respondsToSelector:@selector(singleTapAtPoint:)]){
+        [iPhoneTapDelegate singleTapAtPoint:tapPoint];
+    }
     if (!self.bDrawing) {
         return;
     }
@@ -220,6 +225,5 @@
     }else {
         NSLOG3(@"[recordingDelegate respondsToSelector:@selector(mapLevel:singleTapAtPoint:)] returns false");
     }
-    
 }
 @end

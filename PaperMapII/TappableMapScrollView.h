@@ -20,6 +20,7 @@
 
 @property (nonatomic,strong)TapDetectView * tapDetectView;
 @property (nonatomic) id<PM2RecordingDelegate> recordingDelegate;
+@property (nonatomic) id<IPhoneTapDelegate> iPhoneTapDelegate;
 
 - (void)tappedView:(UIView *)view singleTapAtPoint:(CGPoint)tapPoint;
 @end
