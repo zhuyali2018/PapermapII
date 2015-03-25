@@ -158,7 +158,8 @@
     NSLOG10(@"singleTapAtPoint - need to call external handler here 2");
     // here, need to send single tap to iPhone version to hide menu
     if ([iPhoneTapDelegate respondsToSelector:@selector(singleTapAtPoint:)]){
-        [iPhoneTapDelegate singleTapAtPoint:tapPoint];
+        if (tapPoint.x != 0)        //when it is not touch up
+           [iPhoneTapDelegate singleTapAtPoint:tapPoint];
     }
     if (!self.bDrawing) {
         return;
