@@ -465,7 +465,6 @@ bool connectedToIphone;
     [menuPOIs setTitle:menuTitle];
     menuPOIs.id=GOTOPOI;
     [self.navigationController pushViewController:menuPOIs animated:YES];
-    [self hideIPhoneMainMenu];
 }
 -(void)showGPSTrackList:(NSString *) menuTitle{
     if (menuGPSTracks == nil) {
@@ -534,6 +533,7 @@ bool connectedToIphone;
         }
         tk=[Recorder sharedRecorder].poiArray[row];
     }else if (myid==GOTOPOI) {
+        [self hideIPhoneMainMenu];
         POI * poi=[Recorder sharedRecorder].poiArray[row];
         if (!poi.folder) {
             [[DrawableMapScrollView sharedMap] centerMapToPOI:poi];
