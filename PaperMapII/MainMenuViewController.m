@@ -76,7 +76,7 @@
                     [[MenuItem alloc]initWithTitle:@"Reset Map Error"],
                     [[MenuItem alloc]initWithTitle:@"Help"],
                     [[MenuItem alloc]initWithTitle:@"Send Email to Developer"],
-                    [[MenuItem alloc]initWithTitle:@"About Paper Map II (2015.3.25.I)"], nil];
+                    [[MenuItem alloc]initWithTitle:@"About Paper Map II (2015.3.26.I)"], nil];
         
         menuMatrix=[[NSArray alloc]initWithObjects:drawingMenu,gpsMenu,poiMenu,helpMenu,nil];
         fileListView=[[ListViewController alloc]initWithStyle:UITableViewStylePlain];
@@ -367,7 +367,7 @@ bool connectedToIphone;
     [DrawableMapScrollView sharedMap].adjustingMap=true;
     [DrawableMapScrollView sharedMap].isFirstTouchPoint=true;
     [[DrawableMapScrollView sharedMap] setScrollEnabled:NO];
-
+    [self hideIPhoneMainMenu];
 }
 -(void)ResetMapError:(NSString *)menuTitle{
     NSLog(@"Tap on Resetting Map Error");
@@ -383,6 +383,7 @@ bool connectedToIphone;
     [DrawableMapScrollView sharedMap]->satMapErr=CGPointZero;
     //[[DrawableMapScrollView sharedMap] refreshTilePositions];
     [[DrawableMapScrollView sharedMap] reloadData];
+    [self hideIPhoneMainMenu];
 }
 -(void)Settings:(NSString *)menuTitle{
     NSLog(@"Tap on Settings");
@@ -412,12 +413,18 @@ bool connectedToIphone;
         [OSB colorPicker];
     }
 }
+-(void)hideIPhoneMainMenu{
+    if ([[DrawableMapScrollView sharedMap].iPhoneTapDelegate respondsToSelector:@selector(singleTapAtPoint:)]){
+            [[DrawableMapScrollView sharedMap].iPhoneTapDelegate singleTapAtPoint:CGPointZero];
+    }
+}
 -(void)CreatePoi{
     NSLog(@"Tap on the map to Create a POI");
     PM2OnScreenButtons * OSB=[PM2OnScreenButtons sharedBnManager];
     if([OSB.menuPopover isPopoverVisible]){
         [OSB.menuPopover dismissPopoverAnimated:YES];
     }
+    [self hideIPhoneMainMenu];
     Recorder * recorder=[Recorder sharedRecorder];
     recorder.POICreating=true;
     [self dismissViewControllerAnimated:YES completion:NULL];  //for iphone
@@ -441,6 +448,7 @@ bool connectedToIphone;
     if([OSB.menuPopover isPopoverVisible]){
         [OSB.menuPopover dismissPopoverAnimated:YES];
     }
+    [self hideIPhoneMainMenu];
     Recorder * recorder=[Recorder sharedRecorder];
     recorder.POIMoving=true;
     [[DrawableMapScrollView sharedMap] setScrollEnabled:NO];
@@ -457,6 +465,7 @@ bool connectedToIphone;
     [menuPOIs setTitle:menuTitle];
     menuPOIs.id=GOTOPOI;
     [self.navigationController pushViewController:menuPOIs animated:YES];
+    [self hideIPhoneMainMenu];
 }
 -(void)showGPSTrackList:(NSString *) menuTitle{
     if (menuGPSTracks == nil) {
