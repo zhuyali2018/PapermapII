@@ -22,6 +22,10 @@
 #import "Settings.h"
 #import "SaveItem.h"
 
+extern bool bWANavailable;
+extern bool bWiFiAvailable;
+extern BOOL bDrawBigLabel;
+
 @interface MainMenuViewController ()
 @end
 
@@ -76,14 +80,14 @@
                     [[MenuItem alloc]initWithTitle:@"Reset Map Error"],
                     [[MenuItem alloc]initWithTitle:@"Help"],
                     [[MenuItem alloc]initWithTitle:@"Send Email to Developer"],
-                    [[MenuItem alloc]initWithTitle:@"About Paper Map II (2015.3.26.I)"], nil];
+                    [[MenuItem alloc]initWithTitle:@"About Paper Map II (2015.3.26.II)"], nil];
         
         menuMatrix=[[NSArray alloc]initWithObjects:drawingMenu,gpsMenu,poiMenu,helpMenu,nil];
         fileListView=[[ListViewController alloc]initWithStyle:UITableViewStylePlain];
     }
     return self;
 }
-typedef enum{SAVEDRAWINGDLG=1000,SAVEGPSTRACKSDLG,SAVEPOISDLG, UNLOADDRAWCONFIRMDLG,UNLOADGPSCONFIRMDLG,UNLOADPOICONFIRMDLG} DLGID;
+typedef enum{SAVEDRAWINGDLG=1000,SAVEGPSTRACKSDLG,SAVEPOISDLG, UNLOADDRAWCONFIRMDLG,UNLOADGPSCONFIRMDLG,UNLOADPOICONFIRMDLG, ADDRESSDLG} DLGID;
 
 // section definitions
 #define DRAW_SECTION 0
@@ -112,6 +116,8 @@ typedef enum{SAVEDRAWINGDLG=1000,SAVEGPSTRACKSDLG,SAVEPOISDLG, UNLOADDRAWCONFIRM
 #define MODIFYPOI   1
 #define MOVEAPOI    2
 #define GOTOAPOI    3
+#define GOTOADDR    4
+#define HIDEALLPOI  5
 #define SAVEPOIS    6
 #define LOADPOIS    7
 #define UNLOADPOIS  8
@@ -121,6 +127,8 @@ typedef enum{SAVEDRAWINGDLG=1000,SAVEGPSTRACKSDLG,SAVEPOISDLG, UNLOADDRAWCONFIRM
 #define SETTINGS    1
 #define ADJMAPERR   2
 #define RSTMAPERR   3
+#define HELP        4
+#define SENDEMAIL   5
 
 - (void)viewDidLoad
 {
@@ -144,7 +152,8 @@ typedef enum{SAVEDRAWINGDLG=1000,SAVEGPSTRACKSDLG,SAVEPOISDLG, UNLOADDRAWCONFIRM
     ((MenuItem *)menuMatrix[POI_SECTION][MODIFYPOI]).menuItemHandler=@selector(ModifyPoi:);
     ((MenuItem *)menuMatrix[POI_SECTION][MOVEAPOI]).menuItemHandler=@selector(MoveAPoi:);
     ((MenuItem *)menuMatrix[POI_SECTION][GOTOAPOI]).menuItemHandler=@selector(GotoAPoi:);
-    
+    ((MenuItem *)menuMatrix[POI_SECTION][GOTOADDR]).menuItemHandler=@selector(GotoAddr:);
+    ((MenuItem *)menuMatrix[POI_SECTION][HIDEALLPOI]).menuItemHandler=@selector(HideAllPOI:);
     ((MenuItem *)menuMatrix[POI_SECTION][SAVEPOIS]).menuItemHandler=@selector(savePOIsToFile:);
     ((MenuItem *)menuMatrix[POI_SECTION][LOADPOIS]).menuItemHandler=@selector(loadPOIsFromFile:);
     ((MenuItem *)menuMatrix[POI_SECTION][UNLOADPOIS]).menuItemHandler=@selector(unloadAllPOIs:);
@@ -155,6 +164,8 @@ typedef enum{SAVEDRAWINGDLG=1000,SAVEGPSTRACKSDLG,SAVEPOISDLG, UNLOADDRAWCONFIRM
     ((MenuItem *)menuMatrix[HELP_SECTION][SETTINGS]).menuItemHandler=@selector(Settings:);
     ((MenuItem *)menuMatrix[HELP_SECTION][ADJMAPERR]).menuItemHandler=@selector(AdjustMapError:);
     ((MenuItem *)menuMatrix[HELP_SECTION][RSTMAPERR]).menuItemHandler=@selector(ResetMapError:);
+    ((MenuItem *)menuMatrix[HELP_SECTION][HELP]).menuItemHandler=@selector(SendEmailToDeveloper:);
+    ((MenuItem *)menuMatrix[HELP_SECTION][SENDEMAIL]).menuItemHandler=@selector(SendEmailToDeveloper);
 
 }
 #pragma mark - -------------menu item handlers-------------------
@@ -385,6 +396,21 @@ bool connectedToIphone;
     [[DrawableMapScrollView sharedMap] reloadData];
     [self hideIPhoneMainMenu];
 }
+-(void)SendEmailToDeveloper{
+    if((!bWANavailable)&&(!bWiFiAvailable)){
+        UIAlertView * alert1=[[UIAlertView alloc]initWithTitle:@"Email service \nis not available now" message:@"Sending Email requires \ninternet access \nwhich is not available now\n\n Please try again later!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];[alert1 show];
+        return;
+    }
+    
+    MFMailComposeViewController * email=[[MFMailComposeViewController alloc] init];
+    email.mailComposeDelegate=self;
+
+    [email setSubject:@"Some bugs found and suggestions about Paper Map II for iPad"];
+
+    [email setToRecipients:[NSArray arrayWithObject:@"yali800@yahoo.com"]];
+
+    [self presentViewController:email animated:YES completion:nil];
+}
 -(void)Settings:(NSString *)menuTitle{
     NSLog(@"Tap on Settings");
     if (menuSettings == nil) {
@@ -465,6 +491,34 @@ bool connectedToIphone;
     [menuPOIs setTitle:menuTitle];
     menuPOIs.id=GOTOPOI;
     [self.navigationController pushViewController:menuPOIs animated:YES];
+}
+-(void)GotoAddr:(NSString *) menuTitle{
+    NSLog(@"Tap on menu to Goto an address");
+    //Hide menu
+    PM2OnScreenButtons * OSB=[PM2OnScreenButtons sharedBnManager];
+    if([OSB.menuPopover isPopoverVisible]){
+        [OSB.menuPopover dismissPopoverAnimated:YES];
+    }
+    
+    UIAlertView * addressDlg = [[UIAlertView alloc] initWithTitle:@"Go to an Address" message:nil delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Go",nil];
+    
+    addressDlg.alertViewStyle = UIAlertViewStylePlainTextInput;
+    addressDlg.tag=ADDRESSDLG;
+    [addressDlg show];
+    [self hideIPhoneMainMenu];
+}
+-(void)HideAllPOI:(NSString *) menuTitle{
+    NSLog(@"Tap on menu to Hide All POIs");
+    //Hide menu
+    PM2OnScreenButtons * OSB=[PM2OnScreenButtons sharedBnManager];
+    if([OSB.menuPopover isPopoverVisible]){
+        [OSB.menuPopover dismissPopoverAnimated:YES];
+    }
+    NSMutableArray * allPOIArray = [Recorder sharedRecorder].poiArray;
+    for (POI *poi in allPOIArray) {
+        poi.selected = false;
+    }
+    [[DrawableMapScrollView sharedMap] refresh];
 }
 -(void)showGPSTrackList:(NSString *) menuTitle{
     if (menuGPSTracks == nil) {
@@ -672,6 +726,148 @@ bool connectedToIphone;
         [self performSelector:clickedItem.menuItemHandler withObject:clickedItem.text];
     }
 }
+-(NSString *)getCountry{
+    NSString * country;
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString * rgn=(NSString *)[defaults objectForKey:@"language"];
+    if (rgn) {
+        country=[[NSString alloc]initWithString:rgn];
+    }else
+        country=@"en";
+    if (country.length>2) {
+        if ([country characterAtIndex:2]=='4') {   //got to be en4 for india
+            ///[country release];
+            country=@"en&gl=in";
+        }else if ([country characterAtIndex:2]!='-') {
+            country=[country substringToIndex:2];
+        }			
+    }
+    return country;
+}
+
+-(NSString *)getFormatedAddress:(NSString *)theString{ //v1027
+    if (theString == nil) {
+        return @"";
+    }
+    //NSRange range=[theString rangeOfString:@"\"formatted_address\":"];   // was version 4.1 and before
+    NSRange range=[theString rangeOfString:@"\"formatted_address\" :"];  // version 4.11
+    
+    int startLoc=range.location+range.length+1;
+    NSRange rangeSt,rangeEnd;
+    rangeSt.location=startLoc;
+    rangeSt.length=[theString length]-startLoc-1;
+    NSRange range1=[theString rangeOfString:@"\"" options:NSLiteralSearch range:rangeSt];
+    rangeEnd.location=range1.location+range1.length;
+    rangeEnd.length=[theString length]-rangeEnd.location-1;
+    NSRange range2=[theString rangeOfString:@"\"" options:NSLiteralSearch range:rangeEnd];
+    NSRange rangeTarget;
+    rangeTarget.location=rangeEnd.location;
+    rangeTarget.length=range2.location-rangeEnd.location;
+    NSString * formatedAddr=[theString substringWithRange:rangeTarget];
+    return formatedAddr;
+}
+-(NSString *)getLat:(NSString *)theString {   //v1027
+    if (theString == nil) {
+        return @"";
+    }
+    //NSRange range=[theString rangeOfString:@"\"lat\":"];  // was version 4.1 and before  //version 4.11
+    NSRange range=[theString rangeOfString:@"\"lat\" :"];   // version 4.11
+    
+    int startLoc=range.location+range.length+1;
+    NSRange rangeSt;
+    rangeSt.location=startLoc;
+    rangeSt.length=[theString length]-startLoc-1;
+    NSRange range1=[theString rangeOfString:@"," options:NSLiteralSearch range:rangeSt];
+    int latLength=range1.location-startLoc;
+    NSRange latRange;
+    latRange.location=startLoc;
+    latRange.length=latLength;
+    NSString * lat=[theString substringWithRange:latRange];
+    return lat;
+}
+-(NSString *)getLng:(NSString *)theString { //v1027
+    if (theString == nil) {
+        return @"";
+    }
+    //NSRange range=[theString rangeOfString:@"\"lng\":"];  // was version 4.1 and before
+    NSRange range=[theString rangeOfString:@"\"lng\" :"]; // version 4.11
+    int startLoc=range.location+range.length+1;
+    NSRange rangeSt;
+    rangeSt.location=startLoc;
+    rangeSt.length=[theString length]-startLoc-1;
+    NSCharacterSet * aSet=[NSCharacterSet characterSetWithCharactersInString:@" \n}"];
+    NSRange range1=[theString rangeOfCharacterFromSet:aSet options:NSLiteralSearch range:rangeSt];
+    int lngLength=range1.location-startLoc;
+    NSRange lngRange;
+    lngRange.location=startLoc;
+    lngRange.length=lngLength;
+    NSString * lng=[theString substringWithRange:lngRange];
+    return lng;
+}
+#define PI 3.1415926
+-(double)GetScreenY:(double)lat{
+    double y1=lat*PI/180;
+    double y=0.5*log((1+sin(y1))/(1-sin(y1)));
+    return y*180/PI/2;
+}
+-(int)getXforRes:(int)res with:(double)lon{
+    return (180+lon)*256*pow(2,res)/360;
+}
+-(int)getYforRes:(int)res with:(double)lat{
+    
+    return pow(2,res)*1.422222222*(90-[self GetScreenY:lat]);
+}
+-(void)gotoAddress:(NSString *) address{ //v1027
+    NSString * country = [self getCountry];
+    NSMutableString * temp = [address mutableCopy];
+    
+    [temp replaceOccurrencesOfString:@" "
+                          withString:@"+"
+                             options:0
+                               range:NSMakeRange(0, [temp length])];
+    NSString* temp1 = [temp stringByAddingPercentEscapesUsingEncoding: NSUTF8StringEncoding];
+    NSString * URL=[[NSString alloc] initWithFormat:@"http://maps.googleapis.com/maps/api/geocode/json?address=%@&language=%@&sensor=false",temp1,country];
+    NSURLRequest *theRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:URL]];
+    NSURLResponse *resp = nil;
+    NSError *err = nil;
+    NSData *response = [NSURLConnection sendSynchronousRequest: theRequest returningResponse: &resp error: &err];
+    NSString * theString = [[NSString alloc] initWithData:response encoding:NSUTF8StringEncoding];
+    NSLog(@"%@",theString);
+    NSRange r=[theString rangeOfString:@"\"status\" : \"ZERO_RESULTS\""];   //version 4.11
+    if (r.length>0) {
+        UIAlertView *alert=[[UIAlertView alloc] initWithTitle:@"Address Not Found" message:@"Please try again !" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];[alert show];
+        return;
+    }
+    NSString * formatedAddress=[self getFormatedAddress:theString];
+    NSString * lat=[self getLat:theString];
+    NSString * lng=[self getLng:theString];
+    
+    //Add an POI:
+    POI *poi=[[POI alloc] initWithPoint:CGPointMake(0, 0)];
+    poi.res=[DrawableMapScrollView sharedMap].maplevel;
+    poi.selected=true;
+    NSRange first20;
+    first20.location=0;
+    if ([formatedAddress length]>30 ) {
+        first20.length=30;
+    }else {
+        first20.length=[formatedAddress length];
+    }
+    
+    poi.title=[formatedAddress substringWithRange:first20];
+    poi.description=formatedAddress;
+    
+    poi.nType=ORANGEFLAG;
+    poi.x=[self getXforRes:poi.res with:[lng doubleValue]];
+    poi.y=[self getYforRes:poi.res with:[lat doubleValue]];
+    
+    if([Recorder sharedRecorder].poiArray==nil){
+        [Recorder sharedRecorder].poiArray=[[NSMutableArray alloc]initWithCapacity:5];
+    }
+    [[Recorder sharedRecorder].poiArray addObject:poi];
+    [[DrawableMapScrollView sharedMap] centerMapToPOI:poi];
+    [[Recorder sharedRecorder] saveAllPOIs];
+}
 #pragma mark --------- UITextField Delegate methods--------------
 - (void)alertView:(UIAlertView *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
     //Save DrawingDlg
@@ -732,6 +928,13 @@ bool connectedToIphone;
                                                           message:@"All POIs have been cleared from map" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];[alert show];
             [[DrawableMapScrollView sharedMap] refresh];
             [[Recorder sharedRecorder] saveAllPOIs];      //commit the changes
+        }
+    }else if (ADDRESSDLG==actionSheet.tag){
+        if (buttonIndex == 0){
+            NSLog(@"go to an address cancelled");
+        }else{
+            UITextField * addressField=[actionSheet textFieldAtIndex:0];
+            [self gotoAddress:addressField.text];
         }
     }
 }
@@ -819,4 +1022,30 @@ bool connectedToIphone;
 	[[Recorder sharedRecorder] saveAllPOIsTo:[poi getAbsolutePathFilename]];            //save the POIs to file
     [self saveToList:poi andFile:@"poiArrayTable.tbl" withKey:@"poiArrayTable" listType:POILIST];
 }
+
+#pragma mark------MFMailComposeViewControllerDelegate Methods------------------------
+- (void) mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
+{
+    switch (result)
+    {
+        case MFMailComposeResultCancelled:
+            NSLog(@"Mail cancelled");
+            break;
+        case MFMailComposeResultSaved:
+            NSLog(@"Mail saved");
+            break;
+        case MFMailComposeResultSent:
+            NSLog(@"Mail sent");
+            break;
+        case MFMailComposeResultFailed:
+            NSLog(@"Mail sent failure: %@", [error localizedDescription]);
+            break;
+        default:
+            break;
+    }
+    
+    // Close the Mail Interface
+    [self dismissViewControllerAnimated:YES completion:NULL];
+}
+
 @end

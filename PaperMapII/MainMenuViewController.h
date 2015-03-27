@@ -5,13 +5,15 @@
 //  Created by Yali Zhu on 6/26/13.
 //  Copyright (c) 2013 Yali Zhu. All rights reserved.
 //
-
+#import "AllImports.h"
 #import <UIKit/UIKit.h>
 #import <GameKit/GameKit.h>
 #import "MenuItem.h"
 #import "ExpandableMenuViewController.h"
 #import "ListViewController.h"
-@interface MainMenuViewController : UITableViewController <TrackHandleDelegate,UITextFieldDelegate,GKPeerPickerControllerDelegate,GKSessionDelegate>
+
+
+@interface MainMenuViewController : UITableViewController <TrackHandleDelegate,UITextFieldDelegate,GKPeerPickerControllerDelegate,GKSessionDelegate,MFMailComposeViewControllerDelegate>
 
 @property BOOL adjustingMap;      //flag for adjust Map error
 
@@ -28,5 +30,8 @@
 @property (nonatomic,strong) ExpandableMenuViewController *menuGPSTracks;
 @property (nonatomic,strong) ExpandableMenuViewController *menuPOIs;
 @property (nonatomic,strong) ExpandableMenuViewController *menuSettings;
+
+
+-(void)SendEmailToDeveloper;
 
 @end
