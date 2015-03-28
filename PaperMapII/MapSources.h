@@ -22,6 +22,7 @@
 + (MapSources *)sharedManager;
 - (void)mapTile:(MapTile *)tile1;
 - (bool)setMapSourceType:(MapType)mapType;
+- (MapType)getMapSourceType;
 - (void)lock;
 - (void)unlock;
 @end

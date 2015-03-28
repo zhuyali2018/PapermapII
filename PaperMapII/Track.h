@@ -16,15 +16,20 @@
     NSString * title;
     bool visible;
     //bool nodesDirtyFlag;        //tracking the nodes change
+@public
+    CGPoint	CTMapErr;             //Creating Time's map type's Map Error
+    int     CTResolution;           //Creating Time's map type's Map Resolution
 }
 @property (nonatomic,strong) NSArray * nodes;
 @property (nonatomic,strong) LineProperty * lineProperty;
 //@property bool visible;
 @property float version;                //track class version, for saving purpose
 @property (nonatomic,copy) NSString * filename;
-//@property (nonatomic,copy) NSString * title;
 @property NSDate * timestamp;
 @property bool nodesDirtyFlag;
+@property CGPoint CTMapErr;
+@property int CTResolution;
+
 
 -(bool)saveNodes;
 -(bool)readNodes;

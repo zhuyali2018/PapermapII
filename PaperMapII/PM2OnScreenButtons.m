@@ -726,6 +726,7 @@ extern float zmc;
     [_baseView addSubview:resLabel];
     [[MainQ sharedManager] register:resLabel withID:MAPRES];
 }
+#define SCRMAP [DrawableMapScrollView sharedMap]
 -(void)toggleMapType:(UIButton *)bn{
     NSLOG9(@"toggleMapType here !");
     MainQ * mQ=[MainQ sharedManager];
@@ -733,14 +734,14 @@ extern float zmc;
     if ([[bn.titleLabel text] compare:@"Map"]==NSOrderedSame) {
         if([mapSrc setMapSourceType:googleMap]){
             [bn setTitle:@"Sat" forState:UIControlStateNormal];
-            [DrawableMapScrollView sharedMap]->posErrResolution=[DrawableMapScrollView sharedMap]->mapErrResolution;
-            [DrawableMapScrollView sharedMap]->posErr=[[DrawableMapScrollView sharedMap] adJustErrForResolution:[DrawableMapScrollView sharedMap]->mapMapErr res:[DrawableMapScrollView sharedMap]->mapErrResolution];
+            SCRMAP->posErrResolution=SCRMAP->mapErrResolution;
+            SCRMAP->posErr=[SCRMAP adJustErrForResolution:SCRMAP->mapMapErr res:SCRMAP->mapErrResolution];
         }
     }else{
         if([mapSrc setMapSourceType:googleSat]){
             [bn setTitle:@"Map" forState:UIControlStateNormal];
-            [DrawableMapScrollView sharedMap]->posErrResolution=[DrawableMapScrollView sharedMap]->satErrResolution;
-            [DrawableMapScrollView sharedMap]->posErr=[[DrawableMapScrollView sharedMap] adJustErrForResolution:[DrawableMapScrollView sharedMap]->satMapErr res:[DrawableMapScrollView sharedMap]->satErrResolution];
+            SCRMAP->posErrResolution=SCRMAP->satErrResolution;
+            SCRMAP->posErr=[SCRMAP adJustErrForResolution:SCRMAP->satMapErr res:SCRMAP->satErrResolution];
         }
     }
     [mapScrollView reloadData];

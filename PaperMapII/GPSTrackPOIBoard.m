@@ -83,8 +83,9 @@
 	}
 	CGContextStrokePath(context);
 }
-//
+// Drawing the track here
 #define POSERR [DrawableMapScrollView sharedMap]->posErr
+#define CTERR track->CTMapErr
 -(void)tapDrawTrack:(Track *)track context:(CGContextRef)context{
     if (track.folder) {  //very important, or it will crash for ever, deadloop
         return;
@@ -99,6 +100,9 @@
 	CGContextSetLineWidth(context, COLOR.lineWidth);
 	CGContextSetLineCap(context, kCGLineCapRound);  //version 4.0
     
+    //Update the CTERR here before drawing // Since it is updated here, it does not need to update in scrollViewDidEndZooming of the MapScrollView
+    CTERR = [[DrawableMapScrollView sharedMap] adJustErrForResolution:CTERR res:track->CTResolution];
+    
 	Node * startNode;
     int i=0;
     for (i=0;i<count;i++){
@@ -107,7 +111,7 @@
             break;
     }
     CGPoint pStart=[self ConvertPoint:startNode];
-	CGContextMoveToPoint(context, pStart.x+POSERR.x, pStart.y+POSERR.y);
+	CGContextMoveToPoint(context, pStart.x+POSERR.x-CTERR.x, pStart.y+POSERR.y-CTERR.y);
 	for (int j=i; j<count; j++) {
 		Node * tmpN=[track.nodes objectAtIndex:j];
         bool terNodeFound=false;
@@ -118,10 +122,10 @@
         }
         CGPoint tmpP=[self ConvertPoint:tmpN];
         if(terNodeFound){
-            CGContextMoveToPoint(context, tmpP.x+POSERR.x, tmpP.y+POSERR.y);
+            CGContextMoveToPoint(context, tmpP.x+POSERR.x-CTERR.x, tmpP.y+POSERR.y-CTERR.y);
             terNodeFound=false;
         }else
-            CGContextAddLineToPoint(context, tmpP.x+POSERR.x, tmpP.y+POSERR.y);
+            CGContextAddLineToPoint(context, tmpP.x+POSERR.x-CTERR.x, tmpP.y+POSERR.y-CTERR.y);
 	}
 	CGContextStrokePath(context);
 }

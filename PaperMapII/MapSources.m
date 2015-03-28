@@ -303,4 +303,7 @@ extern NSString * satVersion;  //version 5.0
     [myLock unlock];
     return ret;
 }
+- (MapType)getMapSourceType{
+    return mapType;
+}
 @end

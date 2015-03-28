@@ -619,7 +619,8 @@ long firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleC
     //TODO: May need to uncomment following 2 lines: done
     [gpsTrackPOIBoard.tapDetectView setFrame:fr1];
     posErr=[self adJustErrForResolution:posErr res:posErrResolution];   //posErr needs to be adjusted with the zoom level changes
-    posErrResolution = maplevel;        //need to keep track of the new posErr and posErrorResolution pair updated at the same time
+    posErrResolution = maplevel;        //need to keep track of the new posErr and posErrorResolution pair updated at the same time    
+    
     [self reloadData:zoomFactor];
     //[NSTimer scheduledTimerWithTimeInterval:0.2 target:self selector:@selector(restoreOffset) userInfo:nil repeats: NO];//TODO: Restore this line
     //[self setNeedsDisplay];

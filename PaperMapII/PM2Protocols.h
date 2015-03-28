@@ -7,13 +7,16 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "MapTile.h"
+
 @class TapDetectView;
-@class MapTile;
+
 
 @protocol PM2MapSourceDelegate <NSObject>
 @optional
 - (void)mapTile:(MapTile *)tile;
 - (bool)setMapSourceType:(int)mapType1;
+- (MapType)getMapSourceType;
 @end
 
 @protocol PM2SingleTapHandleDelegate <NSObject>

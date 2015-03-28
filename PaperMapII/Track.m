@@ -13,6 +13,7 @@
 #import "DrawableMapScrollView.h"
 #import "GPSNode.h"
 #import "Recorder.h"
+#import "MapSources.h"
 
 @implementation Track
 @synthesize filename;
@@ -62,11 +63,21 @@
     [outputFormatter setDateFormat:@"yyyy-MM-dd_HH-mm-ss-SSS"];
     filename = [[outputFormatter stringFromDate:now] stringByAppendingString:@".trk"];
     nodesDirtyFlag=false;
+    //newly added for track going with errored map:
+    if ([[MapSources sharedManager] getMapSourceType] == googleMap){
+        CTResolution = [DrawableMapScrollView sharedMap]->mapErrResolution;
+        CTMapErr =[DrawableMapScrollView sharedMap]->mapMapErr;
+    }else{
+        CTResolution = [DrawableMapScrollView sharedMap]->satErrResolution;
+        CTMapErr =[DrawableMapScrollView sharedMap]->satMapErr;
+    }
 }
 #pragma mark ----------------
 -(id)initWithCoder:(NSCoder *)coder{
     if(self=[super initWithCoder:coder]){
         self.dataSource=self;
+        self.CTMapErr       =[coder decodeCGPointForKey:@"CTMAPERR"];
+        self.CTResolution   =[coder decodeIntForKey:@"CTRESOLUTION"];
         self.lineProperty   =[coder decodeObjectForKey:@"LINEPROPERTY"];
         self.filename       =[coder decodeObjectForKey:@"FILENAME"];
         self.title          =[coder decodeObjectForKey:@"TITLE"];
@@ -109,8 +120,10 @@
         [coder encodeObject:self.nodes          forKey:@"NODES"];
         //NSLog(@"Nodes saved to a single file");
     }
-    [coder encodeFloat:self.version          forKey:@"VERSION"];
+    [coder encodeFloat:self.version         forKey:@"VERSION"];
 	[coder encodeObject:self.lineProperty   forKey:@"LINEPROPERTY"];
+    [coder encodeInt:self.CTResolution      forKey:@"CTRESOLUTION"];
+    [coder encodeCGPoint:self.CTMapErr      forKey:@"CTMAPERR"];
     [coder encodeBool:self.visible          forKey:@"VISIBLE"];
     [coder encodeObject:self.filename       forKey:@"FILENAME"];
     [coder encodeObject:self.title          forKey:@"TITLE"];
@@ -119,6 +132,8 @@
 -(id)copyWithZone:(NSZone *)zone {
 	Track * tkCopy=[[[self class] allocWithZone:zone] init];
 	tkCopy.lineProperty  =[self.lineProperty copyWithZone:zone];
+    tkCopy.CTMapErr = CGPointMake(self.CTMapErr.x,self.CTMapErr.y);
+    tkCopy.CTResolution =self.CTResolution;
     tkCopy.nodes=[[NSArray alloc]initWithArray:self.nodes];
     tkCopy.version=self.version;
     tkCopy.visible=self.visible;
