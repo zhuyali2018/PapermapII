@@ -67,6 +67,7 @@ extern BOOL bDrawBigLabel;
                     [[MenuItem alloc]initWithTitle:@"Move a POI"],
                     [[MenuItem alloc]initWithTitle:@"Goto a POI"],
                     [[MenuItem alloc]initWithTitle:@"Goto an Address"],
+                    [[MenuItem alloc]initWithTitle:@"Draw Navigation Line"],
                     [[MenuItem alloc]initWithTitle:@"Hide POIs"],
                     [[MenuItem alloc]initWithTitle:@"Save POIs to File"],
                     [[MenuItem alloc]initWithTitle:@"Load POIs from File"],
@@ -117,11 +118,12 @@ typedef enum{SAVEDRAWINGDLG=1000,SAVEGPSTRACKSDLG,SAVEPOISDLG, UNLOADDRAWCONFIRM
 #define MOVEAPOI    2
 #define GOTOAPOI    3
 #define GOTOADDR    4
-#define HIDEALLPOI  5
-#define SAVEPOIS    6
-#define LOADPOIS    7
-#define UNLOADPOIS  8
-#define SEDNPOIFILE 9
+#define DRAWNAVLINE 5
+#define HIDEALLPOI  6
+#define SAVEPOIS    7
+#define LOADPOIS    8
+#define UNLOADPOIS  9
+#define SEDNPOIFILE 10
 // Help Section
 #define PICKCOLOR   0
 #define SETTINGS    1
@@ -153,6 +155,7 @@ typedef enum{SAVEDRAWINGDLG=1000,SAVEGPSTRACKSDLG,SAVEPOISDLG, UNLOADDRAWCONFIRM
     ((MenuItem *)menuMatrix[POI_SECTION][MOVEAPOI]).menuItemHandler=@selector(MoveAPoi:);
     ((MenuItem *)menuMatrix[POI_SECTION][GOTOAPOI]).menuItemHandler=@selector(GotoAPoi:);
     ((MenuItem *)menuMatrix[POI_SECTION][GOTOADDR]).menuItemHandler=@selector(GotoAddr:);
+    ((MenuItem *)menuMatrix[POI_SECTION][DRAWNAVLINE]).menuItemHandler=@selector(DrawNavigationLine:);
     ((MenuItem *)menuMatrix[POI_SECTION][HIDEALLPOI]).menuItemHandler=@selector(HideAllPOI:);
     ((MenuItem *)menuMatrix[POI_SECTION][SAVEPOIS]).menuItemHandler=@selector(savePOIsToFile:);
     ((MenuItem *)menuMatrix[POI_SECTION][LOADPOIS]).menuItemHandler=@selector(loadPOIsFromFile:);
@@ -167,6 +170,12 @@ typedef enum{SAVEDRAWINGDLG=1000,SAVEGPSTRACKSDLG,SAVEPOISDLG, UNLOADDRAWCONFIRM
     ((MenuItem *)menuMatrix[HELP_SECTION][HELP]).menuItemHandler=@selector(SendEmailToDeveloper:);
     ((MenuItem *)menuMatrix[HELP_SECTION][SENDEMAIL]).menuItemHandler=@selector(SendEmailToDeveloper);
 
+}
+POI * srcPOI;
+POI * dstPOI;
+int NavStep=0;
+- (void)viewDidAppear:(BOOL)animated{
+    NavStep = 0;
 }
 #pragma mark - -------------menu item handlers-------------------
 bool connectedToIphone;
@@ -492,12 +501,33 @@ bool connectedToIphone;
     menuPOIs.id=GOTOPOI;
     [self.navigationController pushViewController:menuPOIs animated:YES];
 }
+-(void)DrawNavigationLine:(NSString *) menuTitle{
+    if((!bWANavailable)&&(!bWiFiAvailable)){
+        UIAlertView * alert1=[[UIAlertView alloc]initWithTitle:@"Drawing service \nis not available now" message:@"Drawing Navigation Line requires \ninternet access \nwhich is not available now\n\n Please try again later!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];[alert1 show];
+        return;
+    }
+    
+    NSLog(@"Tap on the menu of Draw Navigation Line");
+    if (menuPOIs == nil) {
+        menuPOIs =[[ExpandableMenuViewController alloc] initWithStyle:UITableViewStylePlain];
+        menuPOIs.trackList=[Recorder sharedRecorder].poiArray;
+        menuPOIs.trackHandlerDelegate=self;
+    }
+    [menuPOIs setTitle:@"Please pick starting POI"];
+    menuPOIs.id=DRAWNAVLINE;
+    [self.navigationController pushViewController:menuPOIs animated:YES];
+}
 -(void)GotoAddr:(NSString *) menuTitle{
     NSLog(@"Tap on menu to Goto an address");
     //Hide menu
     PM2OnScreenButtons * OSB=[PM2OnScreenButtons sharedBnManager];
     if([OSB.menuPopover isPopoverVisible]){
         [OSB.menuPopover dismissPopoverAnimated:YES];
+    }
+    
+    if((!bWANavailable)&&(!bWiFiAvailable)){
+        UIAlertView * alert1=[[UIAlertView alloc]initWithTitle:@"Goto service \nis not available now" message:@"Going to an address requires \ninternet access \nwhich is not available now\n\n Please try again later!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];[alert1 show];
+        return;
     }
     
     UIAlertView * addressDlg = [[UIAlertView alloc] initWithTitle:@"Go to an Address" message:nil delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Go",nil];
@@ -564,6 +594,181 @@ bool connectedToIphone;
     NSLOG10(@"executing showDrawListToSendFrom from %@",menuTitle);
     [self.navigationController pushViewController:menuPOIs animated:YES];
 }
+#define PI 3.1415926
+#define e 2.718281828
+-(CGFloat)GetGPSLatCoor:(POI *)Poi{
+    long pixNum=256*pow(2,Poi.res);
+    CGFloat degree=(CGFloat)Poi.y/pixNum*180;	//(0 -> 180)
+    CGFloat Y=90-degree;						//(-90->+90)
+    CGFloat Yrad=(CGFloat)Y/180*PI;				// to Radian
+    CGFloat radLat=asin((pow(e,2*2*Yrad)-1)/(pow(e,2*2*Yrad)+1));    //radian on map
+    CGFloat lat=(CGFloat)180*radLat/PI;				//degree on MAP
+    return lat;
+}
+-(CGFloat)GetGPSLonCoor:(POI *)Poi{
+    //return 360*poi.x/(256*pow(2,poi.res))-180;
+    int tileNum=pow(2,Poi.res);
+    long pixNum=256*tileNum;
+    CGFloat degree=(CGFloat)Poi.x/pixNum*360;
+    CGFloat deg=degree-180;
+    return deg;
+}
+-(NSString *)getAJsonProperty:(NSString *) propertyName from:(NSString *)theString{
+    if ((propertyName == nil)||(theString==nil)) {
+        return @"";
+    }
+    int newStartPos=0;
+    int restLength=[theString length];
+    NSRange rangePoints=[theString rangeOfString:propertyName options:NSLiteralSearch range:NSMakeRange(newStartPos,restLength)];
+    if(rangePoints.length==0) return @"";
+    //find the next double quote
+    int startPos2=rangePoints.location+rangePoints.length;
+    int restLength2=[theString length]-startPos2;
+    NSRange rangeQuote=[theString rangeOfString:@"\"" options:NSLiteralSearch range:NSMakeRange(startPos2,restLength2)];
+    if(rangeQuote.length==0) return @"";
+    
+    int startPos3=rangeQuote.location+rangeQuote.length;
+    int restLength3=[theString length]-startPos3;
+    
+    NSRange rangeQuote2=[theString rangeOfString:@"\"" options:NSLiteralSearch range:NSMakeRange(startPos3,restLength3)];
+    if(rangeQuote2.length==0) return @"";
+    
+    NSString * ret=[theString substringWithRange:NSMakeRange(rangeQuote.location+1,rangeQuote2.location-rangeQuote.location-1)];
+    return ret;
+}
+
+-(NSString *)getOverViewPolylinePoints:(NSString *) theString{
+    if (theString == nil) {
+        return @"";
+    }
+    NSRange range=[theString rangeOfString:@"overview_polyline"];
+    if(range.length==0) return @"";
+    
+    int newStartPos=range.location+range.length;
+    int restLength=[theString length]-newStartPos;
+    NSRange rangePoints=[theString rangeOfString:@"\"points\" :" options:NSLiteralSearch range:NSMakeRange(newStartPos,restLength)]; //version 4.11
+    if(rangePoints.length==0) return @"";
+    //find the next double quote
+    int startPos2=rangePoints.location+rangePoints.length;
+    int restLength2=[theString length]-startPos2;
+    NSRange rangeQuote=[theString rangeOfString:@"\"" options:NSLiteralSearch range:NSMakeRange(startPos2,restLength2)];
+    if(rangeQuote.length==0) return @"";
+    
+    int startPos3=rangeQuote.location+rangeQuote.length;
+    int restLength3=[theString length]-startPos3;
+    
+    NSRange rangeQuote2=[theString rangeOfString:@"\"" options:NSLiteralSearch range:NSMakeRange(startPos3,restLength3)];
+    if(rangeQuote2.length==0) return @"";
+    
+    NSString * ret=[theString substringWithRange:NSMakeRange(rangeQuote.location+1,rangeQuote2.location-rangeQuote.location-1)];
+    return ret;
+}
+-(NSMutableArray *)decodePolyLine: (NSMutableString *)encoded {
+    [encoded replaceOccurrencesOfString:@"\\\\" withString:@"\\"
+                                options:NSLiteralSearch
+                                  range:NSMakeRange(0, [encoded length])];
+    NSInteger len = [encoded length];
+    NSInteger index = 0;
+    NSMutableArray *array = [[NSMutableArray alloc] init];
+    NSInteger lat=0;
+    NSInteger lng=0;
+    while (index < len) {
+        NSInteger b;
+        NSInteger shift = 0;
+        NSInteger result = 0;
+        do {
+            b = [encoded characterAtIndex:index++] - 63;
+            result |= (b & 0x1f) << shift;
+            shift += 5;
+        } while (b >= 0x20);
+        NSInteger dlat = ((result & 1) ? ~(result >> 1) : (result >> 1));
+        lat += dlat;
+        shift = 0;
+        result = 0;
+        do {
+            b = [encoded characterAtIndex:index++] - 63;
+            result |= (b & 0x1f) << shift;
+            shift += 5;
+        } while (b >= 0x20);
+        NSInteger dlng = ((result & 1) ? ~(result >> 1) : (result >> 1));
+        lng += dlng;
+        NSNumber *latitude = [[NSNumber alloc] initWithFloat:lat * 1e-5];
+        NSNumber *longitude = [[NSNumber alloc] initWithFloat:lng * 1e-5];
+        CLLocation *loc = [[CLLocation alloc] initWithLatitude:[latitude floatValue] longitude:[longitude floatValue]];
+        [array addObject:loc];
+        //NSLog(@"%f,%f",[latitude floatValue],[longitude floatValue]);
+    }
+    return array;
+}
+#define MAPMODE [[DrawableMapScrollView sharedMap] getMode]
+#define RECORDER [Recorder sharedRecorder]
+-(void)addNavNode:(CGPoint)pt{
+    Node *node=[[Node alloc]initWithPoint:pt mapLevel:18];
+    RECORDER.track.nodes=[RECORDER addAnyModeAdjustedNode:RECORDER.track.nodes Node:node Mode:MAPMODE];
+    RECORDER.track.nodesDirtyFlag=true;
+}
+
+-(void)addDrawingNode:(CLLocation *)loc index:(int) index{
+    double Lat=loc.coordinate.latitude;
+    double Long=loc.coordinate.longitude;
+    
+    int resM=18;   //use max resolution for best accuracy  //v163
+    
+    int xM=pow(2,resM)*0.711111111*(Long+180);						 //256/360=0.7111111111
+    int yM=pow(2,resM)*1.422222222*(90-[self GetScreenY:Lat]);		 //256/180=1.4222222222
+    
+    CGPoint GPSPoint;
+    GPSPoint.x=xM;
+    GPSPoint.y=yM;
+    if (index == 0) {
+        [RECORDER start];    //creating a new track and added to trackArray
+    }
+    [self addNavNode:GPSPoint];
+}
+
+-(void) DrawNavigationFrom:(POI *) srcPOI to:(POI *) destPOI{
+    NSLog(@"Draw from %@ to %@",srcPOI.title,destPOI.title);
+    CGFloat srcLat=[self GetGPSLatCoor:srcPOI];
+    CGFloat srcLng=[self GetGPSLonCoor:srcPOI];
+    CGFloat dstLat=[self GetGPSLatCoor:destPOI];
+    CGFloat dstLng=[self GetGPSLonCoor:destPOI];
+    
+    NSString * URL=[[NSString alloc] initWithFormat:@"http://maps.googleapis.com/maps/api/directions/json?origin=%f,%f&destination=%f,%f&sensor=false",srcLat,srcLng,dstLat,dstLng];
+    NSLog(@"Routing URL=%@",URL);
+    NSURLRequest *theRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:URL]];
+    NSURLResponse *resp = nil;
+    NSError *err = nil;
+    NSData *response = [NSURLConnection sendSynchronousRequest: theRequest returningResponse: &resp error: &err];
+    NSString * theString = [[NSString alloc] initWithData:response encoding:NSUTF8StringEncoding];
+    NSLog(@"theString=%@",theString);
+    //check for return status
+    NSString * ret=[self getAJsonProperty:@"\"status\" :" from:theString];  //version 4.11
+    NSLog(@"Status=%@",ret);
+    if([ret compare:@"OK"]!=NSOrderedSame){
+        UIAlertView *alert=[[UIAlertView alloc] initWithTitle:ret message:@"Could not find a routing path" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];[alert show];
+        return;
+    }
+    //get copyright info
+    NSString * copyright=[self getAJsonProperty:@"\"copyrights\" :" from:theString];   //version 4.11
+    //[parent.copyRightLabel setText:copyright];        //TODO: Update copyRightLabel
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:copyright forKey:@"COPYRIGHT"];
+    
+    // get the navigation line string
+    NSString * pathPoints=[self getOverViewPolylinePoints:theString];
+    NSMutableString * ma= [NSMutableString stringWithCapacity:1];
+    [ma setString:pathPoints];
+    //bStartNode=TRUE;
+    //decode the line string
+    NSMutableArray * line=[self decodePolyLine:ma];
+    for (int i=0; i<[line count]; i++) {
+        CLLocation * loc=[line objectAtIndex:i];
+        [self addDrawingNode:loc index:i];
+    }
+    [RECORDER.track saveNodes];
+    [RECORDER saveAllTracks];
+    [[DrawableMapScrollView sharedMap] refresh];
+}
 
 - (void)tappedOnIndexPath:(int)row ID:(int)myid{
     NSLog(@"you clicked on row %d",row);
@@ -586,6 +791,24 @@ bool connectedToIphone;
             return;
         }
         tk=[Recorder sharedRecorder].poiArray[row];
+    }else if (myid==DRAWNAVLINE) {
+        if (NavStep == 0) {
+            srcPOI=[Recorder sharedRecorder].poiArray[row];
+            [menuPOIs setTitle:@"Please pick destination POI"];
+            NavStep++;
+        }else if (NavStep == 1){
+            dstPOI=[Recorder sharedRecorder].poiArray[row];
+            NavStep=0;
+            [self DrawNavigationFrom:srcPOI to:dstPOI];
+            //hide menu
+            PM2OnScreenButtons * OSB=[PM2OnScreenButtons sharedBnManager];
+            if([OSB.menuPopover isPopoverVisible]){
+                [OSB.menuPopover dismissPopoverAnimated:YES];
+            }
+            [self hideIPhoneMainMenu];
+        }
+        NSLog(@"Draw Nav Line");
+        return;
     }else if (myid==GOTOPOI) {
         [self hideIPhoneMainMenu];
         POI * poi=[Recorder sharedRecorder].poiArray[row];

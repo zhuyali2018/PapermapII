@@ -58,7 +58,10 @@ bool centerPos;
     }
     return self;
 }
-
+//////////////////////////
+// start drawing --------
+// track: current track
+//////////////////////////
 - (void)start{
     if (_recording) {
         return;

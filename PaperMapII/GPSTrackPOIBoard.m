@@ -83,6 +83,8 @@
 	}
 	CGContextStrokePath(context);
 }
+//
+#define POSERR [DrawableMapScrollView sharedMap]->posErr
 -(void)tapDrawTrack:(Track *)track context:(CGContextRef)context{
     if (track.folder) {  //very important, or it will crash for ever, deadloop
         return;
@@ -96,7 +98,7 @@
     CGContextSetStrokeColorWithColor(context, [UIColor colorWithRed:COLOR.red green:COLOR.green blue:COLOR.blue alpha:COLOR.alpha].CGColor);
 	CGContextSetLineWidth(context, COLOR.lineWidth);
 	CGContextSetLineCap(context, kCGLineCapRound);  //version 4.0
-	
+    
 	Node * startNode;
     int i=0;
     for (i=0;i<count;i++){
@@ -105,7 +107,7 @@
             break;
     }
     CGPoint pStart=[self ConvertPoint:startNode];
-	CGContextMoveToPoint(context, pStart.x, pStart.y);
+	CGContextMoveToPoint(context, pStart.x+POSERR.x, pStart.y+POSERR.y);
 	for (int j=i; j<count; j++) {
 		Node * tmpN=[track.nodes objectAtIndex:j];
         bool terNodeFound=false;
@@ -116,10 +118,10 @@
         }
         CGPoint tmpP=[self ConvertPoint:tmpN];
         if(terNodeFound){
-            CGContextMoveToPoint(context, tmpP.x, tmpP.y);
+            CGContextMoveToPoint(context, tmpP.x+POSERR.x, tmpP.y+POSERR.y);
             terNodeFound=false;
         }else
-            CGContextAddLineToPoint(context, tmpP.x, tmpP.y);
+            CGContextAddLineToPoint(context, tmpP.x+POSERR.x, tmpP.y+POSERR.y);
 	}
 	CGContextStrokePath(context);
 }
