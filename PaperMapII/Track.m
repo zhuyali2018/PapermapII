@@ -22,6 +22,7 @@
 @synthesize timestamp;
 //@synthesize visible;
 @synthesize nodesDirtyFlag;
+@synthesize CTResolution,CTMapErr;
 
 -(void)setTitle:(NSString *)title1{
     self.mainText=title1;
