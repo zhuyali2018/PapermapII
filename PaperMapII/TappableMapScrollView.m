@@ -164,6 +164,7 @@
     if (!self.bDrawing) {
         return;
     }
+    //drawing tap handler follows
     if (self.mapPined) {
         if(self.freeDraw){
             self.drawingBoard.firstPt=CGPointMake(0,0);

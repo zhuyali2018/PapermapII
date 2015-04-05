@@ -81,7 +81,7 @@ extern BOOL bDrawBigLabel;
                     [[MenuItem alloc]initWithTitle:@"Reset Map Error"],
                     [[MenuItem alloc]initWithTitle:@"Help"],
                     [[MenuItem alloc]initWithTitle:@"Send Email to Developer"],
-                    [[MenuItem alloc]initWithTitle:@"About Paper Map II (2015.3.28.I)"], nil];
+                    [[MenuItem alloc]initWithTitle:@"About Paper Map II (2015.4.4.I)"], nil];
         
         menuMatrix=[[NSArray alloc]initWithObjects:drawingMenu,gpsMenu,poiMenu,helpMenu,nil];
         fileListView=[[ListViewController alloc]initWithStyle:UITableViewStylePlain];
@@ -765,6 +765,7 @@ bool connectedToIphone;
         CLLocation * loc=[line objectAtIndex:i];
         [self addDrawingNode:loc index:i];
     }
+    RECORDER.track.nodesDirtyFlag=true;
     [RECORDER.track saveNodes];
     [RECORDER saveAllTracks];
     [[DrawableMapScrollView sharedMap] refresh];

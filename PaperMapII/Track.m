@@ -22,7 +22,7 @@
 @synthesize timestamp;
 //@synthesize visible;
 @synthesize nodesDirtyFlag;
-@synthesize CTResolution,CTMapErr;
+@synthesize CTResolution,CTMapErr,CTMapType;
 
 -(void)setTitle:(NSString *)title1{
     self.mainText=title1;
@@ -65,13 +65,14 @@
     filename = [[outputFormatter stringFromDate:now] stringByAppendingString:@".trk"];
     nodesDirtyFlag=false;
     //newly added for track going with errored map:
-    if ([[MapSources sharedManager] getMapSourceType] == googleMap){
+    //if ([[MapSources sharedManager] getMapSourceType] == googleMap){
         CTResolution = [DrawableMapScrollView sharedMap]->mapErrResolution;
         CTMapErr =[DrawableMapScrollView sharedMap]->mapMapErr;
-    }else{
-        CTResolution = [DrawableMapScrollView sharedMap]->satErrResolution;
-        CTMapErr =[DrawableMapScrollView sharedMap]->satMapErr;
-    }
+    //}else{
+    //    CTResolution = [DrawableMapScrollView sharedMap]->satErrResolution;
+    //    CTMapErr =[DrawableMapScrollView sharedMap]->satMapErr;
+    //}
+    CTMapType=[[MapSources sharedManager] getMapSourceType];
 }
 #pragma mark ----------------
 -(id)initWithCoder:(NSCoder *)coder{
@@ -79,6 +80,7 @@
         self.dataSource=self;
         self.CTMapErr       =[coder decodeCGPointForKey:@"CTMAPERR"];
         self.CTResolution   =[coder decodeIntForKey:@"CTRESOLUTION"];
+        self.CTMapType      =[coder decodeBoolForKey:@"CTMAPTYPE"];
         self.lineProperty   =[coder decodeObjectForKey:@"LINEPROPERTY"];
         self.filename       =[coder decodeObjectForKey:@"FILENAME"];
         self.title          =[coder decodeObjectForKey:@"TITLE"];
@@ -125,6 +127,7 @@
 	[coder encodeObject:self.lineProperty   forKey:@"LINEPROPERTY"];
     [coder encodeInt:self.CTResolution      forKey:@"CTRESOLUTION"];
     [coder encodeCGPoint:self.CTMapErr      forKey:@"CTMAPERR"];
+    [coder encodeBool:self.CTMapType        forKey:@"CTMAPTYPE"];
     [coder encodeBool:self.visible          forKey:@"VISIBLE"];
     [coder encodeObject:self.filename       forKey:@"FILENAME"];
     [coder encodeObject:self.title          forKey:@"TITLE"];
@@ -135,6 +138,7 @@
 	tkCopy.lineProperty  =[self.lineProperty copyWithZone:zone];
     tkCopy.CTMapErr = CGPointMake(self.CTMapErr.x,self.CTMapErr.y);
     tkCopy.CTResolution =self.CTResolution;
+    tkCopy.CTMapType=self.CTMapType;
     tkCopy.nodes=[[NSArray alloc]initWithArray:self.nodes];
     tkCopy.version=self.version;
     tkCopy.visible=self.visible;

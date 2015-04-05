@@ -62,30 +62,31 @@
 	return p2;
 }
 #define COLOR track.lineProperty
--(void)drawTrack:(Track *)track context:(CGContextRef)context{
-    if(!track) return;
-    if(nil==track.nodes)
-        return;
-    int count=(int)[track.nodes count];
-    if(count<2) return;
-    
-    CGContextSetStrokeColorWithColor(context, [UIColor colorWithRed:COLOR.red green:COLOR.green blue:COLOR.blue alpha:COLOR.alpha].CGColor);
-	CGContextSetLineWidth(context, COLOR.lineWidth);
-	CGContextSetLineCap(context, kCGLineCapRound);  //version 4.0
-	
-	Node * startNode=[track.nodes objectAtIndex:0];
-    CGPoint pStart=[self ConvertPoint:startNode];
-	CGContextMoveToPoint(context, pStart.x, pStart.y);
-	for (int i=1; i<count; i++) {
-		Node * tmpN=[track.nodes objectAtIndex:i];
-        CGPoint tmpP=[self ConvertPoint:tmpN];
-		CGContextAddLineToPoint(context, tmpP.x, tmpP.y);
-	}
-	CGContextStrokePath(context);
-}
+//-(void)drawTrack:(Track *)track context:(CGContextRef)context{
+//    if(!track) return;
+//    if(nil==track.nodes)
+//        return;
+//    int count=(int)[track.nodes count];
+//    if(count<2) return;
+//    
+//    CGContextSetStrokeColorWithColor(context, [UIColor colorWithRed:COLOR.red green:COLOR.green blue:COLOR.blue alpha:COLOR.alpha].CGColor);
+//	CGContextSetLineWidth(context, COLOR.lineWidth);
+//	CGContextSetLineCap(context, kCGLineCapRound);  //version 4.0
+//	
+//	Node * startNode=[track.nodes objectAtIndex:0];
+//    CGPoint pStart=[self ConvertPoint:startNode];
+//	CGContextMoveToPoint(context, pStart.x, pStart.y);
+//	for (int i=1; i<count; i++) {
+//		Node * tmpN=[track.nodes objectAtIndex:i];
+//        CGPoint tmpP=[self ConvertPoint:tmpN];
+//		CGContextAddLineToPoint(context, tmpP.x, tmpP.y);
+//	}
+//	CGContextStrokePath(context);
+//}
 // Drawing the track here
-#define POSERR [DrawableMapScrollView sharedMap]->posErr
+//#define POSERR [DrawableMapScrollView sharedMap]->posErr
 #define CTERR track->CTMapErr
+#define SCRMAP [DrawableMapScrollView sharedMap]
 -(void)tapDrawTrack:(Track *)track context:(CGContextRef)context{
     if (track.folder) {  //very important, or it will crash for ever, deadloop
         return;
@@ -101,7 +102,14 @@
 	CGContextSetLineCap(context, kCGLineCapRound);  //version 4.0
     
     //Update the CTERR here before drawing // Since it is updated here, it does not need to update in scrollViewDidEndZooming of the MapScrollView
+    
+    CGPoint curPosErr=CGPointZero;     //Creating Time maptype's current Position Error
     CTERR = [[DrawableMapScrollView sharedMap] adJustErrForResolution:CTERR res:track->CTResolution];
+    //if (track->CTMapType == googleMap) {
+        curPosErr=[SCRMAP adJustErrForResolution:SCRMAP->mapMapErr res:SCRMAP->mapErrResolution];
+    //}else{
+    //    curPosErr=[SCRMAP adJustErrForResolution:SCRMAP->satMapErr res:SCRMAP->satErrResolution];
+    //}
     
 	Node * startNode;
     int i=0;
@@ -111,7 +119,7 @@
             break;
     }
     CGPoint pStart=[self ConvertPoint:startNode];
-	CGContextMoveToPoint(context, pStart.x+POSERR.x-CTERR.x, pStart.y+POSERR.y-CTERR.y);
+	CGContextMoveToPoint(context, pStart.x+curPosErr.x-CTERR.x, pStart.y+curPosErr.y-CTERR.y);
 	for (int j=i; j<count; j++) {
 		Node * tmpN=[track.nodes objectAtIndex:j];
         bool terNodeFound=false;
@@ -122,10 +130,10 @@
         }
         CGPoint tmpP=[self ConvertPoint:tmpN];
         if(terNodeFound){
-            CGContextMoveToPoint(context, tmpP.x+POSERR.x-CTERR.x, tmpP.y+POSERR.y-CTERR.y);
+            CGContextMoveToPoint(context, tmpP.x+curPosErr.x-CTERR.x, tmpP.y+curPosErr.y-CTERR.y);
             terNodeFound=false;
         }else
-            CGContextAddLineToPoint(context, tmpP.x+POSERR.x-CTERR.x, tmpP.y+POSERR.y-CTERR.y);
+            CGContextAddLineToPoint(context, tmpP.x+curPosErr.x-CTERR.x, tmpP.y+curPosErr.y-CTERR.y);
 	}
 	CGContextStrokePath(context);
 }

@@ -622,6 +622,7 @@ long firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleC
     posErrResolution = maplevel;        //need to keep track of the new posErr and posErrorResolution pair updated at the same time    
     
     [self reloadData:zoomFactor];
+    [self.gpsTrackPOIBoard setNeedsDisplay];    //force Drawing on ddrawing board
     //[NSTimer scheduledTimerWithTimeInterval:0.2 target:self selector:@selector(restoreOffset) userInfo:nil repeats: NO];//TODO: Restore this line
     //[self setNeedsDisplay];
 }

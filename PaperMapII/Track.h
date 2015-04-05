@@ -17,8 +17,9 @@
     bool visible;
     //bool nodesDirtyFlag;        //tracking the nodes change
 @public
-    CGPoint	CTMapErr;             //Creating Time's map type's Map Error
+    CGPoint	CTMapErr;               //Creating Time's map type's Map Error
     int     CTResolution;           //Creating Time's map type's Map Resolution
+    bool    CTMapType;              //Creating Time's map type
 }
 @property (nonatomic,strong) NSArray * nodes;
 @property (nonatomic,strong) LineProperty * lineProperty;
@@ -29,7 +30,7 @@
 @property bool nodesDirtyFlag;
 @property CGPoint CTMapErr;
 @property int CTResolution;
-
+@property bool CTMapType;
 
 -(bool)saveNodes;
 -(bool)readNodes;

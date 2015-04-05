@@ -83,7 +83,7 @@
 	return nodeCopy;
 }
 -(void)onCheckBox{      //execute when the menu item is tapped
-    NSLog(@"Center map on my first node position");
+    NSLog(@"Center map on my POI node position");
 //    if (!self.folder) {   //folder may not contain such POI properties as nodes array
 //        [[DrawableMapScrollView sharedMap] centerMapToPOI:self];
 //    }

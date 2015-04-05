@@ -362,6 +362,7 @@
         [mapScrollView refresh];
         //reset the free draw button too
         self.mapScrollView.freeDraw=false;
+        self.mapScrollView.bDrawing=false;      //need to quit drawing mode
         [self.mapScrollView setFreeDraw:TRUE]; //dv.preDraw=TRUE;
         fdrawButton.withGroup=YES;
         undoButton.withGroup=YES;
