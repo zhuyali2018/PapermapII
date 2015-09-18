@@ -19,11 +19,13 @@ typedef enum  {SHOW_SCALE_RULLER,
     HIDE_SPEED_METER,
     HIDE_ALT_METER,
     HIDE_TRIP_METER,
-    HIDE_TRIP_TIMER} Setting;
+    HIDE_TRIP_TIMER,
+    SHOW_MAP_CHINESE} Setting;
 
 @interface Settings : NSObject<CheckBoxHandler>
 @property(nonatomic,strong)NSMutableArray * settingArray;
 + (Settings *)sharedSettings;
 -(bool)getSetting:(int)index;
 -(void)setSetting:(int)index to:(bool)show;
+-(void)saveMapLaugnage:(bool)chineseMap;
 @end

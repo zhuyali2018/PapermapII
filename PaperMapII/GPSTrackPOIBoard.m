@@ -119,7 +119,8 @@
             break;
     }
     CGPoint pStart=[self ConvertPoint:startNode];
-	CGContextMoveToPoint(context, pStart.x+curPosErr.x-CTERR.x, pStart.y+curPosErr.y-CTERR.y);
+	//CGContextMoveToPoint(context, pStart.x+curPosErr.x-CTERR.x, pStart.y+curPosErr.y-CTERR.y);
+    CGContextMoveToPoint(context, pStart.x, pStart.y);
 	for (int j=i; j<count; j++) {
 		Node * tmpN=[track.nodes objectAtIndex:j];
         bool terNodeFound=false;
@@ -130,10 +131,12 @@
         }
         CGPoint tmpP=[self ConvertPoint:tmpN];
         if(terNodeFound){
-            CGContextMoveToPoint(context, tmpP.x+curPosErr.x-CTERR.x, tmpP.y+curPosErr.y-CTERR.y);
+            //CGContextMoveToPoint(context, tmpP.x+curPosErr.x-CTERR.x, tmpP.y+curPosErr.y-CTERR.y);
+            CGContextMoveToPoint(context, tmpP.x, tmpP.y);
             terNodeFound=false;
         }else
-            CGContextAddLineToPoint(context, tmpP.x+curPosErr.x-CTERR.x, tmpP.y+curPosErr.y-CTERR.y);
+            CGContextAddLineToPoint(context, tmpP.x, tmpP.y);
+            //CGContextAddLineToPoint(context, tmpP.x+curPosErr.x-CTERR.x, tmpP.y+curPosErr.y-CTERR.y);
 	}
 	CGContextStrokePath(context);
 }

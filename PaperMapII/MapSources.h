@@ -16,7 +16,7 @@
 @property MapType mapType;
 @property UInt32 lockCount;
 @property(nonatomic, strong)NSLock *myLock;
-
+@property bool mapInChinese;
 
 //+ (id)sharedManager;
 + (MapSources *)sharedManager;

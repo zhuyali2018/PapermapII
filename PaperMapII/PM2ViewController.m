@@ -45,6 +45,10 @@
     [mapScrollView setFrame:CGRectMake(bazel,bazel,height,width)];  //TODO: change height and width back
     //create a mapsource object
     mapSources=[MapSources sharedManager]; //[[MapSources alloc]init];
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    mapSources.mapInChinese=[defaults boolForKey:@"ChineseMap"];
+    
     [[MainQ sharedManager] register:mapSources withID:MAPSOURCE];
     [mapSources setMapSourceType:googleMap];
     //specifying mapsource

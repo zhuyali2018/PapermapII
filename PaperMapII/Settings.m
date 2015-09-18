@@ -13,6 +13,7 @@
 #import "PM2AppDelegate.h"
 #import "ScaleRuler.h"
 #import "MapCenterIndicator.h"
+#import "MapSources.h"
 
 @implementation Settings
 @synthesize settingArray;
@@ -40,6 +41,7 @@
                             [[SettingItem alloc]initWithTitle:@"Show Altitude Meter"    with:HIDE_ALT_METER     andCheckBoxHandler:self],
                             [[SettingItem alloc]initWithTitle:@"Show Trip Meter"        with:HIDE_TRIP_METER    andCheckBoxHandler:self],
                             [[SettingItem alloc]initWithTitle:@"Show Trip Timer"        with:HIDE_TRIP_TIMER    andCheckBoxHandler:self],
+                            [[SettingItem alloc]initWithTitle:@"Map In Chinese"         with:SHOW_MAP_CHINESE   andCheckBoxHandler:self],
                             nil];
         settingArray=[[NSMutableArray alloc]initWithCapacity:11];
         [settingArray addObjectsFromArray:settingArray1];
@@ -51,6 +53,10 @@
 }
 -(void)setSetting:(int)index to:(bool)show{
     ((SettingItem *)settingArray[index]).selected=show;
+}
+-(void)saveMapLaugnage:(bool)chineseMap{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setBool:chineseMap forKey:@"ChineseMap"];
 }
 extern float zmc;
 extern bool directionUp;
@@ -114,6 +120,15 @@ extern bool directionUp;
         case HIDE_TRIP_TIMER:
             lb=(UILabel *)((PM2OnScreenButtons *)[PM2OnScreenButtons sharedBnManager]).timerLabel;
             lb.hidden=!gotSelected;
+            break;
+        case SHOW_MAP_CHINESE:
+            if (gotSelected) {
+                [MapSources sharedManager].mapInChinese = true;
+                
+            }else{
+                [MapSources sharedManager].mapInChinese = false;
+            }
+            [self saveMapLaugnage:gotSelected];
             break;
         default:
             break;

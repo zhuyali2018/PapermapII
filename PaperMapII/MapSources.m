@@ -15,6 +15,7 @@
 @synthesize lockCount;
 @synthesize myLock;
 @synthesize mapType;
+@synthesize mapInChinese;
 
 + (MapSources *)sharedManager {
     static MapSources *sharedMyManager = nil;
@@ -231,8 +232,10 @@ extern NSString * satVersion;  //version 5.0
     int y=tile1.row;
     int r=tile1.res;
     int c=tile1.modeCol;
-    NSString * country=@"en";
-    
+    NSString * country=@"en";       //<===============
+    if (mapInChinese) {
+        country=@"zh-CN";
+    }
     NSString * mapUrlFomat;
     static int svr=0;	svr++;	if (svr>2) svr=0;
     NSString * imageUrl;
