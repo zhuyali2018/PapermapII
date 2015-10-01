@@ -19,7 +19,7 @@ typedef enum  {GPSLIST=1,DRAWLIST,POILIST,GOTOPOI,SETTING,SENDGPSTRACK,SENDDRAWI
 const static bool showLog=false;
 #define NSLOG(fmt, ...) if(showLog) NSLog((@"%s " fmt), __PRETTY_FUNCTION__,##__VA_ARGS__)
 
-const static bool showLog1=true;   //redrawn
+const static bool showLog1=false;   //redrawn
 #define NSLOG1(fmt, ...) if(showLog1) NSLog((@"%s " fmt), __PRETTY_FUNCTION__,##__VA_ARGS__)
 
 const static bool showLog2=false;   //touch handler log
@@ -46,7 +46,7 @@ const static bool showLog8=false;   //Tile Debug
 const static bool showLog9=false;   //Tile Debug
 #define NSLOG9(fmt, ...) if(showLog9) NSLog((@"%s " fmt), __PRETTY_FUNCTION__,##__VA_ARGS__)
 
-const static bool showLog10=true;   //Tile Debug
+const static bool showLog10=false;   //Tile Debug
 #define NSLOG10(fmt, ...) if(showLog10) NSLog((@"%s " fmt), __PRETTY_FUNCTION__,##__VA_ARGS__)
 
 #endif

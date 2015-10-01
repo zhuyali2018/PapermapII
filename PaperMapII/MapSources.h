@@ -17,6 +17,7 @@
 @property UInt32 lockCount;
 @property(nonatomic, strong)NSLock *myLock;
 @property bool mapInChinese;
+@property bool useMSNMap;
 
 //+ (id)sharedManager;
 + (MapSources *)sharedManager;

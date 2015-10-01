@@ -49,6 +49,10 @@
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     mapSources.mapInChinese=[defaults boolForKey:@"ChineseMap"];
     
+    //NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    mapSources.useMSNMap=[defaults boolForKey:@"useMSNMap"];
+    
+    
     [[MainQ sharedManager] register:mapSources withID:MAPSOURCE];
     [mapSources setMapSourceType:googleMap];
     //specifying mapsource
@@ -114,7 +118,7 @@ NSString * satVersion;
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	satVersion=[defaults stringForKey:@"SatMapVersion"];   //version 5.0
 	if ((satVersion==nil)||([satVersion compare:@""]==NSOrderedSame)) {
-		satVersion=@"138";
+		satVersion=@"185";
         [defaults setBool:TRUE forKey:@"AutoSat"];
 	}
     bool autosat=[defaults boolForKey:@"AutoSat"];

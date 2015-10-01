@@ -114,8 +114,12 @@ long firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleC
             col=col-half;
         }else {
             col+=half;
-        }        
+        }
+        NSLOG(@"Mode is Eastern:Converted to col=%d, width=%.f",col,pow(2,maplevel1));
+    }else{
+        NSLOG(@"Mode is Western=%d, width=%.f",col,pow(2,maplevel1));
     }
+
     tile1.modeCol=col;
      NSLOG(@"=============>Get Map tile %d, %d on level %d",tile1.row,tile1.col,tile1.res);
     //--------------------call mapsource delegate---------

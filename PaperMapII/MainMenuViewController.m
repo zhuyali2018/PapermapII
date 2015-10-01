@@ -81,7 +81,7 @@ extern BOOL bDrawBigLabel;
                     [[MenuItem alloc]initWithTitle:@"Reset Map Error"],
                     [[MenuItem alloc]initWithTitle:@"Help"],
                     [[MenuItem alloc]initWithTitle:@"Send Email to Developer"],
-                    [[MenuItem alloc]initWithTitle:@"About Paper Map II (2015.9.18.I)"], nil];
+                    [[MenuItem alloc]initWithTitle:@"About Paper Map II (2015.9.30.I)"], nil];
         
         menuMatrix=[[NSArray alloc]initWithObjects:drawingMenu,gpsMenu,poiMenu,helpMenu,nil];
         fileListView=[[ListViewController alloc]initWithStyle:UITableViewStylePlain];

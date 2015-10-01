@@ -15,7 +15,7 @@
 @synthesize lockCount;
 @synthesize myLock;
 @synthesize mapType;
-@synthesize mapInChinese;
+@synthesize mapInChinese,useMSNMap;
 
 + (MapSources *)sharedManager {
     static MapSources *sharedMyManager = nil;
@@ -189,10 +189,18 @@
     }
     
     NSString *  rootDir;
-    if(mapType==googleSat)
-        rootDir=@"Sat";
-    else if(mapType==googleMap)
-        rootDir=@"Map";
+    if (useMSNMap) {
+        if(mapType==googleSat)
+            rootDir=@"MSNSat";
+        else if(mapType==googleMap)
+            rootDir=@"MSNMap";
+    }else{
+        if(mapType==googleSat)
+            rootDir=@"Sat";
+        else if(mapType==googleMap)
+            rootDir=@"Map";
+    }
+    
     NSString * imgFn=[[NSString alloc] initWithFormat:@"%@%d_%d_%d.jpg",rootDir,tile1.res,tile1.row,tile1.modeCol];
     NSString * dirName=[self getPathName:tile1.res row:tile1.row col:tile1.modeCol];
     NSString * absPath=[self dataFilePath:dirName];
@@ -219,10 +227,62 @@
         //Get maptile from internet -------
         //load the map tile in another thread to increase performance
         [self performSelectorInBackground:@selector(loadImageInBackground:) withObject:tile1];
-        //[self loadImageInBackground:tile1];
+        //[self loadImageInBackground:tile1];    //NoThread for debugging
     }else
         [tile1 setImage:NULL];
     return;
+}
+-(int)GetQFromX:(int)x Y:(int)y R:(int)r{
+    double base=2;
+    int w=pow(base,r);
+    //boundary check
+    if(x>w||x<0||y>w||y<0)
+        return -1;
+    //figure out which quadrant
+    int q=0;
+    if(x<w/2){
+        if(y<w/2){
+            q=0;
+        }else{
+            q=2;
+        }
+    }else{
+        if(y<w/2){
+            q=1;
+        }else{
+            q=3;
+        }
+    }
+    return q;
+}
+-(NSString *)GetTileNumberStringFromX:(int)x Y:(int)y R:(int)r{
+    char * out=(char*)malloc(r + 1);
+    char * p=out;
+    for (int i=r; i>0; i--) {
+        int q=[self GetQFromX:x Y:y R:i];
+        *p=q+0x30; p++;
+        int nw=pow(2.0, i);
+        switch (q) {
+            case 0:
+                break;
+            case 1:
+                x=x-nw/2;
+                break;
+            case 2:
+                y=y-nw/2;
+                break;
+            case 3:
+                x=x-nw/2;
+                y=y-nw/2;
+                break;
+            default:
+                break;
+        }
+    }
+    *p=0;
+    NSString * numString=[NSString stringWithUTF8String:out];
+    free(out);
+    return numString;
 }
 extern NSString * satVersion;  //version 5.0
 -(void)loadImageInBackground:(MapTile *)tile1{
@@ -232,21 +292,35 @@ extern NSString * satVersion;  //version 5.0
     int y=tile1.row;
     int r=tile1.res;
     int c=tile1.modeCol;
+    NSString * imageUrl;
+    
     NSString * country=@"en";       //<===============
     if (mapInChinese) {
         country=@"zh-CN";
     }
-    NSString * mapUrlFomat;
-    static int svr=0;	svr++;	if (svr>2) svr=0;
-    NSString * imageUrl;
-    if(mapType==googleSat){
-        //mapUrlFomat=[[NSString alloc]initWithString:@"http://khm%d.google.com/kh/v=76&x=%d&y=%d&z=%d"];
-        mapUrlFomat=@"http://khm%d.google.com/kh/v=%d&x=%d&y=%d&z=%d";    //version 4.0 4-29-2011
-        //mapUrlFomat=@"https://khms%d.google.com/kh/v=%d&x=%d&y=%d&z=%d";    //version 4.0 11-25-2013
-        imageUrl=[[NSString alloc]initWithFormat:mapUrlFomat, svr,iSatVersion,tile1.modeCol, tile1.row, tile1.res];	   //version 5.0
-    }else if(mapType==googleMap){
-            mapUrlFomat=@"http://mt%d.google.com/vt/v=w2.101&hl=%@&x=%d&y=%d&z=%d";
-            imageUrl=[[NSString alloc]initWithFormat:mapUrlFomat, svr,country,tile1.modeCol, tile1.row, tile1.res];
+    if (useMSNMap) {                //<===============  Use MSN map or Google Map
+        NSString * mapUrlFomat;
+        static int svr=0;	svr++;	if (svr>7) svr=0;
+        NSString * mapTileNumStr = [self GetTileNumberStringFromX:c Y:y R:r];
+        if(mapType==googleSat){
+            mapUrlFomat=@"http://ecn.t%d.tiles.virtualearth.net/tiles/a%@.png?g=854";
+            imageUrl=[[NSString alloc]initWithFormat:mapUrlFomat, svr,mapTileNumStr];
+        }else if(mapType==googleMap){
+            mapUrlFomat=@"http://ecn.t%d.tiles.virtualearth.net/tiles/r%@.png?g=854&mkt=%@";
+            imageUrl=[[NSString alloc]initWithFormat:mapUrlFomat, svr,mapTileNumStr,country];
+        }
+    }else{
+        NSString * mapUrlFomat;
+        static int svr=0;	svr++;	if (svr>2) svr=0;
+        if(mapType==googleSat){
+            //mapUrlFomat=[[NSString alloc]initWithString:@"http://khm%d.google.com/kh/v=76&x=%d&y=%d&z=%d"];
+            mapUrlFomat=@"http://khm%d.google.com/kh/v=%d&x=%d&y=%d&z=%d";    //version 4.0 4-29-2011
+            //mapUrlFomat=@"https://khms%d.google.com/kh/v=%d&x=%d&y=%d&z=%d";    //version 4.0 11-25-2013
+            imageUrl=[[NSString alloc]initWithFormat:mapUrlFomat, svr,iSatVersion,tile1.modeCol, tile1.row, tile1.res];	   //version 5.0
+        }else if(mapType==googleMap){
+                mapUrlFomat=@"http://mt%d.google.com/vt/v=w2.101&hl=%@&x=%d&y=%d&z=%d";
+                imageUrl=[[NSString alloc]initWithFormat:mapUrlFomat, svr,country,tile1.modeCol, tile1.row, tile1.res];
+        }
     }
     NSData * imageData;
     if (tile1.row==-1) {  //no need to do it to save time
@@ -262,11 +336,17 @@ extern NSString * satVersion;  //version 5.0
     if (imageData) {
         
         NSString *  rootDir;
-        if(mapType==googleSat)
-            rootDir=@"Sat";
-        else if(mapType==googleMap)
-            rootDir=@"Map";
-        
+        if (useMSNMap) {
+            if(mapType==googleSat)
+                rootDir=@"MSNSat";
+            else if(mapType==googleMap)
+                rootDir=@"MSNMap";
+        }else{
+            if(mapType==googleSat)
+                rootDir=@"Sat";
+            else if(mapType==googleMap)
+                rootDir=@"Map";
+        }
         //NSString * imgFn=[[NSString alloc] initWithFormat:@"%@%d_%d_%d.jpg",rootDir,tile1.res,tile1.row,tile1.modeCol];
         NSString * imgFn=[[NSString alloc] initWithFormat:@"%@%d_%d_%d.jpg",rootDir,r,y,c];
         //NSString * dirName=[self getPathName:tile1.res row:tile1.row col:tile1.modeCol];

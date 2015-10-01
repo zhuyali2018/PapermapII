@@ -42,6 +42,7 @@
                             [[SettingItem alloc]initWithTitle:@"Show Trip Meter"        with:HIDE_TRIP_METER    andCheckBoxHandler:self],
                             [[SettingItem alloc]initWithTitle:@"Show Trip Timer"        with:HIDE_TRIP_TIMER    andCheckBoxHandler:self],
                             [[SettingItem alloc]initWithTitle:@"Map In Chinese"         with:SHOW_MAP_CHINESE   andCheckBoxHandler:self],
+                            [[SettingItem alloc]initWithTitle:@"Use MSN Map"            with:USE_MSN_MAP        andCheckBoxHandler:self],
                             nil];
         settingArray=[[NSMutableArray alloc]initWithCapacity:11];
         [settingArray addObjectsFromArray:settingArray1];
@@ -57,6 +58,10 @@
 -(void)saveMapLaugnage:(bool)chineseMap{
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setBool:chineseMap forKey:@"ChineseMap"];
+}
+-(void)saveMapTypeMSN:(bool)useMSNMap{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setBool:useMSNMap forKey:@"useMSNMap"];
 }
 extern float zmc;
 extern bool directionUp;
@@ -130,6 +135,16 @@ extern bool directionUp;
             }
             [self saveMapLaugnage:gotSelected];
             break;
+        case USE_MSN_MAP:
+            if (gotSelected) {
+                [MapSources sharedManager].useMSNMap = true;
+                
+            }else{
+                [MapSources sharedManager].useMSNMap = false;
+            }
+            [self saveMapTypeMSN:gotSelected];
+            break;
+    
         default:
             break;
     }
