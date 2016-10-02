@@ -27,8 +27,14 @@
     if (self) {
         locationManager=[[CLLocationManager alloc]init];
         locationManager.delegate=[Recorder sharedRecorder];
-        locationManager.desiredAccuracy=kCLLocationAccuracyBest;
+        locationManager.desiredAccuracy=kCLLocationAccuracyBestForNavigation;
         locationManager.distanceFilter=kCLDistanceFilterNone;
+        // This setup pauses location manager if location wasn't changed
+        [self.locationManager setPausesLocationUpdatesAutomatically:YES];
+        // For iOS9 we have to call this method if we want to receive location updates in background mode
+        if([self.locationManager respondsToSelector:@selector(allowsBackgroundLocationUpdates)]){
+            [self.locationManager setAllowsBackgroundLocationUpdates:YES];
+        }
         GPSRunning=FALSE;
     }
     return self;

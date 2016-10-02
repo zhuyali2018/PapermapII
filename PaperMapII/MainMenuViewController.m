@@ -81,7 +81,7 @@ extern BOOL bDrawBigLabel;
                     [[MenuItem alloc]initWithTitle:@"Reset Map Error"],
                     [[MenuItem alloc]initWithTitle:@"Help"],
                     [[MenuItem alloc]initWithTitle:@"Send Email to Developer"],
-                    [[MenuItem alloc]initWithTitle:@"About Paper Map II (2015.9.30.I)"], nil];
+                    [[MenuItem alloc]initWithTitle:@"About Paper Map II (2016.10.2.II)"], nil];
         
         menuMatrix=[[NSArray alloc]initWithObjects:drawingMenu,gpsMenu,poiMenu,helpMenu,nil];
         fileListView=[[ListViewController alloc]initWithStyle:UITableViewStylePlain];
@@ -167,8 +167,8 @@ typedef enum{SAVEDRAWINGDLG=1000,SAVEGPSTRACKSDLG,SAVEPOISDLG, UNLOADDRAWCONFIRM
     ((MenuItem *)menuMatrix[HELP_SECTION][SETTINGS]).menuItemHandler=@selector(Settings:);
     ((MenuItem *)menuMatrix[HELP_SECTION][ADJMAPERR]).menuItemHandler=@selector(AdjustMapError:);
     ((MenuItem *)menuMatrix[HELP_SECTION][RSTMAPERR]).menuItemHandler=@selector(ResetMapError:);
-    ((MenuItem *)menuMatrix[HELP_SECTION][HELP]).menuItemHandler=@selector(SendEmailToDeveloper:);
-    ((MenuItem *)menuMatrix[HELP_SECTION][SENDEMAIL]).menuItemHandler=@selector(SendEmailToDeveloper);
+    ((MenuItem *)menuMatrix[HELP_SECTION][HELP]).menuItemHandler=@selector(SendEmailToDeveloper);
+    ((MenuItem *)menuMatrix[HELP_SECTION][SENDEMAIL]).menuItemHandler=@selector(SendEmailToDeveloper);  //forgot the colon at the end only if the function has argument!
 
 }
 POI * srcPOI;

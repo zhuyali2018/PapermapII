@@ -72,11 +72,15 @@ NSString * satVersion;
 -(void)URLLoadingInThread{
     NSString * iphoneName=[[UIDevice currentDevice] name];
     NSString * iPhoneName=[iphoneName stringByReplacingOccurrencesOfString:@" " withString:@"-"];
-    NSString * iphoneID=[[UIDevice currentDevice] systemVersion];//uniqueIdentifier];
+    NSString * iOSVersion=[[UIDevice currentDevice] systemVersion];//uniqueIdentifier];
+    NSString * iphoneID=[[[UIDevice currentDevice] identifierForVendor] UUIDString];
     NSString * iphonemodel=[[UIDevice currentDevice] model];
-    NSString * iphoneModel=[iphonemodel stringByReplacingOccurrencesOfString:@" " withString:@"-"];
-    NSString * URLWithIphoneName=[[NSString alloc] initWithFormat:@"http://68.204.125.18:900/PaperMapSatVersion/verPaperMapiPad.asp?iphonename=%@&iphonemodel=%@&iphoneid=%@",iPhoneName,iphoneModel,iphoneID];
-    NSData * versionData=[NSData dataWithContentsOfURL:[NSURL URLWithString:URLWithIphoneName]];
+    NSString * iphonemodeliOS=[iphonemodel stringByAppendingFormat:@"-%@",iOSVersion];
+    NSString * iphoneModeliOS=[iphonemodeliOS stringByReplacingOccurrencesOfString:@" " withString:@"-"];
+    NSString * URLWithIphoneName=[[NSString alloc] initWithFormat:@"http://68.204.125.18:900/PaperMapSatVersion/verPaperMapiPad.asp?iphonename=%@&iphonemodel=%@&iphoneid=%@",iPhoneName,iphoneModeliOS,iphoneID];
+    NSError *error=nil; //[[NSError alloc] init];
+    NSData * versionData=[NSData dataWithContentsOfURL:[NSURL URLWithString:URLWithIphoneName] options:NSDataReadingUncached error:&error];
+    
     NSInteger       dataLength;
     const uint8_t * dataBytes;
     
