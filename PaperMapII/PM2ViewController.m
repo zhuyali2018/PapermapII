@@ -93,8 +93,16 @@ NSString * satVersion;
             msg=[msg substringFromIndex:8];
             NSLog(@"Sat Version = %@",msg);
             satVersion = msg;
+            int iNetSetSatv=[satVersion intValue];
+            
             NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-            [defaults setObject:satVersion forKey:@"SatMapVersion"];
+            NSString * storedSatVersion=[defaults stringForKey:@"SatMapVersion"];   //version 5.0
+            int iStoredSatVersion=[storedSatVersion intValue];
+            if(iNetSetSatv > iStoredSatVersion ){
+                [defaults setObject:satVersion forKey:@"SatMapVersion"];
+            }else{
+                satVersion=storedSatVersion;   //if stored version is greater, use it (this is possible when auto detect newest version is implemented)
+            }
         }
     }
 }

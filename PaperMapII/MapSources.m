@@ -293,6 +293,7 @@ extern NSString * satVersion;  //version 5.0
     int r=tile1.res;
     int c=tile1.modeCol;
     NSString * imageUrl;
+    NSString * satImageUrl;
     
     NSString * country=@"en";       //<===============
     if (mapInChinese) {
@@ -313,23 +314,45 @@ extern NSString * satVersion;  //version 5.0
         NSString * mapUrlFomat;
         static int svr=0;	svr++;	if (svr>2) svr=0;
         if(mapType==googleSat){
-            //mapUrlFomat=[[NSString alloc]initWithString:@"http://khm%d.google.com/kh/v=76&x=%d&y=%d&z=%d"];
-            mapUrlFomat=@"http://khm%d.google.com/kh/v=%d&x=%d&y=%d&z=%d";    //version 4.0 4-29-2011
-            //mapUrlFomat=@"https://khms%d.google.com/kh/v=%d&x=%d&y=%d&z=%d";    //version 4.0 11-25-2013
-            imageUrl=[[NSString alloc]initWithFormat:mapUrlFomat, svr,iSatVersion,tile1.modeCol, tile1.row, tile1.res];	   //version 5.0
+            mapUrlFomat=@"http://khm%d.google.com/kh/v=%%d&x=%d&y=%d&z=%d";    //version 4.0 4-29-2011
+            satImageUrl=[[NSString alloc]initWithFormat:mapUrlFomat, svr,tile1.modeCol, tile1.row, tile1.res];	   //version 5.0
         }else if(mapType==googleMap){
-                mapUrlFomat=@"http://mt%d.google.com/vt/v=w2.101&hl=%@&x=%d&y=%d&z=%d";
-                imageUrl=[[NSString alloc]initWithFormat:mapUrlFomat, svr,country,tile1.modeCol, tile1.row, tile1.res];
+            mapUrlFomat=@"http://mt%d.google.com/vt/v=w2.101&hl=%@&x=%d&y=%d&z=%d";
+            imageUrl=[[NSString alloc]initWithFormat:mapUrlFomat, svr,country,tile1.modeCol, tile1.row, tile1.res];
         }
     }
-    NSData * imageData;
+    NSData * imageData = nil;
     if (tile1.row==-1) {  //no need to do it to save time
         [[MapSources sharedManager] unlock];
         NSLOG10(@"No need to load image %d,%d at %d any more",tile1.row,tile1.modeCol,tile1.res);
         return;
     }
     //NSLOG10(@"imageURL=%@",imageUrl);
-    imageData=[NSData dataWithContentsOfURL:[NSURL URLWithString:imageUrl]];  //goto internet to get the maptile
+    if(mapType==googleSat){  //auto detect sat version
+        int tryTimes=0;
+        int newSatVersion = iSatVersion;
+        while (!imageData && tryTimes<50) { //try max 50 times
+            imageUrl=[[NSString alloc]initWithFormat:satImageUrl, newSatVersion];
+            imageData=[NSData dataWithContentsOfURL:[NSURL URLWithString:imageUrl]];  //goto internet to get the maptile
+            if(!imageData){
+                tryTimes++;
+                newSatVersion=iSatVersion+tryTimes;
+            }
+        }
+        if(tryTimes > 0){
+            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+            NSString * storedSatVersion=[defaults stringForKey:@"SatMapVersion"];   //version 5.0
+            int iStoredSatVersion=[storedSatVersion intValue];
+            if(newSatVersion > iStoredSatVersion ){
+                NSString * sNewSatVersion=[@(newSatVersion) stringValue];
+                [defaults setObject:sNewSatVersion forKey:@"SatMapVersion"];
+            }else{
+                satVersion=storedSatVersion;   //if stored version is greater, use it (this is possible when auto detect newest version is implemented)
+            }
+        }
+    }else{
+        imageData=[NSData dataWithContentsOfURL:[NSURL URLWithString:imageUrl]];  //goto internet to get the maptile
+    }
     UIImage * img;
     img=[UIImage imageWithData:imageData];
     //Save images got from internet into buffer
