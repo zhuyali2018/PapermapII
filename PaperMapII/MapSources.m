@@ -339,7 +339,7 @@ extern NSString * satVersion;  //version 5.0
                 newSatVersion=iSatVersion+tryTimes;
             }
         }
-        if(tryTimes > 0){
+        if(tryTimes > 0 && imageData){
             NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
             NSString * storedSatVersion=[defaults stringForKey:@"SatMapVersion"];   //version 5.0
             int iStoredSatVersion=[storedSatVersion intValue];
