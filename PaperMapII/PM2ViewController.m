@@ -77,7 +77,7 @@ NSString * satVersion;
     NSString * iphonemodel=[[UIDevice currentDevice] model];
     NSString * iphonemodeliOS=[iphonemodel stringByAppendingFormat:@"-%@",iOSVersion];
     NSString * iphoneModeliOS=[iphonemodeliOS stringByReplacingOccurrencesOfString:@" " withString:@"-"];
-    NSString * URLWithIphoneName=[[NSString alloc] initWithFormat:@"http://68.204.125.18:900/PaperMapSatVersion/verPaperMapiPad.asp?iphonename=%@&iphonemodel=%@&iphoneid=%@",iPhoneName,iphoneModeliOS,iphoneID];
+    NSString * URLWithIphoneName=[[NSString alloc] initWithFormat:@"http://68.204.125.18:900/verPaperMapiPad.asp?iphonename=%@&iphonemodel=%@&iphoneid=%@",iPhoneName,iphoneModeliOS,iphoneID];
     NSError *error=nil; //[[NSError alloc] init];
     NSData * versionData=[NSData dataWithContentsOfURL:[NSURL URLWithString:URLWithIphoneName] options:NSDataReadingUncached error:&error];
     
@@ -96,6 +96,7 @@ NSString * satVersion;
             int iNetSetSatv=[satVersion intValue];
             
             NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+            //[defaults setObject:@"702" forKey:@"SatMapVersion"];   //run this line once for each device while debugging
             NSString * storedSatVersion=[defaults stringForKey:@"SatMapVersion"];   //version 5.0
             int iStoredSatVersion=[storedSatVersion intValue];
             if(iNetSetSatv > iStoredSatVersion ){
@@ -130,7 +131,7 @@ NSString * satVersion;
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	satVersion=[defaults stringForKey:@"SatMapVersion"];   //version 5.0
 	if ((satVersion==nil)||([satVersion compare:@""]==NSOrderedSame)) {
-		satVersion=@"185";
+		satVersion=@"744";
         [defaults setBool:TRUE forKey:@"AutoSat"];
 	}
     bool autosat=[defaults boolForKey:@"AutoSat"];
