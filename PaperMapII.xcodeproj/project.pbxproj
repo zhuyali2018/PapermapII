@@ -54,6 +54,8 @@
 		AA8BC56817C2FEF600D433ED /* RoundGreenBn.png in Resources */ = {isa = PBXBuildFile; fileRef = AA8BC56517C2FEF500D433ED /* RoundGreenBn.png */; };
 		AA8BC56917C2FEF600D433ED /* RoundRedBn.png in Resources */ = {isa = PBXBuildFile; fileRef = AA8BC56617C2FEF600D433ED /* RoundRedBn.png */; };
 		AA96E5041924A018001E78BA /* YellowCenter.png in Resources */ = {isa = PBXBuildFile; fileRef = AA96E5031924A018001E78BA /* YellowCenter.png */; };
+		AAA7E55F2005DB650077132B /* HelpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AAA7E55D2005DB650077132B /* HelpViewController.m */; };
+		AAA7E5612005F0270077132B /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAA7E5602005F0270077132B /* WebKit.framework */; };
 		AAAAEF3217BDD81400166090 /* GreenBnOff100.png in Resources */ = {isa = PBXBuildFile; fileRef = AAAAEF3017BDD81200166090 /* GreenBnOff100.png */; };
 		AAAAEF3317BDD81400166090 /* GreenBnOn100.png in Resources */ = {isa = PBXBuildFile; fileRef = AAAAEF3117BDD81300166090 /* GreenBnOn100.png */; };
 		AAAD5A6F176E1F5900DCDAD2 /* PM2OnScreenButtons.m in Sources */ = {isa = PBXBuildFile; fileRef = AAAD5A6E176E1F5900DCDAD2 /* PM2OnScreenButtons.m */; };
@@ -3621,6 +3623,9 @@
 		AA8BC56517C2FEF500D433ED /* RoundGreenBn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = RoundGreenBn.png; sourceTree = "<group>"; };
 		AA8BC56617C2FEF600D433ED /* RoundRedBn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = RoundRedBn.png; sourceTree = "<group>"; };
 		AA96E5031924A018001E78BA /* YellowCenter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = YellowCenter.png; sourceTree = "<group>"; };
+		AAA7E55D2005DB650077132B /* HelpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelpViewController.m; sourceTree = "<group>"; };
+		AAA7E55E2005DB650077132B /* HelpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelpViewController.h; sourceTree = "<group>"; };
+		AAA7E5602005F0270077132B /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = ../../../../../../../System/Library/Frameworks/WebKit.framework; sourceTree = "<group>"; };
 		AAAAEF3017BDD81200166090 /* GreenBnOff100.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = GreenBnOff100.png; sourceTree = "<group>"; };
 		AAAAEF3117BDD81300166090 /* GreenBnOn100.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = GreenBnOn100.png; sourceTree = "<group>"; };
 		AAAD5A6D176E1F5900DCDAD2 /* PM2OnScreenButtons.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PM2OnScreenButtons.h; sourceTree = "<group>"; };
@@ -5423,6 +5428,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AAA7E5612005F0270077132B /* WebKit.framework in Frameworks */,
 				AADD6CB6181DCBCD006A0FFA /* MultipeerConnectivity.framework in Frameworks */,
 				AAC5DD371A9DEE48006AA7CC /* SystemConfiguration.framework in Frameworks */,
 				AAAD5A801770364800DCDAD2 /* CoreLocation.framework in Frameworks */,
@@ -5578,6 +5584,7 @@
 		AABDD47F17437B3600A0D6E9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				AAA7E5602005F0270077132B /* WebKit.framework */,
 				AAC5DD361A9DEE48006AA7CC /* SystemConfiguration.framework */,
 				AAC5DD341A9DEDFC006AA7CC /* MessageUI.framework */,
 				AADD6CB5181DCBCD006A0FFA /* MultipeerConnectivity.framework */,
@@ -5594,6 +5601,8 @@
 		AABDD48617437B3600A0D6E9 /* PaperMapII */ = {
 			isa = PBXGroup;
 			children = (
+				AAA7E55D2005DB650077132B /* HelpViewController.m */,
+				AAA7E55E2005DB650077132B /* HelpViewController.h */,
 				AADE0F6417C9DF7D0016AB8B /* Settings */,
 				AA59B93A17B0D6C800092996 /* POI */,
 				AAF57C3917A37F4900C87DEA /* CollapsableMenu Files */,
@@ -11019,6 +11028,7 @@
 				AAEE0CC2177669DB00549A7D /* LinePropPickerViewController.m in Sources */,
 				AAEE0CC61779448B00549A7D /* GPSTrack.m in Sources */,
 				AA8608F6177AA703008EBC95 /* MainQ.m in Sources */,
+				AAA7E55F2005DB650077132B /* HelpViewController.m in Sources */,
 				AA8608FA177BEF6B008EBC95 /* MainMenuViewController.m in Sources */,
 				AA8608FE177C593E008EBC95 /* MenuItem.m in Sources */,
 				AAE6DF5317808AE9003F230F /* GPSTrackListTableViewController.m in Sources */,
@@ -11182,8 +11192,11 @@
 				GCC_PREFIX_HEADER = "PaperMapII/PaperMapII-Prefix.pch";
 				INFOPLIST_FILE = "PaperMapII/PaperMapII-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yalisoftware.PaperMIIT;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				VALID_ARCHS = "arm64 armv7s armv7";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -11195,8 +11208,11 @@
 				GCC_PREFIX_HEADER = "PaperMapII/PaperMapII-Prefix.pch";
 				INFOPLIST_FILE = "PaperMapII/PaperMapII-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yalisoftware.PaperMIIT;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				VALID_ARCHS = "arm64 armv7s armv7";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

@@ -13,8 +13,11 @@
 #import "ListViewController.h"
 
 
-@interface MainMenuViewController : UITableViewController <TrackHandleDelegate,UITextFieldDelegate,GKPeerPickerControllerDelegate,GKSessionDelegate,MFMailComposeViewControllerDelegate>
+@interface MainMenuViewController : UITableViewController <TrackHandleDelegate,UITextFieldDelegate,GKPeerPickerControllerDelegate,GKSessionDelegate,MFMailComposeViewControllerDelegate>{
 
+    UIPopoverController *menuPopoverController;
+    UIPopoverController *helpPopoverController;
+}
 @property BOOL adjustingMap;      //flag for adjust Map error
 
 @property (nonatomic,strong)NSArray * menuMatrix;
@@ -33,5 +36,10 @@
 
 
 -(void)SendEmailToDeveloper;
+-(void)Help;
+
+@property (nonatomic) UIPopoverController *menuPopoverController;
+@property (nonatomic) UIPopoverController *helpPopoverController;
+
 
 @end

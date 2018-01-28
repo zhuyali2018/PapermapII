@@ -5,7 +5,7 @@
 //  Created by Yali Zhu on 6/26/13.
 //  Copyright (c) 2013 Yali Zhu. All rights reserved.
 //
-#import "AllImports.h"
+//#import "AllImports.h"
 //#import <MultipeerConnectivity/MultipeerConnectivity.h>
 #import <GameKit/GameKit.h>
 #import "MainMenuViewController.h"
@@ -21,6 +21,8 @@
 #import "SettingItem.h"
 #import "Settings.h"
 #import "SaveItem.h"
+#import "HelpViewController.h"
+#import <WebKit/WebKit.h>
 
 extern bool bWANavailable;
 extern bool bWiFiAvailable;
@@ -40,6 +42,8 @@ extern BOOL bDrawBigLabel;
 @synthesize menuDrawings;
 @synthesize menuGPSTracks;
 @synthesize adjustingMap;
+@synthesize menuPopoverController;
+@synthesize helpPopoverController;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -81,7 +85,8 @@ extern BOOL bDrawBigLabel;
                     [[MenuItem alloc]initWithTitle:@"Reset Map Error"],
                     [[MenuItem alloc]initWithTitle:@"Help"],
                     [[MenuItem alloc]initWithTitle:@"Send Email to Developer"],
-                    [[MenuItem alloc]initWithTitle:@"About Paper Map II (2016.12.16.I)"], nil];
+                    //[[MenuItem alloc]initWithTitle:@"About Paper Map II (2016.12.16.I)"], nil];
+                    [[MenuItem alloc]initWithTitle:@"About Paper Map II (2018.1.28.I)"], nil];    //improved sat map switch. 20180128
         
         menuMatrix=[[NSArray alloc]initWithObjects:drawingMenu,gpsMenu,poiMenu,helpMenu,nil];
         fileListView=[[ListViewController alloc]initWithStyle:UITableViewStylePlain];
@@ -167,7 +172,7 @@ typedef enum{SAVEDRAWINGDLG=1000,SAVEGPSTRACKSDLG,SAVEPOISDLG, UNLOADDRAWCONFIRM
     ((MenuItem *)menuMatrix[HELP_SECTION][SETTINGS]).menuItemHandler=@selector(Settings:);
     ((MenuItem *)menuMatrix[HELP_SECTION][ADJMAPERR]).menuItemHandler=@selector(AdjustMapError:);
     ((MenuItem *)menuMatrix[HELP_SECTION][RSTMAPERR]).menuItemHandler=@selector(ResetMapError:);
-    ((MenuItem *)menuMatrix[HELP_SECTION][HELP]).menuItemHandler=@selector(SendEmailToDeveloper);
+    ((MenuItem *)menuMatrix[HELP_SECTION][HELP]).menuItemHandler=@selector(Help);
     ((MenuItem *)menuMatrix[HELP_SECTION][SENDEMAIL]).menuItemHandler=@selector(SendEmailToDeveloper);  //forgot the colon at the end only if the function has argument!
 
 }
@@ -405,6 +410,42 @@ bool connectedToIphone;
     [[DrawableMapScrollView sharedMap] reloadData];
     [self hideIPhoneMainMenu];
 }
+-(void)Help1{
+    WKWebViewConfiguration *theConfiguration = [[WKWebViewConfiguration alloc] init];
+    WKWebView *webView = [[WKWebView alloc] initWithFrame:self.view.frame configuration:theConfiguration];
+    //webView.navigationDelegate = self;
+    NSURL *nsurl=[NSURL URLWithString:@"http://68.204.125.18:900/PaperMapiPad4/"];
+    NSURLRequest *nsrequest=[NSURLRequest requestWithURL:nsurl];
+    [webView loadRequest:nsrequest];
+    [self.view addSubview:webView];
+}
+-(void)Help{
+    
+    if([menuPopoverController isPopoverVisible]) [menuPopoverController dismissPopoverAnimated:YES];
+    //TODO:  uncomment this
+    
+    if((!bWANavailable)&&(!bWiFiAvailable)){
+        UIAlertView * alert=[[UIAlertView alloc]initWithTitle:@"Internet Not Available Now" message:@"Help requires internet access to a help server\nwhich is not available now\n Please try again later!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];[alert show];
+        return;
+    }
+    if (helpPopoverController == nil)
+    {
+        Class cls = NSClassFromString(@"UIPopoverController");
+        if (cls != nil)
+        {
+            //HelpViewController *helpView=[[HelpViewController alloc] initWithNibName:@"HelpViewController" bundle:nil];
+            CGRect frame=CGRectMake(0, 0, 800, 600);
+            HelpViewController *helpViewCtrler=[[HelpViewController alloc] init];
+            UIView *helpView=[[UIView alloc] initWithFrame:frame];
+            helpViewCtrler.view=helpView;
+            helpViewCtrler.rootView=self;
+            UIPopoverController *aPopoverController =[[cls alloc] initWithContentViewController:helpViewCtrler];
+            self.helpPopoverController = aPopoverController;
+        }
+    }
+    [helpPopoverController setPopoverContentSize:CGSizeMake(750,900) animated:YES];
+    [helpPopoverController presentPopoverFromRect:CGRectMake(0,0,750,900) inView:[DrawableMapScrollView sharedMap] permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+}
 -(void)SendEmailToDeveloper{
     if((!bWANavailable)&&(!bWiFiAvailable)){
         UIAlertView * alert1=[[UIAlertView alloc]initWithTitle:@"Email service \nis not available now" message:@"Sending Email requires \ninternet access \nwhich is not available now\n\n Please try again later!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];[alert1 show];
@@ -417,6 +458,7 @@ bool connectedToIphone;
     [email setSubject:@"Some bugs found and suggestions about Paper Map II for iPad"];
 
     [email setToRecipients:[NSArray arrayWithObject:@"yali800@yahoo.com"]];
+    [email setMessageBody:@"Hello from California!" isHTML:NO];
 
     [self presentViewController:email animated:YES completion:nil];
 }

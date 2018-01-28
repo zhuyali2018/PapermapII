@@ -286,7 +286,7 @@
 }
 extern NSString * satVersion;  //version 5.0
 -(void)loadImageInBackground:(MapTile *)tile1{
-    [[MapSources sharedManager] lock];
+    //[[MapSources sharedManager] lock];  //20180128
     int iSatVersion=[satVersion intValue];  //version 5.0;  //TODO: Replaced this hardcoded 113 with some code !!!
     int x=tile1.col; //save here and check at the buttom
     int y=tile1.row;
@@ -299,36 +299,37 @@ extern NSString * satVersion;  //version 5.0
     if (mapInChinese) {
         country=@"zh-CN";
     }
+    tile1.mType=mapType;    //20180128
     if (useMSNMap) {                //<===============  Use MSN map or Google Map
         NSString * mapUrlFomat;
         static int svr=0;	svr++;	if (svr>7) svr=0;
         NSString * mapTileNumStr = [self GetTileNumberStringFromX:c Y:y R:r];
-        if(mapType==googleSat){
+        if(tile1.mType==googleSat){  //20180128
             mapUrlFomat=@"http://ecn.t%d.tiles.virtualearth.net/tiles/a%@.png?g=854";
             imageUrl=[[NSString alloc]initWithFormat:mapUrlFomat, svr,mapTileNumStr];
-        }else if(mapType==googleMap){
+        }else if(tile1.mType==googleMap){ //20180128
             mapUrlFomat=@"http://ecn.t%d.tiles.virtualearth.net/tiles/r%@.png?g=854&mkt=%@";
             imageUrl=[[NSString alloc]initWithFormat:mapUrlFomat, svr,mapTileNumStr,country];
         }
     }else{
         NSString * mapUrlFomat;
         static int svr=0;	svr++;	if (svr>2) svr=0;
-        if(mapType==googleSat){
+        if(tile1.mType==googleSat){  //20180128
             mapUrlFomat=@"http://khm%d.google.com/kh/v=%%d&x=%d&y=%d&z=%d";    //version 4.0 4-29-2011
             satImageUrl=[[NSString alloc]initWithFormat:mapUrlFomat, svr,tile1.modeCol, tile1.row, tile1.res];	   //version 5.0
-        }else if(mapType==googleMap){
+        }else if(tile1.mType==googleMap){  //20180128
             mapUrlFomat=@"http://mt%d.google.com/vt/v=w2.101&hl=%@&x=%d&y=%d&z=%d";
             imageUrl=[[NSString alloc]initWithFormat:mapUrlFomat, svr,country,tile1.modeCol, tile1.row, tile1.res];
         }
     }
     NSData * imageData = nil;
     if (tile1.row==-1) {  //no need to do it to save time
-        [[MapSources sharedManager] unlock];
+        //[[MapSources sharedManager] unlock];    //20180128
         NSLOG10(@"No need to load image %d,%d at %d any more",tile1.row,tile1.modeCol,tile1.res);
         return;
     }
     //NSLOG10(@"imageURL=%@",imageUrl);
-    if(mapType==googleSat){  //auto detect sat version
+    if(tile1.mType==googleSat){  //auto detect sat version  //20180128
         int tryTimes=0;
         int newSatVersion = iSatVersion;
         while (!imageData && tryTimes<50) { //try max 50 times
@@ -360,14 +361,14 @@ extern NSString * satVersion;  //version 5.0
         
         NSString *  rootDir;
         if (useMSNMap) {
-            if(mapType==googleSat)
+            if(tile1.mType==googleSat) //20180128
                 rootDir=@"MSNSat";
-            else if(mapType==googleMap)
+            else if(tile1.mType==googleMap)  //20180128
                 rootDir=@"MSNMap";
         }else{
-            if(mapType==googleSat)
+            if(tile1.mType==googleSat)  //20180128
                 rootDir=@"Sat";
-            else if(mapType==googleMap)
+            else if(tile1.mType==googleMap)  //20180128
                 rootDir=@"Map";
         }
         //NSString * imgFn=[[NSString alloc] initWithFormat:@"%@%d_%d_%d.jpg",rootDir,tile1.res,tile1.row,tile1.modeCol];
@@ -391,24 +392,40 @@ extern NSString * satVersion;  //version 5.0
                 NSLOG10(@"We got a problem: x=%d, col=%d, y=%d, row=%d, r=%d, res=%d",x,tile1.col,y,tile1.row,r,tile1.res);
                 //the tile requesting this image has been recycled and does not need the image anymore!
             }else{
-                [tile1 setImage:img];
+                [myLock lock];  //20180128
+                if(tile1.mType==mapType)  //20180128
+                    [tile1 setImage:img];
+                else
+                    [tile1 setImage:NULL]; //20180128
+                [myLock unlock];  //20180128
             }
         }
     }else
         [tile1 setImage:NULL];
     
-    [[MapSources sharedManager] unlock];
+    //[[MapSources sharedManager] unlock];  //20180128
 }
+//20180128
+- (bool)setMapSourceType:(MapType)mapType1{
+    [myLock lock];
+    mapType=mapType1;
+    [myLock unlock];
+    return true;
+}
+//20180128
+/*
 - (bool)setMapSourceType:(MapType)mapType1{
     bool ret=false;
     [myLock lock];
     if(lockCount==0){
         mapType=mapType1;
+        [myLock unlock];      //20180128
         ret=true;
     }
     [myLock unlock];
     return ret;
 }
+ */
 - (MapType)getMapSourceType{
     return mapType;
 }
