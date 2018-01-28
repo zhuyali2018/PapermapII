@@ -86,7 +86,7 @@ extern BOOL bDrawBigLabel;
                     [[MenuItem alloc]initWithTitle:@"Help"],
                     [[MenuItem alloc]initWithTitle:@"Send Email to Developer"],
                     //[[MenuItem alloc]initWithTitle:@"About Paper Map II (2016.12.16.I)"], nil];
-                    [[MenuItem alloc]initWithTitle:@"About Paper Map II (2018.1.28.I)"], nil];    //improved sat map switch. 20180128
+                    [[MenuItem alloc]initWithTitle:@"About Paper Map II (2018.1.28.II)"], nil];    //improved sat map switch. 20180128
         
         menuMatrix=[[NSArray alloc]initWithObjects:drawingMenu,gpsMenu,poiMenu,helpMenu,nil];
         fileListView=[[ListViewController alloc]initWithStyle:UITableViewStylePlain];

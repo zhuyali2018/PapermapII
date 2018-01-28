@@ -150,7 +150,6 @@ long firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleC
 		return;
 	}
     int loadedImageCount=0;
-    // [[MapSources sharedManager] lock];   //20180128
 	for (int row = firstNeededRow; row <= lastNeededRow; row++) {
         for (int col = firstNeededCol; col <= lastNeededCol; col++) {
 			BOOL tileIsMissing = (firstVisibleRowx[i] > row || firstVisibleColumnx[i] >= col ||lastVisibleRowx[i]  < row || lastVisibleColumnx[i]  < col);
@@ -176,7 +175,6 @@ long firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleC
 				//[zoomView.tileContainer annotateTile:tile res:tile.res row:row col:col];  //add label to tile
 				loadedImageCount++;
                 if(loadedImageCount>36){
-                    // [[MapSources sharedManager] unlock];  //20180128
                     return;   // if it is more than 36, it must not be the layer that needs loading
                 }
 			}else{
@@ -184,7 +182,7 @@ long firstVisibleRowx[4],firstVisibleColumnx[4],lastVisibleRowx[4], lastVisibleC
             }
 		}
 	}
-    // [[MapSources sharedManager] unlock];  //20180128
+
 	firstVisibleRowx[i] = firstNeededRow; firstVisibleColumnx[i] = firstNeededCol;
     lastVisibleRowx[i]  = lastNeededRow;  lastVisibleColumnx[i]  = lastNeededCol;
     NSLOG(@"fillWindowWithBasicMap returns");

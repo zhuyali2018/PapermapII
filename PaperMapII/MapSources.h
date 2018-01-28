@@ -14,7 +14,6 @@
 @public MapType mapType;
 }
 @property MapType mapType;
-@property UInt32 lockCount;
 @property(nonatomic, strong)NSLock *myLock;
 @property bool mapInChinese;
 @property bool useMSNMap;
@@ -24,6 +23,4 @@
 - (void)mapTile:(MapTile *)tile1;
 - (bool)setMapSourceType:(MapType)mapType;
 - (MapType)getMapSourceType;
-- (void)lock;
-- (void)unlock;
 @end

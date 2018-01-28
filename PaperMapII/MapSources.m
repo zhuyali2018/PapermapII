@@ -12,7 +12,6 @@
 
 @implementation MapSources
 
-@synthesize lockCount;
 @synthesize myLock;
 @synthesize mapType;
 @synthesize mapInChinese,useMSNMap;
@@ -22,20 +21,9 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         sharedMyManager = [[self alloc] init];
-        sharedMyManager.lockCount=0;
         sharedMyManager.myLock=[[NSLock alloc] init];
     });
     return sharedMyManager;
-}
-- (void)lock{
-    [myLock lock];
-    lockCount++;
-    [myLock unlock];
-}
-- (void)unlock{
-    [myLock lock];
-    lockCount--;
-    [myLock unlock];
 }
 
 -(NSString *)getPathName:(int)res row:(int)row col:(int)col{
@@ -170,34 +158,47 @@
 }
 #pragma mark Map Source Delegate method
 - (void)mapTile:(MapTile *)tile1{
+    tile1.mType=mapType;   //20180128
     //load built in map for fast loading
 	NSString * imgname;
-	if((tile1.res<6)&&(mapType==googleMap)){  // if less than 3, do it from builtin map tile
+	if((tile1.res<6)&&(tile1.mType==googleMap)){  // if less than 3, do it from builtin map tile
     //if(mapLevel<6){  // if less than 3, do it from builtin map tile
 		// The resolution is stored as a power of 2, so -1 means 50%, -2 means 25%, and 0 means 100%.
 		imgname=[[NSString alloc]initWithFormat:@"Map%d_%d_%d.jpg", tile1.res, tile1.row, tile1.modeCol];
         UIImage * img=[UIImage imageNamed:imgname];
         imgname=nil;
-        [tile1 setImage:img];
+        [myLock lock];  //20180128
+        if(tile1.mType==mapType)  //20180128     if the maptile's maptype is still the same as current map type, load the image onto tile
+            [tile1 setImage:img];
+        else
+            [tile1 setImage:NULL]; //20180128
+        [myLock unlock];  //20180128
+
 		return;
-	}else if((tile1.res<5)&&(mapType==googleSat)){
+	}else if((tile1.res<5)&&(tile1.mType==googleSat)){
         imgname=[[NSString alloc]initWithFormat:@"Sat%d_%d_%d.jpg", tile1.res, tile1.row, tile1.modeCol];
         UIImage *img=[UIImage imageNamed:imgname];
         imgname=nil;
-		[tile1 setImage:img];
+        [myLock lock];  //20180128
+        if(tile1.mType==mapType)  //20180128     if the maptile's maptype is still the same as current map type, load the image onto tile
+            [tile1 setImage:img];
+        else
+            [tile1 setImage:NULL]; //20180128
+        [myLock unlock];  //20180128
+
 		return;
     }
     
     NSString *  rootDir;
     if (useMSNMap) {
-        if(mapType==googleSat)
+        if(tile1.mType==googleSat)
             rootDir=@"MSNSat";
-        else if(mapType==googleMap)
+        else if(tile1.mType==googleMap)
             rootDir=@"MSNMap";
     }else{
-        if(mapType==googleSat)
+        if(tile1.mType==googleSat)
             rootDir=@"Sat";
-        else if(mapType==googleMap)
+        else if(tile1.mType==googleMap)
             rootDir=@"Map";
     }
     
@@ -219,7 +220,12 @@
         img=[UIImage imageWithContentsOfFile:pathFn];  //tring to get image from local
     }
     if(img){    //if got from local, good!
-        [tile1 setImage:img];
+        [myLock lock];  //20180128
+        if(tile1.mType==mapType)  //20180128     if the maptile's maptype is still the same as current map type, load the image onto tile
+            [tile1 setImage:img];
+        else
+            [tile1 setImage:NULL]; //20180128
+        [myLock unlock];  //20180128
 		return;
     }
     
@@ -286,7 +292,6 @@
 }
 extern NSString * satVersion;  //version 5.0
 -(void)loadImageInBackground:(MapTile *)tile1{
-    //[[MapSources sharedManager] lock];  //20180128
     int iSatVersion=[satVersion intValue];  //version 5.0;  //TODO: Replaced this hardcoded 113 with some code !!!
     int x=tile1.col; //save here and check at the buttom
     int y=tile1.row;
@@ -393,7 +398,7 @@ extern NSString * satVersion;  //version 5.0
                 //the tile requesting this image has been recycled and does not need the image anymore!
             }else{
                 [myLock lock];  //20180128
-                if(tile1.mType==mapType)  //20180128
+                if(tile1.mType==mapType)  //20180128     if the maptile's maptype is still the same as current map type, load the image onto tile
                     [tile1 setImage:img];
                 else
                     [tile1 setImage:NULL]; //20180128
@@ -403,7 +408,6 @@ extern NSString * satVersion;  //version 5.0
     }else
         [tile1 setImage:NULL];
     
-    //[[MapSources sharedManager] unlock];  //20180128
 }
 //20180128
 - (bool)setMapSourceType:(MapType)mapType1{
@@ -412,20 +416,6 @@ extern NSString * satVersion;  //version 5.0
     [myLock unlock];
     return true;
 }
-//20180128
-/*
-- (bool)setMapSourceType:(MapType)mapType1{
-    bool ret=false;
-    [myLock lock];
-    if(lockCount==0){
-        mapType=mapType1;
-        [myLock unlock];      //20180128
-        ret=true;
-    }
-    [myLock unlock];
-    return ret;
-}
- */
 - (MapType)getMapSourceType{
     return mapType;
 }
