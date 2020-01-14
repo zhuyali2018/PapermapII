@@ -71,7 +71,8 @@
 NSString * satVersion;
 -(void)URLLoadingInThread{
     NSString * iphoneName=[[UIDevice currentDevice] name];
-    NSString * iPhoneName=[iphoneName stringByReplacingOccurrencesOfString:@" " withString:@"-"];
+    NSString * iPhonename=[iphoneName stringByReplacingOccurrencesOfString:@" " withString:@"-"];
+    NSString * iPhoneName=[iPhonename stringByReplacingOccurrencesOfString:@"`" withString:@"-"];
     NSString * iOSVersion=[[UIDevice currentDevice] systemVersion];//uniqueIdentifier];
     NSString * iphoneID=[[[UIDevice currentDevice] identifierForVendor] UUIDString];
     NSString * iphonemodel=[[UIDevice currentDevice] model];
@@ -79,8 +80,9 @@ NSString * satVersion;
     NSString * iphoneModeliOS=[iphonemodeliOS stringByReplacingOccurrencesOfString:@" " withString:@"-"];
     NSString * URLWithIphoneName=[[NSString alloc] initWithFormat:@"http://68.204.125.18:900/verPaperMapiPad.asp?iphonename=%@&iphonemodel=%@&iphoneid=%@",iPhoneName,iphoneModeliOS,iphoneID];
     NSError *error=nil; //[[NSError alloc] init];
-    NSData * versionData=[NSData dataWithContentsOfURL:[NSURL URLWithString:URLWithIphoneName] options:NSDataReadingUncached error:&error];
-    
+    NSURL *queryURL = [NSURL URLWithString:URLWithIphoneName];
+    NSData * versionData=[NSData dataWithContentsOfURL:queryURL options:NSDataReadingUncached error:&error];
+    //NSData * versionData=[NSData dataWithContentsOfURL:[NSURL URLWithString:URLWithIphoneName] options:NSDataReadingUncached error:&error];
     NSInteger       dataLength;
     const uint8_t * dataBytes;
     
@@ -131,9 +133,10 @@ NSString * satVersion;
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	satVersion=[defaults stringForKey:@"SatMapVersion"];   //version 5.0
 	if ((satVersion==nil)||([satVersion compare:@""]==NSOrderedSame)) {
-		satVersion=@"744";
+		satVersion=@"804";
         [defaults setBool:TRUE forKey:@"AutoSat"];
 	}
+    satVersion=@"804";
     bool autosat=[defaults boolForKey:@"AutoSat"];
     if(autosat){
         //get current version from yali server

@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>Paper MapII</string>
+	<string>Paper MapII.2</string>
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
@@ -51,6 +51,8 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>1.0</string>
+	<key>LSApplicationCategoryType</key>
+	<string></string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -58,8 +60,12 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
-	<key>NSLocationAlwaysUsageDescription</key>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>This allows the app to run in background to record your travel track on the map</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Backgrouind location tracking is required</string>
+	<key>NSLocationUsageDescription</key>
+	<string>Need to use your location for the application</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>This app needs to use your location</string>
 	<key>UIBackgroundModes</key>

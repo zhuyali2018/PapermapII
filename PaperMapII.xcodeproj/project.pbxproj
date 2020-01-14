@@ -5418,7 +5418,7 @@
 		AAEE0CC1177669DB00549A7D /* LinePropPickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LinePropPickerViewController.m; sourceTree = "<group>"; };
 		AAEE0CC41779448A00549A7D /* GPSTrack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPSTrack.h; sourceTree = "<group>"; };
 		AAEE0CC51779448A00549A7D /* GPSTrack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPSTrack.m; sourceTree = "<group>"; };
-		AAF57C4017A37FFC00C87DEA /* trail.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = trail.png; path = "../../../../Test projects/CollapsableMenu/CollapsableMenu/trail.png"; sourceTree = "<group>"; };
+		AAF57C4017A37FFC00C87DEA /* trail.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = trail.png; path = "../Test projects/CollapsableMenu/CollapsableMenu/trail.png"; sourceTree = "<group>"; };
 		AAF8D163178D1B5B00611A86 /* OnOffButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnOffButton.h; sourceTree = "<group>"; };
 		AAF8D164178D1B5B00611A86 /* OnOffButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OnOffButton.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -7500,6 +7500,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 			);
 			mainGroup = AABDD47417437B3600A0D6E9;
@@ -11152,8 +11153,8 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				ONLY_ACTIVE_ARCH = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 2;
 			};
@@ -11177,7 +11178,8 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 2;
@@ -11193,7 +11195,7 @@
 				INFOPLIST_FILE = "PaperMapII/PaperMapII-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.yalisoftware.PaperMIIT;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.yalisoftware.PaperMIIT-2";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				VALID_ARCHS = "arm64 armv7s armv7";
@@ -11209,7 +11211,7 @@
 				INFOPLIST_FILE = "PaperMapII/PaperMapII-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.yalisoftware.PaperMIIT;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.yalisoftware.PaperMIIT-2";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				VALID_ARCHS = "arm64 armv7s armv7";
